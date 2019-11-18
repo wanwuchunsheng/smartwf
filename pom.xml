@@ -45,7 +45,7 @@
         <io.zipkin.java>2.9.4</io.zipkin.java>
         <commons.httpclient>3.1</commons.httpclient>
         <org.apache.rocketmq>4.3.0</org.apache.rocketmq>
-        <security.version>2.0.13.RELEASE</security.version>
+        <security.version>2.0.18.RELEASE</security.version>
         <shiro.version>1.4.0-RC2</shiro.version>
     </properties>
 
