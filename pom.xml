@@ -15,7 +15,6 @@
     	<module>smartwf-common</module>
     	<module>smartwf-health-man</module>
     	<module>smartwf-system-man</module>
-    	<module>smartwf-sso</module>
   </modules>
   <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -52,46 +52,16 @@ public class MathUtils {
 
 
     /**
-     * 获取7位流水号
+     * 获取i位流水号
+     *  i=7 位流水号
      * @return
      */
-    public static String getSerialNumber() {
+    public static String getSerialNumber(int i) {
         String s = String.valueOf(System.nanoTime());
-        String nanoTime = StringUtils.substring(s, s.length() - 7, s.length());
+        String nanoTime = StringUtils.substring(s, s.length() - i, s.length());
         return nanoTime;
     }
 
-
-    /**
-     * 获取12位流水号
-     * @return
-     */
-    public static String getNumber() {
-        String s = String.valueOf(System.nanoTime());
-        String nanoTime = StringUtils.substring(s, s.length() - 12, s.length());
-        return nanoTime;
-    }
-
-    /**
-     * 获取4位随机数
-     * @return
-     */
-    public static String getRandom() {
-        String s = String.valueOf(System.nanoTime());
-        String nanoTime = StringUtils.substring(s, s.length() - 4, s.length());
-        return nanoTime;
-    }
-
-
-    /**
-     * 获取3位随机数
-     * @return
-     */
-    public static String getRandom3() {
-        String s = String.valueOf(System.nanoTime());
-        String nanoTime = StringUtils.substring(s, s.length() - 3, s.length());
-        return nanoTime;
-    }
 
 
     /**

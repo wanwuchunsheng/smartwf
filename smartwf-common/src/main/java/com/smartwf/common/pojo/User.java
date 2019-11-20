@@ -73,21 +73,4 @@ public class User {
      */
     private Integer enable;
 
-
-    /**
-     * 门店id
-     */
-    private Integer shopId;
-
-
-    /**
-     * 门店名称
-     */
-    private String shopName;
-
-
-    /**
-     * 用户注册标识 1 菜市场 0 食安先
-     */
-    private Integer loginFlag;
 }

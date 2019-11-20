@@ -1,4 +1,4 @@
-package com.smartwf.hm.config.swagger;
+package com.smartwf.sm.config.swagger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,10 +68,10 @@ public class Swagger2Config {
      * @return
      */
     private ApiInfo apiInfo() {
-        Contact contact = new Contact("风脉能源", "http://ai.tianliwindpower.com/loginClient", "v_wanchanghuang@163.com");
+        Contact contact = new Contact("SMARTWF", "http://ai.tianliwindpower.com/loginClient", "v_wanchanghuang@163.com");
         return new ApiInfoBuilder()
-        		.title("风脉能源（武汉）股份有限公司")
-                .description("智慧风电场2.0-健康管理子系统接口文档")
+                .title("健康管理子系统API接口文档")
+                .description("智慧风电场2.0")
                 .termsOfServiceUrl("http://ai.tianliwindpower.com/loginClient")
                 .contact(contact)
                 .version("1.0")

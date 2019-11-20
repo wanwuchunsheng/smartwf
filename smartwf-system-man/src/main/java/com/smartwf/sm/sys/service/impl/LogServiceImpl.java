@@ -1,4 +1,4 @@
-package com.smartwf.hm.sys.service.impl;
+package com.smartwf.sm.sys.service.impl;
 
 
 import java.util.List;
@@ -12,9 +12,9 @@ import com.github.pagehelper.PageHelper;
 import com.smartwf.common.dto.LogDTO;
 import com.smartwf.common.pojo.Page;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.hm.sys.dao.LogDao;
-import com.smartwf.hm.sys.pojo.Log;
-import com.smartwf.hm.sys.service.LogService;
+import com.smartwf.sm.sys.dao.LogDao;
+import com.smartwf.sm.sys.pojo.Log;
+import com.smartwf.sm.sys.service.LogService;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -55,9 +55,10 @@ public class LogServiceImpl implements LogService {
     	com.github.pagehelper.Page<Object> objectPage = PageHelper.startPage(page.getPage(), page.getLimit());
         Example example = new Example(Log.class);
         Example.Criteria criteria = example.createCriteria();
-       
+        
         List<Log> logs = this.logDao.selectByExample(example);
        
+		
         return Result.data(objectPage.getTotal(), logs);
     }
 }

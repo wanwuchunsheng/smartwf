@@ -1,4 +1,4 @@
-package com.smartwf.hm.sys.service;
+package com.smartwf.sm.sys.service;
 
 import java.util.List;
 
