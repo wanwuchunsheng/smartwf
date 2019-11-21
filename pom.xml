@@ -176,23 +176,13 @@
                 <artifactId>jedis</artifactId>
                 <version>${redis.clients}</version>
             </dependency>
-            <!-- zipkin -->
-            <dependency>
-                <groupId>io.zipkin.java</groupId>
-                <artifactId>zipkin-autoconfigure-ui</artifactId>
-                <version>${io.zipkin.java}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.java</groupId>
-                <artifactId>zipkin-server</artifactId>
-                <version>${io.zipkin.java}</version>
-            </dependency>
             <!-- httpclient -->
             <dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>${commons.httpclient}</version>
             </dependency>
+            <!-- JMS rocketMQ  -->
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-client</artifactId>
@@ -205,13 +195,6 @@
 			   <version>${lombok.version}</version>
 			   <scope>provided</scope>
 			</dependency>
-			<!-- security -->
-			<dependency>
-			   <groupId>org.springframework.security.oauth</groupId>
-			   <artifactId>spring-security-oauth2</artifactId>
-			   <version>${security.version}</version>
-			</dependency>
-	         
         </dependencies>
     </dependencyManagement>
     
