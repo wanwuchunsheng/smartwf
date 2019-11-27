@@ -3,7 +3,7 @@ package com.smartwf.hm.sys.service;
 import java.util.List;
 
 import com.smartwf.common.dto.LogDTO;
-import com.smartwf.common.pojo.Page;
+import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
 
 /**
@@ -27,5 +27,5 @@ public interface LogService {
      * @param queryPojo
      * @return
      */
-    Result selectLogByPage(Page page);
+    Result selectLogByPage(PageVO page);
 }

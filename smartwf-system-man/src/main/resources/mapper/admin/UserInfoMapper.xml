@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.admin.dao.UserInfoDao" >
+
+    <!-- 查询用户资源列表 -->
+     <select id="selectUserInfoByPage" resultType="com.smartwf.sm.modules.admin.pojo.UserInfo">
+        select
+        	id,
+			user_code,
+			login_code,
+			user_name,
+			pwd,
+			email,
+			mobile,
+			phone,
+			sex,
+			avatar,
+			sign,
+			wx_openid,
+			qq_openid,
+			address,
+			remark,
+			tenant_id,
+			status,
+			mgr_type,
+			pwd_question,
+			pwd_question_answer,
+			pwd_question2,
+			pwd_question_answer2,
+			pwd_question3,
+			pwd_question_answer3,
+			enable,
+			create_time,
+			create_user_id,
+			create_user_name,
+			update_time,
+			update_user_id,
+			update_user_name
+        from sys_user_info 
+        <where>
+            <if test="bean.userCode != null ">
+                and user_code=#{bean.userCode}
+            </if>
+            <if test="bean.loginCode != null ">
+                and login_code=#{bean.loginCode}
+            </if>
+            <if test="bean.userName != null ">
+                and user_name=#{bean.userName}
+            </if>
+            <if test="bean.mobile != null ">
+                and mobile like '%${bean.mobile}%'
+            </if>
+            <if test="bean.enable != null ">
+                and enable=#{bean.enable}
+            </if>
+            <if test="bean.status != null ">
+                and status=#{bean.status}
+            </if>
+            
+        </where>
+        order by create_time desc
+    </select>
+
+</mapper>

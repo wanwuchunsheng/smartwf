@@ -8,7 +8,7 @@ import lombok.Data;
  * @Description: 分页
  */
 @Data
-public class Page {
+public class PageVO {
 
     /**
      * 第几页

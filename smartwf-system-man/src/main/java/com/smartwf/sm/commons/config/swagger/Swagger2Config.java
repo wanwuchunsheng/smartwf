@@ -70,7 +70,7 @@ public class Swagger2Config {
     private ApiInfo apiInfo() {
         Contact contact = new Contact("SMARTWF", "http://ai.tianliwindpower.com/loginClient", "v_wanchanghuang@163.com");
         return new ApiInfoBuilder()
-                .title("健康管理子系统API接口文档")
+                .title("后台管理子系统API接口文档")
                 .description("智慧风电场2.0")
                 .termsOfServiceUrl("http://ai.tianliwindpower.com/loginClient")
                 .contact(contact)

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smartwf.common.annotation.RequiresPermissions;
 import com.smartwf.common.annotation.TraceLog;
-import com.smartwf.common.pojo.Page;
+import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.sys.pojo.SysUser;
 import com.smartwf.hm.sys.service.SysUserService;
@@ -57,7 +57,7 @@ public class UserController {
             @ApiImplicitParam(paramType = "query", name = "pageNum", value = "要查看的页码，默认是1", dataType = "int"),
             @ApiImplicitParam(paramType = "query", name = "pageSize", value = "每页查询数量，默认是10", dataType = "int")
     })
-    public ResponseEntity<Result> selectSysUserByPage(Page page, SysUser sysUser) {
+    public ResponseEntity<Result> selectSysUserByPage(PageVO page, SysUser sysUser) {
         try {
             Result<?> result = this.sysUserService.selectSysUserByPage(page, sysUser);
             if (result != null) {

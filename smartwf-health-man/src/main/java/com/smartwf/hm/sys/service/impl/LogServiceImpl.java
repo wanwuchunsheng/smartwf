@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.smartwf.common.dto.LogDTO;
-import com.smartwf.common.pojo.Page;
+import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.sys.dao.LogDao;
 import com.smartwf.hm.sys.pojo.Log;
@@ -51,7 +51,7 @@ public class LogServiceImpl implements LogService {
      * @return
      */
     @Override
-    public Result selectLogByPage(Page page) {
+    public Result selectLogByPage(PageVO page) {
     	com.github.pagehelper.Page<Object> objectPage = PageHelper.startPage(page.getPage(), page.getLimit());
         Example example = new Example(Log.class);
         Example.Criteria criteria = example.createCriteria();

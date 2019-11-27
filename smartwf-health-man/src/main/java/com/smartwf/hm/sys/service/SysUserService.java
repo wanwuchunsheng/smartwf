@@ -1,6 +1,6 @@
 package com.smartwf.hm.sys.service;
 
-import com.smartwf.common.pojo.Page;
+import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.sys.pojo.SysUser;
 
@@ -15,7 +15,7 @@ public interface SysUserService {
      * @param page
      * @return
      */
-	Result selectSysUserByPage(Page page, SysUser sysUser);
+	Result selectSysUserByPage(PageVO page, SysUser sysUser);
 
 	/**
      * 添加用户

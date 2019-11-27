@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
-import com.smartwf.common.pojo.Page;
+import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.sys.service.LogService;
 
@@ -48,7 +48,7 @@ public class LogController {
             @ApiImplicitParam(paramType = "query", name = "pageNum", value = "要查看的页码，默认是1", dataType = "int"),
             @ApiImplicitParam(paramType = "query", name = "pageSize", value = "每页查询数量，默认是10", dataType = "int")
     })
-    public ResponseEntity<Result> selectLogByPage(Page page) {
+    public ResponseEntity<Result> selectLogByPage(PageVO page) {
         try {
             Result result = this.logService.selectLogByPage(page);
             log.info("返回结果{}",JSONArray.toJSONString(result));
