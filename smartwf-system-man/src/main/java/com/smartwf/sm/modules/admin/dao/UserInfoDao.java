@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.github.pagehelper.Page;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
+import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 import tk.mybatis.mapper.common.Mapper;
 
@@ -23,6 +24,12 @@ public interface UserInfoDao extends Mapper<UserInfo> {
 	 * @result:
 	 */
 	List<UserInfo> selectUserInfoByPage(@Param("bean") UserInfo bean, Page<Object> objectPage);
+
+	/**
+	 * @Description: 批量删除
+	 * @result:
+	 */
+	void deleteUserInfoByIds(@Param("bean") UserInfoVO bean);
 
 
     

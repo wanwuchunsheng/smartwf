@@ -1,38 +1,39 @@
 package com.smartwf.sm.modules.admin.service;
 
-import com.smartwf.common.pojo.PageVO;
+import com.github.pagehelper.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
+import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 /**
- * @Description: 用户资源业务层接口
+ * @Description: 用户资料业务层接口
  * @author WCH
  * @Date: 2019-11-27 11:25:24
  */
 public interface UserInfoService {
 
 	/**
-	 * @Description: 查询用户资源分页
+	 * @Description: 查询用户资料分页
 	 * @result: 
 	 */
-	Result<?> selectUserInfoByPage(PageVO page, UserInfo bean);
+	Result<?> selectUserInfoByPage(Page<Object> page, UserInfo bean);
 
 	/**
-     * @Description: 主键查询用户资源
+     * @Description: 主键查询用户资料
      * @return
      */
 	Result<?> selectUserInfoById(UserInfo bean);
 
 	/**
-     * @Description： 修改用户资源
+     * @Description： 修改用户资料
      * @return
      */
 	void updateUserInfo(UserInfo bean);
 
 	/**
-     * @Description： 删除用户资源
+     * @Description： 删除用户资料
      * @return
      */
-	void deleteUserInfo(UserInfo bean);
+	void deleteUserInfo(UserInfoVO bean);
 
 }

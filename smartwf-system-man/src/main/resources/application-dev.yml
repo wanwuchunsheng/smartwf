@@ -18,11 +18,11 @@ spring:
     name: smartwf-system-man
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss # 如果使用字符串表示，用这行设置格式
-    defaultPropertyInclusion: NON_EMPTY # 如果传递过来的时间为空则不进行过滤
+    defaultPropertyInclusion: ALWAYS # 如果传递过来的时间为空则不进行过滤
     timezone: GMT+8
     serialization:
       write-dates-as-timestamps: false # 使用时间戳，使用数值timestamp表示日期
-  # 数据库访问配置
+      # 数据库访问配置
   datasource:
      name: cloudfy
      type: com.alibaba.druid.pool.DruidDataSource
@@ -79,7 +79,11 @@ spring:
         time-between-eviction-runs-millis: 30000
         # 每次释放连接的最大数目
         num-tests-per-eviction-run: 1024
-        
+         # mongoDB
+  data:
+     mongodb:
+       uri: mongodb://localhost:27017/test
+       
 rocketmq:
   ##producer
   #该应用是否启用生产者
@@ -97,15 +101,12 @@ rocketmq:
     #mq的nameserver地址
     namesrvAddr: 192.168.1.155:9876;192.168.156:9876
     topic: PTP_TEST01
+    
 # 在使用sql查询时value为空则key要返回
 mybatis:
   configuration:
     call-setters-on-nulls: true
     
-  # mongoDB
-  data:
-     mongodb:
-       uri: mongodb://localhost:27017/test   
 # 日志
 logging:
   level:
