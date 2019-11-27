@@ -4,6 +4,6 @@ package com.smartwf.sm.modules.admin.service;
  * @author WCH
  * @Date: 2019-11-27 11:25:24
  */
-public interface UserService {
+public interface UserInfoService {
 
 }
