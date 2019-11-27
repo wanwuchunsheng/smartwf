@@ -19,7 +19,7 @@ import com.smartwf.sm.modules.admin.service.LogService;
 import tk.mybatis.mapper.entity.Example;
 
 /**
- * @Date: 2018/12/18 15:44
+ * @Date: 2019-11-27 11:25:24
  * @Description: 日志业务层实现
  */
 @Service
