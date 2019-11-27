@@ -8,7 +8,7 @@
   <groupId>com.smartwf.sm</groupId>
   <artifactId>smartwf-system-man</artifactId>
   <name>智慧风电场2.0</name>
-  <description>健康管理子系统</description>
+  <description>后台管理子系统</description>
   <dependencies>
         <!-- smartwf-common -->
         <dependency>
@@ -115,7 +115,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.smartwf.sm.SystemManApplication</mainClass>
+                    <mainClass>com.smartwf.sm.modules.SystemManApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

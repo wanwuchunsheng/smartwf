@@ -1,4 +1,4 @@
-package com.smartwf.sm.interceptor;
+package com.smartwf.sm.commons.interceptor;
 
 import java.io.IOException;
 
@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.PermissionThreadLocal;
 import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.common.utils.LoginUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,8 +32,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-        //return LoginUtils.checkLogin(request, response, handler, redisService);
-    	return true;
+        return LoginUtils.checkLogin(request, response, handler, redisService);
+    	//return true;
     }
 
 

@@ -1,4 +1,4 @@
-package com.smartwf.sm.sys.service.impl;
+package com.smartwf.sm.modules.admin.service.impl;
 
 
 import java.util.List;
@@ -12,9 +12,9 @@ import com.github.pagehelper.PageHelper;
 import com.smartwf.common.dto.LogDTO;
 import com.smartwf.common.pojo.Page;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.sm.sys.dao.LogDao;
-import com.smartwf.sm.sys.pojo.Log;
-import com.smartwf.sm.sys.service.LogService;
+import com.smartwf.sm.modules.admin.dao.LogDao;
+import com.smartwf.sm.modules.admin.pojo.Log;
+import com.smartwf.sm.modules.admin.service.LogService;
 
 import tk.mybatis.mapper.entity.Example;
 

@@ -1,4 +1,4 @@
-package com.smartwf.sm.config.rocketmq;
+package com.smartwf.sm.commons.config.rocketmq;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;

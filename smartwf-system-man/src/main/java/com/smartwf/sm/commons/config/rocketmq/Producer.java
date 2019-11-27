@@ -1,4 +1,4 @@
-package com.smartwf.sm.config.rocketmq;
+package com.smartwf.sm.commons.config.rocketmq;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;

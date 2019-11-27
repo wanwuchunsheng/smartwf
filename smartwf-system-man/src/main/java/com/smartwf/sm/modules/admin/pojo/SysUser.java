@@ -1,4 +1,4 @@
-package com.smartwf.sm.sys.pojo;
+package com.smartwf.sm.modules.admin.pojo;
 
 import java.util.Date;
 

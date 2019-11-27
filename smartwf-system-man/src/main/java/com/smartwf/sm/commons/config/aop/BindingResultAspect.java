@@ -1,4 +1,4 @@
-package com.smartwf.sm.config.aop;
+package com.smartwf.sm.commons.config.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -24,7 +24,7 @@ public class BindingResultAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* com.smartwf.sm.*.controller.*.*(..))")
+    @Around("execution(* com.smartwf.sm.*.*.controller.*.*(..))")
     public Object bindingResultAround(ProceedingJoinPoint pjp) throws Throwable {
         return AopAround.bindingResultAround(pjp);
     }

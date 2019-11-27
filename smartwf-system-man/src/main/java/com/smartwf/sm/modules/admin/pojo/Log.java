@@ -1,4 +1,4 @@
-package com.smartwf.sm.sys.pojo;
+package com.smartwf.sm.modules.admin.pojo;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

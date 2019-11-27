@@ -1,4 +1,4 @@
-package com.smartwf.sm.config.mvc;
+package com.smartwf.sm.commons.config.mvc;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,7 +12,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.smartwf.sm.interceptor.LoginInterceptor;
+import com.smartwf.sm.commons.interceptor.LoginInterceptor;
 
 import lombok.extern.slf4j.Slf4j;
 
