@@ -25,6 +25,12 @@ public interface UserInfoService {
 	Result<?> selectUserInfoById(UserInfo bean);
 
 	/**
+     * @Description： 添加用户资料
+     * @return
+     */
+	void saveUserInfo(UserInfo bean);
+	
+	/**
      * @Description： 修改用户资料
      * @return
      */
@@ -35,5 +41,6 @@ public interface UserInfoService {
      * @return
      */
 	void deleteUserInfo(UserInfoVO bean);
+	
 
 }

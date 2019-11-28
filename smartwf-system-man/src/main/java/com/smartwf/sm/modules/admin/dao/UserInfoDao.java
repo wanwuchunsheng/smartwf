@@ -29,7 +29,13 @@ public interface UserInfoDao extends Mapper<UserInfo> {
 	 * @Description: 批量删除
 	 * @result:
 	 */
-	void deleteUserInfoByIds(@Param("bean") UserInfoVO bean);
+	void deleteUserInfoByIds(@Param("list") List<String> list);
+
+	/**
+	 * @Description: 单个删除
+	 * @result:
+	 */
+	void deleteUserInfoById(@Param("bean") UserInfoVO bean);
 
 
     

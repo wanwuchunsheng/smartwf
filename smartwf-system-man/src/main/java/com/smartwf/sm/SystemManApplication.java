@@ -1,4 +1,4 @@
-package com.smartwf.sm.modules;
+package com.smartwf.sm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

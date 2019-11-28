@@ -23,6 +23,8 @@ public class Constants {
     public static final int ONE = 1;
 
     public static final int ZERO = 0;
+    
+    public static final int ADMIN = 2;
 
     /**
      * 状态码========================================================

@@ -115,7 +115,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.smartwf.sm.modules.SystemManApplication</mainClass>
+                    <mainClass>com.smartwf.sm.SystemManApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

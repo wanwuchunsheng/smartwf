@@ -37,7 +37,7 @@ public class LogQueue {
         logDTO.setResult(result);
         User user = UserThreadLocal.getUser();
         if (user != null) {
-            logDTO.setLogUser(user.getUsername());
+            logDTO.setLogUser(user.getUserName());
         }
         queue.add(logDTO);
     }
