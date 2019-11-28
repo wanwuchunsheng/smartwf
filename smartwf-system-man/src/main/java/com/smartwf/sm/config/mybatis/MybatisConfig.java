@@ -1,4 +1,4 @@
-package com.smartwf.sm.commons.config.mybatis;
+package com.smartwf.sm.config.mybatis;
 
 import java.sql.SQLException;
 import java.util.Properties;

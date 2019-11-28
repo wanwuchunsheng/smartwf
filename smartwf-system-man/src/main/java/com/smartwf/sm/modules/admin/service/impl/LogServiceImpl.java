@@ -25,9 +25,6 @@ import tk.mybatis.mapper.entity.Example;
 @Service
 public class LogServiceImpl implements LogService {
 
-	@Autowired
-    private MongoTemplate mongoTemplate;
-	
     @Autowired
     private LogDao logDao;
  

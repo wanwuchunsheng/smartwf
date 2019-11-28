@@ -167,7 +167,7 @@ public class UserInfoController {
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "int"),
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
-    @TraceLog(content = "删除用户资料系统用户", paramIndexs = {1})
+    @TraceLog(content = "删除用户资料系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteUserInfo(UserInfoVO bean) {
         try {
         	this.userService.deleteUserInfo(bean);

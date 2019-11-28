@@ -1,4 +1,4 @@
-package com.smartwf.sm.commons.interceptor;
+package com.smartwf.sm.interceptor;
 
 import java.io.IOException;
 

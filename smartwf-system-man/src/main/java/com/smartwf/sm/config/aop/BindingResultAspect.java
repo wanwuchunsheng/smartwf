@@ -1,4 +1,4 @@
-package com.smartwf.sm.commons.config.aop;
+package com.smartwf.sm.config.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

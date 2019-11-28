@@ -1,4 +1,4 @@
-package com.smartwf.sm.commons.config.swagger;
+package com.smartwf.sm.config.swagger;
 
 import java.util.ArrayList;
 import java.util.List;

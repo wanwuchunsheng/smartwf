@@ -1,4 +1,4 @@
-package com.smartwf.sm.commons.config.redis;
+package com.smartwf.sm.config.redis;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;

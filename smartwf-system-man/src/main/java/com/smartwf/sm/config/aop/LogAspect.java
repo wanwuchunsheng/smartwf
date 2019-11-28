@@ -1,4 +1,4 @@
-package com.smartwf.sm.commons.config.aop;
+package com.smartwf.sm.config.aop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class LogAspect {
      *
      * @return
      */
-    @Pointcut("execution(* com.smartwf.hm.*.*.controller.*.*(..)) && @annotation(com.smartwf.common.annotation.TraceLog)")
+    @Pointcut("execution(* com.smartwf.sm.*.*.controller.*.*(..)) && @annotation(com.smartwf.common.annotation.TraceLog)")
     public void webLog() {
     }
 
