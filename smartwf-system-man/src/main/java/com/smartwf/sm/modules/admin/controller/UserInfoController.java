@@ -98,7 +98,7 @@ public class UserInfoController {
     @PostMapping("saveUserInfo")
     @ApiOperation(value = "添加接口", notes = "添加用户资料接口")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String", required = true),
             @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录账号", dataType = "String", required = true),
             @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String", required = true),
@@ -130,15 +130,17 @@ public class UserInfoController {
     @ApiOperation(value = "修改接口", notes = "修改用户资料资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
-    	 @ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String"),
-         @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录账号", dataType = "String"),
-         @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String"),
-         @ApiImplicitParam(paramType = "query", name = "pwd", value = "密码", dataType = "String"),
-         @ApiImplicitParam(paramType = "query", name = "mobile", value = "手机号", dataType = "String"),
-         @ApiImplicitParam(paramType = "query", name = "phone", value = "电话", dataType = "String"),
-         @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
+    	@ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录账号", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "pwd", value = "密码", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "mobile", value = "手机号", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "phone", value = "电话", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
  	    @ApiImplicitParam(paramType = "query", name = "sex", value = "性别（0-女 1-男）", dataType = "int"),
  	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "等级（0-普通 1-管理员 2-超级管理员）", dataType = "int"),
+ 	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int"),
+ 	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int"),
  	    @ApiImplicitParam(paramType = "query", name = "address", value = "联系地址", dataType = "String"),
  	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
@@ -165,7 +167,7 @@ public class UserInfoController {
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "int"),
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
-    @TraceLog(content = "删除用户资料系统用户", paramIndexs = {0})
+    @TraceLog(content = "删除用户资料系统用户", paramIndexs = {1})
     public ResponseEntity<Result<?>> deleteUserInfo(UserInfoVO bean) {
         try {
         	this.userService.deleteUserInfo(bean);
