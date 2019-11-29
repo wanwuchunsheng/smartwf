@@ -49,7 +49,7 @@ public class UserInfoController {
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "用户类型（2超级管理员 1管理员 0普通）", dataType = "int",required = true),
             @ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String"),
-            @ApiImplicitParam(paramType = "query", name = "enable", value = "状态", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "createTime", value = "开始时间", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "updateTime", value = "结束时间", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "pageNum", value = "第几页，默认1", dataType = "int"),

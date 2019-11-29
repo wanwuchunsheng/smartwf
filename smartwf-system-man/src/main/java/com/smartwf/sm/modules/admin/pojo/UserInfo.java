@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.smartwf.common.pojo.BasePojo;
+
 import lombok.Data;
 
 /**
@@ -14,7 +16,7 @@ import lombok.Data;
  */
 @Data
 @Table(name = "sys_user_info")
-public class UserInfo implements Serializable{
+public class UserInfo extends BasePojo implements Serializable{
 	 private static final long serialVersionUID = 1L;
 	/**
      * 主键id
@@ -129,29 +131,6 @@ public class UserInfo implements Serializable{
             
 	 */
 	private Integer enable;
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
-	/**
-	 * 创建人id
-	 */
-	private Integer createUserId;
-	/**
-	 * 创建人姓名
-	 */
-	private String createUserName;
-	/**
-	 * 修改时间
-	 */
-	private Date updateTime;
-	/**
-	 * 修改人id
-	 */
-	private Integer updateUserId;
-	/**
-	 * 修改人姓名
-	 */
-	private String updateUserName;
+	
 	
 }

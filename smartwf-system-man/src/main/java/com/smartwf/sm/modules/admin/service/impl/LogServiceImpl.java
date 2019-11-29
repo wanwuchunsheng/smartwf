@@ -51,11 +51,8 @@ public class LogServiceImpl implements LogService {
     public Result selectLogByPage(PageVO page) {
     	com.github.pagehelper.Page<Object> objectPage = PageHelper.startPage(page.getPage(), page.getLimit());
         Example example = new Example(Log.class);
-        Example.Criteria criteria = example.createCriteria();
-        
+        //Example.Criteria criteria = example.createCriteria();
         List<Log> logs = this.logDao.selectByExample(example);
-       
-		
         return Result.data(objectPage.getTotal(), logs);
     }
 }

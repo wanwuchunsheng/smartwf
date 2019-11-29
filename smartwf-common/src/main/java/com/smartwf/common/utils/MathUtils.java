@@ -1,44 +1,17 @@
 package com.smartwf.common.utils;
 
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.smartwf.common.pojo.BasePojo;
-
 /**
  * @Auther:
  * @Description: 通用工具类
  */
 public class MathUtils {
-
-
-    /**
-     * 设置创建人、修改时间、修改人、修改时间
-     * @param basePojo
-     * @param StringName
-     */
-    public static void setUserAndTime(BasePojo basePojo, String StringName) {
-        basePojo.setCreateTime(new Date());
-        basePojo.setCreateUser(StringName);
-        basePojo.setUpdateTime(new Date());
-        basePojo.setUpdateUser(StringName);
-    }
-
-
-    /**
-     * 设置修改人跟修改时间
-     * @param basePojo
-     * @param StringName
-     */
-    public static void setUpdateUserAndUpdateTime(BasePojo basePojo, String StringName) {
-        basePojo.setUpdateTime(new Date());
-        basePojo.setUpdateUser(StringName);
-    }
 
 
     /**
