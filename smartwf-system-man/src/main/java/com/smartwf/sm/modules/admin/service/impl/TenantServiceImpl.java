@@ -121,8 +121,22 @@ public class TenantServiceImpl implements TenantService{
 	@Override
 	public void deleteTenant(TenantVO bean) {
 		if( null!=bean.getId()) {
-			//单个对象删除
+			//删除租户表
 			this.tenantDao.deleteByPrimaryKey(bean);
+			//删除组织架构表
+			this.tenantDao.deleteOrgByTeandId(bean);
+			//删除用户组织架构表
+			this.tenantDao.deleteUserOrgByTeandId(bean);
+			//删除职务表
+			this.tenantDao.deletePostByTeandId(bean);
+			//删除用户职务表
+			this.tenantDao.deleteUserPostByTeandId(bean);
+			//删除角色表
+			this.tenantDao.deleteRoleByTeandId(bean);
+			//删除用户角色表
+			this.tenantDao.deleteUserRoleByTeandId(bean);
+			//删除角色权限表
+			this.tenantDao.deletePermissionByTeandId(bean);
 		}else {
 			//批量删除
 			if(StringUtils.isNotBlank(bean.getIds())) {
@@ -130,7 +144,22 @@ public class TenantServiceImpl implements TenantService{
 				for(String val:bean.getIds().split(",")) {
 					list.add(val);
 				}
+				//租户表
 				this.tenantDao.deleteTenantByIds(list);
+				//删除组织架构表
+				this.tenantDao.deleteOrgByTeandIds(list);
+				//删除用户组织架构表
+				this.tenantDao.deleteUserOrgByTeandIds(list);
+				//删除职务表
+				this.tenantDao.deletePostByTeandIds(list);
+				//删除用户职务表
+				this.tenantDao.deleteUserPostByTeandIds(list);
+				//删除角色表
+				this.tenantDao.deleteRoleByTeandIds(list);
+				//删除用户角色表
+				this.tenantDao.deleteUserRoleByTeandIds(list);
+				//删除角色权限表
+				this.tenantDao.deletePermissionByTeandIds(list);
 			}
 		}
 	}
