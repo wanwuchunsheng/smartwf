@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
 
@@ -74,8 +76,8 @@ public class TenantServiceImpl implements TenantService{
      */
 	@Override
 	public Result<?> selectTenantById(Tenant bean) {
-		Tenant Tenant= this.tenantDao.selectByPrimaryKey(bean);
-		return Result.data(Tenant);
+		Tenant tenant= this.tenantDao.selectByPrimaryKey(bean);
+		return Result.data(tenant);
 	}
 	
 	/**
@@ -131,6 +133,15 @@ public class TenantServiceImpl implements TenantService{
 				this.tenantDao.deleteTenantByIds(list);
 			}
 		}
+	}
+
+	/**
+     * @Description： 初始化租户
+     * @return
+     */
+	@Override
+	public List<Tenant> queryTenantAll() {
+		return this.tenantDao.queryTenantAll();
 	}
 
 

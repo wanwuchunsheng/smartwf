@@ -18,10 +18,16 @@ import tk.mybatis.mapper.common.Mapper;
 public interface TenantDao extends Mapper<Tenant> {
 
 	/**
-	 * @Description: 批量删除
+	 * @Description: 批量删除租户
 	 * @result:
 	 */
 	void deleteTenantByIds(@Param("list") List<String> list);
+
+	/**
+	 * @Description: 初始化租户
+	 * @result:
+	 */
+	List<Tenant> queryTenantAll();
 
 
     

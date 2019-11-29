@@ -1,6 +1,7 @@
 package com.smartwf.common.utils;
 
 
+import java.util.Date;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,7 +79,7 @@ public class MathUtils {
      * @return key
      */
     public static String getKey() {
-        String timestamp = DateUtils.getTimestamp();
+        String timestamp = DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss");
         String s = UUID.randomUUID().toString();
         // delete "-"
         String uuid = s.replace("-", "");

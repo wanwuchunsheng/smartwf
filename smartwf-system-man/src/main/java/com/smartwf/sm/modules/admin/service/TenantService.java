@@ -1,5 +1,7 @@
 package com.smartwf.sm.modules.admin.service;
 
+import java.util.List;
+
 import com.github.pagehelper.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
@@ -41,6 +43,12 @@ public interface TenantService {
      * @return
      */
 	void deleteTenant(TenantVO bean);
+	
+	/**
+     * @Description： 初始化租户
+     * @return
+     */
+	List<Tenant> queryTenantAll();
 	
 
 }

@@ -12,5 +12,14 @@
 	        #{item}
 	    </foreach>
 	</delete>
+	
+	<!-- 查询用户资源列表 -->
+     <select id="queryTenantAll" resultType="com.smartwf.sm.modules.admin.pojo.Tenant">
+        select 
+			id, tenant_code, tenant_name, enable, remark
+		from sys_tenant
+		where enable=0 order by create_time desc
+    </select>
+	
    
 </mapper>
