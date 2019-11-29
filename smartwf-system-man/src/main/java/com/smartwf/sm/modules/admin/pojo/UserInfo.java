@@ -1,7 +1,6 @@
 package com.smartwf.sm.modules.admin.pojo;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,7 +16,9 @@ import lombok.Data;
 @Data
 @Table(name = "sys_user_info")
 public class UserInfo extends BasePojo implements Serializable{
+	
 	 private static final long serialVersionUID = 1L;
+	 
 	/**
      * 主键id
      */

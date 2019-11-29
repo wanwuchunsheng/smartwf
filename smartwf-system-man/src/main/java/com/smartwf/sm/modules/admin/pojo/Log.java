@@ -15,7 +15,7 @@ import lombok.Data;
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @Data
-@Table(name = "sys_log2")
+@Table(name = "sys_log")
 public class Log extends LogDTO {
 
 

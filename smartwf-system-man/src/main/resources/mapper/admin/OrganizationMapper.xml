@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.admin.dao.OrganizationDao" >
+
+     
+    <!-- 批量删除组织架构 -->
+    <delete id="deleteOrganizationByIds" parameterType = "java.util.List">
+	    delete 
+	       from sys_organization 
+	    where id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+	
+	<!-- 查询组织架构列表 -->
+     <select id="queryOrganizationAll" resultType="com.smartwf.sm.modules.admin.pojo.Organization">
+        select 
+			id,
+			pid,
+			uid,
+			sort,
+			org_code,
+			org_name,
+			org_type,
+			remark,
+			tenant_id,
+			enable,
+			level
+		from sys_tenant
+		where enable=0 order by create_time desc
+    </select>
+	
+   
+</mapper>

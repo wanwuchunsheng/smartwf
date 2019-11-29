@@ -11,11 +11,11 @@ import com.smartwf.common.pojo.BasePojo;
 import lombok.Data;
 
 /**
- * @Description: 租户表
+ * @Description: 组织架构表
  */
 @Data
-@Table(name = "sys_tenant")
-public class Tenant extends BasePojo implements Serializable{
+@Table(name = "sys_organization")
+public class Organization extends BasePojo implements Serializable{
 	
 	 private static final long serialVersionUID = 1L;
 	 
@@ -27,13 +27,37 @@ public class Tenant extends BasePojo implements Serializable{
 	private Integer id;
    
     /**
-	 * 租户代码
+	 * 父级id
 	 */
-	private String tenantCode;
+	private Integer pid;
 	/**
-	 * 租户名称
+	 * 上级id
 	 */
-	private String tenantName;
+	private Integer uid;
+	/**
+	 * 排序
+	 */
+	private Integer sort;
+	/**
+	 * 机构编码
+	 */
+	private String orgCode;
+	/**
+	 * 机构名称
+	 */
+	private String orgName;
+	/**
+	 * 机构类型
+	 */
+	private Integer orgType;
+	/**
+	 * 备注
+	 */
+	private String remark;
+	/**
+	 * 租户id
+	 */
+	private Integer tenantId;
 	/**
 	 * 是否有效
             0有效  
@@ -42,8 +66,8 @@ public class Tenant extends BasePojo implements Serializable{
 	 */
 	private Integer enable;
 	/**
-	 * 备注
+	 * 层次级别
 	 */
-	private String remark;
+	private Integer level;
 	
 }
