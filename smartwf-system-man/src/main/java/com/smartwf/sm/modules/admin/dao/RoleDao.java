@@ -31,10 +31,15 @@ public interface RoleDao extends Mapper<Role> {
 	List<Role> queryRoleAll();
 
 	/**
-	 * @Deprecated 删除用户组织结构
+	 * @Deprecated 删除用户角色
 	 * 
 	 * */
-	void deleteUserOrgById(@Param("bean") RoleVO bean);
+	void deleteUserRoleById(@Param("bean") RoleVO bean);
+	/**
+	 * @Deprecated 删除角色权限
+	 * 
+	 * */
+	void deleteRolePermissionById(@Param("bean") RoleVO bean);
 
 
     

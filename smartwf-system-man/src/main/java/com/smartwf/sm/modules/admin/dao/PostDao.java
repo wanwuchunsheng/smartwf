@@ -34,7 +34,7 @@ public interface PostDao extends Mapper<Post> {
 	 * @Deprecated 删除用户组织结构
 	 * 
 	 * */
-	void deleteUserOrgById(@Param("bean") PostVO bean);
+	void deleteUserPostById(@Param("bean") PostVO bean);
 
 
     

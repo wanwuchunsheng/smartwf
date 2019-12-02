@@ -28,8 +28,14 @@
     </select>
     
 	<!-- 删除用户角色表-->
-    <delete id="deleteUserOrgById" parameterType = "com.smartwf.sm.modules.admin.vo.RoleVO">
+    <delete id="deleteUserRoleById" parameterType = "com.smartwf.sm.modules.admin.vo.RoleVO">
 	   delete from sys_user_role where role_id = #{bean.id}
 	</delete>
+	
+	<!-- 删除角色权限表-->
+    <delete id="deleteRolePermissionById" parameterType = "com.smartwf.sm.modules.admin.vo.RoleVO">
+	   delete from sys_role_permission where role_id = #{bean.id}
+	</delete>
+	
   
 </mapper>

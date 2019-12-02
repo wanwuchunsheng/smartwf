@@ -134,8 +134,8 @@ public class PostServiceImpl implements PostService{
 		if( null!=bean.getId()) {
 			//删除职务
 			this.postDao.deleteByPrimaryKey(bean);
-			//删除用户组织结构
-			this.postDao.deleteUserOrgById(bean);
+			//删除用户职务
+			this.postDao.deleteUserPostById(bean);
 		}else {
 			String ids=StrUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
@@ -144,8 +144,8 @@ public class PostServiceImpl implements PostService{
 					list.add(val);
 					bean=new PostVO();
 					bean.setId(Integer.valueOf(val));
-					//删除用户组织结构
-					this.postDao.deleteUserOrgById(bean);
+					//删除用户职务
+					this.postDao.deleteUserPostById(bean);
 				}
 				//批量删除职务
 				this.postDao.deletePostByIds(list);

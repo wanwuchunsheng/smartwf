@@ -30,7 +30,7 @@
     </select>
     
 	<!-- 删除用户职务表-->
-    <delete id="deleteUserOrgById" parameterType = "com.smartwf.sm.modules.admin.vo.PostVO">
+    <delete id="deleteUserPostById" parameterType = "com.smartwf.sm.modules.admin.vo.PostVO">
 	   delete from sys_user_post where post_id = #{bean.id}
 	</delete>
   

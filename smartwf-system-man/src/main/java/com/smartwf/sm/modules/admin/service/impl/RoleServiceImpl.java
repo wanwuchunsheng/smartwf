@@ -126,8 +126,10 @@ public class RoleServiceImpl implements RoleService{
 		if( null!=bean.getId()) {
 			//删除角色
 			this.roleDao.deleteByPrimaryKey(bean);
-			//删除用户组织结构
-			this.roleDao.deleteUserOrgById(bean);
+			//删除用户角色
+			this.roleDao.deleteUserRoleById(bean);
+			//删除角色权限
+			this.roleDao.deleteRolePermissionById(bean);
 		}else {
 			String ids=StrUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
@@ -136,8 +138,10 @@ public class RoleServiceImpl implements RoleService{
 					list.add(val);
 					bean=new RoleVO();
 					bean.setId(Integer.valueOf(val));
-					//删除用户组织结构
-					this.roleDao.deleteUserOrgById(bean);
+					//删除用户角色
+					this.roleDao.deleteUserRoleById(bean);
+					//删除角色权限
+					this.roleDao.deleteRolePermissionById(bean);
 				}
 				//批量删除角色
 				this.roleDao.deleteRoleByIds(list);
