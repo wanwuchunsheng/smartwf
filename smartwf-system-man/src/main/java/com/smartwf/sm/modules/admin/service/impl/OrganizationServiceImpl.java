@@ -46,8 +46,8 @@ public class OrganizationServiceImpl implements OrganizationService{
 		Example example = new Example(Organization.class);
         example.setOrderByClause("create_time desc");
         Example.Criteria criteria = example.createCriteria();
-        //租户
-  		if (null!=bean.getTenantId()) { 
+        //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
+  		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
   			criteria.andEqualTo("tenantId", bean.getTenantId()); 
   		} 
         //组织架构编码
@@ -127,6 +127,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 		if( null!=bean.getId()) {
 			//单个对象删除
 			this.organizationDao.deleteByPrimaryKey(bean);
+			
 		}else {
 			//批量删除
 			if(StringUtils.isNotBlank(bean.getIds())) {

@@ -47,6 +47,7 @@ public class OrganizationController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询组织架构")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构代码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
@@ -125,7 +126,6 @@ public class OrganizationController {
     @ApiOperation(value = "修改接口", notes = "修改组织架构资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
-    	//@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "uid", value = "上级（主键）", dataType = "int"),
 	    @ApiImplicitParam(paramType = "query", name = "pid", value = "父级（主键）", dataType = "int"),
         @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "int"),
