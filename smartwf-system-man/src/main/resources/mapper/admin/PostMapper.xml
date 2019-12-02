@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.admin.dao.PostDao" >
+
+     
+    <!-- 批量删除职务 -->
+    <delete id="deletePostByIds" parameterType = "java.util.List">
+	    delete 
+	       from sys_post 
+	    where id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+	
+	<!-- 查询职务列表 -->
+     <select id="queryPostAll" resultType="com.smartwf.sm.modules.admin.pojo.Post">
+        select 
+			 id,
+			 organization_id,
+			 post_code,
+			 post_name,
+			 post_type,
+			 enable,
+			 sort,
+			 remark,
+			 tenant_id
+		from sys_post
+		where enable=0
+		<if test="bean.tenantId != null ">
+            and tenant_id =#{bean.tenantId}
+        </if>
+        <if test="bean.organizationId != null ">
+            and organization_id =#{bean.organizationId}
+        </if>
+		order by create_time desc
+    </select>
+    
+	<!-- 删除用户职务表-->
+    <delete id="deleteUserOrgById" parameterType = "com.smartwf.sm.modules.admin.vo.PostVO">
+	   delete from sys_user_post where post_id = #{bean.id}
+	</delete>
+  
+</mapper>
