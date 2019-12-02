@@ -30,19 +30,19 @@ public class UserThreadLocal {
       // return userThreadLocal.get();
      //初始化用户，等有登录功能再注释掉
      		User user=new User();
-     		user.setUserCode("X2201FC");
-     		user.setUserName("超级管理员");
-     		user.setLoginCode("wanchanghuang");
+     		user.setUserCode("T52EXF");
+     		user.setUserName("张三");
+     		user.setLoginCode("zhangsan");
      		user.setPwd(MD5Utils.convertMd5("123456"));
-     		user.setEmail("wanchanghuang@163.com");
-     		user.setMobile("15102742951");
+     		user.setEmail("zhangsan@163.com");
+     		user.setMobile("13858684039");
      		user.setSex(1);
      		user.setAddress("湖北武汉");
-     		user.setRemark("测试用户");
+     		user.setRemark("湖北武汉江夏区");
      		user.setEnable(0);
-     		user.setId(11);
-     		user.setMgrType(2);
-     		user.setTenantId(999999);
+     		user.setId(2);
+     		user.setMgrType(1);
+     		user.setTenantId(1);
      		return user;
     }
 

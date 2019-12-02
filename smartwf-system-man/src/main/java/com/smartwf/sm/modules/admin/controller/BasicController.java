@@ -67,7 +67,7 @@ public class BasicController {
     public ResponseEntity<Result<?>> organizationAll(Organization bean) {
         try {
         	List<Organization> list=JsonUtil.jsonToList(redisService.get("organizationAll"), Organization.class);
-        	if(null !=bean.getId()) {
+        	if(null !=bean.getTenantId()) {
         		List<Organization> orglist=new ArrayList<Organization>();
             	for(Organization org:list) {
             		if(org.getTenantId()==bean.getTenantId()) {
@@ -99,7 +99,7 @@ public class BasicController {
     public ResponseEntity<Result<?>> PostAll(Post bean) {
         try {
         	List<Post> list=JsonUtil.jsonToList(redisService.get("postAll"), Post.class);
-        	if(null !=bean.getId()) {
+        	if(null !=bean.getTenantId()) {
         		List<Post> orglist=new ArrayList<Post>();
             	for(Post org:list) {
             		if(org.getTenantId()==bean.getTenantId() && org.getOrganizationId()==bean.getOrganizationId()) {
