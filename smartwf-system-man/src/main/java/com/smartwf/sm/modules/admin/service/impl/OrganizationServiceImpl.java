@@ -127,7 +127,22 @@ public class OrganizationServiceImpl implements OrganizationService{
 		if( null!=bean.getId()) {
 			//单个对象删除
 			this.organizationDao.deleteByPrimaryKey(bean);
-			
+			/**
+			//删除组织架构表
+			this.tenantDao.deleteOrgByTeandId(bean);
+			//删除用户组织架构表
+			this.tenantDao.deleteUserOrgByTeandId(bean);
+			//删除职务表
+			this.tenantDao.deletePostByTeandId(bean);
+			//删除用户职务表
+			this.tenantDao.deleteUserPostByTeandId(bean);
+			//删除角色表
+			this.tenantDao.deleteRoleByTeandId(bean);
+			//删除用户角色表
+			this.tenantDao.deleteUserRoleByTeandId(bean);
+			//删除角色权限表
+			this.tenantDao.deletePermissionByTeandId(bean);
+			*/
 		}else {
 			//批量删除
 			if(StringUtils.isNotBlank(bean.getIds())) {
@@ -136,6 +151,22 @@ public class OrganizationServiceImpl implements OrganizationService{
 					list.add(val);
 				}
 				this.organizationDao.deleteOrganizationByIds(list);
+				/*
+				//删除组织架构表
+				this.tenantDao.deleteOrgByTeandIds(list);
+				//删除用户组织架构表
+				this.tenantDao.deleteUserOrgByTeandIds(list);
+				//删除职务表
+				this.tenantDao.deletePostByTeandIds(list);
+				//删除用户职务表
+				this.tenantDao.deleteUserPostByTeandIds(list);
+				//删除角色表
+				this.tenantDao.deleteRoleByTeandIds(list);
+				//删除用户角色表
+				this.tenantDao.deleteUserRoleByTeandIds(list);
+				//删除角色权限表
+				this.tenantDao.deletePermissionByTeandIds(list);
+				*/
 			}
 		}
 	}

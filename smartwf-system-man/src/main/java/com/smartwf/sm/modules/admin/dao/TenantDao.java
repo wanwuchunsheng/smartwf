@@ -47,6 +47,8 @@ public interface TenantDao extends Mapper<Tenant> {
 	void deleteUserRoleByTeandId(@Param("bean") TenantVO bean);
 
 	void deletePermissionByTeandId(@Param("bean") TenantVO bean);
+	
+	void deleteUserByTeandId(@Param("bean") TenantVO bean);
 
 	/**
 	 * @Description: 批量级联删除
@@ -65,6 +67,8 @@ public interface TenantDao extends Mapper<Tenant> {
 	void deleteUserRoleByTeandIds(@Param("list") List<String> list);
 
 	void deletePermissionByTeandIds(@Param("list") List<String> list);
+
+	void deleteUserByTeandIds(@Param("list") List<String> list);
 
     
 }

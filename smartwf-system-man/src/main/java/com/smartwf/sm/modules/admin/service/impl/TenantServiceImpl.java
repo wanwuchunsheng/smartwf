@@ -137,6 +137,8 @@ public class TenantServiceImpl implements TenantService{
 			this.tenantDao.deleteUserRoleByTeandId(bean);
 			//删除角色权限表
 			this.tenantDao.deletePermissionByTeandId(bean);
+			//删除用户表
+			this.tenantDao.deleteUserByTeandId(bean);
 		}else {
 			//批量删除
 			if(StringUtils.isNotBlank(bean.getIds())) {
@@ -160,6 +162,10 @@ public class TenantServiceImpl implements TenantService{
 				this.tenantDao.deleteUserRoleByTeandIds(list);
 				//删除角色权限表
 				this.tenantDao.deletePermissionByTeandIds(list);
+				//删除角色权限表
+				this.tenantDao.deletePermissionByTeandIds(list);
+				//删除用户表
+				this.tenantDao.deleteUserByTeandIds(list);
 			}
 		}
 	}

@@ -47,11 +47,14 @@
     <delete id="deleteUserRoleByTeandId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
 	    delete from sys_user_role where tenant_id = #{bean.id}
 	</delete>
-	<!-- 删除角色权限 -->
+	<!-- 删除角色权限表 -->
     <delete id="deletePermissionByTeandId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
 	    delete from sys_role_permission where tenant_id = #{bean.id}
 	</delete>
-	
+	<!-- 删除用户表 -->
+    <delete id="deleteUserTeandId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
+	    delete from sys_user_info where tenant_id = #{bean.id}
+	</delete>
 	
 	
 	
@@ -97,15 +100,20 @@
 	        #{item}
 	    </foreach>
 	</delete>
-	<!-- 批量删除角色权限 -->
+	<!-- 批量删除角色权限表 -->
     <delete id="deletePermissionByTeandIds" parameterType = "java.util.List">
 	    delete from sys_role_permission where tenant_id in
 	    <foreach collection="list" item="item" open="(" separator="," close=")">
 	        #{item}
 	    </foreach>
 	</delete>
-	
-	
+	<!-- 批量删除用户表 -->
+    <delete id="deleteUserByTeandIds" parameterType = "java.util.List">
+	    delete from sys_user_info where tenant_id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
 	
 	
 	
