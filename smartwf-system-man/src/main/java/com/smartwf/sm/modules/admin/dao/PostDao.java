@@ -31,7 +31,7 @@ public interface PostDao extends Mapper<Post> {
 	List<Post> queryPostAll();
 
 	/**
-	 * @Deprecated 删除用户组织结构
+	 * @Deprecated 删除用户职务
 	 * 
 	 * */
 	void deleteUserPostById(@Param("bean") PostVO bean);
