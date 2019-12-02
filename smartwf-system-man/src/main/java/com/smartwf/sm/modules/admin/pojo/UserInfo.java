@@ -11,7 +11,7 @@ import com.smartwf.common.pojo.BasePojo;
 import lombok.Data;
 
 /**
- * @Description: 系统用户表
+ * @Description: 用户资料表
  */
 @Data
 @Table(name = "sys_user_info")

@@ -164,8 +164,6 @@ public class TenantServiceImpl implements TenantService{
 				this.tenantDao.deleteUserRoleByTenantIds(list);
 				//删除角色权限表
 				this.tenantDao.deletePermissionByTenantIds(list);
-				//删除角色权限表
-				this.tenantDao.deletePermissionByTenantIds(list);
 				//删除用户表
 				this.tenantDao.deleteUserByTenantIds(list);
 			}
