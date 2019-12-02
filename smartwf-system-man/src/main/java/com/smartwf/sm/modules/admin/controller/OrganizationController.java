@@ -2,6 +2,7 @@ package com.smartwf.sm.modules.admin.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -162,6 +163,9 @@ public class OrganizationController {
     @TraceLog(content = "删除组织架构系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteOrganization(OrganizationVO bean) {
         try {
+        	if(null==bean.getId() && StringUtils.isBlank(bean.getIds()) ) {
+        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除数据为空！"));
+        	}
         	this.organizationService.deleteOrganization(bean);
             return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
         } catch (Exception e) {

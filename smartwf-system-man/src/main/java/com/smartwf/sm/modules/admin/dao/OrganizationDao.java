@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.smartwf.sm.modules.admin.pojo.Organization;
+import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
 import tk.mybatis.mapper.common.Mapper;
 
@@ -28,6 +29,12 @@ public interface OrganizationDao extends Mapper<Organization> {
 	 * @result:
 	 */
 	List<Organization> queryOrganizationAll();
+
+	/**
+	 * @Deprecated 删除用户组织结构
+	 * 
+	 * */
+	void deleteUserOrgById(@Param("bean") OrganizationVO bean);
 
 
     

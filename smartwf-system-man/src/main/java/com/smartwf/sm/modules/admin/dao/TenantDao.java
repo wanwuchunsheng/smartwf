@@ -34,41 +34,41 @@ public interface TenantDao extends Mapper<Tenant> {
 	 * @Description: 级联删除
 	 * 
 	 * */
-	void deleteOrgByTeandId(@Param("bean") TenantVO bean);
+	void deleteOrgByTenantId(@Param("bean") TenantVO bean);
 
-	void deleteUserOrgByTeandId(@Param("bean") TenantVO bean);
+	void deleteUserOrgByTenantId(@Param("bean") TenantVO bean);
 
-	void deletePostByTeandId(@Param("bean") TenantVO bean);
+	void deletePostByTenantId(@Param("bean") TenantVO bean);
 
-	void deleteUserPostByTeandId(@Param("bean") TenantVO bean);
+	void deleteUserPostByTenantId(@Param("bean") TenantVO bean);
 
-	void deleteRoleByTeandId(@Param("bean") TenantVO bean);
+	void deleteRoleByTenantId(@Param("bean") TenantVO bean);
 
-	void deleteUserRoleByTeandId(@Param("bean") TenantVO bean);
+	void deleteUserRoleByTenantId(@Param("bean") TenantVO bean);
 
-	void deletePermissionByTeandId(@Param("bean") TenantVO bean);
+	void deletePermissionByTenantId(@Param("bean") TenantVO bean);
 	
-	void deleteUserByTeandId(@Param("bean") TenantVO bean);
+	void deleteUserByTenantId(@Param("bean") TenantVO bean);
 
 	/**
 	 * @Description: 批量级联删除
 	 * 
 	 * */
-	void deleteOrgByTeandIds(@Param("list") List<String> list);
+	void deleteOrgByTenantIds(@Param("list") List<String> list);
 
-	void deleteUserOrgByTeandIds(@Param("list") List<String> list);
+	void deleteUserOrgByTenantIds(@Param("list") List<String> list);
 
-	void deletePostByTeandIds(@Param("list") List<String> list);
+	void deletePostByTenantIds(@Param("list") List<String> list);
 
-	void deleteUserPostByTeandIds(@Param("list") List<String> list);
+	void deleteUserPostByTenantIds(@Param("list") List<String> list);
 
-	void deleteRoleByTeandIds(@Param("list") List<String> list);
+	void deleteRoleByTenantIds(@Param("list") List<String> list);
 
-	void deleteUserRoleByTeandIds(@Param("list") List<String> list);
+	void deleteUserRoleByTenantIds(@Param("list") List<String> list);
 
-	void deletePermissionByTeandIds(@Param("list") List<String> list);
+	void deletePermissionByTenantIds(@Param("list") List<String> list);
 
-	void deleteUserByTeandIds(@Param("list") List<String> list);
+	void deleteUserByTenantIds(@Param("list") List<String> list);
 
     
 }

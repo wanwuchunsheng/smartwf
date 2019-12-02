@@ -16,6 +16,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
@@ -124,48 +125,49 @@ public class TenantServiceImpl implements TenantService{
 			//删除租户表
 			this.tenantDao.deleteByPrimaryKey(bean);
 			//删除组织架构表
-			this.tenantDao.deleteOrgByTeandId(bean);
+			this.tenantDao.deleteOrgByTenantId(bean);
 			//删除用户组织架构表
-			this.tenantDao.deleteUserOrgByTeandId(bean);
+			this.tenantDao.deleteUserOrgByTenantId(bean);
 			//删除职务表
-			this.tenantDao.deletePostByTeandId(bean);
+			this.tenantDao.deletePostByTenantId(bean);
 			//删除用户职务表
-			this.tenantDao.deleteUserPostByTeandId(bean);
+			this.tenantDao.deleteUserPostByTenantId(bean);
 			//删除角色表
-			this.tenantDao.deleteRoleByTeandId(bean);
+			this.tenantDao.deleteRoleByTenantId(bean);
 			//删除用户角色表
-			this.tenantDao.deleteUserRoleByTeandId(bean);
+			this.tenantDao.deleteUserRoleByTenantId(bean);
 			//删除角色权限表
-			this.tenantDao.deletePermissionByTeandId(bean);
+			this.tenantDao.deletePermissionByTenantId(bean);
 			//删除用户表
-			this.tenantDao.deleteUserByTeandId(bean);
+			this.tenantDao.deleteUserByTenantId(bean);
 		}else {
+			String ids=StrUtils.regex(bean.getIds());
 			//批量删除
-			if(StringUtils.isNotBlank(bean.getIds())) {
+			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
-				for(String val:bean.getIds().split(",")) {
+				for(String val:ids.split(",")) {
 					list.add(val);
 				}
 				//租户表
 				this.tenantDao.deleteTenantByIds(list);
 				//删除组织架构表
-				this.tenantDao.deleteOrgByTeandIds(list);
+				this.tenantDao.deleteOrgByTenantIds(list);
 				//删除用户组织架构表
-				this.tenantDao.deleteUserOrgByTeandIds(list);
+				this.tenantDao.deleteUserOrgByTenantIds(list);
 				//删除职务表
-				this.tenantDao.deletePostByTeandIds(list);
+				this.tenantDao.deletePostByTenantIds(list);
 				//删除用户职务表
-				this.tenantDao.deleteUserPostByTeandIds(list);
+				this.tenantDao.deleteUserPostByTenantIds(list);
 				//删除角色表
-				this.tenantDao.deleteRoleByTeandIds(list);
+				this.tenantDao.deleteRoleByTenantIds(list);
 				//删除用户角色表
-				this.tenantDao.deleteUserRoleByTeandIds(list);
+				this.tenantDao.deleteUserRoleByTenantIds(list);
 				//删除角色权限表
-				this.tenantDao.deletePermissionByTeandIds(list);
+				this.tenantDao.deletePermissionByTenantIds(list);
 				//删除角色权限表
-				this.tenantDao.deletePermissionByTeandIds(list);
+				this.tenantDao.deletePermissionByTenantIds(list);
 				//删除用户表
-				this.tenantDao.deleteUserByTeandIds(list);
+				this.tenantDao.deleteUserByTenantIds(list);
 			}
 		}
 	}

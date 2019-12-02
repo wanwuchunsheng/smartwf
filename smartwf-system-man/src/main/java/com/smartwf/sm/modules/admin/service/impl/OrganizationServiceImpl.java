@@ -16,11 +16,15 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.OrganizationDao;
+import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Organization;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
+import com.smartwf.sm.modules.admin.vo.TenantVO;
 
 import lombok.extern.log4j.Log4j;
 import tk.mybatis.mapper.entity.Example;
@@ -35,6 +39,8 @@ public class OrganizationServiceImpl implements OrganizationService{
 	
 	@Autowired
 	private OrganizationDao organizationDao;
+	@Autowired
+	private TenantDao tenantDao;
 
 	/**
 	 * @Description:查询组织架构分页
@@ -125,51 +131,27 @@ public class OrganizationServiceImpl implements OrganizationService{
 	@Override
 	public void deleteOrganization(OrganizationVO bean) {
 		if( null!=bean.getId()) {
-			//单个对象删除
+			//删除组织机构
 			this.organizationDao.deleteByPrimaryKey(bean);
-			/**
-			//删除组织架构表
-			this.tenantDao.deleteOrgByTeandId(bean);
-			//删除用户组织架构表
-			this.tenantDao.deleteUserOrgByTeandId(bean);
-			//删除职务表
-			this.tenantDao.deletePostByTeandId(bean);
-			//删除用户职务表
-			this.tenantDao.deleteUserPostByTeandId(bean);
-			//删除角色表
-			this.tenantDao.deleteRoleByTeandId(bean);
-			//删除用户角色表
-			this.tenantDao.deleteUserRoleByTeandId(bean);
-			//删除角色权限表
-			this.tenantDao.deletePermissionByTeandId(bean);
-			*/
+			//删除用户组织结构
+			this.organizationDao.deleteUserOrgById(bean);
 		}else {
-			//批量删除
-			if(StringUtils.isNotBlank(bean.getIds())) {
+			String ids=StrUtils.regex(bean.getIds());
+			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
-				for(String val:bean.getIds().split(",")) {
+				for(String val:ids.split(",")) {
 					list.add(val);
+					bean=new OrganizationVO();
+					bean.setId(Integer.valueOf(val));
+					//删除用户组织结构
+					this.organizationDao.deleteUserOrgById(bean);
 				}
+				//批量删除组织机构
 				this.organizationDao.deleteOrganizationByIds(list);
-				/*
-				//删除组织架构表
-				this.tenantDao.deleteOrgByTeandIds(list);
-				//删除用户组织架构表
-				this.tenantDao.deleteUserOrgByTeandIds(list);
-				//删除职务表
-				this.tenantDao.deletePostByTeandIds(list);
-				//删除用户职务表
-				this.tenantDao.deleteUserPostByTeandIds(list);
-				//删除角色表
-				this.tenantDao.deleteRoleByTeandIds(list);
-				//删除用户角色表
-				this.tenantDao.deleteUserRoleByTeandIds(list);
-				//删除角色权限表
-				this.tenantDao.deletePermissionByTeandIds(list);
-				*/
 			}
 		}
 	}
+	
 
 	/**
      * @Description： 初始化组织架构
