@@ -27,7 +27,7 @@
 			tenant_id,
 			enable,
 			level
-		from sys_tenant
+		from sys_organization
 		where enable=0 order by create_time desc
     </select>
     

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.service.TenantService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,9 @@ public class InitDataConfig implements CommandLineRunner{
 	TenantService tenantService;
 	
 	@Autowired
+	OrganizationService organizationService;
+	
+	@Autowired
     private RedisService redisService;
 
 	/**
@@ -30,12 +34,14 @@ public class InitDataConfig implements CommandLineRunner{
     public void InitDataListener() {
     	try {
     		//租户
-        	this.redisService.set("TenantAll", JSONArray.toJSONString(this.tenantService.queryTenantAll()));
+        	this.redisService.set("tenantAll", JSONArray.toJSONString(this.tenantService.queryTenantAll()));
         	//组织机构
+        	this.redisService.set("organizationAll", JSONArray.toJSONString(this.organizationService.queryOrganizationAll()));
         	//职务
         	//角色
         	//基础主数据
-        	log.info("初始化基础数据完成{}",redisService.get("TenantAll"));
+        	log.info("租户数据{}",redisService.get("tenantAll"));
+        	log.info("组织机构数据{}",redisService.get("organizationAll"));
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}
