@@ -10,8 +10,13 @@ import java.util.Date;
  * @Description: 用户
  */
 @Data
-public class User {
+public class User extends BasePojo implements Serializable{
 
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
      * id
@@ -124,29 +129,6 @@ public class User {
             
 	 */
 	private Integer enable;
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
-	/**
-	 * 创建人id
-	 */
-	private Integer createUserId;
-	/**
-	 * 创建人姓名
-	 */
-	private String createUserName;
-	/**
-	 * 修改时间
-	 */
-	private Date updateTime;
-	/**
-	 * 修改人id
-	 */
-	private Integer updateUserId;
-	/**
-	 * 修改人姓名
-	 */
-	private String updateUserName;
+	
 
 }

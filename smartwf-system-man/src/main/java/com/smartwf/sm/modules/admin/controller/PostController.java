@@ -105,9 +105,9 @@ public class PostController {
 	        @ApiImplicitParam(paramType = "query", name = "organizationId", value = "组织架构（主键）", dataType = "int", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "postCode", value = "职务代码", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "postName", value = "职务名称", dataType = "String", required = true),
+		    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "postType", value = "职务类型（0高管 1中层 2基层）", dataType = "Integer"),
 		    @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
-	        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     public ResponseEntity<Result<?>> savePost(HttpSession session,Post bean) {

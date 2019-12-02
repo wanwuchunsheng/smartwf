@@ -5,7 +5,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
+import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.common.utils.MD5Utils;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.service.TenantService;

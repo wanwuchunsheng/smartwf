@@ -26,14 +26,7 @@
 			 remark,
 			 tenant_id
 		from sys_post
-		where enable=0
-		<if test="bean.tenantId != null ">
-            and tenant_id =#{bean.tenantId}
-        </if>
-        <if test="bean.organizationId != null ">
-            and organization_id =#{bean.organizationId}
-        </if>
-		order by create_time desc
+		where enable=0 order by create_time desc
     </select>
     
 	<!-- 删除用户职务表-->
