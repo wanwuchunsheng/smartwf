@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2019/11/28 17:16:04                          */
+/* Created on:     2019/12/2 14:56:20                           */
 /*==============================================================*/
 
 
@@ -234,7 +234,7 @@ alter table sys_resouce comment '资源表';
 /*==============================================================*/
 create table sys_role
 (
-   id                   int not null comment '主键',
+   id                   int not null auto_increment comment '主键',
    role_code            varchar(32) comment '角色编号',
    role_name            varchar(25) comment '角色名称',
    tenant_id            int comment '租户id',
@@ -260,7 +260,7 @@ alter table sys_role comment '角色表';
 /*==============================================================*/
 create table sys_role_permission
 (
-   id                   int not null comment '主键',
+   id                   int not null auto_increment comment '主键',
    permission_id        int comment '权限id',
    role_id              int comment '角色id',
    tenant_id            int comment '租户id',
@@ -405,7 +405,7 @@ alter table sys_user_post comment '用户职务表';
 /*==============================================================*/
 create table sys_user_role
 (
-   id                   int not null comment '主键',
+   id                   int not null auto_increment comment '主键',
    role_id              int comment '角色id',
    user_id              int comment '用户id',
    tenant_id            int comment '租户id',
