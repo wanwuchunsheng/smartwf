@@ -70,7 +70,7 @@
     <delete id="deleteUserInfoByIds" parameterType = "java.util.List">
 	    delete 
 	       from sys_user_info  
-	    where mgr_type not in (2) and id in
+	    where id in
 	    <foreach collection="list" item="item" open="(" separator="," close=")">
 	        #{item}
 	    </foreach>
@@ -78,7 +78,20 @@
     
     <!-- 单个删除用户资料 -->
     <delete id="deleteUserInfoById" parameterType = "com.smartwf.sm.modules.admin.vo.UserInfoVO">
-	    delete from sys_user_info where mgr_type not in (2) and id = #{bean.id}
+	    delete from sys_user_info where  id = #{bean.id}
+	</delete>
+	
+	<!-- 删除用户组织架构 -->
+	<delete id="deleteUserOrgById" parameterType = "com.smartwf.sm.modules.admin.vo.UserInfoVO">
+	    delete from sys_user_organization where user_id = #{bean.id}
+	</delete>
+	<!-- 删除用户职务 -->
+	<delete id="deleteUserPostById" parameterType = "com.smartwf.sm.modules.admin.vo.UserInfoVO">
+	    delete from sys_user_post where user_id = #{bean.id}
+	</delete>
+	<!-- 删除用户角色 -->
+	<delete id="deleteUserRoleById" parameterType = "com.smartwf.sm.modules.admin.vo.UserInfoVO">
+	    delete from sys_user_role where user_id = #{bean.id}
 	</delete>
 	
 </mapper>

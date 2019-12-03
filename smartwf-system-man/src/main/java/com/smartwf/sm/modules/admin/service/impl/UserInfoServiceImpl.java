@@ -16,12 +16,17 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.MD5Utils;
+import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.UserInfoDao;
+import com.smartwf.sm.modules.admin.dao.UserOrganizationDao;
+import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
+import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 import lombok.extern.log4j.Log4j;
+import tk.mybatis.mapper.entity.Example;
 /**
  * @Description: 用户资料业务层接口实现
  * @author WCH
@@ -115,15 +120,30 @@ public class UserInfoServiceImpl implements UserInfoService{
 	public void deleteUserInfo(UserInfoVO bean) {
 		if( null!=bean.getId()) {
 			//单个对象删除
-			//this.userInfoDao.deleteByPrimaryKey(bean);
 			this.userInfoDao.deleteUserInfoById(bean);
+			//删除用户组织架构表
+			this.userInfoDao.deleteUserOrgById(bean);
+			//删除用户职务表
+			this.userInfoDao.deleteUserPostById(bean);
+			//删除用户角色表
+			this.userInfoDao.deleteUserRoleById(bean);
 		}else {
 			//批量删除
-			if(StringUtils.isNotBlank(bean.getIds())) {
+			String ids=StrUtils.regex(bean.getIds());
+			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
-				for(String val:bean.getIds().split(",")) {
+				for(String val:ids.split(",")) {
 					list.add(val);
+					bean = new UserInfoVO();
+					bean.setId(Integer.valueOf(val));
+					//删除用户组织架构表
+					this.userInfoDao.deleteUserOrgById(bean);
+					//删除用户职务表
+					this.userInfoDao.deleteUserPostById(bean);
+					//删除用户角色表
+					this.userInfoDao.deleteUserRoleById(bean);
 				}
+				//批量删除
 				this.userInfoDao.deleteUserInfoByIds(list);
 			}
 		}
