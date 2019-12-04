@@ -15,6 +15,7 @@ import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Post;
+import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 
 import io.swagger.annotations.Api;
@@ -100,14 +101,46 @@ public class BasicController {
         try {
         	List<Post> list=JsonUtil.jsonToList(redisService.get("postAll"), Post.class);
         	if(null !=bean.getTenantId()) {
-        		List<Post> orglist=new ArrayList<Post>();
+        		List<Post> postlist=new ArrayList<Post>();
             	for(Post org:list) {
             		if(org.getTenantId()==bean.getTenantId() && org.getOrganizationId()==bean.getOrganizationId()) {
-            			orglist.add(org);
+            			postlist.add(org);
             		}
             	}
             	//过滤租户&组织架构返回
-            	return ResponseEntity.ok(Result.data(orglist));
+            	return ResponseEntity.ok(Result.data(postlist));
+        	}
+        	//无需过滤租户&组织架构返回
+            return ResponseEntity.ok(Result.data(list));
+        } catch (Exception e) {
+            log.error("查询租户列表信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询租户列表信息错误！"));
+    }
+    
+    
+    /**
+     * @Description 角色列表
+     * @param 
+     * @return
+     */
+    @GetMapping("role")
+    @ApiOperation(value = "查询职务列表接口", notes = "查询职务列表信息")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）为空返回租户下所有的组织架构", dataType = "Integer")
+    })
+    public ResponseEntity<Result<?>> RoleAll(Role bean) {
+        try {
+        	List<Role> list=JsonUtil.jsonToList(redisService.get("roleAll"), Role.class);
+        	if(null !=bean.getTenantId()) {
+        		List<Role> rolelist=new ArrayList<Role>();
+            	for(Role org:list) {
+            		if(org.getTenantId()==bean.getTenantId()) {
+            			rolelist.add(org);
+            		}
+            	}
+            	//过滤租户&组织架构返回
+            	return ResponseEntity.ok(Result.data(rolelist));
         	}
         	//无需过滤租户&组织架构返回
             return ResponseEntity.ok(Result.data(list));

@@ -5,12 +5,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
-import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
-import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.MD5Utils;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.service.PostService;
+import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.service.TenantService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +31,9 @@ public class InitDataConfig implements CommandLineRunner{
 	
 	@Autowired
     private PostService postService;
+	
+	@Autowired
+    private RoleService roleService;
 
 	/**
 	 * @Description: 初始化基础数据
@@ -46,10 +47,12 @@ public class InitDataConfig implements CommandLineRunner{
         	//职务
         	this.redisService.set("postAll", JSONArray.toJSONString(this.postService.queryPostAll()));
         	//角色
+        	this.redisService.set("roleAll", JSONArray.toJSONString(this.roleService.queryRoleAll()));
         	//基础主数据
         	log.info("租户数据{}",redisService.get("tenantAll"));
         	log.info("组织机构数据{}",redisService.get("organizationAll"));
         	log.info("职务基础数据{}",redisService.get("postAll"));
+        	log.info("角色基础数据{}",redisService.get("roleAll"));
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}
