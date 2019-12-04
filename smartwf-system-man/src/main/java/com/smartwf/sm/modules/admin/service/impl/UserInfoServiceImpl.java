@@ -19,14 +19,16 @@ import com.smartwf.common.utils.MD5Utils;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.UserInfoDao;
 import com.smartwf.sm.modules.admin.dao.UserOrganizationDao;
-import com.smartwf.sm.modules.admin.pojo.Organization;
+import com.smartwf.sm.modules.admin.dao.UserPostDao;
+import com.smartwf.sm.modules.admin.dao.UserRoleDao;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.pojo.UserOrganization;
+import com.smartwf.sm.modules.admin.pojo.UserPost;
+import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 import lombok.extern.log4j.Log4j;
-import tk.mybatis.mapper.entity.Example;
 /**
  * @Description: 用户资料业务层接口实现
  * @author WCH
@@ -38,6 +40,15 @@ public class UserInfoServiceImpl implements UserInfoService{
 	
 	@Autowired
 	private UserInfoDao userInfoDao;
+	
+	@Autowired
+	private UserOrganizationDao userOrganizationDao;
+	
+	@Autowired
+	private UserPostDao userPostDao;
+	
+	@Autowired
+	private UserRoleDao userRoleDao;
 
 	/**
 	 * @Description:查询用户资料分页
@@ -66,7 +77,7 @@ public class UserInfoServiceImpl implements UserInfoService{
      */
 	@Override
 	public Result<?> selectUserInfoById(UserInfo bean) {
-		UserInfo userInfo= this.userInfoDao.selectByPrimaryKey(bean);
+		UserInfo userInfo= this.userInfoDao.selectUserInfoById(bean);
 		return Result.data(userInfo);
 	}
 	
@@ -74,8 +85,9 @@ public class UserInfoServiceImpl implements UserInfoService{
      * @Description: 添加用户资料
      * @return
      */
+	@Transactional
 	@Override
-	public void saveUserInfo(UserInfo bean) {
+	public void saveUserInfo(UserInfoVO bean) {
 		//添加创建人基本信息
 		User user=UserThreadLocal.getUser();
 		bean.setCreateTime(new Date());
@@ -88,16 +100,56 @@ public class UserInfoServiceImpl implements UserInfoService{
 		if(StringUtils.isNotBlank(bean.getPwd())) {
 			bean.setPwd(MD5Utils.convertMd5(bean.getPwd()));
 		}
-		//保存
+		//保存用户资料
 		this.userInfoDao.insertSelective(bean);
+		//批量添加与用户相关联表
+		//添加用户组织机构
+		String orgIds=StrUtils.regex(bean.getOrganizationIds());
+		if(StringUtils.isNotBlank(orgIds)) {
+			UserOrganization uo=null;
+			for(String id:orgIds.split(",")) {
+				uo=new UserOrganization();
+				uo.setUserId(bean.getId());
+				uo.setTenantId(bean.getTenantId());
+				uo.setOrganizationId(Integer.valueOf(id));
+				this.userOrganizationDao.insertSelective(uo);
+			}
+		}
+		//添加用户职务
+		String postIds=StrUtils.regex(bean.getPostIds());
+		if(StringUtils.isNotBlank(postIds)) {
+			UserPost up = null;
+			for(String id:postIds.split(",")) {
+				up=new UserPost();
+				up.setUserId(bean.getId());
+				up.setTenantId(bean.getTenantId());
+				up.setPostId(Integer.valueOf(id));
+				this.userPostDao.insertSelective(up);
+			}
+		}
+		//添加用户角色
+		String roleIds=StrUtils.regex(bean.getRoleIds());
+		if(StringUtils.isNotBlank(roleIds)) {
+			UserRole ur = null;
+			for(String id:roleIds.split(",")) {
+				ur=new UserRole();
+				ur.setUserId(bean.getId());
+				ur.setTenantId(bean.getTenantId());
+				ur.setRoleId(Integer.valueOf(id));
+				this.userRoleDao.insertSelective(ur);
+			}
+		}
 	}
 
 	/**
      * @Description： 修改用户资料
+     *    1.用户信息修改
+     *    2.用户关联表修改
      * @return
      */
+	@Transactional
 	@Override
-	public void updateUserInfo(UserInfo bean) {
+	public void updateUserInfo(UserInfoVO bean) {
 		//添加修改人信息
 		User user=UserThreadLocal.getUser();
 		bean.setUpdateTime(new Date());
@@ -107,8 +159,53 @@ public class UserInfoServiceImpl implements UserInfoService{
 		if(StringUtils.isNotBlank(bean.getPwd())) {
 			bean.setPwd(MD5Utils.convertMd5(bean.getPwd()));
 		}
-		//修改
+		//1)修改用户资料
 		this.userInfoDao.updateByPrimaryKeySelective(bean);
+		
+		//2）删除原始用户对应的关系表（清空）
+		//删除用户组织架构表
+		this.userInfoDao.deleteUserOrgById(bean);
+		//删除用户职务表
+		this.userInfoDao.deleteUserPostById(bean);
+		//删除用户角色表
+		this.userInfoDao.deleteUserRoleById(bean);
+		//3）重新添加新的关联关系
+		//添加用户组织机构
+		String orgIds=StrUtils.regex(bean.getOrganizationIds());
+		if(StringUtils.isNotBlank(orgIds)) {
+			UserOrganization uo=null;
+			for(String id:orgIds.split(",")) {
+				uo=new UserOrganization();
+				uo.setUserId(bean.getId());
+				uo.setTenantId(bean.getTenantId());
+				uo.setOrganizationId(Integer.valueOf(id));
+				this.userOrganizationDao.insertSelective(uo);
+			}
+		}
+		//添加用户职务
+		String postIds=StrUtils.regex(bean.getPostIds());
+		if(StringUtils.isNotBlank(postIds)) {
+			UserPost up = null;
+			for(String id:postIds.split(",")) {
+				up=new UserPost();
+				up.setUserId(bean.getId());
+				up.setTenantId(bean.getTenantId());
+				up.setPostId(Integer.valueOf(id));
+				this.userPostDao.insertSelective(up);
+			}
+		}
+		//添加用户角色
+		String roleIds=StrUtils.regex(bean.getRoleIds());
+		if(StringUtils.isNotBlank(roleIds)) {
+			UserRole ur = null;
+			for(String id:roleIds.split(",")) {
+				ur=new UserRole();
+				ur.setUserId(bean.getId());
+				ur.setTenantId(bean.getTenantId());
+				ur.setRoleId(Integer.valueOf(id));
+				this.userRoleDao.insertSelective(ur);
+			}
+		}
 	}
 
 	/**

@@ -96,20 +96,23 @@ public class UserInfoController {
     @ApiOperation(value = "添加接口", notes = "添加用户资料接口")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "organizationIds", value = "组织架构（主键），逗号拼接", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "postIds", value = "职务（主键），逗号拼接", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "roleIds", value = "角色（主键），逗号拼接", dataType = "String", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String", required = true),
             @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录账号", dataType = "String", required = true),
             @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String", required = true),
             @ApiImplicitParam(paramType = "query", name = "pwd", value = "密码", dataType = "String", required = true),
             @ApiImplicitParam(paramType = "query", name = "mobile", value = "手机号", dataType = "String", required = true),
-            @ApiImplicitParam(paramType = "query", name = "phone", value = "电话", dataType = "String"),
-            @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "sex", value = "性别（0-女 1-男）", dataType = "int", required = true),
+            @ApiImplicitParam(paramType = "query", name = "sex", value = "性别（0-女 1-男）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "等级（0-普通 1-管理员 2-超级管理员）", dataType = "int", required = true),
+            @ApiImplicitParam(paramType = "query", name = "phone", value = "电话", dataType = "String"),
+            @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "address", value = "联系地址", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
-    public ResponseEntity<Result<?>> saveSysUser(HttpSession session,UserInfo bean) {
+    public ResponseEntity<Result<?>> saveSysUser(HttpSession session,UserInfoVO bean) {
         try {
     		this.userService.saveUserInfo(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
@@ -127,6 +130,9 @@ public class UserInfoController {
     @ApiOperation(value = "修改接口", notes = "修改用户资料资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "organizationIds", value = "组织架构（主键），逗号拼接", dataType = "String", required = true),
+	    @ApiImplicitParam(paramType = "query", name = "postIds", value = "职务（主键），逗号拼接", dataType = "String", required = true),
+	    @ApiImplicitParam(paramType = "query", name = "roleIds", value = "角色（主键），逗号拼接", dataType = "String", required = true),
     	@ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录账号", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String"),
@@ -142,7 +148,7 @@ public class UserInfoController {
  	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改用户资料", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updateSysUser(UserInfo bean) {
+    public ResponseEntity<Result<?>> updateSysUser(UserInfoVO bean) {
         try {
             this.userService.updateUserInfo(bean);
             return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));

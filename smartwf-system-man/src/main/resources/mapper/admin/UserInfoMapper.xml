@@ -66,6 +66,44 @@
         order by create_time desc
     </select>
     
+     <!-- 查询用户资源列表 -->
+     <select id="selectUserInfoById" resultType="com.smartwf.sm.modules.admin.vo.UserInfoVO">
+       select 
+		    a.id,
+			a.user_code,
+			a.login_code,
+			a.user_name,
+			a.pwd,
+			a.email,
+			a.mobile,
+			a.phone,
+			a.sex,
+			a.avatar,
+			a.sign,
+			a.wx_openid,
+			a.qq_openid,
+			a.address,
+			a.remark,
+			a.tenant_id,
+			a.status,
+			a.mgr_type,
+			a.pwd_question,
+			a.pwd_question_answer,
+			a.pwd_question2,
+			a.pwd_question_answer2,
+			a.pwd_question3,
+			a.pwd_question_answer3,
+			a.enable,
+		    (select group_concat(organization_id separator ',') from sys_user_organization where a.id=user_id and a.tenant_id=tenant_id group by tenant_id,user_id) as organizationIds,
+			(select group_concat(post_id separator ',') from sys_user_post where a.id=user_id and a.tenant_id=tenant_id group by tenant_id,user_id) as postIds,
+			(select group_concat(role_id separator ',') from sys_user_role where a.id=user_id and a.tenant_id=tenant_id group by tenant_id,user_id) as roleIds 
+		from sys_user_info a
+		where id= #{bean.id}
+    </select>
+    
+    
+    
+    
     <!-- 批量删除用户资料 -->
     <delete id="deleteUserInfoByIds" parameterType = "java.util.List">
 	    delete 

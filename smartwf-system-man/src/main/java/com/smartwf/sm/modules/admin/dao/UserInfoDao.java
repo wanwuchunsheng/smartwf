@@ -49,6 +49,10 @@ public interface UserInfoDao extends Mapper<UserInfo> {
 	 * @Description: 单个删除用户角色
 	 */
 	void deleteUserRoleById(@Param("bean") UserInfoVO bean);
+	/**
+	 * @Description: 主键查询用户资料
+	 */
+	UserInfo selectUserInfoById(@Param("bean") UserInfo bean);
 
 
     

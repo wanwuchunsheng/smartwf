@@ -28,13 +28,13 @@ public interface UserInfoService {
      * @Description： 添加用户资料
      * @return
      */
-	void saveUserInfo(UserInfo bean);
+	void saveUserInfo(UserInfoVO bean);
 	
 	/**
      * @Description： 修改用户资料
      * @return
      */
-	void updateUserInfo(UserInfo bean);
+	void updateUserInfo(UserInfoVO bean);
 
 	/**
      * @Description： 删除用户资料
