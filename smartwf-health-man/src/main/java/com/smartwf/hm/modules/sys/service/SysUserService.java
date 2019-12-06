@@ -1,8 +1,8 @@
-package com.smartwf.hm.sys.service;
+package com.smartwf.hm.modules.sys.service;
 
 import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.hm.sys.pojo.SysUser;
+import com.smartwf.hm.modules.sys.pojo.SysUser;
 
 /**
  * @Description: 系统业务层接口

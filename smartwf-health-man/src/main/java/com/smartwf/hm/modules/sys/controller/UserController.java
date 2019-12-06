@@ -1,4 +1,4 @@
-package com.smartwf.hm.sys.controller;
+package com.smartwf.hm.modules.sys.controller;
 
 import java.util.Date;
 
@@ -18,8 +18,8 @@ import com.smartwf.common.annotation.RequiresPermissions;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.hm.sys.pojo.SysUser;
-import com.smartwf.hm.sys.service.SysUserService;
+import com.smartwf.hm.modules.sys.pojo.SysUser;
+import com.smartwf.hm.modules.sys.service.SysUserService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

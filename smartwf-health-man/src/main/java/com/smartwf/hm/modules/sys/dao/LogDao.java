@@ -1,4 +1,4 @@
-package com.smartwf.hm.sys.dao;
+package com.smartwf.hm.modules.sys.dao;
 
 
 import java.util.List;
@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.smartwf.common.dto.LogDTO;
-import com.smartwf.hm.sys.pojo.Log;
+import com.smartwf.hm.modules.sys.pojo.Log;
 
 import tk.mybatis.mapper.common.Mapper;
 

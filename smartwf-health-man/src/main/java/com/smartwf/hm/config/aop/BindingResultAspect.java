@@ -24,7 +24,7 @@ public class BindingResultAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* com.smartwf.hm.*.controller.*.*(..))")
+    @Around("execution(* com.smartwf.hm.*.*.controller.*.*(..))")
     public Object bindingResultAround(ProceedingJoinPoint pjp) throws Throwable {
         return AopAround.bindingResultAround(pjp);
     }

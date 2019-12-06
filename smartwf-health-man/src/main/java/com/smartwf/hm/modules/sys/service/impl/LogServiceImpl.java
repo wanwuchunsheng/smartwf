@@ -1,10 +1,9 @@
-package com.smartwf.hm.sys.service.impl;
+package com.smartwf.hm.modules.sys.service.impl;
 
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,9 +11,9 @@ import com.github.pagehelper.PageHelper;
 import com.smartwf.common.dto.LogDTO;
 import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.hm.sys.dao.LogDao;
-import com.smartwf.hm.sys.pojo.Log;
-import com.smartwf.hm.sys.service.LogService;
+import com.smartwf.hm.modules.sys.dao.LogDao;
+import com.smartwf.hm.modules.sys.pojo.Log;
+import com.smartwf.hm.modules.sys.service.LogService;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -25,8 +24,6 @@ import tk.mybatis.mapper.entity.Example;
 @Service
 public class LogServiceImpl implements LogService {
 
-	@Autowired
-    private MongoTemplate mongoTemplate;
 	
     @Autowired
     private LogDao logDao;

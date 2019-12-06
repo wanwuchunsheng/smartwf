@@ -1,4 +1,4 @@
-package com.smartwf.hm.sys.pojo;
+package com.smartwf.hm.modules.sys.pojo;
 
 import java.util.Date;
 
@@ -12,7 +12,7 @@ import lombok.Data;
  * @Description: 系统用户表
  */
 @Data
-@Table(name = "sys_user2")
+@Table(name = "sys_user")
 public class SysUser {
 	/**
      * 主键id

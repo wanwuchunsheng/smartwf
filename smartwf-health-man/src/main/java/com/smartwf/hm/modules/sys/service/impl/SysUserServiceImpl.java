@@ -1,4 +1,4 @@
-package com.smartwf.hm.sys.service.impl;
+package com.smartwf.hm.modules.sys.service.impl;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.config.rocketmq.Producer;
-import com.smartwf.hm.sys.dao.SysUserDao;
-import com.smartwf.hm.sys.pojo.SysUser;
-import com.smartwf.hm.sys.service.SysUserService;
+import com.smartwf.hm.modules.sys.dao.SysUserDao;
+import com.smartwf.hm.modules.sys.pojo.SysUser;
+import com.smartwf.hm.modules.sys.service.SysUserService;
 
 import lombok.extern.slf4j.Slf4j;
 import tk.mybatis.mapper.entity.Example;

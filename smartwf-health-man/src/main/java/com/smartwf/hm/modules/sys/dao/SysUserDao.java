@@ -1,8 +1,8 @@
-package com.smartwf.hm.sys.dao;
+package com.smartwf.hm.modules.sys.dao;
 
 import org.springframework.stereotype.Repository;
 
-import com.smartwf.hm.sys.pojo.SysUser;
+import com.smartwf.hm.modules.sys.pojo.SysUser;
 
 import tk.mybatis.mapper.common.Mapper;
 

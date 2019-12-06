@@ -1,4 +1,4 @@
-package com.smartwf.hm.sys.controller;
+package com.smartwf.hm.modules.sys.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONArray;
 import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.hm.sys.service.LogService;
+import com.smartwf.hm.modules.sys.service.LogService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import com.smartwf.common.aop.AopAround;
 import com.smartwf.common.dto.LogDTO;
 import com.smartwf.common.queue.LogQueue;
-import com.smartwf.hm.sys.service.LogService;
+import com.smartwf.hm.modules.sys.service.LogService;
 
 
 /**
@@ -37,7 +37,7 @@ public class LogAspect {
      *
      * @return
      */
-    @Pointcut("execution(* com.smartwf.hm.*.controller.*.*(..)) && @annotation(com.smartwf.common.annotation.TraceLog)")
+    @Pointcut("execution(* com.smartwf.hm.*.*.controller.*.*(..)) && @annotation(com.smartwf.common.annotation.TraceLog)")
     public void webLog() {
     }
 
