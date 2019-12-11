@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.admin.dao.UserActionDao" >
+
+     
+    <!-- 批量删除用户操作 -->
+    <delete id="deleteUserActionByIds" parameterType = "java.util.List">
+	    delete 
+	       from sys_user_action  
+	    where id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+	
+
+   
+</mapper>
