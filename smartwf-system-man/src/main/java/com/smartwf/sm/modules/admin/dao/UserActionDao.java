@@ -22,5 +22,10 @@ public interface UserActionDao extends Mapper<UserAction> {
 	 * @result:
 	 */
 	void deleteUserActionByIds(@Param("list") List<String> list);
+	/**
+	 * @Description: 初始化用户操作
+	 * @result:
+	 */
+	List<UserAction> queryUserActionAll();
 
 }

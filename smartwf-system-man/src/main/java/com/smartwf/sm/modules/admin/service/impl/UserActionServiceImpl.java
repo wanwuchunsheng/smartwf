@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,6 @@ import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.UserActionDao;
 import com.smartwf.sm.modules.admin.pojo.UserAction;
-import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.UserActionService;
 import com.smartwf.sm.modules.admin.vo.UserActionVO;
 
@@ -148,7 +146,7 @@ public class UserActionServiceImpl implements UserActionService{
      */
 	@Override
 	public List<UserAction> queryUserActionAll() {
-		return null ;//return this.UserActionDao.queryUserActionAll();
+		return this.UserActionDao.queryUserActionAll();
 	}
 
 

@@ -13,6 +13,26 @@
 	    </foreach>
 	</delete>
 	
-
-   
+    <!-- 初始化用户操作 -->
+    <select id="queryUserActionAll" resultType="com.smartwf.sm.modules.admin.pojo.UserAction">
+        select 
+	        id,
+			act_code,
+			act_name,
+			enable,
+			sort,
+			remark,
+			tenant_id,
+			create_time,
+			create_user_id,
+			create_user_name,
+			update_time,
+			update_user_id,
+			update_user_name
+	        from sys_user_action 
+        where enable=0
+    </select>
+    
+    
+    
 </mapper>
