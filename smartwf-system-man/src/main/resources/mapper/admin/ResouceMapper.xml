@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.admin.dao.ResouceDao" >
+
+     
+    <!-- 批量删除资源 -->
+    <delete id="deleteResouceByIds" parameterType = "java.util.List">
+	    delete 
+	       from sys_resouce
+	    where id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+	
+	<!-- 批量删除子系统下的所有资源 -->
+    <delete id="deleteResouceByfid" parameterType = "com.smartwf.sm.modules.admin.pojo.Resouce">
+	    delete from sys_resouce where id in (
+		   select id from ( select id from sys_resouce where fid= #{bean.id} ) h
+		)
+	</delete>
+    
+    <!-- 删除模块下所以资源 -->
+    <select id="selectResouceByfidLevel" parameterType="com.smartwf.sm.modules.admin.pojo.Resouce">
+       delete from sys_resouce where id in (
+		   select id from ( select id  from sys_resouce where pid = #{bean.pid} and level> #{bean.level} ) h
+		)
+    </select>
+    
+    <!-- 初始化资源 -->
+    <select id="queryResouceAll" resultType="com.smartwf.sm.modules.admin.pojo.Resouce">
+        select 
+	        id,
+			pid,
+			uid,
+			sort,
+			level,
+			res_code,
+			res_name,
+			res_type,
+			res_href,
+			permission,
+			remark,
+			tenant_id,
+			enable
+		from sys_resouce
+        where enable=0
+    </select>
+    
+    
+</mapper>
