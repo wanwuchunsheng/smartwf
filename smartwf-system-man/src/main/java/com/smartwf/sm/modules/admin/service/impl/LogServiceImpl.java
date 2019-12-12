@@ -1,8 +1,10 @@
 package com.smartwf.sm.modules.admin.service.impl;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import com.smartwf.common.dto.LogDTO;
 import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.LogDao;
 import com.smartwf.sm.modules.admin.pojo.Log;
 import com.smartwf.sm.modules.admin.service.LogService;
@@ -54,4 +57,25 @@ public class LogServiceImpl implements LogService {
         List<Log> logs = this.logDao.selectByExample(example);
         return Result.data(objectPage.getTotal(), logs);
     }
+
+
+    /**
+     * @Description: 主键查询操作日志
+     * @return
+     */
+	@Override
+	public Result<?> selectLogById(Log bean) {
+		Log log= this.logDao.selectByPrimaryKey(bean);
+		return Result.data(log);
+	}
+
+	/**
+     * @Description： 删除操作日志
+     * @param id 单个删除
+     * @return
+     */
+	@Override
+	public void deleteLog(Log bean) {
+		this.logDao.deleteByPrimaryKey(bean);
+	}
 }
