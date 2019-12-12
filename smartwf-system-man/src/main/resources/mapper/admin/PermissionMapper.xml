@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.admin.dao.PermissionDao" >
+
+    <!-- 查询权限集合-->
+    <select id="selectPermissionByAll" parameterType="com.smartwf.sm.modules.admin.pojo.Permission">
+       
+    </select>
+    
+</mapper>
