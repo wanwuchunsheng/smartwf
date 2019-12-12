@@ -20,11 +20,24 @@
 		)
 	</delete>
     
-    <!-- 删除模块下所以资源 -->
-    <select id="selectResouceByfidLevel" parameterType="com.smartwf.sm.modules.admin.pojo.Resouce">
-       delete from sys_resouce where id in (
-		   select id from ( select id  from sys_resouce where pid = #{bean.pid} and level> #{bean.level} ) h
-		)
+    <!-- 查询模块下所以子模块 -->
+    <select id="selectResouceById" parameterType="com.smartwf.sm.modules.admin.pojo.Resouce">
+        select 
+	        id,
+			pid,
+			uid,
+			sort,
+			level,
+			res_code,
+			res_name,
+			res_type,
+			res_href,
+			permission,
+			remark,
+			tenant_id,
+			enable
+		from sys_resouce
+        where res_type=2 and uid = #{bean.id}
     </select>
     
     <!-- 初始化资源 -->

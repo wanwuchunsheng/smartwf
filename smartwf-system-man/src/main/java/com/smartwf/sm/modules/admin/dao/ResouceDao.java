@@ -33,9 +33,9 @@ public interface ResouceDao extends Mapper<Resouce> {
 	 */
 	void deleteResouceByfid(@Param("bean") Resouce bean);
 	/**
-	 * @Description: 删除模块下所有资源
+	 * @Description: 查询删除模块下的所有子模块
 	 * @result:
 	 */
-	void selectResouceByfidLevel(@Param("bean") Resouce res);
+	List<Resouce> selectResouceById(@Param("bean") Resouce bean);
 
 }
