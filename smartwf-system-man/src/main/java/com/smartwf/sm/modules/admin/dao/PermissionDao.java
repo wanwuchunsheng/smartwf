@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.smartwf.sm.modules.admin.pojo.Permission;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
+import com.smartwf.sm.modules.admin.vo.ResouceVO;
 
 import tk.mybatis.mapper.common.Mapper;
 
@@ -28,6 +29,7 @@ public interface PermissionDao extends Mapper<Permission> {
 	 * @result:
 	 */
 	void deletePermissionByIds(@Param("list") List<String> list);
+	
 	
 	
 }

@@ -46,7 +46,7 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
         </dependency>
-        <!-- lombak，快速开发使用 -->
+        <!-- lombok，快速开发使用 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -122,4 +122,5 @@
             </plugin>
         </plugins>
     </build>
+    
 </project>

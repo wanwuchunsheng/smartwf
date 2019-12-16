@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.smartwf.sm.modules.admin.pojo.Resouce;
+import com.smartwf.sm.modules.admin.vo.PermissionVO;
+import com.smartwf.sm.modules.admin.vo.ResouceVO;
 
 import tk.mybatis.mapper.common.Mapper;
 
@@ -37,5 +39,11 @@ public interface ResouceDao extends Mapper<Resouce> {
 	 * @result:
 	 */
 	List<Resouce> selectResouceById(@Param("bean") Resouce bean);
+	/**
+	 * @Description: 资源与用户操作查询
+	 * @DateTime 2019-12-13 11:00:43
+	 * @return
+	 */
+	List<ResouceVO> selectResouceActByPage(@Param("bean") PermissionVO bean);
 
 }

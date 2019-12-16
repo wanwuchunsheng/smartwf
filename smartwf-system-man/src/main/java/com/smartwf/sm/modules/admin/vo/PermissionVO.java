@@ -1,7 +1,5 @@
 package com.smartwf.sm.modules.admin.vo;
 
-import java.util.Date;
-
 import com.smartwf.sm.modules.admin.pojo.Permission;
 
 import lombok.Data;

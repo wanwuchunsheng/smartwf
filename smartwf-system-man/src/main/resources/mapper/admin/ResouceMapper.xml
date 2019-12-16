@@ -60,5 +60,32 @@
         where enable=0
     </select>
     
+    <!-- 查询用户操作和资源 -->
+    <select id="selectResouceActByPage" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
+        select 
+			b.ids,
+			f.id,
+			f.pid,
+			f.uid,
+			f.sort,
+			f.level,
+			f.res_code,
+			f.res_name,
+			f.res_type,
+			f.res_href,
+			f.permission,
+			f.remark,
+			f.tenant_id,
+			f.enable 
+		from sys_resouce f left join (
+		  select 
+		     group_concat( c.id separator ',' ) as ids, d.res_id, d.tenant_id 
+		  from sys_user_action c, sys_permission d 
+		  where c.id = d.act_id and c.tenant_id = d.tenant_id and c.enable = 0 group by d.tenant_id,d.res_id 
+		) b on f.id=b.res_id where f.enable=0 
+        <if test="bean.tenantId != null ">
+            and f.tenant_id = #{bean.tenantId}
+        </if>
+    </select>
     
 </mapper>

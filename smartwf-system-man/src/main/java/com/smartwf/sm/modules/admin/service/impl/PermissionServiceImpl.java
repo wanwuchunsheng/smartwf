@@ -16,9 +16,11 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.sm.modules.admin.dao.PermissionDao;
+import com.smartwf.sm.modules.admin.dao.ResouceDao;
 import com.smartwf.sm.modules.admin.pojo.Permission;
 import com.smartwf.sm.modules.admin.service.PermissionService;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
+import com.smartwf.sm.modules.admin.vo.ResouceVO;
 
 import lombok.extern.log4j.Log4j;
 import tk.mybatis.mapper.entity.Example;
@@ -33,6 +35,9 @@ public class PermissionServiceImpl implements PermissionService{
 	
 	@Autowired
 	private PermissionDao permissionDao;
+	
+	@Autowired
+	private ResouceDao resouceDao;
 
 	/**
 	 * @Description:查询权限分页
@@ -45,18 +50,9 @@ public class PermissionServiceImpl implements PermissionService{
   			
   		}
 		List<Permission> list=this.permissionDao.selectPermissionByAll(bean);
-		return Result.data(null, list);
+		return Result.data(list);
 	}
 
-	/**
-     * @Description: 主键查询权限
-     * @return
-     */
-	@Override
-	public Result<?> selectPermissionById(Permission bean) {
-		Permission Permission= this.permissionDao.selectByPrimaryKey(bean);
-		return Result.data(Permission);
-	}
 	
 	/**
      * @Description: 添加权限
@@ -76,20 +72,7 @@ public class PermissionServiceImpl implements PermissionService{
 		this.permissionDao.insertSelective(bean);
 	}
 
-	/**
-     * @Description： 修改权限
-     * @return
-     */
-	@Override
-	public void updatePermission(Permission bean) {
-		//添加修改人信息
-		User user=UserThreadLocal.getUser();
-		bean.setUpdateTime(new Date());
-		bean.setUpdateUserId(user.getId());
-		bean.setUpdateUserName(user.getUserName());
-		//修改
-		this.permissionDao.updateByPrimaryKeySelective(bean);
-	}
+	
 
 	/**
      * @Description： 删除权限
@@ -99,6 +82,21 @@ public class PermissionServiceImpl implements PermissionService{
 	@Override
 	public void deletePermission(Permission bean) {
 		this.permissionDao.deleteByPrimaryKey(bean);
+	}
+
+	/**
+	 * @Description: 资源与用户操作查询
+	 * @DateTime 2019-12-13 11:00:43
+	 * @return
+	 */
+	@Override
+	public Result<?> selectResouceActByPage(PermissionVO bean) {
+		//过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
+  		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) {
+  			bean.setTenantId(null);
+  		}
+		List<ResouceVO> list=this.resouceDao.selectResouceActByPage(bean);
+		return Result.data(list);
 	}
 
 	

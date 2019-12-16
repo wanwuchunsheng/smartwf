@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,9 +46,7 @@ public class PermissionController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询权限")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
- 	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true),
-            @ApiImplicitParam(paramType = "query", name = "pageNum", value = "第几页，默认1", dataType = "Integer"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", value = "每页多少条，默认10", dataType = "Integer")
+ 	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true)
     })
     public ResponseEntity<Result<?>> selectPermissionByPage(Page<Object> page, PermissionVO bean) {
         try {
@@ -64,24 +61,26 @@ public class PermissionController {
     }
     
     /**
-     * @Description: 主键查询权限
-     * @return
-     */
-    @GetMapping("selectPermissionById")
-    @ApiOperation(value = "主键查询接口", notes = "主键查询权限")
+	 * @Description: 资源与用户操作查询√
+	 * @DateTime 2019-12-13 11:00:43
+	 * @return
+	 */
+    @GetMapping("selectPermissionByPage")
+    @ApiOperation(value = "资源与用户操作查询接口", notes = "资源与用户操作查询")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int",required = true)
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+ 	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true)
     })
-    public ResponseEntity<Result<?>> selectPermissionById(Permission bean) {
+    public ResponseEntity<Result<?>> selectResouceActByPage( PermissionVO bean) {
         try {
-            Result<?> result = this.permissionService.selectPermissionById(bean);
+            Result<?> result = this.permissionService.selectResouceActByPage(bean);
             if (result != null) {
-                return ResponseEntity.ok(result);
+                return ResponseEntity.status(HttpStatus.OK).body(result);
             }
         } catch (Exception e) {
-            log.error("主键查询权限信息错误！{}", e.getMessage(), e);
+            log.error("资源与用户操作查询信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询用户信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("资源与用户操作查询信息错误！"));
     }
     
     /**
@@ -94,17 +93,11 @@ public class PermissionController {
     @ApiOperation(value = "添加接口", notes = "添加权限接口")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户id", dataType = "int", required = true),
-	    	@ApiImplicitParam(paramType = "query", name = "uid", value = "上级id", dataType = "int", required = true),
-	    	@ApiImplicitParam(paramType = "query", name = "pid", value = "父级id", dataType = "int", required = true),
-	    	@ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "int", required = true),
-	    	@ApiImplicitParam(paramType = "query", name = "resCode", value = "权限编码", dataType = "String"),
-		    @ApiImplicitParam(paramType = "query", name = "resName", value = "权限名称", dataType = "String", required = true),
-		    @ApiImplicitParam(paramType = "query", name = "resType", value = "权限类型（1系统 2模块 3权限）", dataType = "String", required = true),
-		    @ApiImplicitParam(paramType = "query", name = "level", value = "层次级别", dataType = "int", required = true),
-	        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-默认启用 1-禁用）", dataType = "int", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
+    	    @ApiImplicitParam(paramType = "query", name = "permissionCode", value = "权重", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "actId", value = "用户操作id（主键）", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "resId", value = "资源表id（主键）", dataType = "int", required = true)
     })
-    public ResponseEntity<Result<?>> savePermission(HttpSession session,Permission bean) {
+    public ResponseEntity<Result<?>> savePermission(HttpSession session,PermissionVO bean) {
         try {
     		this.permissionService.savePermission(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
@@ -115,32 +108,7 @@ public class PermissionController {
     }
     
     /**
-     * @Description： 修改权限
-     * @return
-     */
-    @PutMapping("updatePermission")
-    @ApiOperation(value = "修改接口", notes = "修改权限资料")
-    @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "id", value = "权限（主键）", dataType = "int", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "resCode", value = "操作编码", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "resName", value = "操作名称", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
-        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
-    })
-    @TraceLog(content = "修改权限", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updatePermission(Permission bean) {
-        try {
-            this.permissionService.updatePermission(bean);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
-        } catch (Exception e) {
-            log.error("修改权限信息错误！{}", e.getMessage(), e);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("修改权限信息错误！"));
-    }
-    
-    /**
-     * @Description： 删除权限
+     * @Description： 删除权限√
      * @param id 单个删除
      * @return
      */
