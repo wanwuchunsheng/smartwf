@@ -2,7 +2,7 @@ package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.vo.ResouceVO;
@@ -18,7 +18,7 @@ public interface ResouceService {
 	 * @Description: 查询资源分页
 	 * @result: 
 	 */
-	Result<?> selectResouceByPage(Page<Object> page, ResouceVO bean);
+	Result<?> selectResouceByPage(Page<Resouce> page, ResouceVO bean);
 
 	/**
      * @Description: 主键查询资源

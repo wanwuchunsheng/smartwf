@@ -2,7 +2,7 @@ package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.vo.PostVO;
@@ -18,7 +18,7 @@ public interface PostService {
 	 * @Description: 查询职务分页
 	 * @result: 
 	 */
-	Result<?> selectPostByPage(Page<Object> page, PostVO bean);
+	Result<?> selectPostByPage(Page<Post> page, PostVO bean);
 
 	/**
      * @Description: 主键查询职务

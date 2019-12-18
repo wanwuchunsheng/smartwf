@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
@@ -22,7 +23,6 @@ import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.vo.PostVO;
 
 import lombok.extern.log4j.Log4j;
-import tk.mybatis.mapper.entity.Example;
 /**
  * @Description: 职务业务层接口实现
  * @author WCH
@@ -40,45 +40,43 @@ public class PostServiceImpl implements PostService{
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectPostByPage(Page<Object> page, PostVO bean) {
-		Page<Object> objectPage = PageHelper.startPage(page.getPageNum(), page.getPageSize());
-		Example example = new Example(Post.class);
-        example.setOrderByClause("create_time desc");
-        Example.Criteria criteria = example.createCriteria();
+	public Result<?> selectPostByPage(Page<Post> page, PostVO bean) {
+		QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
+		queryWrapper.orderByDesc("update_time"); //降序
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
-  			criteria.andEqualTo("tenantId", bean.getTenantId()); 
+  			queryWrapper.eq("tenant_id", bean.getTenantId()); 
   		} 
   	    //组织机构
         if (null != bean.getOrganizationId()) {
-            criteria.andEqualTo("organizationId", bean.getOrganizationId());
+        	queryWrapper.eq("organization_id", bean.getOrganizationId());
         }
         //职务编码
         if (!StringUtils.isEmpty(bean.getPostCode())) {
-            criteria.andLike("postCode", Constants.PER_CENT + bean.getPostCode() + Constants.PER_CENT);
+        	queryWrapper.like("post_code", Constants.PER_CENT + bean.getPostCode() + Constants.PER_CENT);
         }
         //职务名称
         if (!StringUtils.isEmpty(bean.getPostName())) {
-            criteria.andLike("postName", Constants.PER_CENT + bean.getPostName() + Constants.PER_CENT);
+        	queryWrapper.like("post_name", Constants.PER_CENT + bean.getPostName() + Constants.PER_CENT);
         }
         //职务类型
         if (null != bean.getPostType()) {
-            criteria.andEqualTo("postName", bean.getPostType());
+        	queryWrapper.eq("post_name", bean.getPostType());
         }
         //状态
 		if (null!=bean.getEnable()) { 
-			criteria.andEqualTo("enable", bean.getEnable()); 
+			queryWrapper.eq("enable", bean.getEnable()); 
 		}
         //时间
         if (bean.getStartTime() != null && bean.getEndTime() != null) {
-            criteria.orBetween("createTime", bean.getStartTime(), bean.getEndTime());
+        	queryWrapper.between("create_time", bean.getStartTime(), bean.getEndTime());
         }
         //备注
         if (!StringUtils.isEmpty(bean.getRemark())) {
-            criteria.andLike("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
+        	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
-		List<Post> list=this.postDao.selectByExample(example);
-		return Result.data(objectPage.getTotal(), list);
+		IPage<Post> list=this.postDao.selectPage(page, queryWrapper);
+		return Result.data(list.getTotal(), list);
 	}
 
 	/**
@@ -87,7 +85,7 @@ public class PostServiceImpl implements PostService{
      */
 	@Override
 	public Result<?> selectPostById(Post bean) {
-		Post Post= this.postDao.selectByPrimaryKey(bean);
+		Post Post= this.postDao.selectById(bean);
 		return Result.data(Post);
 	}
 	
@@ -106,7 +104,7 @@ public class PostServiceImpl implements PostService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
-		this.postDao.insertSelective(bean);
+		this.postDao.insert(bean);
 	}
 
 	/**
@@ -121,7 +119,7 @@ public class PostServiceImpl implements PostService{
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		//修改
-		this.postDao.updateByPrimaryKeySelective(bean);
+		this.postDao.updateById(bean);
 	}
 
 	/**
@@ -133,7 +131,7 @@ public class PostServiceImpl implements PostService{
 	public void deletePost(PostVO bean) {
 		if( null!=bean.getId()) {
 			//删除职务
-			this.postDao.deleteByPrimaryKey(bean);
+			this.postDao.deleteById(bean);
 			//删除用户职务
 			this.postDao.deleteUserPostById(bean);
 		}else {

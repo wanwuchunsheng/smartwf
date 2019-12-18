@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
@@ -23,7 +22,6 @@ import com.smartwf.sm.modules.admin.vo.PermissionVO;
 import com.smartwf.sm.modules.admin.vo.ResouceVO;
 
 import lombok.extern.log4j.Log4j;
-import tk.mybatis.mapper.entity.Example;
 /**
  * @Description: 权限业务层接口实现
  * @author WCH
@@ -44,7 +42,7 @@ public class PermissionServiceImpl implements PermissionService{
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectPermissionByPage(Page<Object> page, PermissionVO bean) {
+	public Result<?> selectPermissionByPage(Page<Permission> page, PermissionVO bean) {
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
   			
@@ -69,7 +67,7 @@ public class PermissionServiceImpl implements PermissionService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
-		this.permissionDao.insertSelective(bean);
+		this.permissionDao.insert(bean);
 	}
 
 	
@@ -81,7 +79,7 @@ public class PermissionServiceImpl implements PermissionService{
 	@Transactional
 	@Override
 	public void deletePermission(Permission bean) {
-		this.permissionDao.deleteByPrimaryKey(bean);
+		this.permissionDao.deleteById(bean);
 	}
 
 	/**
@@ -90,12 +88,12 @@ public class PermissionServiceImpl implements PermissionService{
 	 * @return
 	 */
 	@Override
-	public Result<?> selectResouceActByPage(PermissionVO bean) {
+	public Result<?> selectResouceUserActByPage(PermissionVO bean) {
 		//过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) {
   			bean.setTenantId(null);
   		}
-		List<ResouceVO> list=this.resouceDao.selectResouceActByPage(bean);
+		List<ResouceVO> list=this.resouceDao.selectResouceUserActByPage(bean);
 		return Result.data(list);
 	}
 

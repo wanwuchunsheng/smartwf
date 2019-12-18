@@ -2,6 +2,7 @@ package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.dto.LogDTO;
 import com.smartwf.common.pojo.PageVO;
 import com.smartwf.common.pojo.Result;
@@ -28,7 +29,7 @@ public interface LogService {
      * @param queryPojo
      * @return
      */
-    Result selectLogByPage(PageVO page);
+    Result selectLogByPage(Page<Log> page);
 
     /**
      * @Description: 主键查询操作日志

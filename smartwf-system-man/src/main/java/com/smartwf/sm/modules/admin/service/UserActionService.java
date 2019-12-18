@@ -2,7 +2,7 @@ package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.UserAction;
 import com.smartwf.sm.modules.admin.vo.UserActionVO;
@@ -18,7 +18,7 @@ public interface UserActionService {
 	 * @Description: 查询用户操作分页
 	 * @result: 
 	 */
-	Result<?> selectUserActionByPage(Page<Object> page, UserActionVO bean);
+	Result<?> selectUserActionByPage(Page<UserAction> page, UserActionVO bean);
 
 	/**
      * @Description: 主键查询用户操作

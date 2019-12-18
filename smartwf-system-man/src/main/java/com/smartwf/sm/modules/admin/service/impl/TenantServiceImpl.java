@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
@@ -22,7 +23,6 @@ import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
 
 import lombok.extern.log4j.Log4j;
-import tk.mybatis.mapper.entity.Example;
 /**
  * @Description: 租户业务层接口实现
  * @author WCH
@@ -40,33 +40,31 @@ public class TenantServiceImpl implements TenantService{
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectTenantByPage(Page<Object> page, TenantVO bean) {
-		Page<Object> objectPage = PageHelper.startPage(page.getPageNum(), page.getPageSize());
-		Example example = new Example(Tenant.class);
-        example.setOrderByClause("create_time desc");
-        Example.Criteria criteria = example.createCriteria();
+	public Result<?> selectTenantByPage(Page<Tenant> page, TenantVO bean) {
+		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
+		queryWrapper.orderByDesc("update_time"); //降序
         //租户编码
         if (!StringUtils.isEmpty(bean.getTenantCode())) {
-            criteria.andLike("tenantCode", Constants.PER_CENT + bean.getTenantCode() + Constants.PER_CENT);
+        	queryWrapper.like("tenantCode", Constants.PER_CENT + bean.getTenantCode() + Constants.PER_CENT);
         }
         //租户名称
         if (!StringUtils.isEmpty(bean.getTenantName())) {
-            criteria.andLike("tenantName", Constants.PER_CENT + bean.getTenantName() + Constants.PER_CENT);
+        	queryWrapper.like("tenantName", Constants.PER_CENT + bean.getTenantName() + Constants.PER_CENT);
         }
         //状态
 		if (null!=bean.getEnable()) { 
-			criteria.andEqualTo("enable", bean.getEnable()); 
+			queryWrapper.eq("enable", bean.getEnable()); 
 		}
         //时间
         if (bean.getStartTime() != null && bean.getEndTime() != null) {
-            criteria.orBetween("createTime", bean.getStartTime(), bean.getEndTime());
+        	queryWrapper.between("createTime", bean.getStartTime(), bean.getEndTime());
         }
         //备注
         if (!StringUtils.isEmpty(bean.getRemark())) {
-            criteria.andLike("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
+        	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
-		List<Tenant> list=this.tenantDao.selectByExample(example);
-		return Result.data(objectPage.getTotal(), list);
+		IPage<Tenant> list=this.tenantDao.selectPage(page, queryWrapper);
+		return Result.data(list.getTotal(), list.getRecords());
 	}
 
 	/**
@@ -75,7 +73,7 @@ public class TenantServiceImpl implements TenantService{
      */
 	@Override
 	public Result<?> selectTenantById(Tenant bean) {
-		Tenant tenant= this.tenantDao.selectByPrimaryKey(bean);
+		Tenant tenant= this.tenantDao.selectById(bean);
 		return Result.data(tenant);
 	}
 	
@@ -94,7 +92,7 @@ public class TenantServiceImpl implements TenantService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
-		this.tenantDao.insertSelective(bean);
+		this.tenantDao.insert(bean);
 	}
 
 	/**
@@ -109,7 +107,7 @@ public class TenantServiceImpl implements TenantService{
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		//修改
-		this.tenantDao.updateByPrimaryKeySelective(bean);
+		this.tenantDao.updateById(bean);
 	}
 
 	/**
@@ -121,7 +119,7 @@ public class TenantServiceImpl implements TenantService{
 	public void deleteTenant(TenantVO bean) {
 		if( null!=bean.getId()) {
 			//删除租户表
-			this.tenantDao.deleteByPrimaryKey(bean);
+			this.tenantDao.deleteById(bean);
 			//删除组织架构表
 			this.tenantDao.deleteOrgByTenantId(bean);
 			//删除用户组织架构表

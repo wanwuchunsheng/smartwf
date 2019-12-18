@@ -2,7 +2,7 @@ package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
@@ -18,7 +18,7 @@ public interface TenantService {
 	 * @Description: 查询租户分页
 	 * @result: 
 	 */
-	Result<?> selectTenantByPage(Page<Object> page, TenantVO bean);
+	Result<?> selectTenantByPage(Page<Tenant> page, TenantVO bean);
 
 	/**
      * @Description: 主键查询租户

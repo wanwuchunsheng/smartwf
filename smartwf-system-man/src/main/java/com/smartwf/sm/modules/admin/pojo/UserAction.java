@@ -2,10 +2,9 @@ package com.smartwf.sm.modules.admin.pojo;
 
 import java.io.Serializable;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.smartwf.common.pojo.BasePojo;
 
 import lombok.Data;
@@ -14,7 +13,7 @@ import lombok.Data;
  * @Description: 用户操作表
  */
 @Data
-@Table(name = "sys_user_action")
+@TableName("sys_user_action")
 public class UserAction extends BasePojo implements Serializable{
 	
 	 private static final long serialVersionUID = 1L;
@@ -22,8 +21,7 @@ public class UserAction extends BasePojo implements Serializable{
 	/**
      * 主键id
      */
-    @Id
-    @GeneratedValue(generator = "JDBC")
+	@TableId(type = IdType.AUTO)
 	private Integer id;
    
 	/**

@@ -61,7 +61,7 @@
     </select>
     
     <!-- 查询用户操作和资源 -->
-    <select id="selectResouceActByPage" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
+    <select id="selectResouceUserActByPage" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
         select 
 			b.ids,
 			f.id,

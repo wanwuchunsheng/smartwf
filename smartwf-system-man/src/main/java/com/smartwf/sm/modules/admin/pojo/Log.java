@@ -1,9 +1,10 @@
 package com.smartwf.sm.modules.admin.pojo;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.smartwf.common.dto.LogDTO;
 
@@ -15,15 +16,14 @@ import lombok.Data;
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @Data
-@Table(name = "sys_log")
+@TableName( "sys_log")
 public class Log extends LogDTO {
 
 
     /**
      * id
      */
-    @Id
-    @GeneratedValue(generator = "JDBC")
+	@TableId(type = IdType.AUTO)
     private Integer id;
 
 }

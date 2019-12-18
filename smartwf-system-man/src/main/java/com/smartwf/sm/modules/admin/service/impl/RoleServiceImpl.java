@@ -9,20 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.RoleDao;
+import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.vo.RoleVO;
 
 import lombok.extern.log4j.Log4j;
-import tk.mybatis.mapper.entity.Example;
 /**
  * @Description: 角色业务层接口实现
  * @author WCH
@@ -40,37 +41,35 @@ public class RoleServiceImpl implements RoleService{
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectRoleByPage(Page<Object> page, RoleVO bean) {
-		Page<Object> objectPage = PageHelper.startPage(page.getPageNum(), page.getPageSize());
-		Example example = new Example(Role.class);
-        example.setOrderByClause("create_time desc");
-        Example.Criteria criteria = example.createCriteria();
+	public Result<?> selectRoleByPage(Page<Role> page, RoleVO bean) {
+		QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+		queryWrapper.orderByDesc("update_time"); //降序
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
-  			criteria.andEqualTo("tenantId", bean.getTenantId()); 
+  			queryWrapper.eq("tenantId", bean.getTenantId()); 
   		} 
         //角色编码
         if (!StringUtils.isEmpty(bean.getRoleCode())) {
-            criteria.andLike("roleCode", Constants.PER_CENT + bean.getRoleCode() + Constants.PER_CENT);
+        	queryWrapper.like("roleCode", Constants.PER_CENT + bean.getRoleCode() + Constants.PER_CENT);
         }
         //角色名称
         if (!StringUtils.isEmpty(bean.getRoleName())) {
-            criteria.andLike("RoleName", Constants.PER_CENT + bean.getRoleName() + Constants.PER_CENT);
+        	queryWrapper.like("RoleName", Constants.PER_CENT + bean.getRoleName() + Constants.PER_CENT);
         }
         //状态
 		if (null!=bean.getEnable()) { 
-			criteria.andEqualTo("enable", bean.getEnable()); 
+			queryWrapper.eq("enable", bean.getEnable()); 
 		}
         //时间
         if (bean.getStartTime() != null && bean.getEndTime() != null) {
-            criteria.orBetween("createTime", bean.getStartTime(), bean.getEndTime());
+        	queryWrapper.between("createTime", bean.getStartTime(), bean.getEndTime());
         }
         //备注
         if (!StringUtils.isEmpty(bean.getRemark())) {
-            criteria.andLike("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
+        	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
-		List<Role> list=this.roleDao.selectByExample(example);
-		return Result.data(objectPage.getTotal(), list);
+		IPage<Role> list=this.roleDao.selectPage(page, queryWrapper);
+		return Result.data(list.getTotal(), list.getRecords());
 	}
 
 	/**
@@ -79,7 +78,7 @@ public class RoleServiceImpl implements RoleService{
      */
 	@Override
 	public Result<?> selectRoleById(Role bean) {
-		Role Role= this.roleDao.selectByPrimaryKey(bean);
+		Role Role= this.roleDao.selectById(bean);
 		return Result.data(Role);
 	}
 	
@@ -98,7 +97,7 @@ public class RoleServiceImpl implements RoleService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
-		this.roleDao.insertSelective(bean);
+		this.roleDao.insert(bean);
 	}
 
 	/**
@@ -113,7 +112,7 @@ public class RoleServiceImpl implements RoleService{
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		//修改
-		this.roleDao.updateByPrimaryKeySelective(bean);
+		this.roleDao.updateById(bean);
 	}
 
 	/**
@@ -125,7 +124,7 @@ public class RoleServiceImpl implements RoleService{
 	public void deleteRole(RoleVO bean) {
 		if( null!=bean.getId()) {
 			//删除角色
-			this.roleDao.deleteByPrimaryKey(bean);
+			this.roleDao.deleteById(bean);
 			//删除用户角色
 			this.roleDao.deleteUserRoleById(bean);
 			//删除角色权限

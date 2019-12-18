@@ -9,19 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.sm.modules.admin.dao.ResouceDao;
+import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.service.ResouceService;
 import com.smartwf.sm.modules.admin.vo.ResouceVO;
 
 import lombok.extern.log4j.Log4j;
-import tk.mybatis.mapper.entity.Example;
 /**
  * @Description: 资源业务层接口实现
  * @author WCH
@@ -39,33 +40,31 @@ public class ResouceServiceImpl implements ResouceService{
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectResouceByPage(Page<Object> page, ResouceVO bean) {
-		Page<Object> objectPage = PageHelper.startPage(page.getPageNum(), page.getPageSize());
-		Example example = new Example(Resouce.class);
-        example.setOrderByClause("create_time desc");
-        Example.Criteria criteria = example.createCriteria();
+	public Result<?> selectResouceByPage(Page<Resouce> page, ResouceVO bean) {
+		QueryWrapper<Resouce> queryWrapper = new QueryWrapper<>();
+		queryWrapper.orderByDesc("update_time"); //降序
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
-  			criteria.andEqualTo("tenantId", bean.getTenantId()); 
+  			queryWrapper.eq("tenant_id", bean.getTenantId()); 
   		}
         //资源编码
         if (!StringUtils.isEmpty(bean.getResCode())) {
-            criteria.andLike("ResouceCode", Constants.PER_CENT + bean.getResCode() + Constants.PER_CENT);
+        	queryWrapper.like("resouce_code", Constants.PER_CENT + bean.getResCode() + Constants.PER_CENT);
         }
         //资源名称
         if (!StringUtils.isEmpty(bean.getResName())) {
-            criteria.andLike("ResouceName", Constants.PER_CENT + bean.getResName() + Constants.PER_CENT);
+        	queryWrapper.like("resouce_name", Constants.PER_CENT + bean.getResName() + Constants.PER_CENT);
         }
         //状态
 		if (null!=bean.getEnable()) { 
-			criteria.andEqualTo("enable", bean.getEnable()); 
+			queryWrapper.eq("enable", bean.getEnable()); 
 		}
         //备注
         if (!StringUtils.isEmpty(bean.getRemark())) {
-            criteria.andLike("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
+        	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
-		List<Resouce> list=this.resouceDao.selectByExample(example);
-		return Result.data(objectPage.getTotal(), list);
+		IPage<Resouce> list=this.resouceDao.selectPage(page, queryWrapper);
+		return Result.data(list.getTotal(), list.getRecords());
 	}
 
 	/**
@@ -74,7 +73,7 @@ public class ResouceServiceImpl implements ResouceService{
      */
 	@Override
 	public Result<?> selectResouceById(Resouce bean) {
-		Resouce resouce= this.resouceDao.selectByPrimaryKey(bean);
+		Resouce resouce= this.resouceDao.selectById(bean);
 		return Result.data(resouce);
 	}
 	
@@ -93,7 +92,7 @@ public class ResouceServiceImpl implements ResouceService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
-		this.resouceDao.insertSelective(bean);
+		this.resouceDao.insert(bean);
 	}
 
 	/**
@@ -108,7 +107,7 @@ public class ResouceServiceImpl implements ResouceService{
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		//修改
-		this.resouceDao.updateByPrimaryKeySelective(bean);
+		this.resouceDao.updateById(bean);
 	}
 
 	/**
@@ -120,12 +119,12 @@ public class ResouceServiceImpl implements ResouceService{
 	public void deleteResouce(ResouceVO bean) {
 		if( null!=bean.getId()) {
 			//判断删除的数据类型
-			Resouce res=this.resouceDao.selectOne(bean);
+			Resouce res=this.resouceDao.selectById(bean);
 			//1系统  2模块  3资源
 			switch (res.getResType()) {
 				case 1:
 					//a删除子系统
-					this.resouceDao.deleteByPrimaryKey(res);
+					this.resouceDao.deleteById(res);
 					//b删除子系统下所有资源
 					this.resouceDao.deleteResouceByfid(res);
 					break;
@@ -133,14 +132,14 @@ public class ResouceServiceImpl implements ResouceService{
 	            	List<Integer> idList = new ArrayList<Integer>();
 	            	List<Resouce> resList=new ArrayList<Resouce>();
 					//a删除模块
-	            	this.resouceDao.deleteByPrimaryKey(res);
+	            	this.resouceDao.deleteById(res);
 	            	//b查询模块下所有资源
             		List<Resouce> list=this.resouceDao.selectResouceById(res);
 	            	if( list !=null && list.size()>0 ){
 	            		for(Resouce rs: list ) {
 	            			idList.add(rs.getId());//记录模块id
 	            			resList.add(rs);//记录模块
-	            			this.resouceDao.deleteByPrimaryKey(rs);//删除模块
+	            			this.resouceDao.deleteById(rs);//删除模块
 	            		}
 	            		
 	            		boolean flag=true;
@@ -162,7 +161,7 @@ public class ResouceServiceImpl implements ResouceService{
 					break;
 	            case 3:
 	            	//a删除资源
-					this.resouceDao.deleteByPrimaryKey(res);
+					this.resouceDao.deleteById(res);
 					break;
 				default:
 					break;

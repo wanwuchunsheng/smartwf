@@ -24,7 +24,7 @@ spring:
       write-dates-as-timestamps: false # 使用时间戳，使用数值timestamp表示日期
       # 数据库访问配置
   datasource:
-     name: cloudfy
+     name: mysql
      type: com.alibaba.druid.pool.DruidDataSource
      driver-class-name: com.mysql.cj.jdbc.Driver
      url: jdbc:mysql://localhost:3306/smartwf-sm?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
@@ -99,12 +99,17 @@ rocketmq:
     topic: PTP_TEST01
     
 # 在使用sql查询时value为空则key要返回
-mybatis:
-  configuration:
-    call-setters-on-nulls: true
+#mybatis:
+#  configuration:
+#    call-setters-on-nulls: true
+#mybatis-plus:
+      # xml地址
+     # mapper-locations: classpath:mapper/*.xml
+      # 实体扫描，多个package用逗号或者分号分隔
+     # type-aliases-package: com.exp.modules.test.pojo   #自己的实体类地址
     
 # 日志
 logging:
   level:
-    root: INFO
+    root: DEBUG
   config: classpath:log/logback-spring-dev.xml

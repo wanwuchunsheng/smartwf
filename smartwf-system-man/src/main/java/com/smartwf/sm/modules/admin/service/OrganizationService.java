@@ -2,7 +2,7 @@ package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
@@ -18,7 +18,7 @@ public interface OrganizationService {
 	 * @Description: 查询组织架构分页
 	 * @result: 
 	 */
-	Result<?> selectOrganizationByPage(Page<Object> page, OrganizationVO bean);
+	Result<?> selectOrganizationByPage(Page<Organization> page, OrganizationVO bean);
 
 	/**
      * @Description: 主键查询组织架构

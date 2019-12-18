@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
@@ -22,7 +23,6 @@ import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
 import lombok.extern.log4j.Log4j;
-import tk.mybatis.mapper.entity.Example;
 /**
  * @Description: 组织架构业务层接口实现
  * @author WCH
@@ -40,37 +40,35 @@ public class OrganizationServiceImpl implements OrganizationService{
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectOrganizationByPage(Page<Object> page, OrganizationVO bean) {
-		Page<Object> objectPage = PageHelper.startPage(page.getPageNum(), page.getPageSize());
-		Example example = new Example(Organization.class);
-        example.setOrderByClause("create_time desc");
-        Example.Criteria criteria = example.createCriteria();
+	public Result<?> selectOrganizationByPage(Page<Organization> page, OrganizationVO bean) {
+		QueryWrapper<Organization> queryWrapper = new QueryWrapper<>();
+		queryWrapper.orderByDesc("update_time"); //降序
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
-  			criteria.andEqualTo("tenantId", bean.getTenantId()); 
+  			queryWrapper.eq("tenant_id", bean.getTenantId()); 
   		} 
         //组织架构编码
         if (!StringUtils.isEmpty(bean.getOrgCode())) {
-            criteria.andLike("orgCode", Constants.PER_CENT + bean.getOrgCode() + Constants.PER_CENT);
+        	queryWrapper.like("org_code", Constants.PER_CENT + bean.getOrgCode() + Constants.PER_CENT);
         }
         //组织架构名称
         if (!StringUtils.isEmpty(bean.getOrgName())) {
-            criteria.andLike("orgName", Constants.PER_CENT + bean.getOrgName() + Constants.PER_CENT);
+        	queryWrapper.like("org_name", Constants.PER_CENT + bean.getOrgName() + Constants.PER_CENT);
         }
         //状态
 		if (null!=bean.getEnable()) { 
-			criteria.andEqualTo("enable", bean.getEnable()); 
+			queryWrapper.eq("enable", bean.getEnable()); 
 		}
         //时间
         if (bean.getStartTime() != null && bean.getEndTime() != null) {
-            criteria.orBetween("createTime", bean.getStartTime(), bean.getEndTime());
+        	queryWrapper.between("create_time", bean.getStartTime(), bean.getEndTime());
         }
         //备注
         if (!StringUtils.isEmpty(bean.getRemark())) {
-            criteria.andLike("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
+        	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
-		List<Organization> list=this.organizationDao.selectByExample(example);
-		return Result.data(objectPage.getTotal(), list);
+		IPage<Organization> list=this.organizationDao.selectPage(page, queryWrapper);
+		return Result.data(list.getTotal(), list.getRecords());
 	}
 
 	/**
@@ -79,7 +77,7 @@ public class OrganizationServiceImpl implements OrganizationService{
      */
 	@Override
 	public Result<?> selectOrganizationById(Organization bean) {
-		Organization Organization= this.organizationDao.selectByPrimaryKey(bean);
+		Organization Organization= this.organizationDao.selectById(bean.getId());
 		return Result.data(Organization);
 	}
 	
@@ -98,7 +96,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
-		this.organizationDao.insertSelective(bean);
+		this.organizationDao.insert(bean);
 	}
 
 	/**
@@ -113,7 +111,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		//修改
-		this.organizationDao.updateByPrimaryKeySelective(bean);
+		this.organizationDao.updateById(bean);
 	}
 
 	/**
@@ -125,7 +123,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 	public void deleteOrganization(OrganizationVO bean) {
 		if( null!=bean.getId()) {
 			//删除组织机构
-			this.organizationDao.deleteByPrimaryKey(bean);
+			this.organizationDao.deleteById(bean.getId());
 			//删除用户组织结构
 			this.organizationDao.deleteUserOrgById(bean);
 		}else {

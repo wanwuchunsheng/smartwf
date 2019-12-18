@@ -2,7 +2,7 @@ package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.vo.RoleVO;
@@ -18,7 +18,7 @@ public interface RoleService {
 	 * @Description: 查询角色分页
 	 * @result: 
 	 */
-	Result<?> selectRoleByPage(Page<Object> page, RoleVO bean);
+	Result<?> selectRoleByPage(Page<Role> page, RoleVO bean);
 
 	/**
      * @Description: 主键查询角色

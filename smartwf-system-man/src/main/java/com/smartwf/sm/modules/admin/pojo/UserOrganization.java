@@ -2,9 +2,9 @@ package com.smartwf.sm.modules.admin.pojo;
 
 import java.io.Serializable;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import lombok.Data;
  * @Description: 用户组织架构表
  */
 @Data
-@Table(name = "sys_user_organization")
+@TableName("sys_user_organization")
 public class UserOrganization implements Serializable{
 	
 	 private static final long serialVersionUID = 1L;
@@ -20,8 +20,7 @@ public class UserOrganization implements Serializable{
 	/**
      * 主键id
      */
-    @Id
-    @GeneratedValue(generator = "JDBC")
+	@TableId(type = IdType.AUTO)
 	private Integer id;
    
     /**

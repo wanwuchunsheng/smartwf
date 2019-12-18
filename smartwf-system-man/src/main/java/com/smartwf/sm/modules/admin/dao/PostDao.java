@@ -6,17 +6,16 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.vo.PostVO;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 职务持久层接口
  */
 @Repository
-public interface PostDao extends Mapper<Post> {
+public interface PostDao extends BaseMapper<Post> {
 
 	/**
 	 * @Description: 批量删除职务

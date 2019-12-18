@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Role;
@@ -55,10 +55,10 @@ public class RoleController {
             @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", dataType = "Date"),
-            @ApiImplicitParam(paramType = "query", name = "pageNum", value = "第几页，默认1", dataType = "Integer"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", value = "每页多少条，默认10", dataType = "Integer")
+            @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectRoleByPage(Page<Object> page, RoleVO bean) {
+    public ResponseEntity<Result<?>> selectRoleByPage(Page<Role> page, RoleVO bean) {
         try {
             Result<?> result = this.RoleService.selectRoleByPage(page, bean);
             if (result != null) {

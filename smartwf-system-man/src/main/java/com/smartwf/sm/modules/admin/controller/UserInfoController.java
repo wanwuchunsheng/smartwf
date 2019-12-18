@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
@@ -52,10 +52,10 @@ public class UserInfoController {
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "createTime", value = "开始时间", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "updateTime", value = "结束时间", dataType = "Date"),
-            @ApiImplicitParam(paramType = "query", name = "pageNum", value = "第几页，默认1", dataType = "int"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", value = "每页多少条，默认10", dataType = "int")
+            @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "int"),
+            @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "int")
     })
-    public ResponseEntity<Result<?>> selectUserInfoByPage(Page<Object> page, UserInfo bean) {
+    public ResponseEntity<Result<?>> selectUserInfoByPage(Page<UserInfo> page, UserInfo bean) {
         try {
             Result<?> result = this.userService.selectUserInfoByPage(page, bean);
             if (result != null) {

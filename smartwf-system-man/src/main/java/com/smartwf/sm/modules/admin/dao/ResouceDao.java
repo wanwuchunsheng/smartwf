@@ -6,18 +6,17 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
 import com.smartwf.sm.modules.admin.vo.ResouceVO;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 资源持久层接口
  */
 @Repository
-public interface ResouceDao extends Mapper<Resouce> {
+public interface ResouceDao extends BaseMapper<Resouce> {
 
 	/**
 	 * @Description: 批量删除资源
@@ -44,6 +43,6 @@ public interface ResouceDao extends Mapper<Resouce> {
 	 * @DateTime 2019-12-13 11:00:43
 	 * @return
 	 */
-	List<ResouceVO> selectResouceActByPage(@Param("bean") PermissionVO bean);
+	List<ResouceVO> selectResouceUserActByPage(@Param("bean") PermissionVO bean);
 
 }

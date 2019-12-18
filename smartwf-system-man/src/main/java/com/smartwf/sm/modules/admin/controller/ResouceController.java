@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Resouce;
@@ -50,10 +50,10 @@ public class ResouceController {
  	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "resCode", value = "资源编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "resName", value = "资源名称", dataType = "String"),
-            @ApiImplicitParam(paramType = "query", name = "pageNum", value = "第几页，默认1", dataType = "Integer"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", value = "每页多少条，默认10", dataType = "Integer")
+            @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectResouceByPage(Page<Object> page, ResouceVO bean) {
+    public ResponseEntity<Result<?>> selectResouceByPage(Page<Resouce> page, ResouceVO bean) {
         try {
             Result<?> result = this.resouceService.selectResouceByPage(page, bean);
             if (result != null) {

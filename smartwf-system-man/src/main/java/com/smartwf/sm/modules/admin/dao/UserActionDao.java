@@ -6,16 +6,15 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.sm.modules.admin.pojo.UserAction;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 用户操作持久层接口
  */
 @Repository
-public interface UserActionDao extends Mapper<UserAction> {
+public interface UserActionDao extends BaseMapper<UserAction> {
 
 	/**
 	 * @Description: 批量删除用户操作

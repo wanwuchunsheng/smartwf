@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
@@ -22,7 +23,6 @@ import com.smartwf.sm.modules.admin.service.UserActionService;
 import com.smartwf.sm.modules.admin.vo.UserActionVO;
 
 import lombok.extern.log4j.Log4j;
-import tk.mybatis.mapper.entity.Example;
 /**
  * @Description: 用户操作业务层接口实现
  * @author WCH
@@ -40,37 +40,35 @@ public class UserActionServiceImpl implements UserActionService{
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectUserActionByPage(Page<Object> page, UserActionVO bean) {
-		Page<Object> objectPage = PageHelper.startPage(page.getPageNum(), page.getPageSize());
-		Example example = new Example(UserAction.class);
-        example.setOrderByClause("create_time desc");
-        Example.Criteria criteria = example.createCriteria();
+	public Result<?> selectUserActionByPage(Page<UserAction> page, UserActionVO bean) {
+		QueryWrapper<UserAction> queryWrapper = new QueryWrapper<>();
+		queryWrapper.orderByDesc("update_time"); //降序
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
-  			criteria.andEqualTo("tenantId", bean.getTenantId()); 
+  			queryWrapper.eq("tenantId", bean.getTenantId()); 
   		}
         //用户操作编码
         if (!StringUtils.isEmpty(bean.getActCode())) {
-            criteria.andLike("UserActionCode", Constants.PER_CENT + bean.getActCode() + Constants.PER_CENT);
+        	queryWrapper.like("UserActionCode", Constants.PER_CENT + bean.getActCode() + Constants.PER_CENT);
         }
         //用户操作名称
         if (!StringUtils.isEmpty(bean.getActName())) {
-            criteria.andLike("UserActionName", Constants.PER_CENT + bean.getActName() + Constants.PER_CENT);
+        	queryWrapper.like("UserActionName", Constants.PER_CENT + bean.getActName() + Constants.PER_CENT);
         }
         //状态
 		if (null!=bean.getEnable()) { 
-			criteria.andEqualTo("enable", bean.getEnable()); 
+			queryWrapper.eq("enable", bean.getEnable()); 
 		}
         //时间
         if (bean.getStartTime() != null && bean.getEndTime() != null) {
-            criteria.orBetween("createTime", bean.getStartTime(), bean.getEndTime());
+        	queryWrapper.between("createTime", bean.getStartTime(), bean.getEndTime());
         }
         //备注
         if (!StringUtils.isEmpty(bean.getRemark())) {
-            criteria.andLike("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
+        	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
-		List<UserAction> list=this.UserActionDao.selectByExample(example);
-		return Result.data(objectPage.getTotal(), list);
+		IPage<UserAction> list=this.UserActionDao.selectPage(page, queryWrapper);
+		return Result.data(list.getTotal(), list);
 	}
 
 	/**
@@ -79,7 +77,7 @@ public class UserActionServiceImpl implements UserActionService{
      */
 	@Override
 	public Result<?> selectUserActionById(UserAction bean) {
-		UserAction UserAction= this.UserActionDao.selectByPrimaryKey(bean);
+		UserAction UserAction= this.UserActionDao.selectById(bean);
 		return Result.data(UserAction);
 	}
 	
@@ -98,7 +96,7 @@ public class UserActionServiceImpl implements UserActionService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
-		this.UserActionDao.insertSelective(bean);
+		this.UserActionDao.insert(bean);
 	}
 
 	/**
@@ -113,7 +111,7 @@ public class UserActionServiceImpl implements UserActionService{
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		//修改
-		this.UserActionDao.updateByPrimaryKeySelective(bean);
+		this.UserActionDao.updateById(bean);
 	}
 
 	/**
@@ -125,7 +123,7 @@ public class UserActionServiceImpl implements UserActionService{
 	public void deleteUserAction(UserActionVO bean) {
 		if( null!=bean.getId()) {
 			//删除用户操作表
-			this.UserActionDao.deleteByPrimaryKey(bean);
+			this.UserActionDao.deleteById(bean);
 		}else {
 			String ids=StrUtils.regex(bean.getIds());
 			//批量删除

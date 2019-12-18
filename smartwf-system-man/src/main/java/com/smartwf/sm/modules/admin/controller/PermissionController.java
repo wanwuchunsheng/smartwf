@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Permission;
@@ -48,7 +48,7 @@ public class PermissionController {
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
  	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true)
     })
-    public ResponseEntity<Result<?>> selectPermissionByPage(Page<Object> page, PermissionVO bean) {
+    public ResponseEntity<Result<?>> selectPermissionByPage(Page<Permission> page, PermissionVO bean) {
         try {
             Result<?> result = this.permissionService.selectPermissionByPage(page, bean);
             if (result != null) {
@@ -65,7 +65,7 @@ public class PermissionController {
 	 * @DateTime 2019-12-13 11:00:43
 	 * @return
 	 */
-    @GetMapping("selectPermissionByPage")
+    @GetMapping("selectResouceUserActByPage")
     @ApiOperation(value = "资源与用户操作查询接口", notes = "资源与用户操作查询")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
@@ -73,7 +73,7 @@ public class PermissionController {
     })
     public ResponseEntity<Result<?>> selectResouceActByPage( PermissionVO bean) {
         try {
-            Result<?> result = this.permissionService.selectResouceActByPage(bean);
+            Result<?> result = this.permissionService.selectResouceUserActByPage(bean);
             if (result != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }

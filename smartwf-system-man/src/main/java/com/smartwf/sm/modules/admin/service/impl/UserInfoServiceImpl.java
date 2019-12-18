@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
@@ -60,14 +59,13 @@ public class UserInfoServiceImpl implements UserInfoService{
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectUserInfoByPage(Page<Object> page, UserInfo bean) {
-		Page<Object> objectPage = PageHelper.startPage(page.getPageNum(), page.getPageSize());
+	public Result<?> selectUserInfoByPage(Page<UserInfo> page, UserInfo bean) {
 		//过滤租户（超级管理员无需）
 		if(Constants.ADMIN==bean.getMgrType()) {
 			bean.setTenantId(null);
 		}
 		//查询
-		List<UserInfo> UserInfoList = this.userInfoDao.selectUserInfoByPage(bean,objectPage);
+		List<UserInfo> UserInfoList = this.userInfoDao.selectUserInfoByPage(bean,page);
 		return Result.data(page.getTotal(), UserInfoList);
 	}
 
@@ -101,7 +99,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			bean.setPwd(MD5Utils.convertMd5(bean.getPwd()));
 		}
 		//保存用户资料
-		this.userInfoDao.insertSelective(bean);
+		this.userInfoDao.insert(bean);
 		//批量添加与用户相关联表
 		//添加用户组织机构
 		String orgIds=StrUtils.regex(bean.getOrganizationIds());
@@ -112,7 +110,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 				uo.setUserId(bean.getId());
 				uo.setTenantId(bean.getTenantId());
 				uo.setOrganizationId(Integer.valueOf(id));
-				this.userOrganizationDao.insertSelective(uo);
+				this.userOrganizationDao.insert(uo);
 			}
 		}
 		//添加用户职务
@@ -124,7 +122,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 				up.setUserId(bean.getId());
 				up.setTenantId(bean.getTenantId());
 				up.setPostId(Integer.valueOf(id));
-				this.userPostDao.insertSelective(up);
+				this.userPostDao.insert(up);
 			}
 		}
 		//添加用户角色
@@ -136,7 +134,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 				ur.setUserId(bean.getId());
 				ur.setTenantId(bean.getTenantId());
 				ur.setRoleId(Integer.valueOf(id));
-				this.userRoleDao.insertSelective(ur);
+				this.userRoleDao.insert(ur);
 			}
 		}
 	}
@@ -160,7 +158,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			bean.setPwd(MD5Utils.convertMd5(bean.getPwd()));
 		}
 		//1)修改用户资料
-		this.userInfoDao.updateByPrimaryKeySelective(bean);
+		this.userInfoDao.updateById(bean);
 		
 		//2）删除原始用户对应的关系表（清空）
 		//删除用户组织架构表
@@ -179,7 +177,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 				uo.setUserId(bean.getId());
 				uo.setTenantId(bean.getTenantId());
 				uo.setOrganizationId(Integer.valueOf(id));
-				this.userOrganizationDao.insertSelective(uo);
+				this.userOrganizationDao.insert(uo);
 			}
 		}
 		//添加用户职务
@@ -191,7 +189,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 				up.setUserId(bean.getId());
 				up.setTenantId(bean.getTenantId());
 				up.setPostId(Integer.valueOf(id));
-				this.userPostDao.insertSelective(up);
+				this.userPostDao.insert(up);
 			}
 		}
 		//添加用户角色
@@ -203,7 +201,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 				ur.setUserId(bean.getId());
 				ur.setTenantId(bean.getTenantId());
 				ur.setRoleId(Integer.valueOf(id));
-				this.userRoleDao.insertSelective(ur);
+				this.userRoleDao.insert(ur);
 			}
 		}
 	}
