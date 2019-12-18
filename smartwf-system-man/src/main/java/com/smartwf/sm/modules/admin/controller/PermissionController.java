@@ -2,6 +2,7 @@ package com.smartwf.sm.modules.admin.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Permission;
+import com.smartwf.sm.modules.admin.pojo.UserAction;
 import com.smartwf.sm.modules.admin.service.PermissionService;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
+import com.smartwf.sm.modules.admin.vo.UserActionVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -60,6 +63,55 @@ public class PermissionController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询权限信息错误！"));
     }
     
+
+    /**
+     * @Description: 授权添加
+     * @param tenantId 租户ID
+     * @param ids json字符串
+     * @return
+     */
+    @PostMapping("savePermission")
+    @ApiOperation(value = "添加接口", notes = "添加权限接口")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户id", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "ids", value = "json字符串", dataType = "String", required = true)
+    })
+    public ResponseEntity<Result<?>> savePermission(HttpSession session,PermissionVO bean) {
+        try {
+        	if(StringUtils.isNotBlank(bean.getIds())) {
+        		this.permissionService.savePermission(bean);
+            	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
+        	}
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("ids数据不能为空！"));
+        } catch (Exception e) {
+            log.error("添加权限信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("添加权限信息错误！"));
+    }
+    
+    /**
+	 * @Description: 用户操作√
+	 * @DateTime 2019-12-13 11:00:43
+	 * @return
+	 */
+    @GetMapping("selectUserActAll")
+    @ApiOperation(value = "用户操作查询接口", notes = "用户操作查询")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+ 	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> selectUserActAll(UserActionVO bean) {
+        try {
+            Result<?> result = this.permissionService.selectUserActAll(bean);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }
+        } catch (Exception e) {
+            log.error("资源与用户操作查询信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("资源与用户操作查询信息错误！"));
+    }
+    
     /**
 	 * @Description: 资源与用户操作查询√
 	 * @DateTime 2019-12-13 11:00:43
@@ -83,29 +135,6 @@ public class PermissionController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("资源与用户操作查询信息错误！"));
     }
     
-    /**
-     * @Description: 添加权限
-     *      1子系统添加
-     *      2模块，权限添加
-     * @return
-     */
-    @PostMapping("savePermission")
-    @ApiOperation(value = "添加接口", notes = "添加权限接口")
-    @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户id", dataType = "int", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "permissionCode", value = "权重", dataType = "String", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "actId", value = "用户操作id（主键）", dataType = "int", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "resId", value = "资源表id（主键）", dataType = "int", required = true)
-    })
-    public ResponseEntity<Result<?>> savePermission(HttpSession session,PermissionVO bean) {
-        try {
-    		this.permissionService.savePermission(bean);
-        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
-        } catch (Exception e) {
-            log.error("添加权限信息错误！{}", e.getMessage(), e);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("添加权限信息错误！"));
-    }
     
     /**
      * @Description： 删除权限√

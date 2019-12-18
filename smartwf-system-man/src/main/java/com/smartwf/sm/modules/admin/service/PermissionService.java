@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Permission;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
+import com.smartwf.sm.modules.admin.vo.UserActionVO;
 
 /**
  * @Description: 权限业务层接口
@@ -22,7 +23,7 @@ public interface PermissionService {
      * @Description： 添加权限
      * @return
      */
-	void savePermission(Permission bean);
+	void savePermission(PermissionVO bean);
 	
 	/**
      * @Description： 删除权限
@@ -35,6 +36,12 @@ public interface PermissionService {
 	 * @return
 	 */
 	Result<?> selectResouceUserActByPage(PermissionVO bean);
+	/**
+	 * @Description: 用户操作
+	 * @DateTime 2019-12-13 11:00:43
+	 * @return
+	 */
+	Result<?> selectUserActAll(UserActionVO bean);
 	
 
 }
