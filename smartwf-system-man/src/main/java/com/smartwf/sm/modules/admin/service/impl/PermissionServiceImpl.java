@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
@@ -18,6 +19,7 @@ import com.smartwf.sm.modules.admin.dao.PermissionDao;
 import com.smartwf.sm.modules.admin.dao.ResouceDao;
 import com.smartwf.sm.modules.admin.dao.UserActionDao;
 import com.smartwf.sm.modules.admin.pojo.Permission;
+import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.pojo.UserAction;
 import com.smartwf.sm.modules.admin.service.PermissionService;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
@@ -49,12 +51,24 @@ public class PermissionServiceImpl implements PermissionService{
 	 */
 	@Override
 	public Result<?> selectPermissionByPage(Page<Permission> page, PermissionVO bean) {
-        //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
-  		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
-  			
+	    QueryWrapper<Resouce> queryWrapper=new QueryWrapper<>();
+	    //状态 0启用1禁用
+	    queryWrapper.eq("enable", 0);
+        //租户
+  		if(Constants.ADMIN==bean.getMgrType()) {
+  			bean.setTenantId(null);//超级用户无需过滤租户
+  		}else {
+  			queryWrapper.eq("tenant_id",bean.getTenantId());
   		}
-		List<Permission> list=this.permissionDao.selectPermissionByAll(bean);
-		return Result.data(list);
+  	    //已授权数据
+		List<PermissionVO> perList=this.permissionDao.selectPermissionByAll(bean);
+		log.info(JSON.toJSON(perList));
+		//全部资源
+		List<Resouce> resList=this.resouceDao.selectList(queryWrapper);
+		log.info(JSON.toJSON(resList));
+		
+		
+		return Result.data(null);
 	}
 
 	

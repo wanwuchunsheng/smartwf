@@ -3,8 +3,31 @@
 <mapper namespace="com.smartwf.sm.modules.admin.dao.PermissionDao" >
 
     <!-- 查询权限集合-->
-    <select id="selectPermissionByAll" parameterType="com.smartwf.sm.modules.admin.pojo.Permission">
-       
+    <select id="selectPermissionByAll" resultType="com.smartwf.sm.modules.admin.vo.PermissionVO">
+        select 
+			a.id as permission_id,
+			a.permission_code,
+			c.act_name,
+			b.id,
+			b.pid,
+			b.uid,
+			b.sort,
+			b.level,
+			b.res_code,
+			b.res_name,
+			b.res_type,
+			b.res_href,
+			b.permission,
+			b.remark,
+			b.tenant_id
+		from sys_permission a 
+		left join sys_resouce b on a.res_id=b.id
+		left join sys_user_action c on a.act_id = c.id
+		where a.tenant_id=b.tenant_id and a.tenant_id=c.tenant_id
+		and b.enable=0 and c.enable=0 
+		<if test="bean.tenantId != null ">
+            and a.tenant_id = #{bean.tenantId}
+        </if>
     </select>
     
 </mapper>

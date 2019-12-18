@@ -16,7 +16,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Permission;
-import com.smartwf.sm.modules.admin.pojo.UserAction;
 import com.smartwf.sm.modules.admin.service.PermissionService;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
 import com.smartwf.sm.modules.admin.vo.UserActionVO;
@@ -42,7 +41,7 @@ public class PermissionController {
 	private PermissionService permissionService;
 	
 	/**
-	 * @Description: 查询权限分页
+	 * @Description: 分页查询权限
 	 * @return
 	 */
     @GetMapping("selectPermissionByPage")
@@ -65,7 +64,7 @@ public class PermissionController {
     
 
     /**
-     * @Description: 授权添加
+     * @Description: 授权添加√
      * @param tenantId 租户ID
      * @param ids json字符串
      * @return

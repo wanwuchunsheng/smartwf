@@ -21,7 +21,7 @@ public interface PermissionDao extends BaseMapper<Permission> {
 	 * @Description: 查询权限
 	 * @result:
 	 */
-	List<Permission> selectPermissionByAll(@Param("bean") PermissionVO bean);
+	List<PermissionVO> selectPermissionByAll(@Param("bean") PermissionVO bean);
 	/**
 	 * @Description: 批量删除权限
 	 * @result:
