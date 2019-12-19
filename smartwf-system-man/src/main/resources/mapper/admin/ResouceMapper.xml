@@ -19,6 +19,12 @@
 		   select id from ( select id from sys_resouce where fid= #{bean.id} ) h
 		)
 	</delete>
+	
+	<!-- 批量删除子系统下的所有资源 -->
+    <delete id="deleteResouceById" parameterType = "com.smartwf.sm.modules.admin.pojo.Resouce">
+	    delete from sys_resouce where uid = #{bean.id}
+	</delete>
+	
     
     <!-- 查询模块下所以子模块 -->
     <select id="selectResouceById" parameterType="com.smartwf.sm.modules.admin.pojo.Resouce">

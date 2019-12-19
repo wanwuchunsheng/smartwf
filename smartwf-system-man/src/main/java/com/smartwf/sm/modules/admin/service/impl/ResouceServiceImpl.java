@@ -1,6 +1,5 @@
 package com.smartwf.sm.modules.admin.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.sm.modules.admin.dao.ResouceDao;
-import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.service.ResouceService;
 import com.smartwf.sm.modules.admin.vo.ResouceVO;
@@ -128,36 +126,21 @@ public class ResouceServiceImpl implements ResouceService{
 					//b删除子系统下所有资源
 					this.resouceDao.deleteResouceByfid(res);
 					break;
-	            case 2:
-	            	List<Integer> idList = new ArrayList<Integer>();
-	            	List<Resouce> resList=new ArrayList<Resouce>();
+	            case 2: 
 					//a删除模块
 	            	this.resouceDao.deleteById(res);
-	            	//b查询模块下所有资源
+	            	//b删除模块下所有资源
+	            	this.resouceDao.deleteResouceById(res);
+	            	//c查询模块下的子模块
             		List<Resouce> list=this.resouceDao.selectResouceById(res);
-	            	if( list !=null && list.size()>0 ){
-	            		for(Resouce rs: list ) {
-	            			idList.add(rs.getId());//记录模块id
-	            			resList.add(rs);//记录模块
-	            			this.resouceDao.deleteById(rs);//删除模块
+	            	if(list!=null && list.size()>0) {
+	            		for(Resouce r:list) {
+	            			//d删除当前模块
+	            			this.resouceDao.deleteById(r);
+	            			//e删除当前模块下的子菜单
+	    	            	this.resouceDao.deleteResouceById(r);
 	            		}
-	            		
-	            		boolean flag=true;
-	            		while(flag) {
-	            			if( resList !=null && resList.size()>0 ) {
-	            				for( Resouce r: resList) {
-	            					list=this.resouceDao.selectResouceById(res);
-	            					if( list!=null && list.size()>0 ){
-	            						
-	            					}
-				            	}
-	            				resList.clear();//清空
-	            			}
-		            	}
 	            	}
-	            	//c查询模块下是否还有模块，记录每个模块的ids
-	            	//d通过ids查询所有模块下菜单并删除
-	            	
 					break;
 	            case 3:
 	            	//a删除资源

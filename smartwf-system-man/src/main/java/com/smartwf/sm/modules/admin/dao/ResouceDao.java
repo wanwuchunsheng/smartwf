@@ -34,7 +34,7 @@ public interface ResouceDao extends BaseMapper<Resouce> {
 	 */
 	void deleteResouceByfid(@Param("bean") Resouce bean);
 	/**
-	 * @Description: 查询删除模块下的所有子模块
+	 * @Description: 查询模块下的所有子模块
 	 * @result:
 	 */
 	List<Resouce> selectResouceById(@Param("bean") Resouce bean);
@@ -44,6 +44,13 @@ public interface ResouceDao extends BaseMapper<Resouce> {
 	 * @return
 	 */
 	List<ResouceVO> selectResouceUserActByPage(@Param("bean") PermissionVO bean);
+	
+	/**
+	 * @Description: 删除模块下所有资源
+	 * @DateTime 2019-12-13 11:00:43
+	 * @return
+	 */
+	void deleteResouceById(@Param("bean") Resouce bean);
 	
 
 }

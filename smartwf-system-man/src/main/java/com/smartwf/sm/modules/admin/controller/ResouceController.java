@@ -149,7 +149,7 @@ public class ResouceController {
     @DeleteMapping("deleteResouce")
     @ApiOperation(value = "删除接口", notes = "删除资源")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "int")
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单删除", dataType = "int",required = true)
     })
     @TraceLog(content = "删除资源系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteResouce(ResouceVO bean) {
