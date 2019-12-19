@@ -22,12 +22,5 @@ public class PermissionVO extends Permission {
 	
 	private Integer mgrType;//0普通  1管理员  2超级管理员
 	
-	private Integer permissionId;//授权id
-	
-	private String permissionCode;//授权编码
-	
-	private String actName;//用户操作名称
-	
-	private List<Permission> children;//封装树形结构
 	
 }

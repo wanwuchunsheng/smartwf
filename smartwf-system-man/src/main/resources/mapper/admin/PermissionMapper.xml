@@ -3,7 +3,7 @@
 <mapper namespace="com.smartwf.sm.modules.admin.dao.PermissionDao" >
 
     <!-- 查询权限集合-->
-    <select id="selectPermissionByAll" resultType="com.smartwf.sm.modules.admin.vo.PermissionVO">
+    <select id="selectPermissionByAll" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
         select 
 			a.id as permission_id,
 			a.permission_code,
@@ -27,6 +27,69 @@
 		and b.enable=0 and c.enable=0 
 		<if test="bean.tenantId != null ">
             and a.tenant_id = #{bean.tenantId}
+        </if>
+    </select>
+    
+    <!-- 查询所有启用资源 -->
+    <select id="selectResouceByAll" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
+       select 
+			(-a.id) as id,
+			b.pid,
+			a.res_id as uid,
+			b.sort,
+			(b.level+1) as level,
+			a.permission_code as res_code,
+			c.act_name as res_name,
+			(b.res_type+1) as res_type,
+			b.res_href,
+			b.permission,
+			b.remark,
+			b.tenant_id
+		from sys_permission a 
+		left join sys_resouce b on a.res_id=b.id
+		left join sys_user_action c on a.act_id = c.id
+		where a.tenant_id=b.tenant_id and a.tenant_id=c.tenant_id
+		and b.enable=0 and c.enable=0 
+		<if test="bean.tenantId != null ">
+            and a.tenant_id = #{bean.tenantId}
+        </if>
+        
+		UNION ALL 
+		
+		select 
+			id,
+			pid,
+			uid,
+			sort,
+			level,
+			res_code,
+			res_name,
+			res_type,
+			res_href,
+			permission,
+			remark,
+			tenant_id
+		from sys_resouce
+		where enable=0
+		and pid in (
+				select 
+					b.pid
+				from sys_permission a 
+				left join sys_resouce b on a.res_id=b.id
+				left join sys_user_action c on a.act_id = c.id
+				where a.tenant_id=b.tenant_id and a.tenant_id=c.tenant_id
+				and b.enable=0 and c.enable=0 group by b.pid
+		) or id in (
+		        select 
+					b.pid
+				from sys_permission a 
+				left join sys_resouce b on a.res_id=b.id
+				left join sys_user_action c on a.act_id = c.id
+				where a.tenant_id=b.tenant_id and a.tenant_id=c.tenant_id
+				and b.enable=0 and c.enable=0 group by b.pid
+		)
+		<if test="bean.tenantId != null ">
+            and tenant_id = #{bean.tenantId}
         </if>
     </select>
     

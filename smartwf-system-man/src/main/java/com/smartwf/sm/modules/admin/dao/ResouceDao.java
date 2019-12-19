@@ -44,5 +44,6 @@ public interface ResouceDao extends BaseMapper<Resouce> {
 	 * @return
 	 */
 	List<ResouceVO> selectResouceUserActByPage(@Param("bean") PermissionVO bean);
+	
 
 }

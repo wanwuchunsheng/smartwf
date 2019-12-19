@@ -64,7 +64,7 @@ public class PermissionController {
     
 
     /**
-     * @Description: 授权添加√
+     * @Description: 授权添加
      * @param tenantId 租户ID
      * @param ids json字符串
      * @return
@@ -89,7 +89,7 @@ public class PermissionController {
     }
     
     /**
-	 * @Description: 用户操作√
+	 * @Description: 用户操作
 	 * @DateTime 2019-12-13 11:00:43
 	 * @return
 	 */
@@ -112,7 +112,7 @@ public class PermissionController {
     }
     
     /**
-	 * @Description: 资源与用户操作查询√
+	 * @Description: 资源与用户操作查询
 	 * @DateTime 2019-12-13 11:00:43
 	 * @return
 	 */
@@ -136,7 +136,7 @@ public class PermissionController {
     
     
     /**
-     * @Description： 删除权限√
+     * @Description： 删除权限
      * @param id 单个删除
      * @return
      */

@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.admin.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import com.smartwf.sm.modules.admin.pojo.Resouce;
 
@@ -20,5 +21,7 @@ public class ResouceVO extends Resouce{
 	private Date startTime;//开始时间
 	
 	private Date endTime;//结束时间
+	
+	private List<ResouceVO> children;//封装树形结构
 
 }

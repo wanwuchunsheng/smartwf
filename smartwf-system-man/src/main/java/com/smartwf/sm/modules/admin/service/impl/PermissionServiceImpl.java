@@ -1,5 +1,6 @@
 package com.smartwf.sm.modules.admin.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
@@ -19,7 +19,6 @@ import com.smartwf.sm.modules.admin.dao.PermissionDao;
 import com.smartwf.sm.modules.admin.dao.ResouceDao;
 import com.smartwf.sm.modules.admin.dao.UserActionDao;
 import com.smartwf.sm.modules.admin.pojo.Permission;
-import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.pojo.UserAction;
 import com.smartwf.sm.modules.admin.service.PermissionService;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
@@ -51,25 +50,50 @@ public class PermissionServiceImpl implements PermissionService{
 	 */
 	@Override
 	public Result<?> selectPermissionByPage(Page<Permission> page, PermissionVO bean) {
-	    QueryWrapper<Resouce> queryWrapper=new QueryWrapper<>();
-	    //状态 0启用1禁用
-	    queryWrapper.eq("enable", 0);
         //租户
   		if(Constants.ADMIN==bean.getMgrType()) {
   			bean.setTenantId(null);//超级用户无需过滤租户
-  		}else {
-  			queryWrapper.eq("tenant_id",bean.getTenantId());
   		}
   	    //已授权数据
-		List<PermissionVO> perList=this.permissionDao.selectPermissionByAll(bean);
-		log.info(JSON.toJSON(perList));
+		//List<ResouceVO> voList=this.permissionDao.selectPermissionByAll(bean);
 		//全部资源
-		List<Resouce> resList=this.resouceDao.selectList(queryWrapper);
-		log.info(JSON.toJSON(resList));
-		
-		
-		return Result.data(null);
+		List<ResouceVO> resList=this.permissionDao.selectResouceByAll(bean);
+		//返回集合
+		List<ResouceVO> list=buildByRecursive(resList);
+		return Result.data(list);
 	}
+	
+	 /**
+                * 使用递归方法建树
+     * @param treeNodes
+     * @return
+     */
+    public static List<ResouceVO> buildByRecursive(List<ResouceVO> treeNodes) {
+        List<ResouceVO> trees = new ArrayList<ResouceVO>();
+        for (ResouceVO treeNode : treeNodes) {
+            if (treeNode.getUid()==0) {
+                trees.add(findChildren(treeNode,treeNodes));
+            }
+        }
+        return trees;
+    }
+ 
+    /**
+     * 递归查找子节点
+     * @param treeNodes
+     * @return
+     */
+    public static ResouceVO findChildren(ResouceVO treeNode,List<ResouceVO> treeNodes) {
+        for (ResouceVO it : treeNodes) {
+            if(treeNode.getId().equals(it.getUid())) {
+                if (treeNode.getChildren() == null) {
+                    treeNode.setChildren(new ArrayList<ResouceVO>());
+                }
+                treeNode.getChildren().add(findChildren(it,treeNodes));
+            }
+        }
+        return treeNode;
+    }
 
 	
 	/**
