@@ -21,6 +21,7 @@ import com.smartwf.sm.modules.admin.dao.OrganizationDao;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
+import com.smartwf.sm.modules.admin.vo.ResouceVO;
 
 import lombok.extern.log4j.Log4j;
 /**
@@ -69,6 +70,51 @@ public class OrganizationServiceImpl implements OrganizationService{
         }
 		IPage<Organization> list=this.organizationDao.selectPage(page, queryWrapper);
 		return Result.data(list.getTotal(), list.getRecords());
+	}
+	
+	/**
+	 * @Description: 查询所有组织架构（树形结构）
+	 * @return
+	 */
+	@Override
+	public Result<?> selectOrganizationByAll(OrganizationVO bean) {
+		//过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
+  		if (null!=bean.getTenantId() && Constants.ADMIN==bean.getMgrType()) { 
+  			bean.setTenantId(null); 
+  		} 
+		List<OrganizationVO> list=buildByRecursive(this.organizationDao.selectOrganizationByAll(bean));
+		return Result.data(list);
+	}
+	 /**
+     * 使用递归方法建树
+	* @param treeNodes
+	* @return
+	*/
+	public static List<OrganizationVO> buildByRecursive(List<OrganizationVO> treeNodes) {
+		List<OrganizationVO> trees = new ArrayList<OrganizationVO>();
+		for (OrganizationVO treeNode : treeNodes) {
+			 if (treeNode.getUid()==0) {
+			     trees.add(findChildren(treeNode,treeNodes));
+			 }
+		}
+		return trees;
+	}
+	
+	/**
+	* 递归查找子节点
+	* @param treeNodes
+	* @return
+	*/
+	public static OrganizationVO findChildren(OrganizationVO treeNode,List<OrganizationVO> treeNodes) {
+		for (OrganizationVO it : treeNodes) {
+			 if(treeNode.getId().equals(it.getUid())) {
+			     if (treeNode.getChildren() == null) {
+			         treeNode.setChildren(new ArrayList<OrganizationVO>());
+			     }
+			     treeNode.getChildren().add(findChildren(it,treeNodes));
+			 }
+		}
+		return treeNode;
 	}
 
 	/**
@@ -152,6 +198,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 	public List<Organization> queryOrganizationAll() {
 		return this.organizationDao.queryOrganizationAll();
 	}
+	
 
 
 }

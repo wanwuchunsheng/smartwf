@@ -68,7 +68,7 @@ public class UserActionServiceImpl implements UserActionService{
         	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
 		IPage<UserAction> list=this.UserActionDao.selectPage(page, queryWrapper);
-		return Result.data(list.getTotal(), list);
+		return Result.data(list.getTotal(), list.getRecords());
 	}
 
 	/**

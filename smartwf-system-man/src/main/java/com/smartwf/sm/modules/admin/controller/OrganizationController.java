@@ -71,6 +71,34 @@ public class OrganizationController {
     }
     
     /**
+	 * @Description: 查询所有组织架构（树形结构）
+	 * @return
+	 */
+    @GetMapping("selectOrganizationByAll")
+    @ApiOperation(value = "查询所有接口", notes = "查询组织架构所有数据")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构代码", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String"),
+            @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
+            @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
+            @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", dataType = "Date")
+    })
+    public ResponseEntity<Result<?>> selectOrganizationByAll(OrganizationVO bean) {
+        try {
+            Result<?> result = this.organizationService.selectOrganizationByAll(bean);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }
+        } catch (Exception e) {
+            log.error("分页查询组织架构信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询组织架构信息错误！"));
+    }
+    
+    /**
      * @Description: 主键查询组织架构
      * @return
      */

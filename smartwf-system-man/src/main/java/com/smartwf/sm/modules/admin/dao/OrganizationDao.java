@@ -34,6 +34,11 @@ public interface OrganizationDao extends BaseMapper<Organization> {
 	 * 
 	 * */
 	void deleteUserOrgById(@Param("bean") OrganizationVO bean);
+	/**
+	 * @Description: 查询所有组织架构
+	 * @return
+	 */
+	List<OrganizationVO> selectOrganizationByAll(@Param("bean") OrganizationVO bean);
 
 
     

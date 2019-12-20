@@ -13,7 +13,7 @@
 	    </foreach>
 	</delete>
 	
-	<!-- 查询组织架构列表 -->
+	 <!-- 查询组织架构列表 -->
      <select id="queryOrganizationAll" resultType="com.smartwf.sm.modules.admin.pojo.Organization">
         select 
 			id,
@@ -30,6 +30,47 @@
 		from sys_organization
 		where enable=0 order by create_time desc
     </select>
+    
+    <!-- 查询所有组织架构 -->
+    <select id="selectOrganizationByAll" resultType="com.smartwf.sm.modules.admin.vo.OrganizationVO">
+        select 
+			id,
+			pid,
+			uid,
+			sort,
+			org_code,
+			org_name,
+			org_type,
+			remark,
+			tenant_id,
+			enable,
+			level
+		from sys_organization
+		where 1=1
+		<if test="bean.tenantId != null ">
+            and tenant_id = #{bean.tenantId}
+        </if>
+        <if test="bean.orgCode != null ">
+            and org_code like '%${bean.orgCode}%'
+        </if>
+        <if test="bean.orgName != null ">
+            and org_name like '%${bean.orgName}%'
+        </if>
+        <if test="bean.enable != null ">
+            and enable=#{bean.enable}
+        </if>
+        <if test="bean.remark != null ">
+            and remark like '%${bean.remark}%'
+        </if>
+        <if test="bean.startTime != null">
+            and create_time between #{bean.startTime} and #{bean.endTime}
+        </if>
+        order by create_time desc
+    </select>
+    
+    
+    
+    
     
 	<!-- 删除用户组织架构表-->
     <delete id="deleteUserOrgById" parameterType = "com.smartwf.sm.modules.admin.vo.OrganizationVO">

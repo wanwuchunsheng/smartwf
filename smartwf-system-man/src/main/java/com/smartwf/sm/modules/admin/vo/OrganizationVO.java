@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.admin.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import com.smartwf.sm.modules.admin.pojo.Organization;
 
@@ -20,5 +21,9 @@ public class OrganizationVO extends Organization{
 	private Date startTime;//开始时间
 	
 	private Date endTime;//结束时间
+	
+	private List<OrganizationVO> children;//封装树形结构
+	
+	
 
 }

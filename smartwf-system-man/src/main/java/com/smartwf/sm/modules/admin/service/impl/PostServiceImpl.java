@@ -76,7 +76,7 @@ public class PostServiceImpl implements PostService{
         	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
 		IPage<Post> list=this.postDao.selectPage(page, queryWrapper);
-		return Result.data(list.getTotal(), list);
+		return Result.data(list.getTotal(), list.getRecords());
 	}
 
 	/**

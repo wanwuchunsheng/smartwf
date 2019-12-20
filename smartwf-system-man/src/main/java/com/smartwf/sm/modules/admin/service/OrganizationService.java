@@ -49,6 +49,11 @@ public interface OrganizationService {
      * @return
      */
 	List<Organization> queryOrganizationAll();
+	/**
+	 * @Description: 查询所有组织架构（树形结构）
+	 * @return
+	 */
+	Result<?> selectOrganizationByAll(OrganizationVO bean);
 	
 
 }
