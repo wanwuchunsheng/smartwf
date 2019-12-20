@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Date: 2018/9/17 14:07
  * @Description: 用户
  */
 @Data

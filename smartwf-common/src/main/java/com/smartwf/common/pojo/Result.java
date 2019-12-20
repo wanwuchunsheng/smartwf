@@ -8,7 +8,7 @@ import com.smartwf.common.constant.Constants;
 import lombok.Data;
 
 /**
- * @Date: 2018/12/19 13:26
+ * @Date: 2019/12/19 13:26
  * @Description: 返回结果类
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)

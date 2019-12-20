@@ -7,7 +7,7 @@
   </parent>
   <groupId>com.smartwf.sm</groupId>
   <artifactId>smartwf-system-man</artifactId>
-  <name>智慧风电场2.0</name>
+  <name>smartwf-system-man</name>
   <description>后台管理子系统</description>
   <dependencies>
         <!-- smartwf-common -->

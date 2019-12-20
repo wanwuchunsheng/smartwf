@@ -4,7 +4,7 @@
   <artifactId>smartwf</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>Smart wind farm</name>
+  <name>Smartwf</name>
   <description>智慧风电场</description>
   <parent>
       <groupId>org.springframework.boot</groupId>
@@ -13,7 +13,6 @@
   </parent>
   <modules>
     	<module>smartwf-common</module>
-    	<module>smartwf-health-man</module>
     	<module>smartwf-system-man</module>
   </modules>
   <properties>
@@ -21,10 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <org.springframework.cloud>Finchley.SR2</org.springframework.cloud>
-        <!-- <org.projectlombok>1.16.20</org.projectlombok> -->
         <org.mybatis.spring.boot>2.0.1</org.mybatis.spring.boot>
-        <!-- <tk.mybatis>2.0.3</tk.mybatis> -->
-        <!-- <com.github.pagehelper>1.2.5</com.github.pagehelper> -->
         <com.alibaba.druid>1.1.10</com.alibaba.druid>
         <mysql.connector.java>8.0.15</mysql.connector.java>
         <com.alibaba.fastjson>1.2.9</com.alibaba.fastjson>
@@ -34,18 +30,13 @@
         <org.apache.poi>4.0.0</org.apache.poi>
         <org.json>20180130</org.json>
         <org.apache.commons>3.4</org.apache.commons>
-       <!--  <com.qcloud.cos_api>5.4.6</com.qcloud.cos_api> -->
-       <!--  <com.qcloud.qcloud-java-sdk>2.0.6</com.qcloud.qcloud-java-sdk> -->
         <com.sun.mail>1.5.6</com.sun.mail>
-        <!-- <commons-net>3.6</commons-net> -->
         <org.slf4j>1.7.25</org.slf4j>
         <lombok.version>1.18.4</lombok.version>
         <redis.clients>2.9.0</redis.clients>
         <io.zipkin.java>2.9.4</io.zipkin.java>
         <commons.httpclient>3.1</commons.httpclient>
         <org.apache.rocketmq>4.3.0</org.apache.rocketmq>
-        <!-- <security.version>2.0.13.RELEASE</security.version> -->
-        <!-- <shiro.version>1.4.0-RC2</shiro.version> -->
         <mybatis-plus.version>3.1.2</mybatis-plus.version>
     </properties>
 
@@ -72,27 +63,6 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.connector.java}</version>
             </dependency>
-            <!-- mybatis 
-            <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${org.mybatis.spring.boot}</version>
-            </dependency>
-            -->
-            <!-- 通用mapper 
-            <dependency>
-                <groupId>tk.mybatis</groupId>
-                <artifactId>mapper-spring-boot-starter</artifactId>
-                <version>${tk.mybatis}</version>
-            </dependency>
-            -->
-            <!-- 分页助手 
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>${com.github.pagehelper}</version>
-            </dependency>
-            -->
             <!--mybatis-plus 相关依赖-->
 		    <dependency>
 		        <groupId>com.baomidou</groupId>
