@@ -43,7 +43,7 @@ public class OrganizationController {
 	/**
 	 * @Description: 查询组织架构分页
 	 * @return
-	 */
+	
     @GetMapping("selectOrganizationByPage")
     @ApiOperation(value = "分页查询接口", notes = "分页查询组织架构")
     @ApiImplicitParams({
@@ -68,16 +68,16 @@ public class OrganizationController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询组织架构信息错误！"));
     }
+     */
     
     /**
 	 * @Description: 查询所有组织架构（树形结构）
 	 * @return
 	 */
     @GetMapping("selectOrganizationByAll")
-    @ApiOperation(value = "查询所有数据接口", notes = "查询组织架构所有数据")
+    @ApiOperation(value = "树形查询所有数据接口", notes = "查询组织架构所有数据")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "子系统（主键）", dataType = "int"),
     	    @ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构代码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),

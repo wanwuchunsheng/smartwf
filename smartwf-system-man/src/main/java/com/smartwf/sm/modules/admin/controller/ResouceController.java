@@ -63,7 +63,7 @@ public class ResouceController {
 	/**
 	 * @Description: 查询资源分页
 	 * @return
-	 */
+	 
     @GetMapping("selectResouceByPage")
     @ApiOperation(value = "分页查询接口", notes = "分页查询资源")
     @ApiImplicitParams({
@@ -85,6 +85,7 @@ public class ResouceController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询资源信息错误！"));
     }
+    */
     
     /**
 	 * @Description: 查询所有资源，树形结构

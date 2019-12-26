@@ -67,9 +67,6 @@
 			level
 		from sys_organization
 		where 1=1
-		<if test="bean.id != null ">
-            and pid = #{bean.id} or id= #{bean.id}
-        </if>
 		<if test="bean.tenantId != null ">
             and tenant_id = #{bean.tenantId}
         </if>

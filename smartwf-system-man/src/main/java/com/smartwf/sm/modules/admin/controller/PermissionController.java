@@ -68,7 +68,7 @@ public class PermissionController {
 	 * @return
 	 */
     @GetMapping("selectPermissionByPage")
-    @ApiOperation(value = "分页查询接口", notes = "分页查询权限")
+    @ApiOperation(value = "树形查询所有数据接口", notes = "树形查询所有数据")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "子系统（主键）", dataType = "int", required = true)

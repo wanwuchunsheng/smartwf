@@ -181,10 +181,6 @@ public class OrganizationServiceImpl implements OrganizationService{
 					bean.setId(Integer.valueOf(val));
 					//删除用户组织结构
 					this.organizationDao.deleteUserOrgById(bean);
-					//删除职务
-					//this.organizationDao.deletePostByOrgId(bean);
-					//删除用户职务
-					//this.organizationDao.deleteUserPostByOrgId(bean);
 				}
 				//批量删除组织机构
 				this.organizationDao.deleteOrganizationByIds(list);
