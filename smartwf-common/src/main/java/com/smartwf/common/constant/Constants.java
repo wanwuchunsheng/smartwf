@@ -25,6 +25,12 @@ public class Constants {
     public static final int ZERO = 0;
     
     public static final int ADMIN = 2;
+    
+    /**
+     * 默认租户状态========================================================
+     */ 
+    public static final Integer ISSEL = 1;//默认租户
+    
 
     /**
      * 状态码========================================================
