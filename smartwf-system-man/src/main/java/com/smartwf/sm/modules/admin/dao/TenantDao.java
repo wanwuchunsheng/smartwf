@@ -28,6 +28,11 @@ public interface TenantDao extends BaseMapper<Tenant> {
 	 * @result:
 	 */
 	List<Tenant> queryTenantAll();
+	
+	/**
+	 * @Description: 将所有租户默认状态设置不选中
+	 */
+	void updateBySel();
 
 	/**
 	 * @Description: 级联删除
@@ -45,9 +50,15 @@ public interface TenantDao extends BaseMapper<Tenant> {
 
 	void deleteUserRoleByTenantId(@Param("bean") TenantVO bean);
 
-	void deletePermissionByTenantId(@Param("bean") TenantVO bean);
+	void deleteRolePermissionByTenantId(@Param("bean") TenantVO bean);
 	
 	void deleteUserByTenantId(@Param("bean") TenantVO bean);
+	
+	void deletePermissionByTenantId(@Param("bean") TenantVO bean);
+
+	void deleteResouceByTenantId(@Param("bean") TenantVO bean);
+
+	void deleteUserActionByTenantId(@Param("bean") TenantVO bean);
 
 	/**
 	 * @Description: 批量级联删除
@@ -65,9 +76,20 @@ public interface TenantDao extends BaseMapper<Tenant> {
 
 	void deleteUserRoleByTenantIds(@Param("list") List<String> list);
 
-	void deletePermissionByTenantIds(@Param("list") List<String> list);
+	void deleteRolePermissionByTenantIds(@Param("list") List<String> list);
 
 	void deleteUserByTenantIds(@Param("list") List<String> list);
+	
+	void deletePermissionByTenantIds(@Param("list") List<String> list);
+
+	void deleteResouceByTenantIds(@Param("list") List<String> list);
+
+	void deleteUserActionByTenantIds(@Param("list") List<String> list);
+
+	
+	
+
+	
 
     
 }

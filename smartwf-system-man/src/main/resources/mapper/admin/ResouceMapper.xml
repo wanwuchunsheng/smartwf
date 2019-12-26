@@ -94,4 +94,112 @@
         </if>
     </select>
     
+    <!-- 查询资源子系统列表 -->
+    <select id="selectResouceByPid" resultType="com.smartwf.sm.modules.admin.pojo.Resouce">
+        select 
+			id,
+			pid,
+			uid,
+			sort,
+			level,
+			res_code,
+			res_name,
+			res_type,
+			res_href,
+			permission,
+			remark,
+			tenant_id,
+			enable,
+			create_time,
+			create_user_id,
+			create_user_name,
+			update_time,
+			update_user_id,
+			update_user_name
+		from sys_resouce
+		where pid=0 and uid=0 and tenant_id = #{bean.tenantId}
+    </select>
+    
+    <!-- 查询所有资源数据 -->
+    <select id="selectResouceByAll" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
+        select 
+	        id,
+			pid,
+			uid,
+			sort,
+			level,
+			res_code,
+			res_name,
+			res_type,
+			res_href,
+			permission,
+			remark,
+			tenant_id,
+			enable
+		from sys_resouce
+        where 1=1
+        <if test="bean.tenantId != null ">
+            and tenant_id= #{bean.tenantId}
+        </if>
+        <if test="bean.id != null ">
+            and id= #{bean.id} or pid= #{bean.id}
+        </if>
+        
+        UNION ALL 
+        
+        select 
+			(-a.id) as id,
+			b.pid,
+			a.res_id as uid,
+			b.sort,
+			(b.level+1) as level,
+			a.permission_code as res_code,
+			c.act_name as res_name,
+			(b.res_type+1) as res_type,
+			b.res_href,
+			b.permission,
+			b.remark,
+			b.tenant_id,
+			b.enable
+		from sys_permission a 
+		left join sys_resouce b on a.res_id=b.id
+		left join sys_user_action c on a.act_id = c.id
+		where a.tenant_id=b.tenant_id and a.tenant_id=c.tenant_id
+		<if test="bean.tenantId != null ">
+            and a.tenant_id= #{bean.tenantId}
+        </if>
+        <if test="bean.id != null ">
+            and b.id= #{bean.id} or b.pid= #{bean.id}
+        </if>
+    </select>
+    
+    <!-- 主键查询 -->
+    <select id="selecResoucetById" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
+        select 
+		   (select GROUP_CONCAT(act_id order by act_id) from sys_permission where res_id=a.id group by res_id) as ids,
+			a.id,
+			a.pid,
+			a.uid,
+			a.sort,
+			a.level,
+			a.res_code,
+			a.res_name,
+			a.res_type,
+			a.res_href,
+			a.permission,
+			a.remark,
+			a.tenant_id,
+			a.enable,
+			a.create_time,
+			a.create_user_id,
+			a.create_user_name,
+			a.update_time,
+			a.update_user_id,
+			a.update_user_name
+		from sys_resouce a
+		where a.id = #{bean.id}
+    </select>
+    
+    
+    
 </mapper>

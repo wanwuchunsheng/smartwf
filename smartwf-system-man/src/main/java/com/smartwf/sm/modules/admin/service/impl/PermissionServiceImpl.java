@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
@@ -19,6 +18,7 @@ import com.smartwf.sm.modules.admin.dao.PermissionDao;
 import com.smartwf.sm.modules.admin.dao.ResouceDao;
 import com.smartwf.sm.modules.admin.dao.UserActionDao;
 import com.smartwf.sm.modules.admin.pojo.Permission;
+import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.pojo.UserAction;
 import com.smartwf.sm.modules.admin.service.PermissionService;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
@@ -43,19 +43,23 @@ public class PermissionServiceImpl implements PermissionService{
 	
 	@Autowired
 	private UserActionDao userActionDao;
+	
+	/**
+	 * @Description: 查询资源子系统
+	 * @return
+	 */
+	@Override
+	public Result<?> selectResouceByPid(ResouceVO bean) {
+		List<Resouce> list=this.resouceDao.selectResouceByPid(bean);
+		return Result.data(list);
+	}
 
 	/**
 	 * @Description:查询权限分页
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectPermissionByPage(Page<Permission> page, PermissionVO bean) {
-        //租户
-  		if(Constants.ADMIN==bean.getMgrType()) {
-  			bean.setTenantId(null);//超级用户无需过滤租户
-  		}
-  	    //已授权数据
-		//List<ResouceVO> voList=this.permissionDao.selectPermissionByAll(bean);
+	public Result<?> selectPermissionByPage( PermissionVO bean) {
 		//全部资源
 		List<ResouceVO> resList=this.permissionDao.selectResouceByAll(bean);
 		//返回集合
@@ -64,7 +68,7 @@ public class PermissionServiceImpl implements PermissionService{
 	}
 	
 	 /**
-                * 使用递归方法建树
+     * 使用递归方法建树
      * @param treeNodes
      * @return
      */
@@ -146,10 +150,6 @@ public class PermissionServiceImpl implements PermissionService{
 	 */
 	@Override
 	public Result<?> selectResouceUserActByPage(PermissionVO bean) {
-		//过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
-  		if (null!=bean.getTenantId() && Constants.ADMIN==bean.getMgrType()) {
-  			bean.setTenantId(null);
-  		}
 		List<ResouceVO> list=this.resouceDao.selectResouceUserActByPage(bean);
 		return Result.data(list);
 	}
@@ -165,11 +165,12 @@ public class PermissionServiceImpl implements PermissionService{
 		//状态0-启用  1禁用
 		queryWrapper.eq("enable", 0);
 		//租户,不为超级管理员，过滤租户
-  		if (Constants.ADMIN!=bean.getMgrType()) {
+  		if (null != bean.getTenantId()) {
   			queryWrapper.eq("tenant_id", bean.getTenantId());
   		}
 		List<UserAction> list = this.userActionDao.selectList(queryWrapper);
 		return Result.data(list);
 	}
+	
 
 }

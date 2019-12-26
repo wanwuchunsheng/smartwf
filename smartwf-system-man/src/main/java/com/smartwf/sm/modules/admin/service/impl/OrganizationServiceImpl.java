@@ -21,7 +21,6 @@ import com.smartwf.sm.modules.admin.dao.OrganizationDao;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
-import com.smartwf.sm.modules.admin.vo.ResouceVO;
 
 import lombok.extern.log4j.Log4j;
 /**
@@ -44,10 +43,10 @@ public class OrganizationServiceImpl implements OrganizationService{
 	public Result<?> selectOrganizationByPage(Page<Organization> page, OrganizationVO bean) {
 		QueryWrapper<Organization> queryWrapper = new QueryWrapper<>();
 		queryWrapper.orderByDesc("update_time"); //降序
-        //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
-  		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
+  		//租户
+  		if (null!=bean.getTenantId() ) { 
   			queryWrapper.eq("tenant_id", bean.getTenantId()); 
-  		} 
+  		}
         //组织架构编码
         if (!StringUtils.isEmpty(bean.getOrgCode())) {
         	queryWrapper.like("org_code", Constants.PER_CENT + bean.getOrgCode() + Constants.PER_CENT);
@@ -78,10 +77,6 @@ public class OrganizationServiceImpl implements OrganizationService{
 	 */
 	@Override
 	public Result<?> selectOrganizationByAll(OrganizationVO bean) {
-		//过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
-  		if (null!=bean.getTenantId() && Constants.ADMIN==bean.getMgrType()) { 
-  			bean.setTenantId(null); 
-  		} 
 		List<OrganizationVO> list=buildByRecursive(this.organizationDao.selectOrganizationByAll(bean));
 		return Result.data(list);
 	}
@@ -172,6 +167,10 @@ public class OrganizationServiceImpl implements OrganizationService{
 			this.organizationDao.deleteById(bean.getId());
 			//删除用户组织结构
 			this.organizationDao.deleteUserOrgById(bean);
+			//删除职务
+			this.organizationDao.deletePostByOrgId(bean);
+			//删除用户职务
+			this.organizationDao.deleteUserPostByOrgId(bean);
 		}else {
 			String ids=StrUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
@@ -182,9 +181,17 @@ public class OrganizationServiceImpl implements OrganizationService{
 					bean.setId(Integer.valueOf(val));
 					//删除用户组织结构
 					this.organizationDao.deleteUserOrgById(bean);
+					//删除职务
+					//this.organizationDao.deletePostByOrgId(bean);
+					//删除用户职务
+					//this.organizationDao.deleteUserPostByOrgId(bean);
 				}
 				//批量删除组织机构
 				this.organizationDao.deleteOrganizationByIds(list);
+				//删除职务
+				this.organizationDao.deletePostByOrgIds(list);
+				//删除用户职务
+				this.organizationDao.deleteUserPostByOrgIds(list);
 			}
 		}
 	}
@@ -198,6 +205,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 	public List<Organization> queryOrganizationAll() {
 		return this.organizationDao.queryOrganizationAll();
 	}
+
 	
 
 

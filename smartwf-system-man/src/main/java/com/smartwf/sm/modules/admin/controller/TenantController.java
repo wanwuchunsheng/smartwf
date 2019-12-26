@@ -49,6 +49,7 @@ public class TenantController {
     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户代码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "tenantName", value = "租户名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "sel", value = "默认租户（0-否 1-是）", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", dataType = "Date"),
@@ -95,9 +96,10 @@ public class TenantController {
     @PostMapping("saveTenant")
     @ApiOperation(value = "添加接口", notes = "添加租户接口")
     @ApiImplicitParams({
-	    	@ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户代码", dataType = "String", required = true),
+	    	@ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户代码", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "tenantName", value = "租户名称", dataType = "String", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
+	        @ApiImplicitParam(paramType = "query", name = "sel", value = "默认租户（0-否 1-是）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     public ResponseEntity<Result<?>> saveTenant(HttpSession session,Tenant bean) {
@@ -121,6 +123,7 @@ public class TenantController {
     	@ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户代码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "tenantName", value = "租户名称", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "sel", value = "默认租户（0-否 1-是）", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改租户", paramIndexs = {0})

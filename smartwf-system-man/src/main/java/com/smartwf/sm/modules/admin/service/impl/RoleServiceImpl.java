@@ -45,7 +45,7 @@ public class RoleServiceImpl implements RoleService{
 		QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
 		queryWrapper.orderByDesc("update_time"); //降序
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
-  		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
+  		if (null!=bean.getTenantId()) { 
   			queryWrapper.eq("tenantId", bean.getTenantId()); 
   		} 
         //角色编码

@@ -22,6 +22,8 @@ public class OrganizationVO extends Organization{
 	
 	private Date endTime;//结束时间
 	
+	private String label;//组织架构名称，为前端方便，扩展字段 
+	
 	private List<OrganizationVO> children;//封装树形结构
 	
 	

@@ -60,10 +60,6 @@ public class UserInfoServiceImpl implements UserInfoService{
 	 */
 	@Override
 	public Result<?> selectUserInfoByPage(Page<UserInfo> page, UserInfo bean) {
-		//过滤租户（超级管理员无需）
-		if(Constants.ADMIN==bean.getMgrType()) {
-			bean.setTenantId(null);
-		}
 		//查询
 		List<UserInfo> UserInfoList = this.userInfoDao.selectUserInfoByPage(bean,page);
 		return Result.data(page.getTotal(), UserInfoList);

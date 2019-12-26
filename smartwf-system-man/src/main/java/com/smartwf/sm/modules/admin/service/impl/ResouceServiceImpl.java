@@ -1,5 +1,6 @@
 package com.smartwf.sm.modules.admin.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +16,10 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.sm.modules.admin.dao.PermissionDao;
 import com.smartwf.sm.modules.admin.dao.ResouceDao;
+import com.smartwf.sm.modules.admin.dao.UserActionDao;
+import com.smartwf.sm.modules.admin.pojo.Permission;
 import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.service.ResouceService;
 import com.smartwf.sm.modules.admin.vo.ResouceVO;
@@ -32,6 +36,9 @@ public class ResouceServiceImpl implements ResouceService{
 	
 	@Autowired
 	private ResouceDao resouceDao;
+	
+	@Autowired
+	private PermissionDao permissionDao;
 
 	/**
 	 * @Description:查询资源分页
@@ -41,8 +48,12 @@ public class ResouceServiceImpl implements ResouceService{
 	public Result<?> selectResouceByPage(Page<Resouce> page, ResouceVO bean) {
 		QueryWrapper<Resouce> queryWrapper = new QueryWrapper<>();
 		queryWrapper.orderByDesc("update_time"); //降序
-        //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
-  		if (null!=bean.getTenantId() && Constants.ADMIN!=bean.getMgrType()) { 
+		//子系统
+  		if (null!=bean.getId()) { 
+  			queryWrapper.eq("id", bean.getId()).or().eq("pid", bean.getId()); 
+  		}
+        //租户
+  		if (null!=bean.getTenantId()) { 
   			queryWrapper.eq("tenant_id", bean.getTenantId()); 
   		}
         //资源编码
@@ -64,6 +75,48 @@ public class ResouceServiceImpl implements ResouceService{
 		IPage<Resouce> list=this.resouceDao.selectPage(page, queryWrapper);
 		return Result.data(list.getTotal(), list.getRecords());
 	}
+	
+	/**
+	 * @Description: 查询所有资源，树形结构
+	 * @return
+	 */
+	@Override
+	public Result<?> selectResouceByAll(ResouceVO bean) {
+		List<ResouceVO> list=this.resouceDao.selectResouceByAll(bean);
+		return Result.data( buildByRecursive(list));
+	}
+	
+	/**
+     * 使用递归方法建树
+	* @param treeNodes
+	* @return
+	*/
+	public static List<ResouceVO> buildByRecursive(List<ResouceVO> treeNodes) {
+		List<ResouceVO> trees = new ArrayList<ResouceVO>();
+		for (ResouceVO treeNode : treeNodes) {
+			 if (treeNode.getUid()==0) {
+			     trees.add(findChildren(treeNode,treeNodes));
+			 }
+		}
+		return trees;
+	}
+
+	/**
+	* 递归查找子节点
+	* @param treeNodes
+	* @return
+	*/
+	public static ResouceVO findChildren(ResouceVO treeNode,List<ResouceVO> treeNodes) {
+		for (ResouceVO it : treeNodes) {
+			 if(treeNode.getId().equals(it.getUid())) {
+			     if (treeNode.getChildren() == null) {
+			         treeNode.setChildren(new ArrayList<ResouceVO>());
+			     }
+			     treeNode.getChildren().add(findChildren(it,treeNodes));
+			 }
+		}
+		return treeNode;
+	}
 
 	/**
      * @Description: 主键查询资源
@@ -71,7 +124,7 @@ public class ResouceServiceImpl implements ResouceService{
      */
 	@Override
 	public Result<?> selectResouceById(Resouce bean) {
-		Resouce resouce= this.resouceDao.selectById(bean);
+		ResouceVO resouce= this.resouceDao.selecResoucetById(bean);
 		return Result.data(resouce);
 	}
 	
@@ -115,40 +168,13 @@ public class ResouceServiceImpl implements ResouceService{
 	@Transactional
 	@Override
 	public void deleteResouce(ResouceVO bean) {
-		if( null!=bean.getId()) {
-			//判断删除的数据类型
-			Resouce res=this.resouceDao.selectById(bean);
-			//1系统  2模块  3资源
-			switch (res.getResType()) {
-				case 1:
-					//a删除子系统
-					this.resouceDao.deleteById(res);
-					//b删除子系统下所有资源
-					this.resouceDao.deleteResouceByfid(res);
-					break;
-	            case 2: 
-					//a删除模块
-	            	this.resouceDao.deleteById(res);
-	            	//b删除模块下所有资源
-	            	this.resouceDao.deleteResouceById(res);
-	            	//c查询模块下的子模块
-            		List<Resouce> list=this.resouceDao.selectResouceById(res);
-	            	if(list!=null && list.size()>0) {
-	            		for(Resouce r:list) {
-	            			//d删除当前模块
-	            			this.resouceDao.deleteById(r);
-	            			//e删除当前模块下的子菜单
-	    	            	this.resouceDao.deleteResouceById(r);
-	            		}
-	            	}
-					break;
-	            case 3:
-	            	//a删除资源
-					this.resouceDao.deleteById(res);
-					break;
-				default:
-					break;
-			}
+		//id判断正负值(正：删除资源 负：删除权限表)
+		if(bean.getId()>0){
+			//删除资源
+			this.resouceDao.deleteById(bean);
+		}else {
+			//删除权限
+			this.permissionDao.deleteById(bean);
 		}
 	}
 
@@ -160,6 +186,17 @@ public class ResouceServiceImpl implements ResouceService{
 	public List<Resouce> queryResouceAll() {
 		return this.resouceDao.queryResouceAll();
 	}
+	
+	/**
+	 * @Description: 查询资源子系统
+	 * @return
+	 */
+	@Override
+	public Result<?> selectResouceByPid(ResouceVO bean) {
+		List<Resouce> list=this.resouceDao.selectResouceByPid(bean);
+		return Result.data(list);
+	}
+	
 
 
 }

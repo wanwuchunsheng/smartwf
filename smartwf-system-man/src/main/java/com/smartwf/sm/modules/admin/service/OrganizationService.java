@@ -55,5 +55,6 @@ public interface OrganizationService {
 	 */
 	Result<?> selectOrganizationByAll(OrganizationVO bean);
 	
+	
 
 }

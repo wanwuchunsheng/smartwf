@@ -53,6 +53,9 @@
 		<if test="bean.tenantId != null ">
             and a.tenant_id = #{bean.tenantId}
         </if>
+        <if test="bean.id != null ">
+            and b.id = #{bean.id} or b.pid= #{bean.id}
+        </if>
         
 		UNION ALL 
 		
@@ -90,6 +93,9 @@
 		)
 		<if test="bean.tenantId != null ">
             and tenant_id = #{bean.tenantId}
+        </if>
+        <if test="bean.id != null ">
+            and id = #{bean.id} or pid= #{bean.id}
         </if>
     </select>
     

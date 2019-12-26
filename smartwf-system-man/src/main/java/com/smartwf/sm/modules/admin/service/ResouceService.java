@@ -49,6 +49,16 @@ public interface ResouceService {
      * @return
      */
 	List<Resouce> queryResouceAll();
+	/**
+	 * @Description: 查询资源子系统
+	 * @return
+	 */
+	Result<?> selectResouceByPid(ResouceVO bean);
+	/**
+	 * @Description: 查询所有资源，树形结构
+	 * @return
+	 */
+	Result<?> selectResouceByAll(ResouceVO bean);
 	
 
 }

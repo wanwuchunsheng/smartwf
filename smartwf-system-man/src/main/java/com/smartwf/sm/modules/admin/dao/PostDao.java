@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.sm.modules.admin.pojo.Post;
+import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.PostVO;
 
 /**
@@ -34,6 +36,11 @@ public interface PostDao extends BaseMapper<Post> {
 	 * 
 	 * */
 	void deleteUserPostById(@Param("bean") PostVO bean);
+	/**
+	 * @Deprecated 分页查询职务所有数据=删除用户职务
+	 * 
+	 * */
+	List<PostVO> selectPostByPage(@Param("bean") PostVO bean, Page<Post> page);
 
 
     

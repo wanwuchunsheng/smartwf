@@ -48,7 +48,6 @@ public class OrganizationController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询组织架构")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构代码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
@@ -75,10 +74,10 @@ public class OrganizationController {
 	 * @return
 	 */
     @GetMapping("selectOrganizationByAll")
-    @ApiOperation(value = "查询所有接口", notes = "查询组织架构所有数据")
+    @ApiOperation(value = "查询所有数据接口", notes = "查询组织架构所有数据")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "子系统（主键）", dataType = "int"),
     	    @ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构代码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
@@ -97,7 +96,7 @@ public class OrganizationController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询组织架构信息错误！"));
     }
-    
+  
     /**
      * @Description: 主键查询组织架构
      * @return
@@ -130,7 +129,7 @@ public class OrganizationController {
 	    	@ApiImplicitParam(paramType = "query", name = "uid", value = "上级（主键）", dataType = "int", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "pid", value = "根节点（主键）", dataType = "int", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "level", value = "层次级别", dataType = "int", required = true),
-	    	@ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构编码", dataType = "String", required = true),
+	    	@ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构编码", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "int"),

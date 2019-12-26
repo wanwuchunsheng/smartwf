@@ -40,6 +40,27 @@ public class ResouceController {
 	private ResouceService resouceService;
 	
 	/**
+	 * @Description: 查询资源子系统
+	 * @return
+	 */
+    @GetMapping("selectResouceByPid")
+    @ApiOperation(value = "查询子系统接口", notes = "查询资源子系统")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> selectResouceByPid( ResouceVO bean ) {
+        try {
+            Result<?> result = this.resouceService.selectResouceByPid(bean);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }
+        } catch (Exception e) {
+            log.error("分页查询组织架构信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询组织架构信息错误！"));
+    }
+	
+	/**
 	 * @Description: 查询资源分页
 	 * @return
 	 */
@@ -47,7 +68,7 @@ public class ResouceController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询资源")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
- 	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "子系统（主键）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "resCode", value = "资源编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "resName", value = "资源名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
@@ -56,6 +77,30 @@ public class ResouceController {
     public ResponseEntity<Result<?>> selectResouceByPage(Page<Resouce> page, ResouceVO bean) {
         try {
             Result<?> result = this.resouceService.selectResouceByPage(page, bean);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }
+        } catch (Exception e) {
+            log.error("分页查询资源信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询资源信息错误！"));
+    }
+    
+    /**
+	 * @Description: 查询所有资源，树形结构
+	 * @return
+	 */
+    @GetMapping("selectResouceByAll")
+    @ApiOperation(value = "树形查询所有数据接口", notes = "查询资源所有数据，树形结构")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "子系统（主键）", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "resCode", value = "资源编码", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "resName", value = "资源名称", dataType = "String")
+    })
+    public ResponseEntity<Result<?>> selectResouceByAll( ResouceVO bean) {
+        try {
+            Result<?> result = this.resouceService.selectResouceByAll( bean);
             if (result != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }

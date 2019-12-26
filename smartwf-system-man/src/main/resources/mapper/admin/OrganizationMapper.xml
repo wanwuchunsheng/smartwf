@@ -12,6 +12,25 @@
 	        #{item}
 	    </foreach>
 	</delete>
+	<!-- 批量删除职务表 -->
+    <delete id="deletePostByOrgIds" parameterType = "java.util.List">
+	    delete 
+	       from sys_post
+	    where organization_id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+	<!-- 批量删除用户职务表 -->
+    <delete id="deleteUserPostByOrgIds" parameterType = "java.util.List">
+	    delete 
+	       from sys_user_post 
+	    where organization_id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+	
 	
 	 <!-- 查询组织架构列表 -->
      <select id="queryOrganizationAll" resultType="com.smartwf.sm.modules.admin.pojo.Organization">
@@ -28,7 +47,7 @@
 			enable,
 			level
 		from sys_organization
-		where enable=0 order by create_time desc
+		where 1=1 order by create_time desc
     </select>
     
     <!-- 查询所有组织架构 -->
@@ -40,6 +59,7 @@
 			sort,
 			org_code,
 			org_name,
+			org_name as label,
 			org_type,
 			remark,
 			tenant_id,
@@ -47,6 +67,9 @@
 			level
 		from sys_organization
 		where 1=1
+		<if test="bean.id != null ">
+            and pid = #{bean.id} or id= #{bean.id}
+        </if>
 		<if test="bean.tenantId != null ">
             and tenant_id = #{bean.tenantId}
         </if>
@@ -68,13 +91,17 @@
         order by create_time desc
     </select>
     
-    
-    
-    
-    
 	<!-- 删除用户组织架构表-->
     <delete id="deleteUserOrgById" parameterType = "com.smartwf.sm.modules.admin.vo.OrganizationVO">
 	   delete from sys_user_organization where organization_id = #{bean.id}
 	</delete>
-  
+	<!-- 删除职务表-->
+    <delete id="deletePostByOrgId" parameterType = "com.smartwf.sm.modules.admin.vo.OrganizationVO">
+	   delete from sys_post where organization_id = #{bean.id}
+	</delete>
+	<!-- 删除用户职务表-->
+    <delete id="deleteUserPostByOrgId" parameterType = "com.smartwf.sm.modules.admin.vo.OrganizationVO">
+	   delete from sys_user_post where organization_id = #{bean.id}
+	</delete>
+	
 </mapper>

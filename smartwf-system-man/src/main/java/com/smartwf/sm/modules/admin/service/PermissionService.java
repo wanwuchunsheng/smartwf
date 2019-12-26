@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Permission;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
+import com.smartwf.sm.modules.admin.vo.ResouceVO;
 import com.smartwf.sm.modules.admin.vo.UserActionVO;
 
 /**
@@ -17,7 +18,7 @@ public interface PermissionService {
 	 * @Description: 查询权限分页
 	 * @result: 
 	 */
-	Result<?> selectPermissionByPage(Page<Permission> page, PermissionVO bean);
+	Result<?> selectPermissionByPage( PermissionVO bean);
 
 	/**
      * @Description： 添加权限
@@ -42,6 +43,11 @@ public interface PermissionService {
 	 * @return
 	 */
 	Result<?> selectUserActAll(UserActionVO bean);
+	/**
+	 * @Description: 查询资源子系统
+	 * @return
+	 */
+	Result<?> selectResouceByPid(ResouceVO bean);
 	
 
 }

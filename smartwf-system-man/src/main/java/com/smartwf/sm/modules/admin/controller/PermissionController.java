@@ -18,6 +18,7 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Permission;
 import com.smartwf.sm.modules.admin.service.PermissionService;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
+import com.smartwf.sm.modules.admin.vo.ResouceVO;
 import com.smartwf.sm.modules.admin.vo.UserActionVO;
 
 import io.swagger.annotations.Api;
@@ -41,18 +42,40 @@ public class PermissionController {
 	private PermissionService permissionService;
 	
 	/**
-	 * @Description: 分页查询权限
+	 * @Description: 查询资源子系统
+	 * @return
+	 */
+    @GetMapping("selectResouceByPid")
+    @ApiOperation(value = "查询子系统接口", notes = "查询资源子系统")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> selectResouceByPid( ResouceVO bean ) {
+        try {
+            Result<?> result = this.permissionService.selectResouceByPid(bean);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }
+        } catch (Exception e) {
+            log.error("查询资源子系统信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询资源子系统信息错误！"));
+    }
+    
+	
+	/**
+	 * @Description: 分页权限查询权限
 	 * @return
 	 */
     @GetMapping("selectPermissionByPage")
     @ApiOperation(value = "分页查询接口", notes = "分页查询权限")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
- 	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true)
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "子系统（主键）", dataType = "int", required = true)
     })
-    public ResponseEntity<Result<?>> selectPermissionByPage(Page<Permission> page, PermissionVO bean) {
+    public ResponseEntity<Result<?>> selectPermissionByPage( PermissionVO bean) {
         try {
-            Result<?> result = this.permissionService.selectPermissionByPage(page, bean);
+            Result<?> result = this.permissionService.selectPermissionByPage(bean);
             if (result != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }
@@ -96,8 +119,7 @@ public class PermissionController {
     @GetMapping("selectUserActAll")
     @ApiOperation(value = "用户操作查询接口", notes = "用户操作查询")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
- 	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true)
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
     })
     public ResponseEntity<Result<?>> selectUserActAll(UserActionVO bean) {
         try {

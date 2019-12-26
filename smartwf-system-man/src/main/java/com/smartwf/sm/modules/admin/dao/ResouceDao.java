@@ -51,6 +51,21 @@ public interface ResouceDao extends BaseMapper<Resouce> {
 	 * @return
 	 */
 	void deleteResouceById(@Param("bean") Resouce bean);
+	/**
+	 * @Description: 查询资源子系统
+	 * @return
+	 */
+	List<Resouce> selectResouceByPid(@Param("bean") ResouceVO bean);
+	/**
+	 * @Description: 查询所有资源，树形结构
+	 * @return
+	 */
+	List<ResouceVO> selectResouceByAll(@Param("bean") ResouceVO bean);
+	/**
+     * @Description: 主键查询资源
+     * @return
+     */
+	ResouceVO selecResoucetById(@Param("bean") Resouce bean);
 	
 
 }

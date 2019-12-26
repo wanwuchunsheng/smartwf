@@ -48,7 +48,6 @@ public class PostController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询职务")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "organizationId", value = "组织架构（主键）", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "postCode", value = "职务代码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "postName", value = "职务名称", dataType = "String"),

@@ -33,6 +33,12 @@ public class Tenant extends BasePojo implements Serializable{
 	 */
 	private String tenantName;
 	/**
+	 * 默认选中
+	 *   0-默认
+	 *   1-选中
+	 */
+	private Integer sel; 
+	/**
 	 * 是否有效
             0有效  
             1无效

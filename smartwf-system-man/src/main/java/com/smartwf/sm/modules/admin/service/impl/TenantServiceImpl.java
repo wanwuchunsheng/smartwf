@@ -81,6 +81,7 @@ public class TenantServiceImpl implements TenantService{
      * @Description: 添加租户
      * @return
      */
+	@Transactional
 	@Override
 	public void saveTenant(Tenant bean) {
 		//添加创建人基本信息
@@ -91,6 +92,10 @@ public class TenantServiceImpl implements TenantService{
 		bean.setUpdateTime(bean.getCreateTime());
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
+		if(bean.getSel().equals(Constants.ISSEL)) {
+			//置空默认租户
+			this.tenantDao.updateBySel();
+		}
 		//保存
 		this.tenantDao.insert(bean);
 	}
@@ -106,6 +111,11 @@ public class TenantServiceImpl implements TenantService{
 		bean.setUpdateTime(new Date());
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
+		//默认租户 0-否 1-是
+		if( null!=bean.getSel() && bean.getSel().equals(Constants.ISSEL)) {
+			//置空默认租户
+			this.tenantDao.updateBySel();
+		}
 		//修改
 		this.tenantDao.updateById(bean);
 	}
@@ -133,9 +143,15 @@ public class TenantServiceImpl implements TenantService{
 			//删除用户角色表
 			this.tenantDao.deleteUserRoleByTenantId(bean);
 			//删除角色权限表
-			this.tenantDao.deletePermissionByTenantId(bean);
+			this.tenantDao.deleteRolePermissionByTenantId(bean);
 			//删除用户表
 			this.tenantDao.deleteUserByTenantId(bean);
+			//删除权限表
+			this.tenantDao.deletePermissionByTenantId(bean);
+			//删除资源表
+			this.tenantDao.deleteResouceByTenantId(bean);
+			//删除用户操作表
+			this.tenantDao.deleteUserActionByTenantId(bean);
 		}else {
 			String ids=StrUtils.regex(bean.getIds());
 			//批量删除
@@ -159,9 +175,15 @@ public class TenantServiceImpl implements TenantService{
 				//删除用户角色表
 				this.tenantDao.deleteUserRoleByTenantIds(list);
 				//删除角色权限表
-				this.tenantDao.deletePermissionByTenantIds(list);
+				this.tenantDao.deleteRolePermissionByTenantIds(list);
 				//删除用户表
 				this.tenantDao.deleteUserByTenantIds(list);
+				//删除权限表
+				this.tenantDao.deletePermissionByTenantIds(list);
+				//删除资源表
+				this.tenantDao.deleteResouceByTenantIds(list);
+				//删除用户操作表
+				this.tenantDao.deleteUserActionByTenantIds(list);
 			}
 		}
 	}

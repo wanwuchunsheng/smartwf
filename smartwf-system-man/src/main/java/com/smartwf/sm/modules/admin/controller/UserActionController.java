@@ -47,7 +47,6 @@ public class UserActionController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询用户操作")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
- 	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "actCode", value = "操作编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "actName", value = "操作名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),

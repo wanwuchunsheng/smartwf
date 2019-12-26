@@ -13,7 +13,7 @@
 	    </foreach>
 	</delete>
 	
-	<!-- 查询职务列表 -->
+	 <!-- 查询职务列表 -->
      <select id="queryPostAll" resultType="com.smartwf.sm.modules.admin.pojo.Post">
         select 
 			 id,
@@ -33,5 +33,51 @@
     <delete id="deleteUserPostById" parameterType = "com.smartwf.sm.modules.admin.vo.PostVO">
 	   delete from sys_user_post where post_id = #{bean.id}
 	</delete>
+	
+	<!-- 分页查询职务所有信息-->
+	<select id="selectPostByPage" resultType="com.smartwf.sm.modules.admin.vo.PostVO">
+       SELECT
+			a.id,
+			a.organization_id,
+			b.org_name as orgName,
+			a.post_code,
+			a.post_name,
+			a.post_type,
+			a.enable,
+			a.sort,
+			a.remark,
+			a.tenant_id,
+			a.create_time,
+			a.create_user_id,
+			a.create_user_name,
+			a.update_time,
+			a.update_user_id,
+			a.update_user_name
+		FROM
+			sys_post a left join sys_organization b on a.organization_id=b.id 
+		where a.enable=0 and b.enable=0 
+		<if test="bean.tenantId != null ">
+            and a.tenant_id= #{bean.tenantId} 
+        </if>
+        <if test="bean.organizationId != null ">
+            and a.organization_id= #{bean.organizationId} 
+        </if>
+        <if test="bean.postCode != null ">
+            and a.post_code= #{bean.postCode} 
+        </if>
+        <if test="bean.postName != null ">
+            and a.post_name like '%${bean.postName}%'
+        </if>
+        <if test="bean.enable != null ">
+            and a.enable = #{bean.enable} 
+        </if>
+        <if test="bean.startTime != null" >
+            and a.create_time between #{bean.startTime} and #{bean.endTime}
+        </if>
+        <if test="bean.remark != null ">
+            and a.remark like '%${bean.remark}%'
+        </if>
+		
+    </select>
   
 </mapper>

@@ -48,7 +48,6 @@ public class RoleController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询角色")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "roleCode", value = "角色编号", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "roleName", value = "角色名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
