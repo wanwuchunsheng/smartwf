@@ -86,7 +86,7 @@ public class TenantController {
         } catch (Exception e) {
             log.error("主键查询租户信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询用户信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询租户信息错误！"));
     }
     
     /**

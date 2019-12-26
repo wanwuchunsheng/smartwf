@@ -16,6 +16,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.common.utils.GenerateUtils;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
@@ -92,6 +93,7 @@ public class TenantServiceImpl implements TenantService{
 		bean.setUpdateTime(bean.getCreateTime());
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
+		bean.setTenantCode(GenerateUtils.getSelfIdByUUId());//生成唯一编号
 		if(bean.getSel().equals(Constants.ISSEL)) {
 			//置空默认租户
 			this.tenantDao.updateBySel();
