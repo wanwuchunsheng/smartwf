@@ -132,8 +132,8 @@ public class OrganizationController {
 	    	@ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构编码", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
-	        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "int"),
-		    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型", dataType = "int"),
+	        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
+		    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     public ResponseEntity<Result<?>> saveOrganization(HttpSession session,Organization bean) {
@@ -154,14 +154,14 @@ public class OrganizationController {
     @ApiOperation(value = "修改接口", notes = "修改组织架构资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "uid", value = "上级（主键）", dataType = "int"),
-	    @ApiImplicitParam(paramType = "query", name = "pid", value = "根节点（主键）", dataType = "int"),
-        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "int"),
-        @ApiImplicitParam(paramType = "query", name = "level", value = "层次级别", dataType = "int"),
+    	@ApiImplicitParam(paramType = "query", name = "uid", value = "上级（主键）", dataType = "Integer"),
+	    @ApiImplicitParam(paramType = "query", name = "pid", value = "根节点（主键）", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "level", value = "层次级别", dataType = "Integer"),
     	@ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构编码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型", dataType = "int"),
-        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int"),
+	    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改组织架构", paramIndexs = {0})
@@ -184,8 +184,7 @@ public class OrganizationController {
     @DeleteMapping("deleteOrganization")
     @ApiOperation(value = "删除接口", notes = "删除组织架构")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "int"),
-    	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "int", required = true)
     })
     @TraceLog(content = "删除组织架构系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteOrganization(OrganizationVO bean) {

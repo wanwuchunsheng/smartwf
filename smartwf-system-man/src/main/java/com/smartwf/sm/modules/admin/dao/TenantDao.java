@@ -24,12 +24,6 @@ public interface TenantDao extends BaseMapper<Tenant> {
 	void deleteTenantByIds(@Param("list") List<String> list);
 
 	/**
-	 * @Description: 初始化租户
-	 * @result:
-	 */
-	List<Tenant> queryTenantAll();
-	
-	/**
 	 * @Description: 将所有租户默认状态设置不选中
 	 */
 	void updateBySel();

@@ -127,8 +127,8 @@ public class PostController {
     @ApiOperation(value = "修改接口", notes = "修改职务资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "职务（主键）", dataType = "int",required = true),
-    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int"),
-        @ApiImplicitParam(paramType = "query", name = "organizationId", value = "组织架构（主键）", dataType = "int"),
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "organizationId", value = "组织架构（主键）", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "postCode", value = "职务代码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "postName", value = "职务名称", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "postType", value = "职务类型（0高管 1中层 2基层）", dataType = "Integer"),
@@ -156,7 +156,7 @@ public class PostController {
     @DeleteMapping("deletePost")
     @ApiOperation(value = "删除接口", notes = "删除职务")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "int"),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer" ),
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
     @TraceLog(content = "删除职务系统用户", paramIndexs = {0})

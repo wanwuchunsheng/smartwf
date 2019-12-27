@@ -122,7 +122,7 @@ public class UserActionController {
     	@ApiImplicitParam(paramType = "query", name = "id", value = "用户操作（主键）", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "actCode", value = "操作编码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "actName", value = "操作名称", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int"),
+        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改用户操作", paramIndexs = {0})
@@ -145,7 +145,7 @@ public class UserActionController {
     @DeleteMapping("deleteUserAction")
     @ApiOperation(value = "删除接口", notes = "删除用户操作")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "int"),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
     @TraceLog(content = "删除用户操作系统用户", paramIndexs = {0})

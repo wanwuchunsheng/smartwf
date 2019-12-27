@@ -26,12 +26,6 @@ public interface PostDao extends BaseMapper<Post> {
 	void deletePostByIds(@Param("list") List<String> list);
 
 	/**
-	 * @Description: 初始化职务
-	 * @result:
-	 */
-	List<Post> queryPostAll();
-
-	/**
 	 * @Deprecated 删除用户职务
 	 * 
 	 * */

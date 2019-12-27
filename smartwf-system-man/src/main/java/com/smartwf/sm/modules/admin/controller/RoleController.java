@@ -101,7 +101,7 @@ public class RoleController {
 		    @ApiImplicitParam(paramType = "query", name = "roleCode", value = "角色编码", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "roleName", value = "角色名称", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
-	        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "int"),
+	        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     public ResponseEntity<Result<?>> saveRole(HttpSession session,Role bean) {
@@ -122,11 +122,11 @@ public class RoleController {
     @ApiOperation(value = "修改接口", notes = "修改角色资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int"),
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "RoleCode", value = "角色编码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "RoleName", value = "角色名称", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int"),
-        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "int"),
+	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改角色", paramIndexs = {0})
@@ -149,7 +149,7 @@ public class RoleController {
     @DeleteMapping("deleteRole")
     @ApiOperation(value = "删除接口", notes = "删除角色")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "int"),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
     @TraceLog(content = "删除角色系统用户", paramIndexs = {0})

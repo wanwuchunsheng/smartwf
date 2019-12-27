@@ -165,7 +165,7 @@ public class PermissionController {
     @DeleteMapping("deletePermission")
     @ApiOperation(value = "删除接口", notes = "删除权限")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键删除", dataType = "int")
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键删除", dataType = "int", required = true)
     })
     @TraceLog(content = "删除权限系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deletePermission(Permission bean) {

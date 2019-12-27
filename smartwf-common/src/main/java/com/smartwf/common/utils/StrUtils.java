@@ -18,27 +18,6 @@ public class StrUtils {
     	return str.replaceAll(regex, "");
     }
 
-    /**
-     * @对象转xml字符串
-     * @param obj
-     * @param load
-     * @return
-     * @throws JAXBException
-     */
-    public static String objectToXmlStr(Object obj,Class<?> load){
-        String result = "";
-        try{
-            JAXBContext context = JAXBContext.newInstance(load);
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.setProperty(Marshaller.JAXB_ENCODING, "GBK");
-            StringWriter writer = new StringWriter();
-            marshaller.marshal(obj,writer);
-            result = writer.toString();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return result;
-    }
+   
    
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.admin.dao.DictionaryDao" >
+
+    <!-- 批量删除数据字典 -->
+    <delete id="deleteDictionaryByIds" parameterType = "java.util.List">
+	    delete 
+	       from sys_dict_data  
+	    where id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+    
+    <!-- 分页查询数据字典 -->
+    <select id="selectDictionaryByPage" resultType="com.smartwf.sm.modules.admin.vo.DictionaryVO">
+        select 
+			b.dict_name as dictTypeName,
+			a.dict_name,
+			a.id,
+			a.pid,
+			a.uid,
+			a.sort,
+			a.level,
+			a.dict_code,
+			a.dict_name,
+			a.dict_type,
+			a.remark,
+			a.tenant_id,
+			a.enable,
+			a.create_time,
+			a.create_user_id,
+			a.create_user_name,
+			a.update_time,
+			a.update_user_id,
+			a.update_user_name
+		from sys_dict_data a,(
+			select id,pid,uid,level,dict_code,dict_name from sys_dict_data 
+		) b where a.pid=b.id
+		<if test="bean.tenantId != null ">
+            and a.tenant_id = #{bean.tenantId}
+        </if>
+        <if test="bean.dictCode != null ">
+            and a.dict_code like '%${bean.dictCode}%'
+        </if>
+        <if test="bean.dictName != null ">
+            and a.dict_name like '%${bean.dictName}%'
+        </if>
+        <if test="bean.enable != null ">
+            and a.enable= #{bean.enable}
+        </if>
+        <if test="bean.remark != null ">
+            and a.remark like '%${bean.remark}%'
+        </if>
+        <if test="bean.startTime != null">
+            and a.create_time between #{bean.startTime} and #{bean.endTime}
+        </if>
+        order by a.create_time desc
+    </select>
+
+   
+</mapper>

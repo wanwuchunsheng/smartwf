@@ -189,15 +189,20 @@ public class TenantServiceImpl implements TenantService{
 			}
 		}
 	}
-
+	
 	/**
-     * @Description： 初始化租户
+     * @Description：初始化租户信息
      * @return
      */
 	@Override
-	public List<Tenant> queryTenantAll() {
-		return this.tenantDao.queryTenantAll();
+	public List<Tenant> InitTenantDatas() {
+		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
+		queryWrapper.orderByDesc("update_time"); //降序
+		queryWrapper.eq("enable", 0); //0启用  1禁用
+		return this.tenantDao.selectList(queryWrapper);
 	}
+
+	
 
 
 }

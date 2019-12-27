@@ -2,7 +2,9 @@ package com.smartwf.sm.modules.admin.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,11 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.RoleDao;
+import com.smartwf.sm.modules.admin.pojo.Organization;
+import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.pojo.Role;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.vo.RoleVO;
 
@@ -147,16 +152,25 @@ public class RoleServiceImpl implements RoleService{
 			}
 		}
 	}
-	
 
 	/**
-     * @Description： 初始化角色
+     * @Description：初始化角色信息
      * @return
      */
 	@Override
-	public List<Role> queryRoleAll() {
-		return this.roleDao.queryRoleAll();
+	public Map<Integer,List<Role>> initRoleDatas(List<Tenant> list) {
+		Map<Integer,List<Role>> map =new HashMap<>();
+		QueryWrapper<Role> queryWrapper =null;
+		for(Tenant t:list) {
+			queryWrapper = new QueryWrapper<>();
+			queryWrapper.orderByDesc("update_time"); //降序
+			queryWrapper.eq("enable", 0); //0启用  1禁用
+			queryWrapper.eq("tenant_id", t.getId());//租户
+			map.put(t.getId(), this.roleDao.selectList(queryWrapper));
+		}
+		return map;
 	}
+	
 
 
 }

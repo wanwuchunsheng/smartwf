@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.smartwf.sm.modules.admin.dao.TenantDao" >
 
-
-
-     
     <!-- 批量删除租户 -->
     <delete id="deleteTenantByIds" parameterType = "java.util.List">
 	    delete 
@@ -14,14 +11,6 @@
 	        #{item}
 	    </foreach>
 	</delete>
-	
-	<!-- 查询用户资源列表 -->
-     <select id="queryTenantAll" resultType="com.smartwf.sm.modules.admin.pojo.Tenant">
-        select 
-			id, tenant_code, tenant_name, enable, remark
-		from sys_tenant
-		where enable=0 order by create_time desc
-    </select>
     
     <!-- 将所有租户默认状态设置不选中 -->
     <update id="updateBySel">
@@ -72,8 +61,6 @@
     <delete id="deleteUserActionByTenantId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
 	    delete from sys_user_action where tenant_id = #{bean.id}
 	</delete>
-	
-	
 	
 	<!-- 批量删除组织架构表-->
     <delete id="deleteOrgByTenantIds" parameterType = "java.util.List">

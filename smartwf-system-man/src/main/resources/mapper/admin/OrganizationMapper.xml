@@ -2,54 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.smartwf.sm.modules.admin.dao.OrganizationDao" >
 
-     
-    <!-- 批量删除组织架构 -->
-    <delete id="deleteOrganizationByIds" parameterType = "java.util.List">
-	    delete 
-	       from sys_organization 
-	    where id in
-	    <foreach collection="list" item="item" open="(" separator="," close=")">
-	        #{item}
-	    </foreach>
-	</delete>
-	<!-- 批量删除职务表 -->
-    <delete id="deletePostByOrgIds" parameterType = "java.util.List">
-	    delete 
-	       from sys_post
-	    where organization_id in
-	    <foreach collection="list" item="item" open="(" separator="," close=")">
-	        #{item}
-	    </foreach>
-	</delete>
-	<!-- 批量删除用户职务表 -->
-    <delete id="deleteUserPostByOrgIds" parameterType = "java.util.List">
-	    delete 
-	       from sys_user_post 
-	    where organization_id in
-	    <foreach collection="list" item="item" open="(" separator="," close=")">
-	        #{item}
-	    </foreach>
-	</delete>
-	
-	
-	 <!-- 查询组织架构列表 -->
-     <select id="queryOrganizationAll" resultType="com.smartwf.sm.modules.admin.pojo.Organization">
-        select 
-			id,
-			pid,
-			uid,
-			sort,
-			org_code,
-			org_name,
-			org_type,
-			remark,
-			tenant_id,
-			enable,
-			level
-		from sys_organization
-		where 1=1 order by create_time desc
-    </select>
-    
     <!-- 查询所有组织架构 -->
     <select id="selectOrganizationByAll" resultType="com.smartwf.sm.modules.admin.vo.OrganizationVO">
         select 
@@ -88,17 +40,33 @@
         order by create_time desc
     </select>
     
+    <!-- 查询所有组织架构 -->
+    <select id="queryUserPostByOrgId" resultType="com.smartwf.sm.modules.admin.pojo.UserPost">
+        select 
+		   id,user_id,post_id,tenant_id
+		from sys_user_post where post_id in (
+		   select id from sys_post where organization_id= #{bean.id}
+		)
+    </select>
+    
 	<!-- 删除用户组织架构表-->
     <delete id="deleteUserOrgById" parameterType = "com.smartwf.sm.modules.admin.vo.OrganizationVO">
 	   delete from sys_user_organization where organization_id = #{bean.id}
 	</delete>
+	
 	<!-- 删除职务表-->
     <delete id="deletePostByOrgId" parameterType = "com.smartwf.sm.modules.admin.vo.OrganizationVO">
 	   delete from sys_post where organization_id = #{bean.id}
 	</delete>
-	<!-- 删除用户职务表-->
-    <delete id="deleteUserPostByOrgId" parameterType = "com.smartwf.sm.modules.admin.vo.OrganizationVO">
-	   delete from sys_user_post where organization_id = #{bean.id}
+	
+	<!-- 批量删除用户职务表-->
+    <delete id="deleteUserPostByOrgIds" parameterType = "java.util.List">
+	   delete 
+	      from sys_user_post 
+	   where id in 
+	   <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	   </foreach>
 	</delete>
 	
 </mapper>

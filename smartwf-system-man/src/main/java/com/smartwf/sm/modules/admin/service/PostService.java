@@ -1,10 +1,13 @@
 package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Post;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.vo.PostVO;
 
 /**
@@ -45,10 +48,12 @@ public interface PostService {
 	void deletePost(PostVO bean);
 	
 	/**
-     * @Description： 初始化职务
-     * @return
-     */
-	List<Post> queryPostAll();
+	 * @Description: 初始化职务
+	 * @return
+	 */
+	Map<Integer,List<Post>> initPostDatas(List<Tenant> list);
+	
+	
 	
 
 }

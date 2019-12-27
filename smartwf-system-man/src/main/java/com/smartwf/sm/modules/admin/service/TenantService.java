@@ -43,12 +43,14 @@ public interface TenantService {
      * @return
      */
 	void deleteTenant(TenantVO bean);
-	
+
 	/**
-     * @Description： 初始化租户
+     * @Description：初始化租户信息
      * @return
      */
-	List<Tenant> queryTenantAll();
+	List<Tenant> InitTenantDatas();
+	
+	
 	
 
 }

@@ -2,7 +2,9 @@ package com.smartwf.sm.modules.admin.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.OrganizationDao;
 import com.smartwf.sm.modules.admin.pojo.Organization;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.pojo.UserPost;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
@@ -162,45 +166,43 @@ public class OrganizationServiceImpl implements OrganizationService{
 	@Transactional
 	@Override
 	public void deleteOrganization(OrganizationVO bean) {
-		if( null!=bean.getId()) {
-			//删除组织机构
-			this.organizationDao.deleteById(bean.getId());
-			//删除用户组织结构
-			this.organizationDao.deleteUserOrgById(bean);
-			//删除职务
-			this.organizationDao.deletePostByOrgId(bean);
-			//删除用户职务
-			this.organizationDao.deleteUserPostByOrgId(bean);
-		}else {
-			String ids=StrUtils.regex(bean.getIds());
-			if(StringUtils.isNotBlank(ids)) {
-				List<String> list=new ArrayList<>();
-				for(String val:ids.split(",")) {
-					list.add(val);
-					bean=new OrganizationVO();
-					bean.setId(Integer.valueOf(val));
-					//删除用户组织结构
-					this.organizationDao.deleteUserOrgById(bean);
-				}
-				//批量删除组织机构
-				this.organizationDao.deleteOrganizationByIds(list);
-				//删除职务
-				this.organizationDao.deletePostByOrgIds(list);
-				//删除用户职务
-				this.organizationDao.deleteUserPostByOrgIds(list);
+		//删除组织机构
+		this.organizationDao.deleteById(bean.getId());
+		//删除用户组织结构
+		this.organizationDao.deleteUserOrgById(bean);
+		//1 通过组织架构id查询用户职务数据
+		List<UserPost> uplist = this.organizationDao.queryUserPostByOrgId(bean);
+		//2 批量删除用户职务
+		if(uplist!=null && uplist.size()>0 ) {
+			List<Integer> list=new ArrayList<>();
+			for(UserPost up : uplist) {
+				list.add( up.getId() );
 			}
+			this.organizationDao.deleteUserPostByOrgIds(list);
 		}
+		//3 删除职务
+		this.organizationDao.deletePostByOrgId(bean);
+	}
+	
+	/**
+	 * @Description: 初始化组织机构
+	 * @return
+	 */
+	@Override
+	public Map<Integer,List<Organization>> initOrganizationDatas(List<Tenant> list) {
+		Map<Integer,List<Organization>> map =new HashMap<>();
+		QueryWrapper<Organization> queryWrapper =null;
+		for(Tenant t:list) {
+			queryWrapper = new QueryWrapper<>();
+			queryWrapper.orderByDesc("update_time"); //降序
+			queryWrapper.eq("enable", 0); //0启用  1禁用
+			queryWrapper.eq("tenant_id", t.getId());//租户
+			map.put(t.getId(), this.organizationDao.selectList(queryWrapper));
+		}
+		return map;
 	}
 	
 
-	/**
-     * @Description： 初始化组织架构
-     * @return
-     */
-	@Override
-	public List<Organization> queryOrganizationAll() {
-		return this.organizationDao.queryOrganizationAll();
-	}
 
 	
 

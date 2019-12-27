@@ -12,22 +12,6 @@
 	        #{item}
 	    </foreach>
 	</delete>
-	
-	 <!-- 查询职务列表 -->
-     <select id="queryPostAll" resultType="com.smartwf.sm.modules.admin.pojo.Post">
-        select 
-			 id,
-			 organization_id,
-			 post_code,
-			 post_name,
-			 post_type,
-			 enable,
-			 sort,
-			 remark,
-			 tenant_id
-		from sys_post
-		where enable=0 order by create_time desc
-    </select>
     
 	<!-- 删除用户职务表-->
     <delete id="deleteUserPostById" parameterType = "com.smartwf.sm.modules.admin.vo.PostVO">

@@ -1,10 +1,12 @@
 package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Organization;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
 /**
@@ -45,15 +47,16 @@ public interface OrganizationService {
 	void deleteOrganization(OrganizationVO bean);
 	
 	/**
-     * @Description： 初始化组织架构
-     * @return
-     */
-	List<Organization> queryOrganizationAll();
-	/**
 	 * @Description: 查询所有组织架构（树形结构）
 	 * @return
 	 */
 	Result<?> selectOrganizationByAll(OrganizationVO bean);
+	
+	/**
+	 * @Description: 初始化组织机构
+	 * @return
+	 */
+	Map<Integer,List<Organization>> initOrganizationDatas(List<Tenant> list);
 	
 	
 

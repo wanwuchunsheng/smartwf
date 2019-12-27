@@ -51,8 +51,8 @@ public class UserInfoController {
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "createTime", value = "开始时间", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "updateTime", value = "结束时间", dataType = "Date"),
-            @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "int"),
-            @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "int")
+            @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
     public ResponseEntity<Result<?>> selectUserInfoByPage(Page<UserInfo> page, UserInfo bean) {
         try {
@@ -139,10 +139,10 @@ public class UserInfoController {
         @ApiImplicitParam(paramType = "query", name = "mobile", value = "手机号", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "phone", value = "电话", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
- 	    @ApiImplicitParam(paramType = "query", name = "sex", value = "性别（0-女 1-男）", dataType = "int"),
- 	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "等级（0-普通 1-管理员 2-超级管理员）", dataType = "int"),
- 	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int"),
- 	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int"),
+ 	    @ApiImplicitParam(paramType = "query", name = "sex", value = "性别（0-女 1-男）", dataType = "Integer"),
+ 	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "等级（0-普通 1-管理员 2-超级管理员）", dataType = "Integer"),
+ 	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
+ 	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "Integer"),
  	    @ApiImplicitParam(paramType = "query", name = "address", value = "联系地址", dataType = "String"),
  	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
@@ -166,7 +166,7 @@ public class UserInfoController {
     @DeleteMapping("deleteUserInfo")
     @ApiOperation(value = "删除接口", notes = "删除用户资料")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "int"),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
     @TraceLog(content = "删除用户资料系统用户", paramIndexs = {0})

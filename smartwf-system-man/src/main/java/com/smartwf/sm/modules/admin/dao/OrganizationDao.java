@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Organization;
+import com.smartwf.sm.modules.admin.pojo.UserPost;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
 /**
@@ -18,25 +19,6 @@ import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 @Repository
 public interface OrganizationDao extends BaseMapper<Organization> {
 
-	/**
-	 * @Description: 批量删除组织架构
-	 * @result:
-	 */
-	void deleteOrganizationByIds(@Param("list") List<String> list);
-	/**
-	 * @Description: 批量删除职务表
-	 */
-	void deletePostByOrgIds(@Param("list") List<String> list);
-	/**
-	 * @Description: 批量删除用户职务表
-	 */
-	void deleteUserPostByOrgIds(@Param("list") List<String> list);
-
-	/**
-	 * @Description: 初始化组织架构
-	 * @result:
-	 */
-	List<Organization> queryOrganizationAll();
 	/**
 	 * @Description: 查询所有组织架构
 	 * @return
@@ -53,9 +35,13 @@ public interface OrganizationDao extends BaseMapper<Organization> {
 	 */
 	void deletePostByOrgId(@Param("bean") OrganizationVO bean);
 	/**
-	 * @Description: 删除用户职务表
+	 * @Description: 批量删除用户职务表
 	 */
-	void deleteUserPostByOrgId(@Param("bean") OrganizationVO bean);
+	void deleteUserPostByOrgIds(@Param("list") List<Integer> list);
+	/**
+	 * @Description: 通过组织架构id，查询用户组织架构集合
+	 */
+	List<UserPost> queryUserPostByOrgId(@Param("bean") OrganizationVO bean);
 	
 	
 	

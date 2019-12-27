@@ -48,8 +48,8 @@ public class LogController {
             @ApiImplicitParam(paramType = "query", name = "name", value = "名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", dataType = "Date"),
-            @ApiImplicitParam(paramType = "query", name = "current", value = "要查看的页码，默认是1", dataType = "int"),
-            @ApiImplicitParam(paramType = "query", name = "size", value = "每页查询数量，默认是10", dataType = "int")
+            @ApiImplicitParam(paramType = "query", name = "current", value = "要查看的页码，默认是1", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "size", value = "每页查询数量，默认是10", dataType = "Integer")
     })
     public ResponseEntity<Result> selectLogByPage(Page<Log> page) {
         try {

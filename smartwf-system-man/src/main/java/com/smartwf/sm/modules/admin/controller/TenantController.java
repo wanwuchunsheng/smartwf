@@ -146,7 +146,7 @@ public class TenantController {
     @DeleteMapping("deleteTenant")
     @ApiOperation(value = "删除接口", notes = "删除租户")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "int"),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
     @TraceLog(content = "删除租户系统用户", paramIndexs = {0})

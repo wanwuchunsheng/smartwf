@@ -24,12 +24,6 @@ public interface RoleDao extends BaseMapper<Role> {
 	void deleteRoleByIds(@Param("list") List<String> list);
 
 	/**
-	 * @Description: 初始化角色
-	 * @result:
-	 */
-	List<Role> queryRoleAll();
-
-	/**
 	 * @Deprecated 删除用户角色
 	 * 
 	 * */

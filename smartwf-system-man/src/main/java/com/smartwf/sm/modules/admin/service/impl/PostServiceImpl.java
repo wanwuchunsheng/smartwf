@@ -2,20 +2,25 @@ package com.smartwf.sm.modules.admin.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.PostDao;
+import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Post;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.vo.PostVO;
 
@@ -115,15 +120,25 @@ public class PostServiceImpl implements PostService{
 		}
 	}
 	
-
 	/**
-     * @Description： 初始化职务
-     * @return
-     */
+	 * @Description: 初始化组织机构
+	 * @return
+	 */
 	@Override
-	public List<Post> queryPostAll() {
-		return this.postDao.queryPostAll();
+	public Map<Integer,List<Post>> initPostDatas(List<Tenant> list) {
+		Map<Integer,List<Post>> map =new HashMap<>();
+		QueryWrapper<Post> queryWrapper =null;
+		for(Tenant t:list) {
+			queryWrapper = new QueryWrapper<>();
+			queryWrapper.orderByDesc("update_time"); //降序
+			queryWrapper.eq("enable", 0); //0启用  1禁用
+			queryWrapper.eq("tenant_id", t.getId());//租户
+			map.put(t.getId(), this.postDao.selectList(queryWrapper));
+		}
+		return map;
 	}
+	
+
 
 
 }
