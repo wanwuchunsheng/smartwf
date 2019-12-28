@@ -98,39 +98,46 @@ public class UserInfoServiceImpl implements UserInfoService{
 		this.userInfoDao.insert(bean);
 		//批量添加与用户相关联表
 		//添加用户组织机构
-		String orgIds=StrUtils.regex(bean.getOrganizationIds());
-		if(StringUtils.isNotBlank(orgIds)) {
-			UserOrganization uo=null;
-			for(String id:orgIds.split(",")) {
-				uo=new UserOrganization();
-				uo.setUserId(bean.getId());
-				uo.setTenantId(bean.getTenantId());
-				uo.setOrganizationId(Integer.valueOf(id));
-				this.userOrganizationDao.insert(uo);
+		if(StringUtils.isNotBlank(bean.getOrganizationIds())) {
+			String orgIds=StrUtils.regex(bean.getOrganizationIds());
+			if(StringUtils.isNotBlank(orgIds)) {
+				UserOrganization uo=null;
+				for(String id:orgIds.split(",")) {
+					uo=new UserOrganization();
+					uo.setUserId(bean.getId());
+					uo.setTenantId(bean.getTenantId());
+					uo.setOrganizationId(Integer.valueOf(id));
+					this.userOrganizationDao.insert(uo);
+				}
 			}
 		}
+		
 		//添加用户职务
-		String postIds=StrUtils.regex(bean.getPostIds());
-		if(StringUtils.isNotBlank(postIds)) {
-			UserPost up = null;
-			for(String id:postIds.split(",")) {
-				up=new UserPost();
-				up.setUserId(bean.getId());
-				up.setTenantId(bean.getTenantId());
-				up.setPostId(Integer.valueOf(id));
-				this.userPostDao.insert(up);
+		if(StringUtils.isNotBlank(bean.getPostIds())) {
+			String postIds=StrUtils.regex(bean.getPostIds());
+			if(StringUtils.isNotBlank(postIds)) {
+				UserPost up = null;
+				for(String id:postIds.split(",")) {
+					up=new UserPost();
+					up.setUserId(bean.getId());
+					up.setTenantId(bean.getTenantId());
+					up.setPostId(Integer.valueOf(id));
+					this.userPostDao.insert(up);
+				}
 			}
 		}
 		//添加用户角色
-		String roleIds=StrUtils.regex(bean.getRoleIds());
-		if(StringUtils.isNotBlank(roleIds)) {
-			UserRole ur = null;
-			for(String id:roleIds.split(",")) {
-				ur=new UserRole();
-				ur.setUserId(bean.getId());
-				ur.setTenantId(bean.getTenantId());
-				ur.setRoleId(Integer.valueOf(id));
-				this.userRoleDao.insert(ur);
+		if(StringUtils.isNotBlank(bean.getRoleIds())) {
+			String roleIds=StrUtils.regex(bean.getRoleIds());
+			if(StringUtils.isNotBlank(roleIds)) {
+				UserRole ur = null;
+				for(String id:roleIds.split(",")) {
+					ur=new UserRole();
+					ur.setUserId(bean.getId());
+					ur.setTenantId(bean.getTenantId());
+					ur.setRoleId(Integer.valueOf(id));
+					this.userRoleDao.insert(ur);
+				}
 			}
 		}
 	}

@@ -3,9 +3,7 @@ package com.smartwf.sm.modules.admin.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import com.alibaba.fastjson.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.parser.Feature;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.TypeReference;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.JsonUtil;
+import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
@@ -50,7 +47,7 @@ public class BasicController {
      * @return
      */
     @GetMapping("tenantAll")
-    @ApiOperation(value = "获取租户列表接口", notes = "获取租户列表信息")
+    @ApiOperation(value = "租户接口", notes = "获取租户列表信息")
     public ResponseEntity<Result<?>> tenantAll() {
         try {
         	List<Tenant> list=JsonUtil.jsonToList(redisService.get("initTenant"), Tenant.class);
@@ -67,7 +64,7 @@ public class BasicController {
      * @return
      */
     @GetMapping("organizationAll")
-    @ApiOperation(value = "获取组织架构列表接口", notes = "获取组织架构列表信息")
+    @ApiOperation(value = "组织架构接口", notes = "获取组织架构列表信息")
     @ApiImplicitParams({
 	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
 	    @ApiImplicitParam(paramType = "query", name = "orgType", value = "返回数据的类型：1树形结构 2列表结构", dataType = "int", required = true)
@@ -107,7 +104,7 @@ public class BasicController {
      * @return
      */
     @GetMapping("post")
-    @ApiOperation(value = "获取职务列表接口", notes = "获取职务列表信息")
+    @ApiOperation(value = "职务接口", notes = "获取职务列表信息")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "organizationId", value = "组织架构（主键）", dataType = "Integer")
@@ -153,7 +150,7 @@ public class BasicController {
      * @return
      */
     @GetMapping("roleAll")
-    @ApiOperation(value = "获取角色列表接口", notes = "获取角色列表信息")
+    @ApiOperation(value = "角色接口", notes = "获取角色列表信息")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
     })
@@ -179,6 +176,42 @@ public class BasicController {
             log.error("获取角色基础数据错误！{}", e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("获取角色基础数据错误！"));
+    }
+    
+    /**
+     * @Description 获取数据字典基础数据列表
+     * @param 
+     * @return
+     */
+    @GetMapping("dictAll")
+    @ApiOperation(value = "数据字典接口", notes = "获取数据字典列表信息")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "dictCode", value = "数据字典编码", dataType = "String", required = true)
+    })
+    public ResponseEntity<Result<?>> dictAll(Dictionary bean) {
+        try {
+        	Map<Integer, List<Dictionary>> map = (Map<Integer, List<Dictionary>>) JSONObject.parseObject(redisService.get("initDictionary"), new TypeReference<Map<Integer, List<Dictionary>>>() {} );
+			if(map!=null && map.size()> 0 ) {
+				List<Dictionary> orglist=map.get(bean.getTenantId());
+	    		if(orglist!=null && orglist.size()>0 ) {
+	                Integer tenantId=bean.getTenantId();
+	                String dictCode=bean.getDictCode();
+	                List<Dictionary> postlist=new ArrayList<>();
+                	//过滤租户
+                	for(Dictionary p : orglist) {
+	    				if(tenantId==p.getTenantId() && dictCode.equals(p.getDictCode())) {
+	    					postlist.add(p);
+	    				}
+	    			}
+	        		return ResponseEntity.ok(Result.data(postlist));
+	    		}
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("数据为空！"));
+        } catch (Exception e) {
+            log.error("获取数据字典基础数据错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("获取数据字典基础数据错误！"));
     }
 
     /**
