@@ -1,10 +1,13 @@
 package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
+import com.smartwf.sm.modules.admin.pojo.Role;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.vo.DictionaryVO;
 
 /**
@@ -45,10 +48,11 @@ public interface DictionaryService {
 	void deleteDictionary(DictionaryVO bean);
 
 	/**
-     * @Description：初始化数据字典信息
+     * @param tenantList 
+	 * @Description：初始化数据字典信息
      * @return
      */
-	List<Dictionary> InitDictionaryDatas();
+	Map<Integer,List<Dictionary>> InitDictionaryDatas(List<Tenant> list);
 	
 	
 	

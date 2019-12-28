@@ -7,7 +7,7 @@ import com.smartwf.sm.modules.admin.pojo.Organization;
 
 import lombok.Data;
 @Data
-public class OrganizationVO extends Organization{
+public class OrganizationVO extends Organization {
 	
 	/**
 	 * 
@@ -23,7 +23,5 @@ public class OrganizationVO extends Organization{
 	private String label;//组织架构名称，为前端方便，扩展字段 
 	
 	private List<OrganizationVO> children;//封装树形结构
-	
-	
 
 }

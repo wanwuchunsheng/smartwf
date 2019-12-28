@@ -56,7 +56,7 @@ public interface OrganizationService {
 	 * @Description: 初始化组织机构
 	 * @return
 	 */
-	Map<Integer,List<Organization>> initOrganizationDatas(List<Tenant> list);
+	Map<Integer,List<OrganizationVO>> initOrganizationDatas(List<Tenant> list);
 	
 	
 

@@ -2,7 +2,9 @@ package com.smartwf.sm.modules.admin.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.DictionaryDao;
 import com.smartwf.sm.modules.admin.dao.DictionaryDao;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
+import com.smartwf.sm.modules.admin.pojo.Organization;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.service.DictionaryService;
@@ -125,11 +129,18 @@ public class DictionaryServiceImpl implements DictionaryService{
      * @return
      */
 	@Override
-	public List<Dictionary> InitDictionaryDatas() {
-		QueryWrapper<Dictionary> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("update_time"); //降序
-		queryWrapper.eq("enable", 0); //0启用  1禁用
-		return this.dictionaryDao.selectList(queryWrapper);
+	public Map<Integer,List<Dictionary>> InitDictionaryDatas(List<Tenant> list) {
+		Map<Integer,List<Dictionary>> map =new HashMap<>();
+		QueryWrapper<Dictionary> queryWrapper =null;
+		for(Tenant t:list) {
+			queryWrapper = new QueryWrapper<>();
+			queryWrapper.orderByDesc("update_time"); //降序
+			queryWrapper.eq("enable", 0); //0启用  1禁用
+			queryWrapper.eq("tenant_id", t.getId());//租户
+			queryWrapper.ne("pid", 0);//租户
+			map.put(t.getId(), this.dictionaryDao.selectList(queryWrapper));
+		}
+		return map;
 	}
 
 	

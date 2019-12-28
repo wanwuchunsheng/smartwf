@@ -189,15 +189,14 @@ public class OrganizationServiceImpl implements OrganizationService{
 	 * @return
 	 */
 	@Override
-	public Map<Integer,List<Organization>> initOrganizationDatas(List<Tenant> list) {
-		Map<Integer,List<Organization>> map =new HashMap<>();
-		QueryWrapper<Organization> queryWrapper =null;
+	public Map<Integer,List<OrganizationVO>> initOrganizationDatas(List<Tenant> list) {
+		Map<Integer,List<OrganizationVO>> map =new HashMap<>();
+		OrganizationVO bean=null;
 		for(Tenant t:list) {
-			queryWrapper = new QueryWrapper<>();
-			queryWrapper.orderByDesc("update_time"); //降序
-			queryWrapper.eq("enable", 0); //0启用  1禁用
-			queryWrapper.eq("tenant_id", t.getId());//租户
-			map.put(t.getId(), this.organizationDao.selectList(queryWrapper));
+			bean = new OrganizationVO();
+			bean.setTenantId(t.getId());//租户
+			bean.setEnable(0);//0启用  1禁用
+			map.put(t.getId(), this.organizationDao.selectOrganizationByAll(bean));
 		}
 		return map;
 	}

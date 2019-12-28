@@ -46,7 +46,6 @@ public interface OrganizationDao extends BaseMapper<Organization> {
 	
 	
 	
-	
 
 
     
