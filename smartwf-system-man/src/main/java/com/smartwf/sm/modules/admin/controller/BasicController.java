@@ -77,7 +77,7 @@ public class BasicController {
         	//1）判断数据类型是否为空
         	if(null !=bean.getOrgType()) {
         		//2）获取所有租户下的组织架构数据
-				Map<Integer, List<OrganizationVO>> map = (Map<Integer, List<OrganizationVO>>) JSONObject.parseObject(redisService.get("initPost"), new TypeReference<Map<Integer, List<OrganizationVO>>>() {} );
+				Map<Integer, List<OrganizationVO>> map = (Map<Integer, List<OrganizationVO>>) JSONObject.parseObject(redisService.get("initOrganization"), new TypeReference<Map<Integer, List<OrganizationVO>>>(){} );
 				if(map!=null && map.size()>0) {
 					List<OrganizationVO> orglist=map.get(bean.getTenantId());
 	        		//3）判断当前租户下是否有组织架构数据
@@ -159,7 +159,7 @@ public class BasicController {
     })
     public ResponseEntity<Result<?>> RoleAll(Role bean) {
         try {
-        	Map<Integer, List<Role>> map = (Map<Integer, List<Role>>) JSONObject.parseObject(redisService.get("initPost"), new TypeReference<Map<Integer, List<Role>>>() {} );
+        	Map<Integer, List<Role>> map = (Map<Integer, List<Role>>) JSONObject.parseObject(redisService.get("initRole"), new TypeReference<Map<Integer, List<Role>>>() {} );
 			if(map!=null && map.size()> 0 ) {
 				List<Role> orglist=map.get(bean.getTenantId());
 	    		if(orglist!=null && orglist.size()>0 ) {
