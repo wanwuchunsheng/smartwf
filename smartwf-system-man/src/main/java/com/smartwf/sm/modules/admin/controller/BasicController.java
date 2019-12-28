@@ -103,7 +103,7 @@ public class BasicController {
      * @param organizationId
      * @return
      */
-    @GetMapping("post")
+    @GetMapping("postAll")
     @ApiOperation(value = "职务接口", notes = "获取职务列表信息")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),

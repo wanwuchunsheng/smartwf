@@ -98,7 +98,7 @@ public class UserInfoController {
     	    @ApiImplicitParam(paramType = "query", name = "organizationIds", value = "组织架构（主键），逗号拼接", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "postIds", value = "职务（主键），逗号拼接", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "roleIds", value = "角色（主键），逗号拼接", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录账号", dataType = "String", required = true),
             @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String", required = true),
             @ApiImplicitParam(paramType = "query", name = "pwd", value = "密码", dataType = "String", required = true),
