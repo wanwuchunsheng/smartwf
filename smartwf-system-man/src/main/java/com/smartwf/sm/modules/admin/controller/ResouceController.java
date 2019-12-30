@@ -54,9 +54,9 @@ public class ResouceController {
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }
         } catch (Exception e) {
-            log.error("分页查询组织架构信息错误！{}", e.getMessage(), e);
+            log.error("分页查询子系统信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询组织架构信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询子系统信息错误！"));
     }
 	
 	/**

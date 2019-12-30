@@ -43,6 +43,11 @@ public class Dictionary extends BasePojo implements Serializable {
 	 */
 	private Integer level;
 	/**
+	 * 编码值
+	 * 
+	 * */
+	private String dictValue;
+	/**
 	 * 编码
 	 */
 	private String dictCode;
