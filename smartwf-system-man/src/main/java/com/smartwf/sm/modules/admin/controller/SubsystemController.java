@@ -96,7 +96,7 @@ public class SubsystemController {
     @PostMapping("saveSubsystem")
     @ApiOperation(value = "添加接口", notes = "添加子系统接口")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户id", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
 	    	@ApiImplicitParam(paramType = "query", name = "resCode", value = "子系统编码", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "resName", value = "子系统名称", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "resHref", value = "路由地址", dataType = "String", required = true),
@@ -120,7 +120,7 @@ public class SubsystemController {
     @PutMapping("updateSubsystem")
     @ApiOperation(value = "修改接口", notes = "修改子系统资料")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "id", value = "子系统（主键）", dataType = "int", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "resCode", value = "子系统编码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "resName", value = "子系统名称", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "resHref", value = "路由地址", dataType = "String"),
@@ -146,7 +146,8 @@ public class SubsystemController {
     @DeleteMapping("deleteSubsystem")
     @ApiOperation(value = "删除接口", notes = "删除子系统")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单删除", dataType = "int",required = true)
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
     @TraceLog(content = "删除子系统系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteSubsystem(ResouceVO bean) {

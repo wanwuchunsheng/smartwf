@@ -15,45 +15,51 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
-import com.smartwf.sm.modules.admin.dao.SubsystemDao;
-import com.smartwf.sm.modules.admin.pojo.Resouce;
-import com.smartwf.sm.modules.admin.service.SubsystemService;
-import com.smartwf.sm.modules.admin.vo.ResouceVO;
+import com.smartwf.sm.modules.admin.dao.UISettingDao;
+import com.smartwf.sm.modules.admin.pojo.SysConfig;
+import com.smartwf.sm.modules.admin.service.UISettingService;
 import com.smartwf.sm.modules.admin.vo.SysConfigVO;
 
 import lombok.extern.log4j.Log4j;
 /**
- * @Description: 资源业务层接口实现
+ * @Description: 前端配置务层接口实现
  * @author WCH
  * @Date: 2019-11-27 11:25:24
  */
 @Service
 @Log4j
-public class SubsystemServiceImpl implements SubsystemService{
+public class UISettingServiceImpl implements UISettingService{
 	
 	@Autowired
-	private SubsystemDao subsystemDao;
+	private UISettingDao uiSettingDao;
 	
 	/**
-	 * @Description:查询资源分页
+	 * @Description:查询前端配置分页
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectSubsystemByPage(Page<Resouce> page, ResouceVO bean) {
-		QueryWrapper<Resouce> queryWrapper = new QueryWrapper<>();
+	public Result<?> selectUISettingByPage(Page<SysConfig> page, SysConfigVO bean) {
+		QueryWrapper<SysConfig> queryWrapper = new QueryWrapper<>();
 		queryWrapper.orderByDesc("update_time"); //降序
-		queryWrapper.eq("pid",Constants.ZERO);//默认查询所有子系统
-        //租户
-  		if (null!=bean.getTenantId()) {
-  			queryWrapper.eq("tenant_id", bean.getTenantId());
+        //是否系统内置 0是 1否
+  		if (null!=bean.getIsSys()) {
+  			queryWrapper.eq("is_sys", bean.getIsSys());
   		}
-        //资源编码
-        if (!StringUtils.isEmpty(bean.getResCode())) {
-        	queryWrapper.like("res_code", Constants.PER_CENT + bean.getResCode() + Constants.PER_CENT);
+        //编码
+        if (!StringUtils.isEmpty(bean.getConfigCode())) {
+        	queryWrapper.like("config_code", bean.getConfigCode() );
         }
-        //资源名称
-        if (!StringUtils.isEmpty(bean.getResName())) {
-        	queryWrapper.like("res_name", Constants.PER_CENT + bean.getResName() + Constants.PER_CENT);
+        //名称
+        if (!StringUtils.isEmpty(bean.getConfigCode())) {
+        	queryWrapper.like("config_name", bean.getConfigCode() );
+        }
+        //键
+        if (!StringUtils.isEmpty(bean.getConfigKey())) {
+        	queryWrapper.like("config_key", bean.getConfigKey() );
+        }
+        //值
+        if (!StringUtils.isEmpty(bean.getConfigValue())) {
+        	queryWrapper.like("config_value",  bean.getConfigValue() );
         }
         //状态
 		if (null!=bean.getEnable()) {
@@ -63,26 +69,26 @@ public class SubsystemServiceImpl implements SubsystemService{
         if (!StringUtils.isEmpty(bean.getRemark())) {
         	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
-		IPage<Resouce> list=this.subsystemDao.selectPage(page, queryWrapper);
+		IPage<SysConfig> list=this.uiSettingDao.selectPage(page, queryWrapper);
 		return Result.data(list.getTotal(), list.getRecords());
 	}
 
 	/**
-     * @Description: 主键查询资源
+     * @Description: 主键查询前端配置
      * @return
      */
 	@Override
-	public Result<?> selectSubsystemById(Resouce bean) {
-		Resouce resouce= this.subsystemDao.selectById(bean);
-		return Result.data(resouce);
+	public Result<?> selectUISettingById(SysConfig bean) {
+		SysConfig sysConfig= this.uiSettingDao.selectById(bean);
+		return Result.data(sysConfig);
 	}
 	
 	/**
-     * @Description: 添加资源
+     * @Description: 添加前端配置
      * @return
      */
 	@Override
-	public void saveSubsystem(Resouce bean) {
+	public void saveUISetting(SysConfig bean) {
 		//添加创建人基本信息
 		User user=UserThreadLocal.getUser();
 		bean.setCreateTime(new Date());
@@ -91,40 +97,35 @@ public class SubsystemServiceImpl implements SubsystemService{
 		bean.setUpdateTime(bean.getCreateTime());
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
-		bean.setUid(0);//默认
-		bean.setPid(0);//默认
-		bean.setSort(0);//排序
-		bean.setLevel(1);//默认等级
-		bean.setResType(1);//1 系统  2模块 3资源
 		//保存
-		this.subsystemDao.insert(bean);
+		this.uiSettingDao.insert(bean);
 	}
 
 	/**
-     * @Description： 修改资源
+     * @Description： 修改前端配置
      * @return
      */
 	@Override
-	public void updateSubsystem(Resouce bean) {
+	public void updateUISetting(SysConfig bean) {
 		//添加修改人信息
 		User user=UserThreadLocal.getUser();
 		bean.setUpdateTime(new Date());
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		//修改
-		this.subsystemDao.updateById(bean);
+		this.uiSettingDao.updateById(bean);
 	}
 
 	/**
-     * @Description： 删除资源
+     * @Description： 删除前端配置
      * @return
      */
 	@Transactional
 	@Override
-	public void deleteSubsystem(ResouceVO bean) {
+	public void deleteUISetting(SysConfigVO bean) {
 		if( null!=bean.getId()) {
-			//删除资源
-			this.subsystemDao.deleteById(bean);
+			//删除
+			this.uiSettingDao.deleteById(bean);
 		}else {
 			String ids=StrUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
@@ -133,12 +134,10 @@ public class SubsystemServiceImpl implements SubsystemService{
 					scv = new SysConfigVO();
 					scv.setId(Integer.valueOf(val));
 					//删除
-					this.subsystemDao.deleteById(scv);
+					this.uiSettingDao.deleteById(scv);
 				}
 		    }
 		}
-		
 	}
-
 
 }
