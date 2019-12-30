@@ -18,8 +18,6 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.sm.modules.admin.dao.PermissionDao;
 import com.smartwf.sm.modules.admin.dao.ResouceDao;
-import com.smartwf.sm.modules.admin.dao.UserActionDao;
-import com.smartwf.sm.modules.admin.pojo.Permission;
 import com.smartwf.sm.modules.admin.pojo.Resouce;
 import com.smartwf.sm.modules.admin.service.ResouceService;
 import com.smartwf.sm.modules.admin.vo.ResouceVO;
@@ -58,11 +56,11 @@ public class ResouceServiceImpl implements ResouceService{
   		}
         //资源编码
         if (!StringUtils.isEmpty(bean.getResCode())) {
-        	queryWrapper.like("resouce_code", Constants.PER_CENT + bean.getResCode() + Constants.PER_CENT);
+        	queryWrapper.like("res_code", Constants.PER_CENT + bean.getResCode() + Constants.PER_CENT);
         }
         //资源名称
         if (!StringUtils.isEmpty(bean.getResName())) {
-        	queryWrapper.like("resouce_name", Constants.PER_CENT + bean.getResName() + Constants.PER_CENT);
+        	queryWrapper.like("res_name", Constants.PER_CENT + bean.getResName() + Constants.PER_CENT);
         }
         //状态
 		if (null!=bean.getEnable()) { 
