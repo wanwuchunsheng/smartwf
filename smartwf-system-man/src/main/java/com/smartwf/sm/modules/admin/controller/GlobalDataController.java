@@ -34,10 +34,10 @@ import lombok.extern.slf4j.Slf4j;
  * @Description: 基础数据控制器
  */
 @RestController
-@RequestMapping("base")
+@RequestMapping("globaldata")
 @Slf4j
-@Api(description = "基础数据控制器")
-public class BasicController {
+@Api(description = "全局数据控制器")
+public class GlobalDataController {
 	
 	@Autowired
     private RedisService redisService;

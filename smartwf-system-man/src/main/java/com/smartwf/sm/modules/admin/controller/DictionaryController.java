@@ -46,7 +46,7 @@ public class DictionaryController {
     @GetMapping("selectDictionaryByPage")
     @ApiOperation(value = "分页查询接口", notes = "分页查询数据字典")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "租户（主键）", dataType = "int",required = true ),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int",required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "dictCode", value = "字典代码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "dictName", value = "字典名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
