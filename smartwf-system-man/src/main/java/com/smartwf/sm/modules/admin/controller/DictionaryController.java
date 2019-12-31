@@ -100,7 +100,7 @@ public class DictionaryController {
 	    	@ApiImplicitParam(paramType = "query", name = "uid", value = "上级（主键）", dataType = "int", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "pid", value = "根节点（主键）", dataType = "int", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "level", value = "层次级别", dataType = "int", required = true),
-	    	@ApiImplicitParam(paramType = "query", name = "dictCode", value = "字典编码", dataType = "String"),
+	    	@ApiImplicitParam(paramType = "query", name = "dictCode", value = "字典编码", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "dictName", value = "字典名称", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "dictValue", value = "字典值", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
