@@ -26,10 +26,7 @@ public class Dictionary extends BasePojo implements Serializable {
      */
 	@TableId(type = IdType.AUTO)
 	private Integer id;
-	/**
-	 * 父级id
-	 */
-	private Integer pid;
+	
 	/**
 	 * 上级id
 	 */
@@ -38,10 +35,7 @@ public class Dictionary extends BasePojo implements Serializable {
 	 * 排序
 	 */
 	private Integer sort;
-	/**
-	 * 层次级别
-	 */
-	private Integer level;
+	
 	/**
 	 * 编码值
 	 * 

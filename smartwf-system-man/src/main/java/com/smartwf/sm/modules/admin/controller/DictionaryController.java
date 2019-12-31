@@ -47,7 +47,7 @@ public class DictionaryController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询数据字典")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int",required = true ),
-    	    @ApiImplicitParam(paramType = "query", name = "dictCode", value = "字典代码", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "dictCode", value = "字典编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "dictName", value = "字典名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
@@ -90,6 +90,27 @@ public class DictionaryController {
     }
     
     /**
+     * @Description:主键查询数据字典子节点集合
+     * @return
+     */
+    @GetMapping("selectDictionaryByUid")
+    @ApiOperation(value = "主键查询节点集合接口", notes = "主键查询数据字典子节点集合")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int",required = true)
+    })
+    public ResponseEntity<Result<?>> selectDictionaryByUid(Dictionary bean) {
+        try {
+            Result<?> result = this.dictionaryService.selectDictionaryByUid(bean);
+            if (result != null) {
+                return ResponseEntity.ok(result);
+            }
+        } catch (Exception e) {
+            log.error("主键查询节点集合信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询节点集合信息错误！"));
+    }
+    
+    /**
      * @Description: 添加数据字典
      * @return
      */
@@ -98,14 +119,12 @@ public class DictionaryController {
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
 	    	@ApiImplicitParam(paramType = "query", name = "uid", value = "上级（主键）", dataType = "int", required = true),
-		    @ApiImplicitParam(paramType = "query", name = "pid", value = "根节点（主键）", dataType = "int", required = true),
-		    @ApiImplicitParam(paramType = "query", name = "level", value = "层次级别", dataType = "int", required = true),
 	    	@ApiImplicitParam(paramType = "query", name = "dictCode", value = "字典编码", dataType = "String", required = true),
+	    	@ApiImplicitParam(paramType = "query", name = "dictValue", value = "字典值", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "dictName", value = "字典名称", dataType = "String", required = true),
-		    @ApiImplicitParam(paramType = "query", name = "dictValue", value = "字典值", dataType = "String", required = true),
+		    @ApiImplicitParam(paramType = "query", name = "dictType", value = "字典类型", dataType = "Integer"),
 		    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
-		    @ApiImplicitParam(paramType = "query", name = "dictType", value = "字典类型", dataType = "Integer"),
  	        @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     public ResponseEntity<Result<?>> saveDictionary(HttpSession session,Dictionary bean) {
@@ -127,13 +146,12 @@ public class DictionaryController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
 		@ApiImplicitParam(paramType = "query", name = "uid", value = "上级（主键）", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "pid", value = "根节点（主键）", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "level", value = "层次级别", dataType = "Integer"),
 		@ApiImplicitParam(paramType = "query", name = "dictCode", value = "字典编码", dataType = "String"),
+		@ApiImplicitParam(paramType = "query", name = "dictValue", value = "字典值", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "dictName", value = "字典名称", dataType = "String"),
+	    @ApiImplicitParam(paramType = "query", name = "dictType", value = "字典类型", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "dictType", value = "字典类型", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改数据字典", paramIndexs = {0})

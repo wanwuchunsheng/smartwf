@@ -12,21 +12,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.GenerateUtils;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.DictionaryDao;
-import com.smartwf.sm.modules.admin.dao.DictionaryDao;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
-import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
-import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.service.DictionaryService;
 import com.smartwf.sm.modules.admin.vo.DictionaryVO;
 
@@ -62,6 +56,18 @@ public class DictionaryServiceImpl implements DictionaryService{
 	public Result<?> selectDictionaryById(Dictionary bean) {
 		Dictionary Dictionary= this.dictionaryDao.selectById(bean);
 		return Result.data(Dictionary);
+	}
+	
+	/**
+     * @Description:主键查询数据字典子节点集合
+     * @return
+     */
+	@Override
+	public Result<?> selectDictionaryByUid(Dictionary bean) {
+		QueryWrapper<Dictionary> queryWrapper =new QueryWrapper<>();
+		queryWrapper.eq("uid", bean.getId());
+		List<Dictionary> list=this.dictionaryDao.selectList(queryWrapper);
+		return Result.data(list);
 	}
 	
 	/**
@@ -108,7 +114,6 @@ public class DictionaryServiceImpl implements DictionaryService{
 		if( null!=bean.getId()) {
 			//删除数据字典表
 			this.dictionaryDao.deleteById(bean);
-			
 		}else {
 			String ids=StrUtils.regex(bean.getIds());
 			//批量删除
@@ -119,7 +124,6 @@ public class DictionaryServiceImpl implements DictionaryService{
 				}
 				//数据字典表
 				this.dictionaryDao.deleteDictionaryByIds(list);
-				
 			}
 		}
 	}
@@ -137,13 +141,12 @@ public class DictionaryServiceImpl implements DictionaryService{
 			queryWrapper.orderByDesc("update_time"); //降序
 			queryWrapper.eq("enable", 0); //0启用  1禁用
 			queryWrapper.eq("tenant_id", t.getId());//租户
-			queryWrapper.ne("pid", 0);//租户
+			queryWrapper.ne("uid", 0);//租户
 			map.put(t.getId(), this.dictionaryDao.selectList(queryWrapper));
 		}
 		return map;
 	}
 
 	
-
 
 }

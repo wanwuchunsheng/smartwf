@@ -6,7 +6,6 @@ import java.util.Map;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
-import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.vo.DictionaryVO;
 
@@ -28,6 +27,13 @@ public interface DictionaryService {
      * @return
      */
 	Result<?> selectDictionaryById(Dictionary bean);
+	
+	/**
+     * @param tenantList 
+	 * @Description：主键查询数据字典子节点集合
+     * @return
+     */
+	Result<?> selectDictionaryByUid(Dictionary bean);
 
 	/**
      * @Description： 添加数据字典
@@ -53,6 +59,7 @@ public interface DictionaryService {
      * @return
      */
 	Map<Integer,List<Dictionary>> InitDictionaryDatas(List<Tenant> list);
+	
 	
 	
 	

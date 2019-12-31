@@ -15,28 +15,23 @@
     <!-- 分页查询数据字典 -->
     <select id="selectDictionaryByPage" resultType="com.smartwf.sm.modules.admin.vo.DictionaryVO">
         select 
-			b.dict_name as dictTypeName,
-			a.dict_name,
 			a.id,
-			a.pid,
 			a.uid,
 			a.sort,
-			a.level,
 			a.dict_code,
 			a.dict_name,
+			a.dict_value,
 			a.dict_type,
 			a.remark,
-			a.tenant_id,
 			a.enable,
+			a.tenant_id,
 			a.create_time,
 			a.create_user_id,
 			a.create_user_name,
 			a.update_time,
 			a.update_user_id,
 			a.update_user_name
-		from sys_dict_data a,(
-			select id,pid,uid,level,dict_code,dict_name from sys_dict_data 
-		) b where a.pid=b.id
+		from sys_dict_data a where a.uid=0
 		<if test="bean.tenantId != null ">
             and a.tenant_id = #{bean.tenantId}
         </if>

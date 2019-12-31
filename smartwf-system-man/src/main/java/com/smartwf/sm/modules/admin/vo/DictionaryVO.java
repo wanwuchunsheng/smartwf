@@ -20,7 +20,5 @@ public class DictionaryVO extends Dictionary{
 	
 	private Date endTime;//结束时间
 	
-	private String dictTypeName;//字典类型名称
-	
 
 }

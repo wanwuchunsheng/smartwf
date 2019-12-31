@@ -4,7 +4,7 @@
   <artifactId>smartwf</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>Smartwf</name>
+  <name>smartwf</name>
   <description>智慧风电场</description>
   <parent>
       <groupId>org.springframework.boot</groupId>
@@ -14,6 +14,7 @@
   <modules>
     	<module>smartwf-common</module>
     	<module>smartwf-system-man</module>
+    	<module>smartwf-health-man</module>
   </modules>
   <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
