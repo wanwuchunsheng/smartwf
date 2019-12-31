@@ -7,8 +7,8 @@
   </parent>
   <groupId>com.smartwf.sm</groupId>
   <artifactId>smartwf-system-man</artifactId>
-  <name>smartwf-system-man</name>
-  <description>后台管理子系统</description>
+  <name>smartwf-sm</name>
+  <description>系统管理中心</description>
   <dependencies>
         <!-- smartwf-common -->
         <dependency>
