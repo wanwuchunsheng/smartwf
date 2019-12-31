@@ -1,4 +1,4 @@
-package com.smartwf.hm.modules.healthov.controller;
+package com.smartwf.hm.modules.alarmstatistics.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +12,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.hm.modules.healthov.pojo.Log;
-import com.smartwf.hm.modules.healthov.service.LogService;
+import com.smartwf.hm.modules.admin.pojo.Log;
+import com.smartwf.hm.modules.admin.service.LogService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

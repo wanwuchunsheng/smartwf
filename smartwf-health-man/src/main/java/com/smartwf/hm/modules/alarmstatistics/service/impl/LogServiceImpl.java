@@ -1,4 +1,4 @@
-package com.smartwf.hm.modules.healthov.service.impl;
+package com.smartwf.hm.modules.alarmstatistics.service.impl;
 
 
 import java.util.List;
@@ -11,9 +11,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.dto.LogDTO;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.hm.modules.healthov.dao.LogDao;
-import com.smartwf.hm.modules.healthov.pojo.Log;
-import com.smartwf.hm.modules.healthov.service.LogService;
+import com.smartwf.hm.modules.admin.dao.LogDao;
+import com.smartwf.hm.modules.admin.pojo.Log;
+import com.smartwf.hm.modules.admin.service.LogService;
 
 
 /**

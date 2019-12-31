@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import com.smartwf.common.aop.AopAround;
 import com.smartwf.common.dto.LogDTO;
 import com.smartwf.common.queue.LogQueue;
-import com.smartwf.hm.modules.healthov.service.LogService;
+import com.smartwf.hm.modules.admin.service.LogService;
 
 
 /**

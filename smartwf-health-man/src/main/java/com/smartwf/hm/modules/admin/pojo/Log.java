@@ -1,4 +1,4 @@
-package com.smartwf.hm.modules.healthov.pojo;
+package com.smartwf.hm.modules.admin.pojo;
 
 
 

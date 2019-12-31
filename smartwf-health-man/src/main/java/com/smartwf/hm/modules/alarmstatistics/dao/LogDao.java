@@ -1,4 +1,4 @@
-package com.smartwf.hm.modules.healthov.dao;
+package com.smartwf.hm.modules.alarmstatistics.dao;
 
 
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.common.dto.LogDTO;
-import com.smartwf.hm.modules.healthov.pojo.Log;
+import com.smartwf.hm.modules.admin.pojo.Log;
 
 
 /**

@@ -1,11 +1,11 @@
-package com.smartwf.hm.modules.healthov.service;
+package com.smartwf.hm.modules.admin.service;
 
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.dto.LogDTO;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.hm.modules.healthov.pojo.Log;
+import com.smartwf.hm.modules.admin.pojo.Log;
 
 /**
  * @Date: 2018/12/18 15:43
