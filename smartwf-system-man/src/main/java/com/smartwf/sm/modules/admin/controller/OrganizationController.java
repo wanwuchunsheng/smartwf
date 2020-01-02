@@ -74,7 +74,7 @@ public class OrganizationController {
 	 * @Description: 查询所有组织架构（树形结构）
 	 * @return
 	 */
-    @GetMapping("selectOrganizationByAll")
+    @GetMapping("selectOrganizationByPage")
     @ApiOperation(value = "树形查询所有数据接口", notes = "查询组织架构所有数据")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),

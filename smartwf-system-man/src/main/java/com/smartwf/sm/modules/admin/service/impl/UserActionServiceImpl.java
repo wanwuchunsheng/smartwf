@@ -45,15 +45,15 @@ public class UserActionServiceImpl implements UserActionService{
 		queryWrapper.orderByDesc("update_time"); //降序
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId()) { 
-  			queryWrapper.eq("tenantId", bean.getTenantId()); 
+  			queryWrapper.eq("tenant_id", bean.getTenantId()); 
   		}
         //用户操作编码
         if (!StringUtils.isEmpty(bean.getActCode())) {
-        	queryWrapper.like("UserActionCode", Constants.PER_CENT + bean.getActCode() + Constants.PER_CENT);
+        	queryWrapper.like("act_code", Constants.PER_CENT + bean.getActCode() + Constants.PER_CENT);
         }
         //用户操作名称
         if (!StringUtils.isEmpty(bean.getActName())) {
-        	queryWrapper.like("UserActionName", Constants.PER_CENT + bean.getActName() + Constants.PER_CENT);
+        	queryWrapper.like("act_name", Constants.PER_CENT + bean.getActName() + Constants.PER_CENT);
         }
         //状态
 		if (null!=bean.getEnable()) { 
@@ -61,7 +61,7 @@ public class UserActionServiceImpl implements UserActionService{
 		}
         //时间
         if (bean.getStartTime() != null && bean.getEndTime() != null) {
-        	queryWrapper.between("createTime", bean.getStartTime(), bean.getEndTime());
+        	queryWrapper.between("create_tTime", bean.getStartTime(), bean.getEndTime());
         }
         //备注
         if (!StringUtils.isEmpty(bean.getRemark())) {

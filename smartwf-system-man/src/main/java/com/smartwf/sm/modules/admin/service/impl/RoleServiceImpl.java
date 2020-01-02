@@ -51,15 +51,15 @@ public class RoleServiceImpl implements RoleService{
 		queryWrapper.orderByDesc("update_time"); //降序
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId()) { 
-  			queryWrapper.eq("tenantId", bean.getTenantId()); 
+  			queryWrapper.eq("tenant_id", bean.getTenantId()); 
   		} 
         //角色编码
         if (!StringUtils.isEmpty(bean.getRoleCode())) {
-        	queryWrapper.like("roleCode", Constants.PER_CENT + bean.getRoleCode() + Constants.PER_CENT);
+        	queryWrapper.like("role_code", Constants.PER_CENT + bean.getRoleCode() + Constants.PER_CENT);
         }
         //角色名称
         if (!StringUtils.isEmpty(bean.getRoleName())) {
-        	queryWrapper.like("RoleName", Constants.PER_CENT + bean.getRoleName() + Constants.PER_CENT);
+        	queryWrapper.like("role_name", Constants.PER_CENT + bean.getRoleName() + Constants.PER_CENT);
         }
         //状态
 		if (null!=bean.getEnable()) { 
@@ -67,7 +67,7 @@ public class RoleServiceImpl implements RoleService{
 		}
         //时间
         if (bean.getStartTime() != null && bean.getEndTime() != null) {
-        	queryWrapper.between("createTime", bean.getStartTime(), bean.getEndTime());
+        	queryWrapper.between("create_time", bean.getStartTime(), bean.getEndTime());
         }
         //备注
         if (!StringUtils.isEmpty(bean.getRemark())) {

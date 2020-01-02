@@ -46,11 +46,11 @@ public class TenantServiceImpl implements TenantService{
 		queryWrapper.orderByDesc("update_time"); //降序
         //租户编码
         if (!StringUtils.isEmpty(bean.getTenantCode())) {
-        	queryWrapper.like("tenantCode", Constants.PER_CENT + bean.getTenantCode() + Constants.PER_CENT);
+        	queryWrapper.like("tenant_code", Constants.PER_CENT + bean.getTenantCode() + Constants.PER_CENT);
         }
         //租户名称
         if (!StringUtils.isEmpty(bean.getTenantName())) {
-        	queryWrapper.like("tenantName", Constants.PER_CENT + bean.getTenantName() + Constants.PER_CENT);
+        	queryWrapper.like("tenant_name", Constants.PER_CENT + bean.getTenantName() + Constants.PER_CENT);
         }
         //状态
 		if (null!=bean.getEnable()) { 
@@ -58,7 +58,7 @@ public class TenantServiceImpl implements TenantService{
 		}
         //时间
         if (bean.getStartTime() != null && bean.getEndTime() != null) {
-        	queryWrapper.between("createTime", bean.getStartTime(), bean.getEndTime());
+        	queryWrapper.between("create_time", bean.getStartTime(), bean.getEndTime());
         }
         //备注
         if (!StringUtils.isEmpty(bean.getRemark())) {
