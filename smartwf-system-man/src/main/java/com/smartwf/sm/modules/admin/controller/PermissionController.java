@@ -18,7 +18,7 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Permission;
 import com.smartwf.sm.modules.admin.service.PermissionService;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
-import com.smartwf.sm.modules.admin.vo.ResouceVO;
+import com.smartwf.sm.modules.admin.vo.ResourceVO;
 import com.smartwf.sm.modules.admin.vo.UserActionVO;
 
 import io.swagger.annotations.Api;
@@ -45,14 +45,14 @@ public class PermissionController {
 	 * @Description: 查询资源子系统
 	 * @return
 	 */
-    @GetMapping("selectResouceByPid")
+    @GetMapping("selectResourceByPid")
     @ApiOperation(value = "查询子系统接口", notes = "查询资源子系统")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
     })
-    public ResponseEntity<Result<?>> selectResouceByPid( ResouceVO bean ) {
+    public ResponseEntity<Result<?>> selectResourceByPid( ResourceVO bean ) {
         try {
-            Result<?> result = this.permissionService.selectResouceByPid(bean);
+            Result<?> result = this.permissionService.selectResourceByPid(bean);
             if (result != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }
@@ -138,15 +138,15 @@ public class PermissionController {
 	 * @DateTime 2019-12-13 11:00:43
 	 * @return
 	 */
-    @GetMapping("selectResouceUserActByPage")
+    @GetMapping("selectResourceUserActByPage")
     @ApiOperation(value = "资源与用户操作查询接口", notes = "资源与用户操作查询")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
  	        @ApiImplicitParam(paramType = "query", name = "mgrType", value = "管理员类型（0-普通 1管理员  2超级管理员）", dataType = "int", required = true)
     })
-    public ResponseEntity<Result<?>> selectResouceActByPage( PermissionVO bean) {
+    public ResponseEntity<Result<?>> selectResourceActByPage( PermissionVO bean) {
         try {
-            Result<?> result = this.permissionService.selectResouceUserActByPage(bean);
+            Result<?> result = this.permissionService.selectResourceUserActByPage(bean);
             if (result != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }

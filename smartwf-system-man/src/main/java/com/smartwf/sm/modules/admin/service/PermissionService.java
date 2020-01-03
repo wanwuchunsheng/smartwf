@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Permission;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
-import com.smartwf.sm.modules.admin.vo.ResouceVO;
+import com.smartwf.sm.modules.admin.vo.ResourceVO;
 import com.smartwf.sm.modules.admin.vo.UserActionVO;
 
 /**
@@ -36,7 +36,7 @@ public interface PermissionService {
 	 * @DateTime 2019-12-13 11:00:43
 	 * @return
 	 */
-	Result<?> selectResouceUserActByPage(PermissionVO bean);
+	Result<?> selectResourceUserActByPage(PermissionVO bean);
 	/**
 	 * @Description: 用户操作
 	 * @DateTime 2019-12-13 11:00:43
@@ -47,7 +47,7 @@ public interface PermissionService {
 	 * @Description: 查询资源子系统
 	 * @return
 	 */
-	Result<?> selectResouceByPid(ResouceVO bean);
+	Result<?> selectResourceByPid(ResourceVO bean);
 	
 
 }

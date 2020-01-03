@@ -16,9 +16,9 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.SubsystemDao;
-import com.smartwf.sm.modules.admin.pojo.Resouce;
+import com.smartwf.sm.modules.admin.pojo.Resource;
 import com.smartwf.sm.modules.admin.service.SubsystemService;
-import com.smartwf.sm.modules.admin.vo.ResouceVO;
+import com.smartwf.sm.modules.admin.vo.ResourceVO;
 import com.smartwf.sm.modules.admin.vo.SysConfigVO;
 
 import lombok.extern.log4j.Log4j;
@@ -39,8 +39,8 @@ public class SubsystemServiceImpl implements SubsystemService{
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectSubsystemByPage(Page<Resouce> page, ResouceVO bean) {
-		QueryWrapper<Resouce> queryWrapper = new QueryWrapper<>();
+	public Result<?> selectSubsystemByPage(Page<Resource> page, ResourceVO bean) {
+		QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
 		queryWrapper.orderByDesc("update_time"); //降序
 		queryWrapper.eq("pid",Constants.ZERO);//默认查询所有子系统
         //租户
@@ -63,7 +63,7 @@ public class SubsystemServiceImpl implements SubsystemService{
         if (!StringUtils.isEmpty(bean.getRemark())) {
         	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
-		IPage<Resouce> list=this.subsystemDao.selectPage(page, queryWrapper);
+		IPage<Resource> list=this.subsystemDao.selectPage(page, queryWrapper);
 		return Result.data(list.getTotal(), list.getRecords());
 	}
 
@@ -72,9 +72,9 @@ public class SubsystemServiceImpl implements SubsystemService{
      * @return
      */
 	@Override
-	public Result<?> selectSubsystemById(Resouce bean) {
-		Resouce resouce= this.subsystemDao.selectById(bean);
-		return Result.data(resouce);
+	public Result<?> selectSubsystemById(Resource bean) {
+		Resource resource= this.subsystemDao.selectById(bean);
+		return Result.data(resource);
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public class SubsystemServiceImpl implements SubsystemService{
      * @return
      */
 	@Override
-	public void saveSubsystem(Resouce bean) {
+	public void saveSubsystem(Resource bean) {
 		//添加创建人基本信息
 		User user=UserThreadLocal.getUser();
 		bean.setCreateTime(new Date());
@@ -105,7 +105,7 @@ public class SubsystemServiceImpl implements SubsystemService{
      * @return
      */
 	@Override
-	public void updateSubsystem(Resouce bean) {
+	public void updateSubsystem(Resource bean) {
 		//添加修改人信息
 		User user=UserThreadLocal.getUser();
 		bean.setUpdateTime(new Date());
@@ -121,7 +121,7 @@ public class SubsystemServiceImpl implements SubsystemService{
      */
 	@Transactional
 	@Override
-	public void deleteSubsystem(ResouceVO bean) {
+	public void deleteSubsystem(ResourceVO bean) {
 		if( null!=bean.getId()) {
 			//删除资源
 			this.subsystemDao.deleteById(bean);

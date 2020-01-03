@@ -13,8 +13,8 @@ import lombok.Data;
  * @Description: 资源表
  */
 @Data
-@TableName("sys_resouce")
-public class Resouce extends BasePojo implements Serializable{
+@TableName("sys_resource")
+public class Resource extends BasePojo implements Serializable{
 	
 	 private static final long serialVersionUID = 1L;
 	 

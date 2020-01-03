@@ -50,7 +50,7 @@ public interface TenantDao extends BaseMapper<Tenant> {
 	
 	void deletePermissionByTenantId(@Param("bean") TenantVO bean);
 
-	void deleteResouceByTenantId(@Param("bean") TenantVO bean);
+	void deleteResourceByTenantId(@Param("bean") TenantVO bean);
 
 	void deleteUserActionByTenantId(@Param("bean") TenantVO bean);
 
@@ -76,7 +76,7 @@ public interface TenantDao extends BaseMapper<Tenant> {
 	
 	void deletePermissionByTenantIds(@Param("list") List<String> list);
 
-	void deleteResouceByTenantIds(@Param("list") List<String> list);
+	void deleteResourceByTenantIds(@Param("list") List<String> list);
 
 	void deleteUserActionByTenantIds(@Param("list") List<String> list);
 

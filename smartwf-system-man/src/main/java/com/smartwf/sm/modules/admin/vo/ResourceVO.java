@@ -3,11 +3,11 @@ package com.smartwf.sm.modules.admin.vo;
 import java.util.Date;
 import java.util.List;
 
-import com.smartwf.sm.modules.admin.pojo.Resouce;
+import com.smartwf.sm.modules.admin.pojo.Resource;
 
 import lombok.Data;
 @Data
-public class ResouceVO extends Resouce{
+public class ResourceVO extends Resource{
 	
 	/**
 	 * 
@@ -20,6 +20,6 @@ public class ResouceVO extends Resouce{
 	
 	private Date endTime;//结束时间
 	
-	private List<ResouceVO> children;//封装树形结构
+	private List<ResourceVO> children;//封装树形结构
 
 }

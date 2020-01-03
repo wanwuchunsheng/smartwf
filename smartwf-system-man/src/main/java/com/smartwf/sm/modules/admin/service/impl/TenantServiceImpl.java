@@ -151,7 +151,7 @@ public class TenantServiceImpl implements TenantService{
 			//删除权限表
 			this.tenantDao.deletePermissionByTenantId(bean);
 			//删除资源表
-			this.tenantDao.deleteResouceByTenantId(bean);
+			this.tenantDao.deleteResourceByTenantId(bean);
 			//删除用户操作表
 			this.tenantDao.deleteUserActionByTenantId(bean);
 		}else {
@@ -183,7 +183,7 @@ public class TenantServiceImpl implements TenantService{
 				//删除权限表
 				this.tenantDao.deletePermissionByTenantIds(list);
 				//删除资源表
-				this.tenantDao.deleteResouceByTenantIds(list);
+				this.tenantDao.deleteResourceByTenantIds(list);
 				//删除用户操作表
 				this.tenantDao.deleteUserActionByTenantIds(list);
 			}

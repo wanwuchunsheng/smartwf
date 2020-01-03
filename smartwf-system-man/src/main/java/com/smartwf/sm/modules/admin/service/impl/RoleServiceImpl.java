@@ -22,7 +22,7 @@ import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.RoleDao;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Post;
-import com.smartwf.sm.modules.admin.pojo.Resouce;
+import com.smartwf.sm.modules.admin.pojo.Resource;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.RoleService;

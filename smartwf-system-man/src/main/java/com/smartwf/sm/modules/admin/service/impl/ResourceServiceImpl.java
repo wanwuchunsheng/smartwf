@@ -17,10 +17,10 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.sm.modules.admin.dao.PermissionDao;
-import com.smartwf.sm.modules.admin.dao.ResouceDao;
-import com.smartwf.sm.modules.admin.pojo.Resouce;
-import com.smartwf.sm.modules.admin.service.ResouceService;
-import com.smartwf.sm.modules.admin.vo.ResouceVO;
+import com.smartwf.sm.modules.admin.dao.ResourceDao;
+import com.smartwf.sm.modules.admin.pojo.Resource;
+import com.smartwf.sm.modules.admin.service.ResourceService;
+import com.smartwf.sm.modules.admin.vo.ResourceVO;
 
 import lombok.extern.log4j.Log4j;
 /**
@@ -30,10 +30,10 @@ import lombok.extern.log4j.Log4j;
  */
 @Service
 @Log4j
-public class ResouceServiceImpl implements ResouceService{
+public class ResourceServiceImpl implements ResourceService{
 	
 	@Autowired
-	private ResouceDao resouceDao;
+	private ResourceDao resourceDao;
 	
 	@Autowired
 	private PermissionDao permissionDao;
@@ -43,8 +43,8 @@ public class ResouceServiceImpl implements ResouceService{
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectResouceByPage(Page<Resouce> page, ResouceVO bean) {
-		QueryWrapper<Resouce> queryWrapper = new QueryWrapper<>();
+	public Result<?> selectResourceByPage(Page<Resource> page, ResourceVO bean) {
+		QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
 		queryWrapper.orderByDesc("update_time"); //降序
 		//子系统
   		if (null!=bean.getId()) { 
@@ -70,7 +70,7 @@ public class ResouceServiceImpl implements ResouceService{
         if (!StringUtils.isEmpty(bean.getRemark())) {
         	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
-		IPage<Resouce> list=this.resouceDao.selectPage(page, queryWrapper);
+		IPage<Resource> list=this.resourceDao.selectPage(page, queryWrapper);
 		return Result.data(list.getTotal(), list.getRecords());
 	}
 	
@@ -79,8 +79,8 @@ public class ResouceServiceImpl implements ResouceService{
 	 * @return
 	 */
 	@Override
-	public Result<?> selectResouceByAll(ResouceVO bean) {
-		List<ResouceVO> list=this.resouceDao.selectResouceByAll(bean);
+	public Result<?> selectResourceByAll(ResourceVO bean) {
+		List<ResourceVO> list=this.resourceDao.selectResourceByAll(bean);
 		return Result.data( buildByRecursive(list));
 	}
 	
@@ -89,9 +89,9 @@ public class ResouceServiceImpl implements ResouceService{
 	* @param treeNodes
 	* @return
 	*/
-	public static List<ResouceVO> buildByRecursive(List<ResouceVO> treeNodes) {
-		List<ResouceVO> trees = new ArrayList<ResouceVO>();
-		for (ResouceVO treeNode : treeNodes) {
+	public static List<ResourceVO> buildByRecursive(List<ResourceVO> treeNodes) {
+		List<ResourceVO> trees = new ArrayList<ResourceVO>();
+		for (ResourceVO treeNode : treeNodes) {
 			 if (treeNode.getUid()==0) {
 			     trees.add(findChildren(treeNode,treeNodes));
 			 }
@@ -104,11 +104,11 @@ public class ResouceServiceImpl implements ResouceService{
 	* @param treeNodes
 	* @return
 	*/
-	public static ResouceVO findChildren(ResouceVO treeNode,List<ResouceVO> treeNodes) {
-		for (ResouceVO it : treeNodes) {
+	public static ResourceVO findChildren(ResourceVO treeNode,List<ResourceVO> treeNodes) {
+		for (ResourceVO it : treeNodes) {
 			 if(treeNode.getId().equals(it.getUid())) {
 			     if (treeNode.getChildren() == null) {
-			         treeNode.setChildren(new ArrayList<ResouceVO>());
+			         treeNode.setChildren(new ArrayList<ResourceVO>());
 			     }
 			     treeNode.getChildren().add(findChildren(it,treeNodes));
 			 }
@@ -121,9 +121,9 @@ public class ResouceServiceImpl implements ResouceService{
      * @return
      */
 	@Override
-	public Result<?> selectResouceById(Resouce bean) {
-		ResouceVO resouce= this.resouceDao.selecResoucetById(bean);
-		return Result.data(resouce);
+	public Result<?> selectResourceById(Resource bean) {
+		ResourceVO Resource= this.resourceDao.selecResourcetById(bean);
+		return Result.data(Resource);
 	}
 	
 	/**
@@ -131,7 +131,7 @@ public class ResouceServiceImpl implements ResouceService{
      * @return
      */
 	@Override
-	public void saveResouce(Resouce bean) {
+	public void saveResource(Resource bean) {
 		//添加创建人基本信息
 		User user=UserThreadLocal.getUser();
 		bean.setCreateTime(new Date());
@@ -141,7 +141,7 @@ public class ResouceServiceImpl implements ResouceService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
-		this.resouceDao.insert(bean);
+		this.resourceDao.insert(bean);
 	}
 
 	/**
@@ -149,14 +149,14 @@ public class ResouceServiceImpl implements ResouceService{
      * @return
      */
 	@Override
-	public void updateResouce(Resouce bean) {
+	public void updateResource(Resource bean) {
 		//添加修改人信息
 		User user=UserThreadLocal.getUser();
 		bean.setUpdateTime(new Date());
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		//修改
-		this.resouceDao.updateById(bean);
+		this.resourceDao.updateById(bean);
 	}
 
 	/**
@@ -165,11 +165,11 @@ public class ResouceServiceImpl implements ResouceService{
      */
 	@Transactional
 	@Override
-	public void deleteResouce(ResouceVO bean) {
+	public void deleteResource(ResourceVO bean) {
 		//id判断正负值(正：删除资源 负：删除权限表)
 		if(bean.getId()>0){
 			//删除资源
-			this.resouceDao.deleteById(bean);
+			this.resourceDao.deleteById(bean);
 		}else {
 			//删除权限
 			this.permissionDao.deleteById(bean);
@@ -181,8 +181,8 @@ public class ResouceServiceImpl implements ResouceService{
      * @return
      */
 	@Override
-	public List<Resouce> queryResouceAll() {
-		return this.resouceDao.queryResouceAll();
+	public List<Resource> queryResourceAll() {
+		return this.resourceDao.queryResourceAll();
 	}
 	
 	/**
@@ -190,8 +190,8 @@ public class ResouceServiceImpl implements ResouceService{
 	 * @return
 	 */
 	@Override
-	public Result<?> selectResouceByPid(ResouceVO bean) {
-		List<Resouce> list=this.resouceDao.selectResouceByPid(bean);
+	public Result<?> selectResourceByPid(ResourceVO bean) {
+		List<Resource> list=this.resourceDao.selectResourceByPid(bean);
 		return Result.data(list);
 	}
 	

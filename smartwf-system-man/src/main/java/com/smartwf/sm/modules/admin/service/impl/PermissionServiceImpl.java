@@ -9,20 +9,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.sm.modules.admin.dao.PermissionDao;
-import com.smartwf.sm.modules.admin.dao.ResouceDao;
+import com.smartwf.sm.modules.admin.dao.ResourceDao;
 import com.smartwf.sm.modules.admin.dao.UserActionDao;
 import com.smartwf.sm.modules.admin.pojo.Permission;
-import com.smartwf.sm.modules.admin.pojo.Resouce;
+import com.smartwf.sm.modules.admin.pojo.Resource;
 import com.smartwf.sm.modules.admin.pojo.UserAction;
 import com.smartwf.sm.modules.admin.service.PermissionService;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
-import com.smartwf.sm.modules.admin.vo.ResouceVO;
+import com.smartwf.sm.modules.admin.vo.ResourceVO;
 import com.smartwf.sm.modules.admin.vo.UserActionVO;
 
 import lombok.extern.log4j.Log4j;
@@ -39,7 +38,7 @@ public class PermissionServiceImpl implements PermissionService{
 	private PermissionDao permissionDao;
 	
 	@Autowired
-	private ResouceDao resouceDao;
+	private ResourceDao resourceDao;
 	
 	@Autowired
 	private UserActionDao userActionDao;
@@ -49,8 +48,8 @@ public class PermissionServiceImpl implements PermissionService{
 	 * @return
 	 */
 	@Override
-	public Result<?> selectResouceByPid(ResouceVO bean) {
-		List<Resouce> list=this.resouceDao.selectResouceByPid(bean);
+	public Result<?> selectResourceByPid(ResourceVO bean) {
+		List<Resource> list=this.resourceDao.selectResourceByPid(bean);
 		return Result.data(list);
 	}
 
@@ -61,9 +60,9 @@ public class PermissionServiceImpl implements PermissionService{
 	@Override
 	public Result<?> selectPermissionByPage( PermissionVO bean) {
 		//全部资源
-		List<ResouceVO> resList=this.permissionDao.selectResouceByAll(bean);
+		List<ResourceVO> resList=this.permissionDao.selectResourceByAll(bean);
 		//返回集合
-		List<ResouceVO> list=buildByRecursive(resList);
+		List<ResourceVO> list=buildByRecursive(resList);
 		return Result.data(list);
 	}
 	
@@ -72,9 +71,9 @@ public class PermissionServiceImpl implements PermissionService{
      * @param treeNodes
      * @return
      */
-    public static List<ResouceVO> buildByRecursive(List<ResouceVO> treeNodes) {
-        List<ResouceVO> trees = new ArrayList<ResouceVO>();
-        for (ResouceVO treeNode : treeNodes) {
+    public static List<ResourceVO> buildByRecursive(List<ResourceVO> treeNodes) {
+        List<ResourceVO> trees = new ArrayList<ResourceVO>();
+        for (ResourceVO treeNode : treeNodes) {
             if (treeNode.getUid()==0) {
                 trees.add(findChildren(treeNode,treeNodes));
             }
@@ -87,11 +86,11 @@ public class PermissionServiceImpl implements PermissionService{
      * @param treeNodes
      * @return
      */
-    public static ResouceVO findChildren(ResouceVO treeNode,List<ResouceVO> treeNodes) {
-        for (ResouceVO it : treeNodes) {
+    public static ResourceVO findChildren(ResourceVO treeNode,List<ResourceVO> treeNodes) {
+        for (ResourceVO it : treeNodes) {
             if(treeNode.getId().equals(it.getUid())) {
                 if (treeNode.getChildren() == null) {
-                    treeNode.setChildren(new ArrayList<ResouceVO>());
+                    treeNode.setChildren(new ArrayList<ResourceVO>());
                 }
                 treeNode.getChildren().add(findChildren(it,treeNodes));
             }
@@ -149,8 +148,8 @@ public class PermissionServiceImpl implements PermissionService{
 	 * @return
 	 */
 	@Override
-	public Result<?> selectResouceUserActByPage(PermissionVO bean) {
-		List<ResouceVO> list=this.resouceDao.selectResouceUserActByPage(bean);
+	public Result<?> selectResourceUserActByPage(PermissionVO bean) {
+		List<ResourceVO> list=this.resourceDao.selectResourceUserActByPage(bean);
 		return Result.data(list);
 	}
 

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.smartwf.sm.modules.admin.dao.ResouceDao" >
+<mapper namespace="com.smartwf.sm.modules.admin.dao.ResourceDao" >
 
      
     <!-- 批量删除资源 -->
-    <delete id="deleteResouceByIds" parameterType = "java.util.List">
+    <delete id="deleteResourceByIds" parameterType = "java.util.List">
 	    delete 
-	       from sys_resouce
+	       from sys_resource
 	    where id in
 	    <foreach collection="list" item="item" open="(" separator="," close=")">
 	        #{item}
@@ -14,20 +14,20 @@
 	</delete>
 	
 	<!-- 批量删除子系统下的所有资源 -->
-    <delete id="deleteResouceByfid" parameterType = "com.smartwf.sm.modules.admin.pojo.Resouce">
-	    delete from sys_resouce where id in (
-		   select id from ( select id from sys_resouce where fid= #{bean.id} ) h
+    <delete id="deleteResourceByfid" parameterType = "com.smartwf.sm.modules.admin.pojo.Resource">
+	    delete from sys_resource where id in (
+		   select id from ( select id from sys_resource where fid= #{bean.id} ) h
 		)
 	</delete>
 	
 	<!-- 批量删除子系统下的所有资源 -->
-    <delete id="deleteResouceById" parameterType = "com.smartwf.sm.modules.admin.pojo.Resouce">
-	    delete from sys_resouce where uid = #{bean.id}
+    <delete id="deleteResourceById" parameterType = "com.smartwf.sm.modules.admin.pojo.Resource">
+	    delete from sys_resource where uid = #{bean.id}
 	</delete>
 	
     
     <!-- 查询模块下所以子模块 -->
-    <select id="selectResouceById" parameterType="com.smartwf.sm.modules.admin.pojo.Resouce">
+    <select id="selectResourceById" parameterType="com.smartwf.sm.modules.admin.pojo.Resource">
         select 
 	        id,
 			pid,
@@ -42,12 +42,12 @@
 			remark,
 			tenant_id,
 			enable
-		from sys_resouce
+		from sys_resource
         where res_type=2 and uid = #{bean.id}
     </select>
     
     <!-- 初始化资源 -->
-    <select id="queryResouceAll" resultType="com.smartwf.sm.modules.admin.pojo.Resouce">
+    <select id="queryResourceAll" resultType="com.smartwf.sm.modules.admin.pojo.Resource">
         select 
 	        id,
 			pid,
@@ -62,12 +62,12 @@
 			remark,
 			tenant_id,
 			enable
-		from sys_resouce
+		from sys_resource
         where enable=0
     </select>
     
     <!-- 查询用户操作和资源 -->
-    <select id="selectResouceUserActByPage" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
+    <select id="selectResourceUserActByPage" resultType="com.smartwf.sm.modules.admin.vo.ResourceVO">
         select 
 			b.ids,
 			f.id,
@@ -83,7 +83,7 @@
 			f.remark,
 			f.tenant_id,
 			f.enable 
-		from sys_resouce f left join (
+		from sys_resource f left join (
 		  select 
 		     group_concat( c.id separator ',' ) as ids, d.res_id, d.tenant_id 
 		  from sys_user_action c, sys_permission d 
@@ -95,7 +95,7 @@
     </select>
     
     <!-- 查询资源子系统列表 -->
-    <select id="selectResouceByPid" resultType="com.smartwf.sm.modules.admin.pojo.Resouce">
+    <select id="selectResourceByPid" resultType="com.smartwf.sm.modules.admin.pojo.Resource">
         select 
 			id,
 			pid,
@@ -116,12 +116,12 @@
 			update_time,
 			update_user_id,
 			update_user_name
-		from sys_resouce
+		from sys_resource
 		where pid=0 and uid=0 and tenant_id = #{bean.tenantId}
     </select>
     
     <!-- 查询所有资源数据 -->
-    <select id="selectResouceByAll" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
+    <select id="selectResourceByAll" resultType="com.smartwf.sm.modules.admin.vo.ResourceVO">
         select 
 	        id,
 			pid,
@@ -136,7 +136,7 @@
 			remark,
 			tenant_id,
 			enable
-		from sys_resouce
+		from sys_resource
         where 1=1
         <if test="bean.tenantId != null ">
             and tenant_id= #{bean.tenantId}
@@ -162,7 +162,7 @@
 			b.tenant_id,
 			b.enable
 		from sys_permission a 
-		left join sys_resouce b on a.res_id=b.id
+		left join sys_resource b on a.res_id=b.id
 		left join sys_user_action c on a.act_id = c.id
 		where a.tenant_id=b.tenant_id and a.tenant_id=c.tenant_id
 		<if test="bean.tenantId != null ">
@@ -174,7 +174,7 @@
     </select>
     
     <!-- 主键查询 -->
-    <select id="selecResoucetById" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
+    <select id="selecResourcetById" resultType="com.smartwf.sm.modules.admin.vo.ResourceVO">
         select 
 		   (select GROUP_CONCAT(act_id order by act_id) from sys_permission where res_id=a.id group by res_id) as ids,
 			a.id,
@@ -196,7 +196,7 @@
 			a.update_time,
 			a.update_user_id,
 			a.update_user_name
-		from sys_resouce a
+		from sys_resource a
 		where a.id = #{bean.id}
     </select>
     

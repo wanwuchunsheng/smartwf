@@ -54,8 +54,8 @@
 	    delete from sys_permission where tenant_id = #{bean.id}
 	</delete>
 	<!-- 删除资源表 -->
-    <delete id="deleteResouceByTenantId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
-	    delete from sys_resouce where tenant_id = #{bean.id}
+    <delete id="deleteResourceByTenantId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
+	    delete from sys_resource where tenant_id = #{bean.id}
 	</delete>
 	<!-- 删除用户操作表 -->
     <delete id="deleteUserActionByTenantId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
@@ -127,8 +127,8 @@
 	    </foreach>
 	</delete>
 	<!-- 批量删除资源表 -->
-    <delete id="deleteResouceByTenantIds" parameterType = "java.util.List">
-	    delete from sys_resouce where tenant_id in
+    <delete id="deleteResourceByTenantIds" parameterType = "java.util.List">
+	    delete from sys_resource where tenant_id in
 	    <foreach collection="list" item="item" open="(" separator="," close=")">
 	        #{item}
 	    </foreach>

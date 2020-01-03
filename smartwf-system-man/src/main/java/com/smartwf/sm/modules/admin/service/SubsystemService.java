@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.sm.modules.admin.pojo.Resouce;
-import com.smartwf.sm.modules.admin.vo.ResouceVO;
+import com.smartwf.sm.modules.admin.pojo.Resource;
+import com.smartwf.sm.modules.admin.vo.ResourceVO;
 
 /**
  * @Description: 子系统业务层接口
@@ -18,31 +18,31 @@ public interface SubsystemService {
 	 * @Description: 查询子系统分页
 	 * @result: 
 	 */
-	Result<?> selectSubsystemByPage(Page<Resouce> page, ResouceVO bean);
+	Result<?> selectSubsystemByPage(Page<Resource> page, ResourceVO bean);
 
 	/**
      * @Description: 主键查询子系统
      * @return
      */
-	Result<?> selectSubsystemById(Resouce bean);
+	Result<?> selectSubsystemById(Resource bean);
 
 	/**
      * @Description： 添加子系统
      * @return
      */
-	void saveSubsystem(Resouce bean);
+	void saveSubsystem(Resource bean);
 	
 	/**
      * @Description： 修改子系统
      * @return
      */
-	void updateSubsystem(Resouce bean);
+	void updateSubsystem(Resource bean);
 
 	/**
      * @Description： 删除子系统
      * @return
      */
-	void deleteSubsystem(ResouceVO bean);
+	void deleteSubsystem(ResourceVO bean);
 	
 	
 	

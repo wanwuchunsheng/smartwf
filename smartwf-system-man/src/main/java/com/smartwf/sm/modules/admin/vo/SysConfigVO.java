@@ -2,7 +2,7 @@ package com.smartwf.sm.modules.admin.vo;
 
 import java.util.Date;
 
-import com.smartwf.sm.modules.admin.pojo.Resouce;
+import com.smartwf.sm.modules.admin.pojo.Resource;
 import com.smartwf.sm.modules.admin.pojo.SysConfig;
 
 import lombok.Data;

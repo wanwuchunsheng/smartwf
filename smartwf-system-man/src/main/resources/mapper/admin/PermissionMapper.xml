@@ -3,7 +3,7 @@
 <mapper namespace="com.smartwf.sm.modules.admin.dao.PermissionDao" >
 
     <!-- 查询权限集合-->
-    <select id="selectPermissionByAll" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
+    <select id="selectPermissionByAll" resultType="com.smartwf.sm.modules.admin.vo.ResourceVO">
         select 
 			a.id as permission_id,
 			a.permission_code,
@@ -21,7 +21,7 @@
 			b.remark,
 			b.tenant_id
 		from sys_permission a 
-		left join sys_resouce b on a.res_id=b.id
+		left join sys_resource b on a.res_id=b.id
 		left join sys_user_action c on a.act_id = c.id
 		where a.tenant_id=b.tenant_id and a.tenant_id=c.tenant_id
 		and b.enable=0 and c.enable=0 
@@ -31,7 +31,7 @@
     </select>
     
     <!-- 查询所有启用资源 -->
-    <select id="selectResouceByAll" resultType="com.smartwf.sm.modules.admin.vo.ResouceVO">
+    <select id="selectResourceByAll" resultType="com.smartwf.sm.modules.admin.vo.ResourceVO">
        select 
 			(-a.id) as id,
 			b.pid,
@@ -46,7 +46,7 @@
 			b.remark,
 			b.tenant_id
 		from sys_permission a 
-		left join sys_resouce b on a.res_id=b.id
+		left join sys_resource b on a.res_id=b.id
 		left join sys_user_action c on a.act_id = c.id
 		where a.tenant_id=b.tenant_id and a.tenant_id=c.tenant_id
 		and b.enable=0 and c.enable=0 
@@ -72,13 +72,13 @@
 			permission,
 			remark,
 			tenant_id
-		from sys_resouce
+		from sys_resource
 		where enable=0
 		and pid in (
 				select 
 					b.pid
 				from sys_permission a 
-				left join sys_resouce b on a.res_id=b.id
+				left join sys_resource b on a.res_id=b.id
 				left join sys_user_action c on a.act_id = c.id
 				where a.tenant_id=b.tenant_id and a.tenant_id=c.tenant_id
 				and b.enable=0 and c.enable=0 group by b.pid
@@ -86,7 +86,7 @@
 		        select 
 					b.pid
 				from sys_permission a 
-				left join sys_resouce b on a.res_id=b.id
+				left join sys_resource b on a.res_id=b.id
 				left join sys_user_action c on a.act_id = c.id
 				where a.tenant_id=b.tenant_id and a.tenant_id=c.tenant_id
 				and b.enable=0 and c.enable=0 group by b.pid

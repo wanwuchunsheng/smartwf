@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.sm.modules.admin.pojo.Resouce;
+import com.smartwf.sm.modules.admin.pojo.Resource;
 import com.smartwf.sm.modules.admin.service.SubsystemService;
-import com.smartwf.sm.modules.admin.vo.ResouceVO;
+import com.smartwf.sm.modules.admin.vo.ResourceVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -55,7 +55,7 @@ public class SubsystemController {
             @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectSubsystemByPage(Page<Resouce> page, ResouceVO bean) {
+    public ResponseEntity<Result<?>> selectSubsystemByPage(Page<Resource> page, ResourceVO bean) {
         try {
             Result<?> result = this.subsystemService.selectSubsystemByPage(page, bean);
             if (result != null) {
@@ -77,7 +77,7 @@ public class SubsystemController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int",required = true)
     })
-    public ResponseEntity<Result<?>> selectSubsystemById(Resouce bean) {
+    public ResponseEntity<Result<?>> selectSubsystemById(Resource bean) {
         try {
             Result<?> result = this.subsystemService.selectSubsystemById(bean);
             if (result != null) {
@@ -103,7 +103,7 @@ public class SubsystemController {
 	        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-默认启用 1-禁用）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
-    public ResponseEntity<Result<?>> saveSubsystem(HttpSession session,Resouce bean) {
+    public ResponseEntity<Result<?>> saveSubsystem(HttpSession session,Resource bean) {
         try {
     		this.subsystemService.saveSubsystem(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
@@ -128,7 +128,7 @@ public class SubsystemController {
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改子系统", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updateSubsystem(Resouce bean) {
+    public ResponseEntity<Result<?>> updateSubsystem(Resource bean) {
         try {
             this.subsystemService.updateSubsystem(bean);
             return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
@@ -150,7 +150,7 @@ public class SubsystemController {
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
     @TraceLog(content = "删除子系统系统用户", paramIndexs = {0})
-    public ResponseEntity<Result<?>> deleteSubsystem(ResouceVO bean) {
+    public ResponseEntity<Result<?>> deleteSubsystem(ResourceVO bean) {
         try {
         	this.subsystemService.deleteSubsystem(bean);
             return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
