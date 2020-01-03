@@ -90,7 +90,7 @@ public class ResouceController {
 	 * @Description: 查询所有资源，树形结构
 	 * @return
 	 */
-    @GetMapping("selectResouceByAll")
+    @GetMapping("selectResouceByPage")
     @ApiOperation(value = "树形查询所有数据接口", notes = "查询资源所有数据，树形结构")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
