@@ -98,7 +98,7 @@ public class ResouceController {
     	    @ApiImplicitParam(paramType = "query", name = "resCode", value = "资源编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "resName", value = "资源名称", dataType = "String")
     })
-    public ResponseEntity<Result<?>> selectResouceByAll( ResouceVO bean) {
+    public ResponseEntity<Result<?>> selectResouceByPage( ResouceVO bean) {
         try {
             Result<?> result = this.resouceService.selectResouceByAll( bean);
             if (result != null) {

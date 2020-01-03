@@ -85,7 +85,7 @@ public class OrganizationController {
             @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", dataType = "Date")
     })
-    public ResponseEntity<Result<?>> selectOrganizationByAll(OrganizationVO bean) {
+    public ResponseEntity<Result<?>> selectOrganizationByPage(OrganizationVO bean) {
         try {
             Result<?> result = this.organizationService.selectOrganizationByAll(bean);
             if (result != null) {
