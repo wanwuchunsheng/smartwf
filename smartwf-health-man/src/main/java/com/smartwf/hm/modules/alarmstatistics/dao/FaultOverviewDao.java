@@ -46,6 +46,13 @@ public interface FaultOverviewDao extends BaseMapper<FaultInformation> {
 	 * @return
 	 */
 	List<FaultInformationVO> selectFaultTypeByDefect(@Param("bean") FaultInformationVO bean);
+	/**
+	 * @Description: 故障等级分布统计 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	List<FaultInformationVO> selectFaultDistrByDate(FaultInformationVO bean);
 
 
     

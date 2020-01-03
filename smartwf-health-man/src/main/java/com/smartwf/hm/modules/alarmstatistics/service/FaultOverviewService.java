@@ -16,6 +16,13 @@ public interface FaultOverviewService {
 	 * @return
 	 */
 	Result<?> selectFaultTypeByDate( FaultInformationVO bean);
+	/**
+	 * @Description: 故障等级分布统计 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	Result<?> selectFaultDistrByDate(FaultInformationVO bean);
 
 
 }

@@ -42,7 +42,6 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		List<FaultInformationVO> alarm= this.faultOverviewDao.selectFaultTypeByAlarm(bean);
 		//2统计缺陷
 		List<FaultInformationVO> defect= this.faultOverviewDao.selectFaultTypeByDefect(bean);
-		
 		//封装故障
 		if(fault!=null && fault.size()>0) {
 			master =new String[fault.size()][2];
@@ -86,6 +85,39 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 			fr = new HashMap<String,Object>();
 			fr.put("id", 2);
 			fr.put("name", "缺陷");
+			fr.put("data",master);
+			list.add(fr);
+		}
+		//返回结果
+		return Result.data(list);
+	}
+
+	
+	/**
+	 * @Description: 故障等级分布统计 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@Override
+	public Result<?> selectFaultDistrByDate(FaultInformationVO bean) {
+		List<Map<String,Object>> list=new ArrayList<>();
+		Map<String,Object> fr=null;
+		String[][] master=null;
+		//1查询故障分布统计数据
+		List<FaultInformationVO> fault= this.faultOverviewDao.selectFaultDistrByDate(bean);
+		//2故障分布统计数据封装
+		if(fault!=null && fault.size()>0) {
+			master =new String[fault.size()][2];
+			int i = 0; 
+			for(FaultInformationVO fivo:fault ) {
+				master[i][0]=fivo.getFname();
+				master[i][1]=fivo.getFvalue();
+				i++;
+			}
+			fr = new HashMap<String,Object>();
+			fr.put("id", 1);
+			fr.put("name", "故障分布统计");
 			fr.put("data",master);
 			list.add(fr);
 		}
