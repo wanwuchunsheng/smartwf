@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.hm.modules.alarmstatistics.dao.FaultOverviewDao" >
+
+    
+    <!-- 统计故障 -->
+    <select id="selectFaultTypeByFault" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+       select a.fname,count(a.fname) as fvalue from (
+			select 
+				date_format(start_time,'%Y-%m-%d') as fname
+			from fault_information 
+			where fault_type=0
+			and start_time between #{bean.startTime} and #{bean.endTime}
+		) a
+		group by a.fname order by fname asc
+    </select>
+    
+    <!-- 统计报警 -->
+    <select id="selectFaultTypeByAlarm" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+       select a.fname,count(a.fname) as fvalue from (
+			select 
+				date_format(start_time,'%Y-%m-%d') as fname
+			from fault_information 
+			where fault_type=1
+			and start_time between #{bean.startTime} and #{bean.endTime}
+		) a
+		group by a.fname order by fname asc
+    </select>
+    
+    <!-- 统计缺陷 -->
+    <select id="selectFaultTypeByDefect" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+       select a.fname,count(a.fname) as fvalue from (
+			select 
+				date_format(start_time,'%Y-%m-%d') as fname
+			from fault_information 
+			where fault_type=2
+			and start_time between #{bean.startTime} and #{bean.endTime}
+		) a
+		group by a.fname order by fname asc
+    </select>
+    
+   
+</mapper>

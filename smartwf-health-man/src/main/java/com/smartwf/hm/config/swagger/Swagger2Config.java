@@ -56,7 +56,7 @@ public class Swagger2Config {
                 .globalOperationParameters(pars)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.windmagics.smartwf"))
+                .apis(RequestHandlerSelectors.basePackage("com.smartwf.hm"))
                 .paths(PathSelectors.any())
                 .build();
     }
