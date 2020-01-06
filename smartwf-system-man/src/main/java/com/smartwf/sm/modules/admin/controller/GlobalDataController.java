@@ -241,13 +241,13 @@ public class GlobalDataController {
     
     /**
      * @Description 获取数据字典基础数据列表
-     * @param flushType 0全部 1租户 2组织机构 3职务  4数据字典
+     * @param flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色
      * @return
      */
     @GetMapping("flushCacheAll")
     @ApiOperation(value = "刷新缓存接口", notes = "刷新缓存信息")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "flushType", value = "刷新类型,可字符串拼接（0全部 1租户 2组织机构 3职务  4数据字典 ）", dataType = "String", required = true)
+    	@ApiImplicitParam(paramType = "query", name = "flushType", value = "刷新类型,可字符串拼接（0全部 1租户 2组织机构 3职务  4数据字典 5角色）", dataType = "String", required = true)
     })
     public ResponseEntity<Result<?>> flushCache(GlobalData bean) {
         try {
@@ -265,27 +265,37 @@ public class GlobalDataController {
     		                	this.redisService.set("initPost", JSON.toJSONString(this.postService.initPostDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
     		                	this.redisService.set("initRole", JSON.toJSONString(this.roleService.initRoleDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
     		                	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.InitDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
-    							break;
+    		                	log.info("租户数据{}",redisService.get("initTenant"));
+    		                	log.info("组织机构数据{}",redisService.get("initOrganization"));
+    		                	log.info("职务基础数据{}",redisService.get("initPost"));
+    		                	log.info("角色基础数据{}",redisService.get("initRole"));
+    		                	log.info("数据字典数据{}",redisService.get("initDictionary"));
+    		                	break;
     						case "1":
     							//租户
     							this.redisService.set("initTenant", JSON.toJSONString(tenantList));
+    							log.info("租户数据{}",redisService.get("initTenant"));
     							break;
     						case "2":
     							//组织机构
     							this.redisService.set("initOrganization",JSON.toJSONString(this.organizationService.initOrganizationDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
-    		                	break;	
+    							log.info("组织机构数据{}",redisService.get("initOrganization"));
+    							break;	
     						case "3":
     							//职务
     							this.redisService.set("initPost", JSON.toJSONString(this.postService.initPostDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
-    		                	break;
+                                log.info("职务基础数据{}",redisService.get("initPost"));
+    							break;
     						case "4":
     							//数据字典
     		                	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.InitDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
-    							break;
+                                log.info("角色基础数据{}",redisService.get("initRole"));
+    		                	break;
     						case "5":
     							//角色
     							this.redisService.set("initRole", JSON.toJSONString(this.roleService.initRoleDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
-    		                	break;
+    							log.info("数据字典数据{}",redisService.get("initDictionary"));
+    							break;
     						default:
     							break;
     					}

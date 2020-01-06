@@ -108,15 +108,24 @@ public class TenantServiceImpl implements TenantService{
 		}
 		this.tenantDao.insert(bean);
 		//3）批量添加新租户数据字典（从默认租户拷贝的数据字典）
-		if(org.springframework.util.StringUtils.isEmpty(dict)) {
+		if( null !=dict) {
 			QueryWrapper<Dictionary> queryWrapper2 = new QueryWrapper<>();
 			queryWrapper2.eq("tenant_id", dict.getId());
 			List<Dictionary> list=this.dictionaryDao.selectList(queryWrapper2);
 			if(list!=null && list.size()>0){
 				int tenantId=bean.getId();
 				for(Dictionary dt: list) {
-					dt.setTenantId(tenantId);
-					dictionaryDao.insert(dt);
+					if(0==dt.getUid()) {
+						dt.setTenantId(tenantId);
+						dictionaryDao.insert(dt);
+						for(Dictionary udt: list) {
+							if(dt.getDictCode().equals(udt.getDictCode()) && 0!=udt.getUid()) {
+								udt.setTenantId(tenantId);
+								udt.setUid(dt.getId());
+								dictionaryDao.insert(udt);
+							}
+						}
+					}
 				}
 			}
 		}

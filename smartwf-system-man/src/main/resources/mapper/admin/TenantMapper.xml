@@ -62,7 +62,7 @@
 	    delete from sys_user_action where tenant_id = #{bean.id}
 	</delete>
 	<!-- 删除数据字典表 -->
-    <delete id="deleteUserActionByTenantId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
+    <delete id="deleteDictionaryByTenantId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
 	    delete from sys_dict_data where tenant_id = #{bean.id}
 	</delete>
 	
