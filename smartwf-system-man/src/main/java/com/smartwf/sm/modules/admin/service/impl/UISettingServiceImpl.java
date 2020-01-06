@@ -41,6 +41,10 @@ public class UISettingServiceImpl implements UISettingService{
 	public Result<?> selectUISettingByPage(Page<SysConfig> page, SysConfigVO bean) {
 		QueryWrapper<SysConfig> queryWrapper = new QueryWrapper<>();
 		queryWrapper.orderByDesc("update_time"); //降序
+  	    //租户
+  		if (null!=bean.getTenantId() ) { 
+  			queryWrapper.eq("tenant_id", bean.getTenantId()); 
+  		}
         //是否系统内置 0是 1否
   		if (null!=bean.getIsSys()) {
   			queryWrapper.eq("is_sys", bean.getIsSys());
