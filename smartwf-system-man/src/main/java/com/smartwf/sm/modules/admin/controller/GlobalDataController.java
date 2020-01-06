@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,16 +12,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.JsonUtil;
+import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
+import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.service.DictionaryService;
+import com.smartwf.sm.modules.admin.service.OrganizationService;
+import com.smartwf.sm.modules.admin.service.PostService;
+import com.smartwf.sm.modules.admin.service.RoleService;
+import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
 import io.swagger.annotations.Api;
@@ -41,6 +51,21 @@ public class GlobalDataController {
 	
 	@Autowired
     private RedisService redisService;
+	
+	@Autowired
+	private TenantService tenantService;
+	
+	@Autowired
+	private OrganizationService organizationService;
+	
+	@Autowired
+    private PostService postService;
+	
+	@Autowired
+    private RoleService roleService;
+	
+	@Autowired
+    private DictionaryService dictionaryService;
 
 	 /**
      * @Description 租户列表
@@ -213,7 +238,66 @@ public class GlobalDataController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("获取数据字典基础数据错误！"));
     }
-
+    
+    /**
+     * @Description 获取数据字典基础数据列表
+     * @param flushType 0全部 1租户 2组织机构 3职务  4数据字典
+     * @return
+     */
+    @GetMapping("flushCacheAll")
+    @ApiOperation(value = "刷新缓存接口", notes = "刷新缓存信息")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "flushType", value = "刷新类型,可字符串拼接（0全部 1租户 2组织机构 3职务  4数据字典 ）", dataType = "String", required = true)
+    })
+    public ResponseEntity<Result<?>> flushCache(GlobalData bean) {
+        try {
+        	//租户
+    		List<Tenant> tenantList=this.tenantService.InitTenantDatas();
+        	if(StringUtils.isNotBlank(bean.getFlushType())) {
+    	    	String flushTypes=StrUtils.regex(bean.getFlushType());
+    	    	if(StringUtils.isNotBlank(flushTypes)) {
+    	    		for(String val:flushTypes.split(",")) {
+    	    			switch (val) {
+    		    			case "0":
+    		    				//组织机构,职务,角色,数据字典
+    		    				this.redisService.set("initTenant", JSON.toJSONString(tenantList));
+    		                	this.redisService.set("initOrganization",JSON.toJSONString(this.organizationService.initOrganizationDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+    		                	this.redisService.set("initPost", JSON.toJSONString(this.postService.initPostDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+    		                	this.redisService.set("initRole", JSON.toJSONString(this.roleService.initRoleDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+    		                	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.InitDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+    							break;
+    						case "1":
+    							//租户
+    							this.redisService.set("initTenant", JSON.toJSONString(tenantList));
+    							break;
+    						case "2":
+    							//组织机构
+    							this.redisService.set("initOrganization",JSON.toJSONString(this.organizationService.initOrganizationDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+    		                	break;	
+    						case "3":
+    							//职务
+    							this.redisService.set("initPost", JSON.toJSONString(this.postService.initPostDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+    		                	break;
+    						case "4":
+    							//数据字典
+    		                	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.InitDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+    							break;
+    						case "5":
+    							//角色
+    							this.redisService.set("initRole", JSON.toJSONString(this.roleService.initRoleDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+    		                	break;
+    						default:
+    							break;
+    					}
+    	    		}
+    	    	}
+    	    }
+        } catch (Exception e) {
+            log.error("获取数据字典基础数据错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("刷新缓存完成！"));
+    }
+    
     /**
      * 使用递归方法建树
 	* @param treeNodes

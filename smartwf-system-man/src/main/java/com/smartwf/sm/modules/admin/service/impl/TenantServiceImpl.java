@@ -18,7 +18,9 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.GenerateUtils;
 import com.smartwf.common.utils.StrUtils;
+import com.smartwf.sm.modules.admin.dao.DictionaryDao;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
+import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
@@ -35,6 +37,9 @@ public class TenantServiceImpl implements TenantService{
 	
 	@Autowired
 	private TenantDao tenantDao;
+	
+	@Autowired
+	private DictionaryDao dictionaryDao;
 
 	/**
 	 * @Description:查询租户分页
@@ -85,7 +90,11 @@ public class TenantServiceImpl implements TenantService{
 	@Transactional
 	@Override
 	public void saveTenant(Tenant bean) {
-		//添加创建人基本信息
+		//1）查询默认租户
+		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("sel", 1);//默认租户：0-否  1-是
+		Tenant dict=this.tenantDao.selectOne(queryWrapper);
+		//2）添加新租户
 		User user=UserThreadLocal.getUser();
 		bean.setCreateTime(new Date());
 		bean.setCreateUserId(user.getId());
@@ -95,11 +104,22 @@ public class TenantServiceImpl implements TenantService{
 		bean.setUpdateUserName(bean.getCreateUserName());
 		bean.setTenantCode(GenerateUtils.getSelfIdByUUId());//生成唯一编号
 		if(bean.getSel().equals(Constants.ISSEL)) {
-			//置空默认租户
-			this.tenantDao.updateBySel();
+			this.tenantDao.updateBySel();//置空默认租户
 		}
-		//保存
 		this.tenantDao.insert(bean);
+		//3）批量添加新租户数据字典（从默认租户拷贝的数据字典）
+		if(org.springframework.util.StringUtils.isEmpty(dict)) {
+			QueryWrapper<Dictionary> queryWrapper2 = new QueryWrapper<>();
+			queryWrapper2.eq("tenant_id", dict.getId());
+			List<Dictionary> list=this.dictionaryDao.selectList(queryWrapper2);
+			if(list!=null && list.size()>0){
+				int tenantId=bean.getId();
+				for(Dictionary dt: list) {
+					dt.setTenantId(tenantId);
+					dictionaryDao.insert(dt);
+				}
+			}
+		}
 	}
 
 	/**
