@@ -154,6 +154,8 @@ public class TenantServiceImpl implements TenantService{
 			this.tenantDao.deleteResourceByTenantId(bean);
 			//删除用户操作表
 			this.tenantDao.deleteUserActionByTenantId(bean);
+			//删除数据字典
+			this.tenantDao.deleteDictionaryByTenantId(bean);
 		}else {
 			String ids=StrUtils.regex(bean.getIds());
 			//批量删除
@@ -186,6 +188,8 @@ public class TenantServiceImpl implements TenantService{
 				this.tenantDao.deleteResourceByTenantIds(list);
 				//删除用户操作表
 				this.tenantDao.deleteUserActionByTenantIds(list);
+				//删除数据字典
+				this.tenantDao.deleteDictionaryByTenantIds(list);
 			}
 		}
 	}

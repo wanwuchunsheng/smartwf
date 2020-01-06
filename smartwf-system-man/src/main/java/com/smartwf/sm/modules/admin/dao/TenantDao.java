@@ -53,6 +53,8 @@ public interface TenantDao extends BaseMapper<Tenant> {
 	void deleteResourceByTenantId(@Param("bean") TenantVO bean);
 
 	void deleteUserActionByTenantId(@Param("bean") TenantVO bean);
+	
+	void deleteDictionaryByTenantId(@Param("bean") TenantVO bean);
 
 	/**
 	 * @Description: 批量级联删除
@@ -79,6 +81,10 @@ public interface TenantDao extends BaseMapper<Tenant> {
 	void deleteResourceByTenantIds(@Param("list") List<String> list);
 
 	void deleteUserActionByTenantIds(@Param("list") List<String> list);
+
+	void deleteDictionaryByTenantIds(@Param("list") List<String> list);
+
+	
 
 	
 	

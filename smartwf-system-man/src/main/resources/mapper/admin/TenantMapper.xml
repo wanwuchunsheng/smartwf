@@ -61,6 +61,10 @@
     <delete id="deleteUserActionByTenantId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
 	    delete from sys_user_action where tenant_id = #{bean.id}
 	</delete>
+	<!-- 删除数据字典表 -->
+    <delete id="deleteUserActionByTenantId" parameterType = "com.smartwf.sm.modules.admin.vo.TenantVO">
+	    delete from sys_dict_data where tenant_id = #{bean.id}
+	</delete>
 	
 	<!-- 批量删除组织架构表-->
     <delete id="deleteOrgByTenantIds" parameterType = "java.util.List">
@@ -140,6 +144,12 @@
 	        #{item}
 	    </foreach>
 	</delete>
-
-   
+    <!-- 批量删除数据字典表 -->
+    <delete id="deleteDictionaryByTenantIds" parameterType = "java.util.List">
+	    delete from sys_dict_data where tenant_id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+	
 </mapper>
