@@ -96,4 +96,15 @@ public class FaultInformation implements Serializable{
 	 * 租户表id
 	 */
 	private String tenantCode;
+	
+	/**
+	 * 资产编码
+	 */
+	private String assetNumber;
+	
+	/**
+	 * 操作状态
+	 *  0-重点关注
+	 */
+	private Integer operatingStatus;
 }
