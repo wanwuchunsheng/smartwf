@@ -52,7 +52,7 @@ public interface FaultOverviewDao extends BaseMapper<FaultInformation> {
 	 * @param endTime
 	 * @return
 	 */
-	List<FaultInformationVO> selectFaultDistrByDate(FaultInformationVO bean);
+	List<FaultInformationVO> selectFaultLevelByDate(@Param("bean") FaultInformationVO bean);
 
 
     

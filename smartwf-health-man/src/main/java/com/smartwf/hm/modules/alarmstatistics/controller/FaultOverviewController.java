@@ -59,28 +59,28 @@ public class FaultOverviewController {
     
     
     /**
-	 * @Description: 故障等级分布统计 
+	 * @Description: 故障等级分布统计
 	 * @param startTime
 	 * @param endTime
 	 * @return
 	 */
-    @PostMapping("selectFaultDistrByDate")
-    @ApiOperation(value = "故障分布统计接口", notes = "故障分布计查询")
+    @PostMapping("selectFaultLevelByDate")
+    @ApiOperation(value = "故障等级分布统计接口", notes = "故障等级分布统计查询")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间", dataType = "Date", required = true ),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间", dataType = "Date", required = true )
     })
-    public ResponseEntity<Result<?>> selectFaultDistrByDate(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectFaultLevelByDate(FaultInformationVO bean) {
         try {
-            Result<?> result = this.faultOverviewService.selectFaultDistrByDate(bean);
+            Result<?> result = this.faultOverviewService.selectFaultLevelByDate(bean);
             if (result != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }
         } catch (Exception e) {
-            log.error("故障分布统计信息错误！{}", e.getMessage(), e);
+            log.error("故障等级分布统计信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障分布统计信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障等级分布统计信息错误！"));
     }
 
 }

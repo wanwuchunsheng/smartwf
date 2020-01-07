@@ -3,7 +3,7 @@
 <mapper namespace="com.smartwf.hm.modules.alarmstatistics.dao.FaultOverviewDao" >
 
     
-    <!-- 统计故障 -->
+    <!-- 故障 -->
     <select id="selectFaultTypeByFault" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
        select a.fname,count(a.fname) as fvalue from (
 			select 
@@ -11,11 +11,14 @@
 			from fault_information 
 			where fault_type=0
 			and start_time between #{bean.startTime} and #{bean.endTime}
+			<if test="bean.tenantCode != null ">
+                and tenant_code = #{bean.tenantCode}
+            </if>
 		) a
 		group by a.fname order by fname asc
     </select>
     
-    <!-- 统计报警 -->
+    <!-- 报警 -->
     <select id="selectFaultTypeByAlarm" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
        select a.fname,count(a.fname) as fvalue from (
 			select 
@@ -23,11 +26,14 @@
 			from fault_information 
 			where fault_type=1
 			and start_time between #{bean.startTime} and #{bean.endTime}
+			<if test="bean.tenantCode != null ">
+                and tenant_code = #{bean.tenantCode}
+            </if>
 		) a
 		group by a.fname order by fname asc
     </select>
     
-    <!-- 统计缺陷 -->
+    <!-- 缺陷 -->
     <select id="selectFaultTypeByDefect" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
        select a.fname,count(a.fname) as fvalue from (
 			select 
@@ -35,9 +41,30 @@
 			from fault_information 
 			where fault_type=2
 			and start_time between #{bean.startTime} and #{bean.endTime}
+			<if test="bean.tenantCode != null ">
+                and tenant_code = #{bean.tenantCode}
+            </if>
 		) a
 		group by a.fname order by fname asc
     </select>
     
-   
+    <!-- 故障等级 -->
+    <select id="selectFaultLevelByDate" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+       select a.fname,a.alarm_level,count(a.fname) as fvalue from (
+			select 
+				date_format(start_time,'%Y-%m-%d') as fname,
+				alarm_level
+			from fault_information 
+			where 1=1 
+			and start_time between #{bean.startTime} and #{bean.endTime}
+			<if test="bean.alarmLevel != null ">
+                and alarm_level = #{bean.alarmLevel}
+            </if>
+			<if test="bean.tenantCode != null ">
+                and tenant_code = #{bean.tenantCode}
+            </if>
+		) a  group by a.fname,a.alarm_level order by fname asc
+    </select>
+    
+    
 </mapper>
