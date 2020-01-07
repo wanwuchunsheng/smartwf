@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -93,10 +91,12 @@ public class GlobalDataServiceImpl implements GlobalDataService{
             			//5）转换成树形
             			List<OrganizationVO> orglist2=buildByRecursive(orglist);
             			if(orglist2!=null && orglist2.size()>0 ) {
-            				//6）返回
+            				//6）返回树形数据
                     		return Result.data(orglist2);
             			}
             		}
+        			//6）返回列表数据
+            		return Result.data(orglist);
         		}
 			}
     	}

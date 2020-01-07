@@ -12,6 +12,7 @@ import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Role;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
@@ -162,7 +163,7 @@ public class GlobalDataController {
     public ResponseEntity<Result<?>> flushCache(GlobalData bean) {
         try {
         	 this.globalDataService.flushCache(bean);
-        	 ResponseEntity.status(HttpStatus.OK).body(Result.msg("成功！"));
+        	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg("成功！"));
         } catch (Exception e) {
             log.error("刷新缓存数据错误！{}", e.getMessage(), e);
         }
