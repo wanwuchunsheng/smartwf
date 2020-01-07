@@ -26,6 +26,8 @@ public class Constants {
     
     public static final int ADMIN = 2;
     
+    public static final int ALARMLEVEL = 4; //0故障 1严重  2一般  3普通
+    
     /**
      * 默认租户状态========================================================
      */ 
