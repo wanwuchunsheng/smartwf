@@ -23,6 +23,13 @@ public interface FaultOverviewService {
 	 * @return
 	 */
 	Result<?> selectFaultLevelByDate(FaultInformationVO bean);
+	/**
+	 * @Description: 故障处理状态&部件故障分析
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	Result<?> selectFaultStatusByDate(FaultInformationVO bean);
 
 
 }

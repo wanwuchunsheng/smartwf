@@ -59,6 +59,33 @@ public class FaultOverviewController {
     
     
     /**
+	 * @Description: 故障处理状态&部件故障分析
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+    @PostMapping("selectFaultStatusByDate")
+    @ApiOperation(value = "故障处理状态&部件故障分析接口", notes = "故障处理状态&部件故障分析查询")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间", dataType = "Date", required = true ),
+            @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间", dataType = "Date", required = true )
+    })
+    public ResponseEntity<Result<?>> selectFaultStatusByDate(FaultInformationVO bean) {
+        try {
+            Result<?> result = this.faultOverviewService.selectFaultStatusByDate(bean);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }
+        } catch (Exception e) {
+            log.error("故障处理状态&部件故障分析错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障处理状态&部件故障分析错误！"));
+    }
+    
+    
+    
+    /**
 	 * @Description: 故障等级分布统计
 	 * @param startTime
 	 * @param endTime

@@ -22,6 +22,8 @@ import org.apache.ibatis.annotations.Param;
  */
 @Repository
 public interface FaultOverviewDao extends BaseMapper<FaultInformation> {
+	
+	
 	/**
 	 * @Description: 故障
 	 * @param faultType 0-故障  1-报警   2-缺陷
@@ -53,7 +55,19 @@ public interface FaultOverviewDao extends BaseMapper<FaultInformation> {
 	 * @return
 	 */
 	List<FaultInformationVO> selectFaultLevelByDate(@Param("bean") FaultInformationVO bean);
+	/**
+	 * @Description: 故障状态，数量统计
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	List<FaultInformationVO> selectFaultStatusByDate(@Param("bean") FaultInformationVO bean);
+	/**
+	 * @Description: 故障部位，数量统计
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	List<FaultInformationVO> selectFaultLocationByDate(@Param("bean") FaultInformationVO bean);
 
-
-    
 }

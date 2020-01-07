@@ -15,7 +15,7 @@
                 and tenant_code = #{bean.tenantCode}
             </if>
 		) a
-		group by a.fname order by fname asc
+		group by a.fname order by a.fname asc
     </select>
     
     <!-- 报警 -->
@@ -30,7 +30,7 @@
                 and tenant_code = #{bean.tenantCode}
             </if>
 		) a
-		group by a.fname order by fname asc
+		group by a.fname order by a.fname asc
     </select>
     
     <!-- 缺陷 -->
@@ -45,7 +45,7 @@
                 and tenant_code = #{bean.tenantCode}
             </if>
 		) a
-		group by a.fname order by fname asc
+		group by a.fname order by a.fname asc
     </select>
     
     <!-- 故障等级 -->
@@ -63,7 +63,37 @@
 			<if test="bean.tenantCode != null ">
                 and tenant_code = #{bean.tenantCode}
             </if>
-		) a  group by a.fname,a.alarm_level order by fname asc
+		) a  group by a.fname,a.alarm_level order by a.fname asc
+    </select>
+    
+    <!-- 故障状态 -->
+    <select id="selectFaultStatusByDate" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+       select a.alarm_status,count(a.fname) as fvalue from (
+			select 
+				date_format(start_time,'%Y-%m-%d') as fname,
+				alarm_status
+			from fault_information 
+			where 1=1
+			and start_time between #{bean.startTime} and #{bean.endTime}
+			<if test="bean.tenantCode != null ">
+                and tenant_code = #{bean.tenantCode}
+            </if>
+		) a  group by a.alarm_status order by a.alarm_status asc
+    </select>
+    
+    <!-- 故障部位 -->
+    <select id="selectFaultLocationByDate" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+       select a.alarm_location,count(a.fname) as fvalue from (
+			select 
+				date_format(start_time,'%Y-%m-%d') as fname,
+				alarm_location
+			from fault_information 
+			where 1=1
+			and start_time between #{bean.startTime} and #{bean.endTime}
+			<if test="bean.tenantCode != null ">
+                and tenant_code = #{bean.tenantCode}
+            </if>
+		) a  group by a.alarm_location order by a.alarm_location asc
     </select>
     
     
