@@ -37,7 +37,7 @@ public class LogAspect {
      *
      * @return
      */
-    @Pointcut("execution(* com.windmagics.smartwf.*.*.controller.*.*(..)) && @annotation(com.smartwf.common.annotation.TraceLog)")
+    @Pointcut("execution(* com.smartwf.hm.*.*.controller.*.*(..)) && @annotation(com.smartwf.common.annotation.TraceLog)")
     public void webLog() {
     }
 
