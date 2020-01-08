@@ -3,7 +3,7 @@
 <mapper namespace="com.smartwf.hm.modules.alarmstatistics.dao.AlarmInboxDao" >
     
     <!-- 查询故障报警信息 -->
-    <select id="selectFaultInforByPage" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+    <select id="selectAlarmInforByPage" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
         select 
         	a.id,
 			a.alarm_code,
@@ -57,7 +57,32 @@
         </if>
     </select>
     
-  
+    <!-- 查询所有未处理的故障  -->
+    <select id="selectFaultInformationByAll" resultType="java.util.HashMap">
+          select 
+			id,
+			alarm_code,
+			alam_source,
+			alarm_description,
+			alarm_location,
+			start_time,
+			end_time,
+			alarm_level,
+			fault_type,
+			manufacturers,
+			device,
+			wind_farm,
+			alarm_status,
+			asset_number,
+			operating_status,
+			create_time,
+			update_time,
+			tenant_code
+		 from fault_information where alarm_status=0
+    </select>
     
     
+    
+    
+   
 </mapper>

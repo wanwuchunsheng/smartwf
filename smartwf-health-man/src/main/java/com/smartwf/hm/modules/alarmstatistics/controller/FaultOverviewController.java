@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FaultOverviewController {
 	
 	@Autowired
-	FaultOverviewService faultOverviewService;
+	private FaultOverviewService faultOverviewService;
 
 	
 	/**

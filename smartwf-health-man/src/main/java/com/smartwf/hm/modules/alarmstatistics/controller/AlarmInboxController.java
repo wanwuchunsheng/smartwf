@@ -1,6 +1,7 @@
 package com.smartwf.hm.modules.alarmstatistics.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.hm.config.redis.RestConfig;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
@@ -30,16 +33,15 @@ import lombok.extern.slf4j.Slf4j;
 public class AlarmInboxController {
 	
 	@Autowired
-	AlarmInboxService alarmInboxService;
+	private AlarmInboxService alarmInboxService;
 
-	
 	/**
 	 * @Description: 分页查询故障报警信息 
 	 * @param startTime
 	 * @param endTime
 	 * @return
 	 */
-    @PostMapping("selectFaultInforByPage")
+    @PostMapping("selectAlarmInforByPage")
     @ApiOperation(value = "故障报警分页查询接口", notes = "故障报警分页查询")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
@@ -57,9 +59,9 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectFaultTypeByDate( Page<FaultInformation> page, FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectAlarmInforByPage( Page<FaultInformation> page, FaultInformationVO bean) {
         try {
-        	Result<?> result = this.alarmInboxService.selectFaultInforByPage(page,bean);
+        	Result<?> result = this.alarmInboxService.selectAlarmInforByPage(page,bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
             log.error("故障类型统计信息错误！{}", e.getMessage(), e);
@@ -67,6 +69,19 @@ public class AlarmInboxController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障类型统计信息错误！"));
     }
     
+    /**
+	 * @Description: 实时故障报警总数查询
+	 * @return
+	 */
+    @PostMapping("selectAlarmsCountByAll")
+    @ApiOperation(value = "实时故障报警总数接口", notes = "实时故障报警总数查询")
+    public Integer selectAlarmsCountByAll() {
+        try {
+        	return this.alarmInboxService.selectAlarmsCountByAll();
+        } catch (Exception e) {
+            log.error("实时故障报警总数信息查询错误！{}", e.getMessage(), e);
+        }
+		return Constants.ZERO;
+    }
     
-
 }

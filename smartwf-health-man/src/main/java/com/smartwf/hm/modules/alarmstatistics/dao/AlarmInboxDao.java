@@ -2,6 +2,7 @@ package com.smartwf.hm.modules.alarmstatistics.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
 
@@ -31,6 +33,12 @@ public interface AlarmInboxDao extends BaseMapper<FaultInformation> {
 	 * @param endTime
 	 * @return
 	 */
-	List<FaultInformationVO> selectFaultInforByPage(Page<FaultInformation> page,@Param("bean") FaultInformationVO bean);
+	List<FaultInformationVO> selectAlarmInforByPage(Page<FaultInformation> page,@Param("bean") FaultInformationVO bean);
+	/**
+	 * @Description: 查询所有未处理的故障报警数据
+	 * @return
+	 */
+	@MapKey("id")
+	Map<String, FaultInformation> selectFaultInformationByAll();
 
 }

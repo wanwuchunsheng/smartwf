@@ -17,7 +17,17 @@ public interface AlarmInboxService {
 	 * @param endTime
 	 * @return
 	 */
-	Result<?> selectFaultInforByPage( Page<FaultInformation> page,FaultInformationVO bean);
+	Result<?> selectAlarmInforByPage( Page<FaultInformation> page,FaultInformationVO bean);
+	/**
+	 * @Description: 实时故障报警总数查询
+	 * @return
+	 */
+	Integer selectAlarmsCountByAll();
+	/**
+	 * @Description: 初始化未结束的故障
+	 * @return
+	 */
+	void selectFaultInformationByAll();
 	
 
 

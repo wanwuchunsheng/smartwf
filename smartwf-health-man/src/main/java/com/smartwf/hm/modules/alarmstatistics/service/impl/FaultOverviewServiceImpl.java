@@ -23,7 +23,7 @@ import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 public class FaultOverviewServiceImpl implements FaultOverviewService {
 	
 	@Autowired
-	FaultOverviewDao faultOverviewDao;
+	private FaultOverviewDao faultOverviewDao;
 	
 
 	/**

@@ -39,9 +39,7 @@ public class Consumer implements CommandLineRunner {
      * 初始化RocketMq的监听信息，渠道信息
      */
     public void messageListener() {
-
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(groupName);
-
         consumer.setNamesrvAddr(namesrvAddr);
         try {
             // 订阅PushTopic下Tag为push的消息,都订阅消息
@@ -59,11 +57,11 @@ public class Consumer implements CommandLineRunner {
                     log.info("进入消息队列  " + msg.getTopic() + "    " + msg.getTags() + "  " + new String(msg.getBody()));
                     if (topic.equals(msg.getTopic())) {
                         switch (msg.getTags()) {
-                            case "BBBB":  
-                               log.info("++++++++++++++++++++++++++++++++++++++++++++++++++");
+                            case "IOT_SMARTWF_HM_TAG":  
+                               log.info("进入IOT消费 ++++++++++++++++++++++++++++++++++++++++++++++++++", new String(msg.getBody()));
                                 break;
                             default:
-                                log.info("支付MQ信息  MSG{}", new String(msg.getBody()));
+                               
                                 break;
                         }
                     }
