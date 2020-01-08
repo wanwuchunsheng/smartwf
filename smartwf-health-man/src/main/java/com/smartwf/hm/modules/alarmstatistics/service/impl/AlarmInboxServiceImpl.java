@@ -49,6 +49,17 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		return Result.data(page.getTotal(), list);
 	}
 	
+	/**
+	 * @Description: 查询所有故障报警信息 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@Override
+	public Result<?> selectAlarmInforByAll(FaultInformationVO bean) {
+		List<FaultInformationVO> list=this.alarmInboxDao.selectAlarmInforByAll(bean);
+		return Result.data(list);
+	}
 	
 	/**
 	 * @Description: 实时故障报警总数查询
@@ -56,10 +67,30 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 */
 	@Override
 	public Integer selectAlarmsCountByAll() {
-		Map<String, Object> maps=JsonUtil.jsonToMap(this.stringRedisTemplate.opsForValue().get("faultCount"));
+		//-Map<String, Object> maps=JsonUtil.jsonToMap(this.stringRedisTemplate.opsForValue().get("faultCount"));
+		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("faultCount"));
 		return maps.size();
 	}
 	
+	/**
+	 * @Description: 故障报警修改
+	 * @param id
+	 */
+	@Override
+	public void updateAlarmInforById(FaultInformationVO bean) {
+		this.alarmInboxDao.updateById(bean);
+	}
+	
+	/**
+	 * @Description: 主键查询
+	 * @param id
+	 */
+	@Override
+	public Result<?> selectAlarmInforById(FaultInformationVO bean) {
+		FaultInformation list= this.alarmInboxDao.selectById(bean);
+		return Result.data(list);
+	}
+
 	/**
 	 * @Description: 初始化未结束的故障
 	 * @return
@@ -67,26 +98,16 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	@Override
 	public void selectFaultInformationByAll() {
 		//重置redis db
-		RestConfig.setIndex(stringRedisTemplate, 1);
+		//-RestConfig.setIndex(stringRedisTemplate, 1);
 		//查询redis数据
 		Map<String,FaultInformation> list = this.alarmInboxDao.selectFaultInformationByAll();
 		//保存redis
-		this.stringRedisTemplate.opsForValue().set("faultCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		//-this.stringRedisTemplate.opsForValue().set("faultCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		this.redisService.set("faultCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
 	}
-	
 
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	
 }

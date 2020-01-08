@@ -78,10 +78,12 @@ public class FaultInformation implements Serializable{
 	private String windFarm;
 	/**
 	 * 故障状态
-	 *    0未处理
-            1处理中
-            2已处理
-            3已关闭
+	 *  0未处理
+		1已转工单
+		2处理中
+		3已处理
+		4已关闭
+
 	 */
 	private Integer alarmStatus;
 	/**

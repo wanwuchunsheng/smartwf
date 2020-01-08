@@ -19,15 +19,33 @@ public interface AlarmInboxService {
 	 */
 	Result<?> selectAlarmInforByPage( Page<FaultInformation> page,FaultInformationVO bean);
 	/**
+	 * @Description: 查询所有故障报警信息 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	Result<?> selectAlarmInforByAll(FaultInformationVO bean);
+	/**
 	 * @Description: 实时故障报警总数查询
 	 * @return
 	 */
 	Integer selectAlarmsCountByAll();
 	/**
+	 * @Description:故障报警修改
+	 * @param id
+	 */
+	void updateAlarmInforById(FaultInformationVO bean);
+	/**
+	 * @Description: 主键查询
+	 * @param id
+	 */
+	Result<?> selectAlarmInforById(FaultInformationVO bean);
+	/**
 	 * @Description: 初始化未结束的故障
 	 * @return
 	 */
 	void selectFaultInformationByAll();
+	
 	
 
 

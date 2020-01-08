@@ -35,10 +35,18 @@ public interface AlarmInboxDao extends BaseMapper<FaultInformation> {
 	 */
 	List<FaultInformationVO> selectAlarmInforByPage(Page<FaultInformation> page,@Param("bean") FaultInformationVO bean);
 	/**
+	 * @Description: 查询所有故障报警信息 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	List<FaultInformationVO> selectAlarmInforByAll(@Param("bean") FaultInformationVO bean);
+	/**
 	 * @Description: 查询所有未处理的故障报警数据
 	 * @return
 	 */
 	@MapKey("id")
 	Map<String, FaultInformation> selectFaultInformationByAll();
+	
 
 }
