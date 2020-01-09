@@ -38,8 +38,6 @@ public class FaultDataController {
 	/**
 	 * @Description: 实时故障报警缺陷数据
 	 *     故障、报警、缺陷实时数据
-	 * @param startTime
-	 * @param endTime
 	 * @return
 	 */
     @PostMapping("saveFaultInformation")
@@ -52,10 +50,13 @@ public class FaultDataController {
     	    @ApiImplicitParam(paramType = "query", name = "alarmLocation", value = "报警部位", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "报警级别(0严重 1普通 2一般 3未知)", dataType = "Integer",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "故障类型(0故障 1报警 2缺陷)", dataType = "Integer",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "manufacturers", value = "厂家", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "device", value = "设备", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1处理中 2已处理 3已关闭)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0重点关注)", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "故障起始时间", dataType = "Date" ),
+    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "故障起始时间", dataType = "Date" ,required = true),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "故障截止时间", dataType = "Date" )
     })
     public ResponseEntity<Result<?>> saveFaultInformation(FaultInformation bean) {

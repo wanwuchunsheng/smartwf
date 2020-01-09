@@ -1,5 +1,6 @@
 package com.smartwf.hm.modules.alarmstatistics.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,12 +32,14 @@ public class FaultDataServiceImpl implements FaultDataService {
 	/**
 	 * @Description: 实时故障报警缺陷数据
 	 *     故障、报警、缺陷实时数据
-	 * @param startTime
-	 * @param endTime
-	 * @return
+	 *     1)保存数据到mysql
+	 *     2）保存数据到redis
+	 *     保证两边数据同步
 	 */
 	@Override
 	public void saveFaultInformation(FaultInformation bean) {
+		bean.setCreateTime(new Date());
+		bean.setUpdateTime(bean.getCreateTime());
 		//1）保存mysql
 		this.faultDataDao.insert(bean);
 		//2）获取redis缓存数据,并更新缓存数据，保存
