@@ -130,7 +130,7 @@ public class AlarmInboxController {
     })
     public ResponseEntity<Result<?>> updateAlarmInforById(FaultInformationVO bean) {
         try {
-        	this.alarmInboxService.updateAlarmInforById(bean);
+        	 this.alarmInboxService.updateAlarmInforById(bean);
         	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
         } catch (Exception e) {
             log.error("故障报警修改错误！{}", e.getMessage(), e);
@@ -197,6 +197,8 @@ public class AlarmInboxController {
 	       }
 	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有故障操作记录信息错误！"));
       }
+      
+      
     
     
 }

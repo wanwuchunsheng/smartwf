@@ -20,7 +20,7 @@ public class InitDataConfig implements CommandLineRunner{
 	private AlarmInboxService alarmInboxService;
 	
 	/**
-	 * @Description: 初始化未结束的故障
+	 * @Description: 初始化未处理的故障
 	 *    保证redis最新的数据和mysql一致
 	 */
     public void InitDataListener() {

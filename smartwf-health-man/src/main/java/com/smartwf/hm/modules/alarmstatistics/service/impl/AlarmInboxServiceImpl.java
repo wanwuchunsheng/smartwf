@@ -8,11 +8,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
@@ -78,7 +80,10 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	public Integer selectAlarmsCountByAll() {
 		//-Map<String, Object> maps=JsonUtil.jsonToMap(this.stringRedisTemplate.opsForValue().get("faultCount"));
 		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("faultCount"));
-		return maps.size();
+		if(maps!=null && maps.size()>0) {
+			return maps.size();
+		}
+		return Constants.ZERO;
 	}
 	
 	/**
@@ -86,6 +91,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 *    0）获取当前登录人信息
 	 *    1）更新最后修改时间及相关状态
 	 *    2）向操作记录表插入操作记录
+	 *    3)刷新redis数据，保存未处理数据与mysql一致
 	 * @param id
 	 * @param alarmStatus
 	 *    0未处理
@@ -94,6 +100,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		  3已处理
 		  4已关闭
 	 */
+	@Transactional
 	@Override
 	public void updateAlarmInforById(FaultInformationVO bean) {
 		//1)获取当前登录人信息
@@ -111,15 +118,19 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		switch (bean.getAlarmStatus()) {
 			case 1:
 				fr.setClosureReason("已转工单");
+				rmFaultInformationByRedis(bean.getId());
 				break;
 			case 2:
 				fr.setClosureReason("处理中");
+				//rmFaultInformationByRedis(bean.getId());
 				break;
 			case 3:
 				fr.setClosureReason("已处理");
+				//rmFaultInformationByRedis(bean.getId());
 				break;
 			case 4:
 				fr.setClosureReason("已关闭");
+				rmFaultInformationByRedis(bean.getId());
 				break;
 			default:
 				break;
@@ -143,12 +154,11 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 */
 	@Override
 	public void selectFaultInformationByAll() {
-		//重置redis db
 		//-RestConfig.setIndex(stringRedisTemplate, 1);
-		//查询redis数据
-		Map<String,FaultInformation> list = this.alarmInboxDao.selectFaultInformationByAll();
-		//保存redis
 		//-this.stringRedisTemplate.opsForValue().set("faultCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		//查询mysql所有未处理的redis数据
+		Map<String,FaultInformation> list = this.alarmInboxDao.selectFaultInformationByAll();
+		//保存redis数据
 		this.redisService.set("faultCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
 	}
 
@@ -170,6 +180,17 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		return Result.data(list);
 	}
 
-	
+	/**
+	 * @Deprecated 删除redis对应的数据
+	 * 
+	 * */
+	public void rmFaultInformationByRedis(String id) {
+		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("faultCount"));
+		if(maps!=null && maps.size()>0) {
+			maps.remove(id);
+			//将新数据保存redis
+			this.redisService.set("faultCount",JSON.toJSONString(maps,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		}
+	}
 	
 }
