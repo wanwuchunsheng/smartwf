@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
+import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
@@ -120,7 +121,7 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "报警级别(0严重 1普通 2一般 3未知)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "故障类型(0故障 1报警 2缺陷)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1处理中 2已处理 3已关闭)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1已转工单  2处理中 3已处理 4已关闭)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间", dataType = "Date" ),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间", dataType = "Date" )
@@ -140,7 +141,7 @@ public class AlarmInboxController {
 	 *    故障详细
 	 * @param id
 	 */
-    @PutMapping("selectAlarmInforById")
+    @GetMapping("selectAlarmInforById")
     @ApiOperation(value = "故障报警主键查询接口", notes = "故障报警主键查询")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true ),
@@ -171,5 +172,29 @@ public class AlarmInboxController {
         }
 		return Constants.ZERO;
     }
+    
+    /**
+   	 * @Description: 查询所有故障报警记录信息 
+   	 *   故障操作记录
+   	 * @param faultInfoId
+   	 * @param tenantCode
+   	 * @return
+   	 */
+      @PostMapping("selectFaultRecordByAll")
+      @ApiOperation(value = "查询所有故障操作记录接口", notes = "查询所有故障操作记录")
+      @ApiImplicitParams({
+       	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+       	    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "故障报警表（主键）", dataType = "int", required = true )
+      })
+      public ResponseEntity<Result<?>> selectFaultRecordByAll(FaultOperationRecord bean) {
+	       try {
+	       	 Result<?> result = this.alarmInboxService.selectFaultRecordByAll(bean);
+	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
+	       } catch (Exception e) {
+	           log.error("查询所有故障操作记录信息错误！{}", e.getMessage(), e);
+	       }
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有故障操作记录信息错误！"));
+      }
+    
     
 }

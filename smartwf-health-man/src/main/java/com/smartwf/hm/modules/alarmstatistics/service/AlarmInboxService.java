@@ -3,6 +3,7 @@ package com.smartwf.hm.modules.alarmstatistics.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
+import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 /**
@@ -45,6 +46,14 @@ public interface AlarmInboxService {
 	 * @return
 	 */
 	void selectFaultInformationByAll();
+	/**
+   	 * @Description: 查询所有故障报警记录信息 
+   	 *   故障操作记录
+   	 * @param faultInfoId
+   	 * @param tenantCode
+   	 * @return
+   	 */
+	Result<?> selectFaultRecordByAll(FaultOperationRecord bean);
 	
 	
 

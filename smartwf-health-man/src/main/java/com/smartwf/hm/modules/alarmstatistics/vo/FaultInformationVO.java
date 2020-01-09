@@ -23,5 +23,13 @@ public class FaultInformationVO extends FaultInformation implements Serializable
 	 * 值
 	 */
 	private String fvalue;
+	/**
+	 * 备注
+	 */
+	private String remark;
+	/**
+	 * 关闭原因
+	 */
+	private String closureReason;
 	
 }
