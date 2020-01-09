@@ -27,12 +27,15 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
+import lombok.extern.log4j.Log4j2;
+
 
 /**
  * @Date: 2019-11-27 11:25:24
  * @Description: 报警收件箱业务层实现
  */
 @Service
+@Log4j2
 public class AlarmInboxServiceImpl implements AlarmInboxService {
 	
 	@Autowired
@@ -188,6 +191,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("faultCount"));
 		if(maps!=null && maps.size()>0) {
 			maps.remove(id);
+			log.info("redis未处理故障总数：{}",maps.size());
 			//将新数据保存redis
 			this.redisService.set("faultCount",JSON.toJSONString(maps,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
 		}
