@@ -7,7 +7,7 @@
         select 
         	a.id,
 			a.alarm_code,
-			a.alam_source,
+			a.alarm_source,
 			a.alarm_description,
 			a.alarm_location,
 			a.start_time,
@@ -64,7 +64,7 @@
         select 
         	a.id,
 			a.alarm_code,
-			a.alam_source,
+			a.alarm_source,
 			a.alarm_description,
 			a.alarm_location,
 			a.start_time,
@@ -123,7 +123,7 @@
           select 
 			id,
 			alarm_code,
-			alam_source,
+			alarm_source,
 			alarm_description,
 			alarm_location,
 			start_time,

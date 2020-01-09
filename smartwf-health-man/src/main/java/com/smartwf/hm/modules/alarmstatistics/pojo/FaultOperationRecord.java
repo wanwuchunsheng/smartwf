@@ -39,8 +39,5 @@ public class FaultOperationRecord implements Serializable {
 	 * 创建人
 	 */
 	private String createUserName;
-	/**
-	 * 租户表code
-	 */
-	private String tenantCode;
+	
 }

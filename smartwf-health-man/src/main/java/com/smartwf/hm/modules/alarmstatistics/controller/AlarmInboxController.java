@@ -112,7 +112,7 @@ public class AlarmInboxController {
     @PutMapping("updateAlarmInforById")
     @ApiOperation(value = "故障报警修改接口", notes = "故障报警修改")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true ),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
@@ -123,6 +123,8 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1已转工单  2处理中 3已处理 4已关闭)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0重点关注)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "closureReason", value = "关闭原因", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间", dataType = "Date" ),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间", dataType = "Date" )
     })
@@ -144,7 +146,7 @@ public class AlarmInboxController {
     @GetMapping("selectAlarmInforById")
     @ApiOperation(value = "故障报警主键查询接口", notes = "故障报警主键查询")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true ),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
     })
     public ResponseEntity<Result<?>> selectAlarmInforById(FaultInformationVO bean) {
@@ -184,7 +186,7 @@ public class AlarmInboxController {
       @ApiOperation(value = "查询所有故障操作记录接口", notes = "查询所有故障操作记录")
       @ApiImplicitParams({
        	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
-       	    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "故障报警表（主键）", dataType = "int", required = true )
+       	    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "故障报警表（主键）", dataType = "String", required = true )
       })
       public ResponseEntity<Result<?>> selectFaultRecordByAll(FaultOperationRecord bean) {
 	       try {

@@ -67,11 +67,11 @@ public class FaultInformation implements Serializable{
 	/**
 	 * 厂家
 	 */
-	private String manufacturersId;
+	private String manufacturers;
 	/**
 	 * 设备
 	 */
-	private String deviceId;
+	private String device;
 	/**
 	 * 风场
 	 */

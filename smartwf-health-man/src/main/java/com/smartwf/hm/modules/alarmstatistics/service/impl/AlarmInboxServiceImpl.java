@@ -105,7 +105,6 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		FaultOperationRecord fr=new FaultOperationRecord();
 		fr.setFaultInfoId(bean.getId());//故障表主键
 		fr.setCreateUserName(user.getUserName()); //操作人
-		fr.setTenantCode(bean.getTenantCode());//租户编码
 		fr.setCreateTime(bean.getUpdateTime()); //时间
 		fr.setRemark(bean.getRemark()); //备注
 		fr.setClosureReason(bean.getClosureReason()); //关闭原因
@@ -163,10 +162,6 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	@Override
 	public Result<?> selectFaultRecordByAll(FaultOperationRecord bean) {
 		QueryWrapper<FaultOperationRecord> queryWrapper = new QueryWrapper<>();
-		//租户编码
-		if(StringUtils.isNotBlank(bean.getTenantCode())) {
-			queryWrapper.eq("tenant_code", bean.getTenantCode());
-		}
 		//故障报警表ID
 		if(StringUtils.isNotBlank(bean.getFaultInfoId())) {
 			queryWrapper.eq("fault_info_id", bean.getFaultInfoId());
