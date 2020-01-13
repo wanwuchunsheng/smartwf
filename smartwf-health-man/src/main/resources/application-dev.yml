@@ -15,7 +15,7 @@ server:
 # spring
 spring:
   application:
-    name: smartwf-system-man
+    name: smartwf-health-hm
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss # 如果使用字符串表示，用这行设置格式
     defaultPropertyInclusion: ALWAYS # 如果传递过来的时间为空则不进行过滤
