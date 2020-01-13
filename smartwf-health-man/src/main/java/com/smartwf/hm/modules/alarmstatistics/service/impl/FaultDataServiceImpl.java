@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultDataDao;
@@ -40,6 +41,7 @@ public class FaultDataServiceImpl implements FaultDataService {
 	public void saveFaultInformation(FaultInformation bean) {
 		bean.setCreateTime(new Date());
 		bean.setUpdateTime(bean.getCreateTime());
+		bean.setAlarmStatus(Constants.ZERO);//0-未处理
 		//1）保存mysql
 		this.faultDataDao.insert(bean);
 		//2）获取redis缓存数据,并更新缓存数据，保存
