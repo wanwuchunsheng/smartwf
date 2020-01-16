@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smartwf.common.pojo.Oauth2Client;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
@@ -170,5 +171,21 @@ public class GlobalDataController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("刷新缓存异常！"));
     }
     
-    
+
+    /**
+     * @Description：授权登录，接收参数
+     * @param code,session_state和state
+     * @return
+     */
+    @GetMapping("oauth2client")
+    @ApiOperation(value = "授权登录", notes = "授权登录，接收参数")
+    public ResponseEntity<Result<?>> oauth2client(Oauth2Client bean) {
+        try {
+        	System.out.println(bean.getState()+"   "+bean.getCode()+"  "+bean.getSession_state()+"  "+bean.getAccess_token());
+            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("成功"));
+        } catch (Exception e) {
+            log.error("授权登录错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权登录错误！"));
+    }
 }
