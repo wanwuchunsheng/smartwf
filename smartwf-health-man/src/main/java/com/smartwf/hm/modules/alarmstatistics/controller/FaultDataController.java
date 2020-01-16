@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author WCH
  * */
 @RestController
-@RequestMapping("faultdata")
+@RequestMapping("api/faultdata")
 @Slf4j
 @Api(description = "实时故障数据控制器")
 public class FaultDataController {
