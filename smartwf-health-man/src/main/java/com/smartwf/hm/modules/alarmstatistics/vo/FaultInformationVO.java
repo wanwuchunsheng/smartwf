@@ -31,5 +31,13 @@ public class FaultInformationVO extends FaultInformation implements Serializable
 	 * 关闭原因
 	 */
 	private String closureReason;
+	/**
+	 * 开始时间
+	 */
+	private String stime;
+	/**
+	 * 结束时间
+	 */
+	private String etime;
 	
 }

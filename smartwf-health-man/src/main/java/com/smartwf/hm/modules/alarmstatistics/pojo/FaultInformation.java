@@ -44,11 +44,11 @@ public class FaultInformation implements Serializable{
 	 */
 	private String alarmLocation;
 	/**
-	 * 开始时间
+	 * 故障开始时间
 	 */
 	private Date startTime;
 	/**
-	 * 最后时间
+	 * 故障最后时间
 	 */
 	private Date endTime;
 	/**
