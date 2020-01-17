@@ -111,5 +111,5 @@ rocketmq:
 # 日志
 logging:
   level:
-    root: DEBUG
+    root: INFO
   config: classpath:log/logback-spring-prod.xml

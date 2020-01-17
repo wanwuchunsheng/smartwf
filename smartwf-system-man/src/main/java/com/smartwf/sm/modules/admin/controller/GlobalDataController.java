@@ -1,5 +1,9 @@
 package com.smartwf.sm.modules.admin.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,11 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smartwf.common.pojo.Oauth2Client;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.utils.HttpClientUtil;
+import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Role;
-import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
@@ -163,8 +168,8 @@ public class GlobalDataController {
     })
     public ResponseEntity<Result<?>> flushCache(GlobalData bean) {
         try {
-        	 this.globalDataService.flushCache(bean);
-        	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg("成功！"));
+        	this.globalDataService.flushCache(bean);
+        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("成功！"));
         } catch (Exception e) {
             log.error("刷新缓存数据错误！{}", e.getMessage(), e);
         }
@@ -181,8 +186,34 @@ public class GlobalDataController {
     @ApiOperation(value = "授权登录", notes = "授权登录，接收参数")
     public ResponseEntity<Result<?>> oauth2client(Oauth2Client bean) {
         try {
-        	System.out.println(bean.getState()+"   "+bean.getCode()+"  "+bean.getSession_state()+"  "+bean.getAccess_token());
-            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("成功"));
+        	//获取token
+        	String url="https://identity.windmagics.com/oauth2/token";
+            Map<String,String> headers = new HashMap<String,String>();
+            headers.put("client_id", "fTHeymlRX7unpsP011mcncmi1K0a");
+            headers.put("client_secret", "899tgF6ulZ7ubYfqOijLMTAfn9ga");
+            headers.put("code", bean.getCode());
+            headers.put("grant_type", "authorization_code");
+            headers.put("redirect_uri", "http://192.168.3.48:8300/globaldata/oauth2client");
+        	String str= HttpClientUtil.doPost(url, headers,"utf-8");
+        	Map<String,Object> map=JsonUtil.jsonToMap(str);
+        	for(Entry<String, Object> m:map.entrySet()) {
+        		System.out.println(m.getKey()+"    "+m.getValue());
+        	}
+        	
+        	
+        	//刷新token
+        	Map<String,String> headers2 = new HashMap<String,String>();
+        	headers2.put("client_id", "fTHeymlRX7unpsP011mcncmi1K0a");
+        	headers2.put("client_secret", "899tgF6ulZ7ubYfqOijLMTAfn9ga");
+        	headers2.put("refresh_token", (String) map.get("refresh_token"));
+        	headers2.put("grant_type", "refresh_token");
+            String str2= HttpClientUtil.doPost(url, headers2,"utf-8");
+        	Map<String,Object> map2=JsonUtil.jsonToMap(str2);
+        	for(Entry<String, Object> m:map2.entrySet()) {
+        		System.out.println(m.getKey()+"    "+m.getValue());
+        	}
+        	return ResponseEntity.ok(Result.data(bean));
+           // return ResponseEntity.status(HttpStatus.OK).body(Result.msg("成功"));
         } catch (Exception e) {
             log.error("授权登录错误！{}", e.getMessage(), e);
         }
