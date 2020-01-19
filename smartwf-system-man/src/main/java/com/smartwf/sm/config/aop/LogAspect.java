@@ -1,22 +1,40 @@
 package com.smartwf.sm.config.aop;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Queue;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
+import com.alibaba.fastjson.JSON;
+import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.aop.AopAround;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.dto.LogDTO;
+import com.smartwf.common.pojo.User;
 import com.smartwf.common.queue.LogQueue;
+import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.common.utils.MathUtils;
+import com.smartwf.sm.modules.admin.pojo.ExceptionLog;
+import com.smartwf.sm.modules.admin.service.ExceptionLogService;
 import com.smartwf.sm.modules.admin.service.LogService;
+
+import lombok.extern.log4j.Log4j2;
 
 
 /**
@@ -24,12 +42,16 @@ import com.smartwf.sm.modules.admin.service.LogService;
  */
 @Aspect
 @Component
+@Log4j2
 @Order(3)
 public class LogAspect {
 
 
     @Autowired
     private LogService logService;
+    
+    @Autowired
+    private ExceptionLogService exceptionLogService;
 
 
     /**
@@ -69,6 +91,60 @@ public class LogAspect {
             }
             this.logService.saveLog(list);
         }
+    }
+    
+    /**
+     * 后置异常通知
+     * @param joinPoint
+     * @param e
+     */
+    @AfterThrowing(pointcut = "webLog()", throwing = "e")
+    public void throwss(JoinPoint joinPoint, Throwable e){
+    	// 获取RequestAttributes
+    	RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+    	// 从获取RequestAttributes中获取HttpServletRequest的信息
+    	HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+    	ExceptionLog excepLog = new ExceptionLog();
+    	try {
+    		// 从切面织入点处通过反射机制获取织入点处的方法
+    		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+    		// 获取切入点所在的方法
+    		Method method = signature.getMethod();
+    		TraceLog traceLog = method.getAnnotation(TraceLog.class);
+    		// 获取请求的类名
+    		excepLog.setLogRequParam( JSON.toJSONString(request.getParameterMap()) ); //请求参数
+    		excepLog.setLogModul(traceLog.content());//模块说明
+    		excepLog.setLogType(Constants.SMARTWF_HEALTH_MAN);//请求类型
+    		excepLog.setLogDesc(stackTraceToString(e.getClass().getName() , e.getMessage() , e.getStackTrace() )); //异常信息 		
+    		excepLog.setLogMethod(new StringBuffer().append(joinPoint.getTarget().getClass().getName()).append(".").append(method.getName()).toString()); //请求方法名
+    		excepLog.setLogUri(request.getRequestURI()); //操作uri
+    		excepLog.setIpAddress(MathUtils.getIpAddress(request)); //ip
+    		excepLog.setCreateTime(new Date()); //发生异常时间
+    		User user = UserThreadLocal.getUser();
+	        if (user != null) {
+	        	excepLog.setLogUser(user.getUserName()); //操作员名称
+	        }
+    		//log.info(JSON.toJSON(excepLog));
+    		this.exceptionLogService.insert(excepLog);
+		} catch (Exception e2) {
+			e.printStackTrace();
+		}
+    }
+    
+    /**
+     * 转换异常信息为字符串
+     * 
+     * @param exceptionName    异常名称
+     * @param exceptionMessage 异常信息
+     * @param elements         堆栈信息
+     */
+    public String stackTraceToString(String exceptionName, String exceptionMessage, StackTraceElement[] elements) {
+        StringBuffer strbuff = new StringBuffer();
+        for (StackTraceElement stet : elements) {
+            strbuff.append(stet + "\n");
+        }
+        String message = exceptionName + ":" + exceptionMessage + "\n\t" + strbuff.toString();
+        return message;
     }
 
 }
