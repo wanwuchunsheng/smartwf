@@ -163,7 +163,7 @@ public class PostController {
     public ResponseEntity<Result<?>> deletePost(PostVO bean) {
         try {
         	if(null==bean.getId() && StringUtils.isBlank(bean.getIds()) ) {
-        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除数据为空！"));
+        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除参数为空！"));
         	}
         	this.PostService.deletePost(bean);
             return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
