@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -102,7 +103,7 @@ public class TenantController {
 	        @ApiImplicitParam(paramType = "query", name = "sel", value = "默认租户（0-否 1-是）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
-    public ResponseEntity<Result<?>> saveTenant(HttpSession session,Tenant bean) {
+    public ResponseEntity<Result<?>> saveTenant(HttpSession session,@Validated Tenant bean) {
         try {
     		this.tenantService.saveTenant(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
