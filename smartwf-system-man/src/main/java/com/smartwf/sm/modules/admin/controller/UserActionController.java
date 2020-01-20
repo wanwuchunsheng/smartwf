@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
+import com.smartwf.common.annotation.ParamValidated.Add;
+import com.smartwf.common.annotation.ParamValidated.Query;
+import com.smartwf.common.annotation.ParamValidated.QueryParam;
+import com.smartwf.common.annotation.ParamValidated.Update;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.UserAction;
 import com.smartwf.sm.modules.admin.service.UserActionService;
@@ -56,7 +61,7 @@ public class UserActionController {
             @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectUserActionByPage(Page<UserAction> page, UserActionVO bean) {
+    public ResponseEntity<Result<?>> selectUserActionByPage(Page<UserAction> page,@Validated(value = QueryParam.class) UserActionVO bean) {
         try {
             Result<?> result = this.userActionService.selectUserActionByPage(page, bean);
             if (result != null) {
@@ -77,7 +82,7 @@ public class UserActionController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int",required = true)
     })
-    public ResponseEntity<Result<?>> selectUserActionById(UserAction bean) {
+    public ResponseEntity<Result<?>> selectUserActionById(@Validated(value = Query.class) UserAction bean) {
         try {
             Result<?> result = this.userActionService.selectUserActionById(bean);
             if (result != null) {
@@ -102,7 +107,7 @@ public class UserActionController {
 	        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
-    public ResponseEntity<Result<?>> saveUserAction(HttpSession session,UserAction bean) {
+    public ResponseEntity<Result<?>> saveUserAction(HttpSession session,@Validated(value = Add.class) UserAction bean) {
         try {
     		this.userActionService.saveUserAction(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
@@ -126,14 +131,9 @@ public class UserActionController {
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改用户操作", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updateUserAction(UserAction bean) {
-        try {
-            this.userActionService.updateUserAction(bean);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
-        } catch (Exception e) {
-            log.error("修改用户操作信息错误！{}", e.getMessage(), e);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("修改用户操作信息错误！"));
+    public ResponseEntity<Result<?>> updateUserAction(@Validated(value = Update.class) UserAction bean) {
+        this.userActionService.updateUserAction(bean);
+        return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
     }
     
     /**
@@ -150,13 +150,8 @@ public class UserActionController {
     })
     @TraceLog(content = "删除用户操作系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteUserAction(UserActionVO bean) {
-        try {
-        	this.userActionService.deleteUserAction(bean);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
-        } catch (Exception e) {
-            log.error("删除用户操作信息错误！{}", e.getMessage(), e);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除用户操作信息错误！"));
+    	this.userActionService.deleteUserAction(bean);
+        return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
     }
 
 
