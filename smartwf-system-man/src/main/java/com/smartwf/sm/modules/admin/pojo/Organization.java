@@ -26,6 +26,7 @@ public class Organization extends BasePojo implements Serializable{
      */
 	@TableId(type = IdType.AUTO)
 	@NotNull(message = "id不能为空", groups = Update.class)
+	@NotNull(message = "id不能为空", groups = Query.class)
 	private Integer id;
    
     /**
