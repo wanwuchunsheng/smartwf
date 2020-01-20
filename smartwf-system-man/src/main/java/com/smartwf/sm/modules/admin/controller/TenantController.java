@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
+import com.smartwf.common.pojo.BasePojo.Add;
+import com.smartwf.common.pojo.BasePojo.Query;
+import com.smartwf.common.pojo.BasePojo.Update;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.TenantService;
@@ -60,9 +63,7 @@ public class TenantController {
     public ResponseEntity<Result<?>> selectTenantByPage(Page<Tenant> page, TenantVO bean) {
         try {
             Result<?> result = this.tenantService.selectTenantByPage(page, bean);
-            if (result != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(result);
-            }
+            return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
             log.error("分页查询租户信息错误！{}", e.getMessage(), e);
         }
@@ -78,12 +79,10 @@ public class TenantController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int",required = true)
     })
-    public ResponseEntity<Result<?>> selectTenantById(Tenant bean) {
+    public ResponseEntity<Result<?>> selectTenantById(@Validated(value = Query.class) Tenant bean) {
         try {
             Result<?> result = this.tenantService.selectTenantById(bean);
-            if (result != null) {
-                return ResponseEntity.ok(result);
-            }
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             log.error("主键查询租户信息错误！{}", e.getMessage(), e);
         }
@@ -103,14 +102,10 @@ public class TenantController {
 	        @ApiImplicitParam(paramType = "query", name = "sel", value = "默认租户（0-否 1-是）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
-    public ResponseEntity<Result<?>> saveTenant(HttpSession session,@Validated Tenant bean) {
-        try {
-    		this.tenantService.saveTenant(bean);
-        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
-        } catch (Exception e) {
-            log.error("添加租户信息错误！{}", e.getMessage(), e);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("添加租户信息错误！"));
+    @TraceLog(content = "添加租户", paramIndexs = {0})
+    public ResponseEntity<Result<?>> saveTenant(HttpSession session,@Validated(value = Add.class) Tenant bean) {
+		this.tenantService.saveTenant(bean);
+    	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
     }
     
     /**
@@ -128,14 +123,9 @@ public class TenantController {
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改租户", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updateTenant(Tenant bean) {
-        try {
-            this.tenantService.updateTenant(bean);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
-        } catch (Exception e) {
-            log.error("修改租户信息错误！{}", e.getMessage(), e);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("修改租户信息错误！"));
+    public ResponseEntity<Result<?>> updateTenant(@Validated(value = Update.class) Tenant bean) {
+        this.tenantService.updateTenant(bean);
+        return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
     }
     
     /**
@@ -152,13 +142,8 @@ public class TenantController {
     })
     @TraceLog(content = "删除租户系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteTenant(TenantVO bean) {
-        try {
-        	this.tenantService.deleteTenant(bean);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
-        } catch (Exception e) {
-            log.error("删除租户信息错误！{}", e.getMessage(), e);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除租户信息错误！"));
+        this.tenantService.deleteTenant(bean);
+        return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
     }
 
 

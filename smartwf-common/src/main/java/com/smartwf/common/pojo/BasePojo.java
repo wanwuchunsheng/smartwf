@@ -4,6 +4,8 @@ import lombok.Data;
 
 import java.util.Date;
 
+import javax.validation.groups.Default;
+
 /**
  * @Auther: 
  * @Description: 基础javaBean
@@ -36,4 +38,15 @@ public class BasePojo {
 	 */
 	private String updateUserName;
 
+	/**
+	 * 继承Default类，可以在不指定@Validated的group时，使用所有默认校验方式。
+	 */
+    public interface Delete extends Default {
+    }
+    public interface Update extends Default {
+    }
+    public interface Add extends Default {
+    }
+    public interface Query extends Default {
+    }
 }

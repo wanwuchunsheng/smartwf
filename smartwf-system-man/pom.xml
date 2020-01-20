@@ -92,6 +92,7 @@
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
         </dependency>
+        
     </dependencies>
     
     <build>
