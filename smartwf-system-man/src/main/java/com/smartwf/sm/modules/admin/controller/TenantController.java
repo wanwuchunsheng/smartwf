@@ -2,6 +2,7 @@ package com.smartwf.sm.modules.admin.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.annotation.ParamValidated.Add;
+import com.smartwf.common.annotation.ParamValidated.Query;
+import com.smartwf.common.annotation.ParamValidated.Update;
 import com.smartwf.common.annotation.TraceLog;
-import com.smartwf.common.pojo.BasePojo.Add;
-import com.smartwf.common.pojo.BasePojo.Query;
-import com.smartwf.common.pojo.BasePojo.Update;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.TenantService;
@@ -142,6 +143,9 @@ public class TenantController {
     })
     @TraceLog(content = "删除租户系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteTenant(TenantVO bean) {
+    	if(null==bean.getId() && StringUtils.isBlank(bean.getIds()) ) {
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键参数为空！"));
+    	}
         this.tenantService.deleteTenant(bean);
         return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
     }
