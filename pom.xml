@@ -51,13 +51,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- SpringBoot开发工具 热部署  -->
+            <!-- SpringBoot开发工具 热部署  
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-devtools</artifactId>
                 <optional>true</optional>
                 <scope>import</scope>
             </dependency>
+            -->
             <!-- mysql -->
             <dependency>
                 <groupId>mysql</groupId>
