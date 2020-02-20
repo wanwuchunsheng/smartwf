@@ -25,7 +25,7 @@ public class InitDataConfig implements CommandLineRunner{
 	 */
     public void InitDataListener() {
     	try {
-    		this.alarmInboxService.selectFaultInformationByAll();
+    		//this.alarmInboxService.selectFaultInformationByAll();
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}
