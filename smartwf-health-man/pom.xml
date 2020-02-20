@@ -6,7 +6,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>smartwf-health-man</artifactId>
-  <name>smartwf-hm</name>
+  <name>smartwf-health-man</name>
   <description>健康管理中心</description>
   <dependencies>
         <!-- smartwf-common -->
@@ -94,6 +94,7 @@
     </dependencies>
     
     <build>
+        <finalName>smartwf-health-man</finalName>
         <plugins>
        		<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
