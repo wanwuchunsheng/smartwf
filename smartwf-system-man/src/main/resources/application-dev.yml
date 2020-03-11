@@ -27,7 +27,7 @@ spring:
      name: mysql
      type: com.alibaba.druid.pool.DruidDataSource
      driver-class-name: com.mysql.cj.jdbc.Driver
-     url: jdbc:mysql://mysql-jdbc:3306/smartwf-sm?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+     url: jdbc:mysql://10.104.111.194:3306/smartwf-sm?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
      username: root
      password: wind2@
      #password: root
