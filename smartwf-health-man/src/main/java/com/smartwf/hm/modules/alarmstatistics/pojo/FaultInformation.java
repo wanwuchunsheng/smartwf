@@ -53,11 +53,10 @@ public class FaultInformation implements Serializable{
 	private Date endTime;
 	/**
 	 * 报警级别
-            0红：严重
-            1橙：普通
-            2紫：一般
-            3灰：位置
-            
+	    0红：严重
+	    1橙：普通
+	    2紫：一般
+	    3灰：位置     
 	 */
 	private Integer alarmLevel;
 	/**
