@@ -8,11 +8,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.utils.DateUtils;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOverviewDao;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultOverviewService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
+
+import lombok.extern.log4j.Log4j2;
 
 
 /**
@@ -20,6 +24,7 @@ import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
  * @Description: 故障总览业务层实现
  */
 @Service
+@Log4j2
 public class FaultOverviewServiceImpl implements FaultOverviewService {
 	
 	@Autowired
@@ -109,19 +114,32 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		List<Map<String,Object>> list=new ArrayList<>();
 		Map<String,Object> fr=null;
 		String[][] master=null;
+		//1·获得两个日期间的所有日期集合
+		List<String> listDates=DateUtils.getDayListOfDate(DateUtils.parseDateToStr(bean.getStime(), "yyyy-MM-dd HH:mm:ss"),DateUtils.parseDateToStr(bean.getEtime(), "yyyy-MM-dd HH:mm:ss") );
 		for(int t=0;t<Constants.ALARMLEVEL;t++) {
 			bean.setAlarmLevel(t);
-			//1查询故障分布统计数据
+			//2.查询故障分布统计数据
 			List<FaultInformationVO> fault= this.faultOverviewDao.selectFaultLevelByDate(bean);
-			//2故障分布统计数据封装
-			if(fault!=null && fault.size()>0) {
-				master =new String[fault.size()][2];
-				int i = 0; 
-				for(FaultInformationVO fivo:fault ) {
-					master[i][0]=fivo.getFname();
-					master[i][1]=fivo.getFvalue();
+			if(listDates!=null && listDates.size()>0) {
+				master =new String[listDates.size()][2];
+				int i = 0;
+				//3.遍历日期集合
+				for(String str:listDates) {
+					master[i][0]=str;
+					//4.查询统计分布时间和日期集合对比
+					if(fault!=null && fault.size()>0) {
+						for(FaultInformationVO fivo:fault ) {
+							if(str.equals(fivo.getFname())) {
+								//5.存在赋值跳出循环，不存在默认给0
+								master[i][1]=fivo.getFvalue();
+								break;
+							}
+							master[i][1]="0"; //当前日期没有值，赋默认值0
+						}
+					}
 					i++;
 				}
+				//封装参数对象
 				fr = new HashMap<String,Object>();
 				fr.put("id", t);
 				fr.put("content",master);
