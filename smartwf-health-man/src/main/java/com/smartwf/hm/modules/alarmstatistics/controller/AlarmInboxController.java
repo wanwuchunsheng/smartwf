@@ -56,8 +56,8 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1处理中 2已处理 3已关闭)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0重点关注)", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间", dataType = "Date" ),
-            @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间", dataType = "Date" ),
+    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
+            @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
     	    @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
@@ -91,8 +91,8 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1处理中 2已处理 3已关闭)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0重点关注)", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间", dataType = "Date" ),
-            @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间", dataType = "Date" )
+    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
+            @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" )
     })
     public ResponseEntity<Result<?>> selectAlarmInforByAll(FaultInformationVO bean) {
         try {
@@ -125,8 +125,8 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "closureReason", value = "关闭原因", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间", dataType = "Date" ),
-            @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间", dataType = "Date" )
+    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
+            @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" )
     })
     public ResponseEntity<Result<?>> updateAlarmInforById(FaultInformationVO bean) {
         try {

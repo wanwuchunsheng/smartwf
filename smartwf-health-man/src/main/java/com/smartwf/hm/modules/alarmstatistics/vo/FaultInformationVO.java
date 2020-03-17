@@ -1,7 +1,11 @@
 package com.smartwf.hm.modules.alarmstatistics.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
+import com.smartwf.common.annotation.ParamValidated.Query;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 
 import lombok.Data;
@@ -34,10 +38,10 @@ public class FaultInformationVO extends FaultInformation implements Serializable
 	/**
 	 * 开始时间
 	 */
-	private String stime;
+	private Date stime;
 	/**
 	 * 结束时间
 	 */
-	private String etime;
+	private Date etime;
 	
 }

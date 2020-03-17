@@ -56,8 +56,8 @@ public class FaultDataController {
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1处理中 2已处理 3已关闭)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0重点关注)", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "故障起始时间", dataType = "Date" ,required = true),
-            @ApiImplicitParam(paramType = "query", name = "endTime", value = "故障截止时间", dataType = "Date" )
+    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "故障起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ,required = true),
+            @ApiImplicitParam(paramType = "query", name = "endTime", value = "故障截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" )
     })
     public ResponseEntity<Result<?>> saveFaultInformation(FaultInformation bean) {
         try {
