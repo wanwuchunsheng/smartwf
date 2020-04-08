@@ -33,6 +33,7 @@ public class UserThreadLocal {
      		user.setUserCode("T52EXF");
      		user.setUserName("张三");
      		user.setLoginCode("zhangsan");
+     		user.setTenantCode("SMARTWF");
      		user.setPwd(MD5Utils.convertMd5("123456"));
      		user.setEmail("zhangsan@163.com");
      		user.setMobile("13858684039");

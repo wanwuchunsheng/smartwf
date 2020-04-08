@@ -68,9 +68,13 @@ public class FaultInformation implements Serializable{
 	 */
 	private String manufacturers;
 	/**
-	 * 设备
+	 * 设备编码
 	 */
-	private String device;
+	private String deviceCode;
+	/**
+	 * 设备名称
+	 */
+	private String deviceName;
 	/**
 	 * 风场
 	 */

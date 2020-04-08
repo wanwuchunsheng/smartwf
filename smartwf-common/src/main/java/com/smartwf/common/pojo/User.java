@@ -51,8 +51,7 @@ public class User extends BasePojo implements Serializable{
 	 */
 	private String phone;
 	/**
-	 * 性别
-            0男 1女
+	 * 性别 0男 1女
 	 */
 	private Integer sex;
 	/**
@@ -84,17 +83,19 @@ public class User extends BasePojo implements Serializable{
 	 */
 	private Integer tenantId;
 	/**
-	 * 审批状态
-            0-审批通过
-            1-审批中
-            2-待审批
+	 * 租户编码
+	 */
+	private String tenantCode;
+	/**
+	 * 租户名称
+	 */
+	private String tenantName;
+	/**
+	 * 审批状态 0-审批通过 1-审批中 2-待审批
 	 */
 	private String status;
 	/**
-	 * 管理员类型
-            0非管理员
-            1系统管理员
-            
+	 * 管理员类型 0非管理员 1系统管理员 
 	 */
 	private Integer mgrType;
 	/**
@@ -122,10 +123,7 @@ public class User extends BasePojo implements Serializable{
 	 */
 	private String pwdQuestionAnswer3;
 	/**
-	 * 是否有效
-            0有效  
-            1无效
-            
+	 * 是否有效 0有效  1无效 
 	 */
 	private Integer enable;
 	

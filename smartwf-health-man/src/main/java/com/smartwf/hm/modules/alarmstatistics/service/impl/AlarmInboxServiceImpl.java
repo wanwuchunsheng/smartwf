@@ -22,8 +22,10 @@ import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.hm.modules.alarmstatistics.dao.AlarmInboxDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOperationRecordDao;
+import com.smartwf.hm.modules.alarmstatistics.dao.KeyPositionDao;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
+import com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
@@ -49,6 +51,9 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	
 	@Autowired
 	private FaultOperationRecordDao faultOperationRecordDao;
+	
+	@Autowired
+	private KeyPositionDao keyPositionDao;
 	
 	
 	/**
@@ -81,7 +86,6 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 */
 	@Override
 	public Integer selectAlarmsCountByAll() {
-		//-Map<String, Object> maps=JsonUtil.jsonToMap(this.stringRedisTemplate.opsForValue().get("faultCount"));
 		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("faultCount"));
 		if(maps!=null && maps.size()>0) {
 			return maps.size();
@@ -157,8 +161,6 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 */
 	@Override
 	public void selectFaultInformationByAll() {
-		//-RestConfig.setIndex(stringRedisTemplate, 1);
-		//-this.stringRedisTemplate.opsForValue().set("faultCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
 		//查询mysql所有未处理的redis数据
 		Map<String,FaultInformation> list = this.alarmInboxDao.selectFaultInformationByAll();
 		//保存redis数据
@@ -195,6 +197,65 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			//将新数据保存redis
 			this.redisService.set("faultCount",JSON.toJSONString(maps,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
 		}
+	}
+
+	/**
+ 	 * @Description: 重点机位添加
+ 	 *  批量添加，格式: 设备编号,设备名称,资产编码@设备编号,设备名称,资产编码
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	@Override
+	public void addKeyPosition(KeyPosition bean) {
+		//1)获取当前登录人信息
+		User user=UserThreadLocal.getUser();
+		//2)将字符串转换成字符串数组对象
+		String[] strObj= bean.getRemark().split("@");
+		KeyPosition keyPost=null;
+		for(String s:strObj) {
+			//3）将字符串数组对象转换成数组
+			String[] str=s.split(",");
+			keyPost=new KeyPosition();
+			keyPost.setDeviceCode(str[0]);//设备编码
+			keyPost.setDeviceName(str[1]);//设备名称
+			keyPost.setAssetNumber(str[2]);//资产编码
+			keyPost.setCreateTime(new Date());
+			keyPost.setCreateUserId(user.getId());
+			keyPost.setCreateUserName(user.getUserName());
+			keyPost.setTenantCode(user.getTenantCode());
+			//4)保存前判断是否存在
+			KeyPosition kp=this.keyPositionDao.selectByDeviceCode(keyPost);
+			if(kp==null) {
+				//5）保存
+				this.keyPositionDao.insert(keyPost);
+			}
+		}
+	}
+
+	/**
+ 	 * @Description: 重点机位删除
+ 	 *  通过重点机位表主键ID删除
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	@Override
+	public void deleteKeyPosition(KeyPosition bean) {
+		this.keyPositionDao.deleteById(bean);
+	}
+
+	/**
+ 	 * @Description: 重点机位统计数据
+ 	 *   重点风机的报警统计
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	@Override
+	public Result<?> selectKeyPositionByCount(KeyPosition bean) {
+		List<FaultInformationVO> list=this.alarmInboxDao.selectKeyPositionByCount(bean);
+		return Result.data(list);
 	}
 	
 }

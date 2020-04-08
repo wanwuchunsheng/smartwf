@@ -44,4 +44,33 @@ public class FaultInformationVO extends FaultInformation implements Serializable
 	 */
 	private Date etime;
 	
+	
+	
+	
+	/**
+	 * 未处理
+	 * 
+	 * */
+	private Integer untreated;
+	/**
+	 * 故障类型-天
+	 * 
+	 * */
+	private Integer faultTypeDay;
+	/**
+	 * 故障类型-月
+	 * 
+	 * */
+	private Integer faultTypeMouth;
+	/**
+	 * 故障类型-所有
+	 * 
+	 * */
+	private Integer faultTypeAll;
+	/**
+	 * 最近时间
+	 * 
+	 * */
+	private String recentTime;
+	
 }

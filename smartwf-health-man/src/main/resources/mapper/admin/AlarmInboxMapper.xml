@@ -15,7 +15,8 @@
 			a.alarm_level,
 			a.fault_type,
 			a.manufacturers,
-			a.device,
+			a.device_code,
+			a.device_name,
 			a.wind_farm,
 			a.alarm_status,
 			a.asset_number,
@@ -72,7 +73,8 @@
 			a.alarm_level,
 			a.fault_type,
 			a.manufacturers,
-			a.device,
+			a.device_code,
+			a.device_name,
 			a.wind_farm,
 			a.alarm_status,
 			a.asset_number,
@@ -131,7 +133,8 @@
 			alarm_level,
 			fault_type,
 			manufacturers,
-			device,
+			device_code,
+			device_name,
 			wind_farm,
 			alarm_status,
 			asset_number,
@@ -143,7 +146,73 @@
     </select>
     
     
-    
+    <!-- 重点机位统计 -->
+    <select id="selectKeyPositionByCount" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+        select 
+			f1.device_code,
+			f1.device_name,
+			IFNULL(f2.alarm_status,0) as untreated,
+			IFNULL(f2.fault_type_day,0) as fault_type_day,
+			IFNULL(f2.fault_type_mouth,0) as fault_type_mouth,
+			IFNULL(f2.fault_type_all,0) as fault_type_all,
+			IFNULL(f2.start_time,0) as recent_time
+		from key_position f1 LEFT JOIN (
+			select 
+				d1.device_code,
+				d1.alarm_status,
+				d2.fault_type_day,
+				d3.fault_type_mouth,
+				d4.fault_type_all
+				,d5.start_time 
+			from 
+			(select device_code,count(*) as alarm_status from fault_information where 1=1
+				<if test="bean.tenantCode != null ">
+		          and tenant_code = #{bean.tenantCode}
+		        </if>
+				and alarm_status=0  group by device_code,device_name
+			) d1,
+			(select device_code,device_name,count(*) as fault_type_day from fault_information  where 1=1
+				<if test="bean.tenantCode != null ">
+		          and tenant_code = #{bean.tenantCode}
+		        </if>
+		        and to_days(start_time) = to_days(now()) group by device_code,device_name
+			) d2,
+			(select device_code,device_name,count(*) as fault_type_mouth from fault_information  where 1=1
+				<if test="bean.tenantCode != null ">
+		          and tenant_code = #{bean.tenantCode}
+		        </if>
+		        and DATE_FORMAT( start_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) group by device_code,device_name
+			) d3,
+			(select device_code,device_name,count(*) as fault_type_all from fault_information  where 1=1
+				
+		        group by device_code,device_name
+			) d4,
+			(select a.device_code,a.device_name,
+				CASE
+						WHEN a.start_time &lt;= 60 THEN concat(start_time ,'分钟')
+						WHEN a.start_time>60 and  a.start_time &lt;= 1440 THEN  concat( TRUNCATE(start_time/60,0),' 小时')
+						WHEN a.start_time>1440 and  a.start_time &lt;= 43200 THEN  concat( TRUNCATE(start_time/1440,0),' 天')
+				ELSE '大于一个月'
+				END 'start_time'
+				from (
+					select device_code,device_name,TIMESTAMPDIFF(MINUTE,max(start_time),now() ) as start_time from fault_information where 1=1 
+					<if test="bean.tenantCode != null ">
+			          and tenant_code = #{bean.tenantCode}
+			        </if>
+			        group by device_code,device_name    
+				) a 
+			) d5
+			where d1.device_code=d2.device_code 
+			and d2.device_code=d3.device_code 
+			and d3.device_code = d4.device_code  
+			and d4.device_code = d5.device_code 
+		) f2 on f1.device_code=f2.device_code
+        where 1=1
+        <if test="bean.tenantCode != null ">
+		    and f1.tenant_code = #{bean.tenantCode}
+		</if>
+        order by f1.device_code
+    </select>
     
    
 </mapper>

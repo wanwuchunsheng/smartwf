@@ -14,6 +14,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
+import com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
@@ -122,7 +123,7 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "故障类型(0故障 1报警 2缺陷)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1已转工单  2处理中 3已处理 4已关闭)", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0重点关注)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0-默认 1重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "closureReason", value = "关闭原因", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
@@ -199,6 +200,95 @@ public class AlarmInboxController {
       }
       
       
-    
-    
+	    /**
+	 	 * @Description: 机位查询
+	 	 *   1）调用生产管理子系统，返回所有机位信息
+	 	 *   2）获得JOSN数据，返回前端
+	 	 *   信息内容： 设备编码，设备名称，资产编号
+	 	 * @author wch
+	 	 * @date 2020-04-07
+	 	 * @return
+	 	 */
+	    @PostMapping("selectKeyPositionByAll")
+	    @ApiOperation(value = "批量机位查询接口", notes = "查询所有机位数据")
+	    @ApiImplicitParams({
+	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
+	    })
+	    public ResponseEntity<Result<?>> selectKeyPositionByAll(FaultOperationRecord bean) {
+	       try {
+	    	 //调用生产管理子系统API接口返回数据
+	       	 Result<?> result = null;
+	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
+	       } catch (Exception e) {
+	           log.error("查询所有机位信息错误！{}", e.getMessage(), e);
+	       }
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有机位信息错误！"));
+	    }
+	    /**
+	 	 * @Description: 重点机位添加
+	 	 *  批量添加，格式: 设备编号,设备名称,资产编码@设备编号,设备名称,资产编码
+	 	 * @author wch
+	 	 * @date 2020-04-07
+	 	 * @return
+	 	 */
+	    @PostMapping("addKeyPosition")
+	    @ApiOperation(value = "重点机位添加接口", notes = "重点机位添加")
+	    @ApiImplicitParams({
+	     	   @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	     	   @ApiImplicitParam(paramType = "query", name = "remark", value = "批量添加格式:设备编号,设备名称,资产编码@设备编号,设备名称,资产编码", dataType = "String", required = true)
+	    })
+	    public ResponseEntity<Result<?>> addKeyPosition(KeyPosition bean) {
+	       try {
+	       	 this.alarmInboxService.addKeyPosition(bean);
+	       	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
+	       } catch (Exception e) {
+	           log.error("重点机位添加错误！{}", e.getMessage(), e);
+	       }
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("重点机位添加错误！"));
+	    }
+	    
+	    /**
+	 	 * @Description: 重点机位删除
+	 	 *  通过重点机位表主键ID删除
+	 	 * @author wch
+	 	 * @date 2020-04-07
+	 	 * @return
+	 	 */
+	    @PostMapping("deleteKeyPosition")
+	    @ApiOperation(value = "重点机位删除接口", notes = "重点机位删除")
+	    @ApiImplicitParams({
+	     	   @ApiImplicitParam(paramType = "query", name = "id", value = "重点机位主键（id）", dataType = "String", required = true)
+	    })
+	    public ResponseEntity<Result<?>> deleteKeyPosition(KeyPosition bean) {
+	       try {
+	       	 this.alarmInboxService.deleteKeyPosition(bean);
+	       	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
+	       } catch (Exception e) {
+	           log.error("重点机位删除错误！{}", e.getMessage(), e);
+	       }
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("重点机位删除错误！"));
+	    }
+	    
+	    /**
+	 	 * @Description: 重点机位统计数据
+	 	 *   重点风机的报警统计
+	 	 * @author wch
+	 	 * @date 2020-04-07
+	 	 * @return
+	 	 */
+	    @PostMapping("selectKeyPositionByCount")
+	    @ApiOperation(value = "重点机位统计数据查询接口", notes = "重点机位统计数据查询")
+	    @ApiImplicitParams({
+	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
+	    })
+	    public ResponseEntity<Result<?>> selectKeyPositionByCount(KeyPosition bean) {
+	       try {
+	       	 Result<?> result = this.alarmInboxService.selectKeyPositionByCount(bean);
+	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
+	       } catch (Exception e) {
+	           log.error("查询所有重点机位统计数据错误！{}", e.getMessage(), e);
+	       }
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有重点机位统计数据错误！"));
+	    }
+        
 }

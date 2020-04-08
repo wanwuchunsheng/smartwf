@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
+import com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 /**
@@ -54,6 +55,29 @@ public interface AlarmInboxService {
    	 * @return
    	 */
 	Result<?> selectFaultRecordByAll(FaultOperationRecord bean);
+	/**
+ 	 * @Description: 重点机位添加
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	void addKeyPosition(KeyPosition bean);
+	/**
+ 	 * @Description: 重点机位删除
+ 	 *  通过重点机位表主键ID删除
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	void deleteKeyPosition(KeyPosition bean);
+	/**
+ 	 * @Description: 重点机位统计数据
+ 	 *   重点风机的报警统计
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	Result<?> selectKeyPositionByCount(KeyPosition bean);
 	
 	
 

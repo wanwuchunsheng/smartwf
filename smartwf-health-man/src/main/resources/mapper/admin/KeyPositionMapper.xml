@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.hm.modules.alarmstatistics.dao.KeyPositionDao" >
+    
+    <!-- 分页查询故障报警信息 -->
+    <select id="selectByDeviceCode" resultType="com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition">
+        select 
+        	id 
+        from key_position where device_code =#{bean.deviceCode}
+         <if test="bean.tenantCode != null ">
+          and tenant_code = #{bean.tenantCode}
+        </if>
+    </select>
+   
+</mapper>
