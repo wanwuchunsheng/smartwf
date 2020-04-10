@@ -71,13 +71,21 @@ public interface AlarmInboxService {
  	 */
 	void deleteKeyPosition(KeyPosition bean);
 	/**
- 	 * @Description: 重点机位统计数据
+ 	 * @Description: 重点机位统计数据-图表
  	 *   重点风机的报警统计
  	 * @author wch
  	 * @date 2020-04-07
  	 * @return
  	 */
 	Result<?> selectKeyPositionByCount(KeyPosition bean);
+	/**
+ 	 * @Description: 重点机位统计数据-列表
+ 	 *   重点风机的报警统计
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	Result<?> selectKeyPositionByList(KeyPosition bean);
 	
 	
 

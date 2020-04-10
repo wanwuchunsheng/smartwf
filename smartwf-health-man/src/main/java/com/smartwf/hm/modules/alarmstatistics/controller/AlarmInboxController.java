@@ -270,25 +270,48 @@ public class AlarmInboxController {
 	    }
 	    
 	    /**
-	 	 * @Description: 重点机位统计数据
+	 	 * @Description: 重点机位统计数据-图表
 	 	 *   重点风机的报警统计
 	 	 * @author wch
 	 	 * @date 2020-04-07
 	 	 * @return
 	 	 */
 	    @PostMapping("selectKeyPositionByCount")
-	    @ApiOperation(value = "重点机位统计数据查询接口", notes = "重点机位统计数据查询")
+	    @ApiOperation(value = "重点机位统计图表数据查询接口", notes = "重点机位统计图表数据查询")
 	    @ApiImplicitParams({
-	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
+	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true)
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByCount(KeyPosition bean) {
 	       try {
 	       	 Result<?> result = this.alarmInboxService.selectKeyPositionByCount(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
 	       } catch (Exception e) {
-	           log.error("查询所有重点机位统计数据错误！{}", e.getMessage(), e);
+	           log.error("查询所有重点机位统计图表数据错误！{}", e.getMessage(), e);
 	       }
-	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有重点机位统计数据错误！"));
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有重点机位统计图表数据错误！"));
 	    }
+	    
+	    /**
+	 	 * @Description: 重点机位统计数据-列表
+	 	 *   重点风机的报警统计
+	 	 * @author wch
+	 	 * @date 2020-04-07
+	 	 * @return
+	 	 */
+	    @PostMapping("selectKeyPositionByList")
+	    @ApiOperation(value = "重点机位统计列表数据查询接口", notes = "重点机位统计列表数据查询")
+	    @ApiImplicitParams({
+	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true)
+	    })
+	    public ResponseEntity<Result<?>> selectKeyPositionByList(KeyPosition bean) {
+	       try {
+	       	 Result<?> result = this.alarmInboxService.selectKeyPositionByList(bean);
+	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
+	       } catch (Exception e) {
+	           log.error("查询所有重点机位统计列表数据错误！{}", e.getMessage(), e);
+	       }
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有重点机位统计列表数据错误！"));
+	    }
+	    
         
 }

@@ -246,7 +246,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	}
 
 	/**
- 	 * @Description: 重点机位统计数据
+ 	 * @Description: 重点机位统计数据-图表
  	 *   重点风机的报警统计
  	 * @author wch
  	 * @date 2020-04-07
@@ -255,6 +255,19 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	@Override
 	public Result<?> selectKeyPositionByCount(KeyPosition bean) {
 		List<FaultInformationVO> list=this.alarmInboxDao.selectKeyPositionByCount(bean);
+		return Result.data(list);
+	}
+
+	/**
+ 	 * @Description: 重点机位统计数据-列表
+ 	 *   重点风机的报警统计
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	@Override
+	public Result<?> selectKeyPositionByList(KeyPosition bean) {
+		List<FaultInformationVO> list=this.alarmInboxDao.selectKeyPositionByList(bean);
 		return Result.data(list);
 	}
 	

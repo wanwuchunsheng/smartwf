@@ -50,13 +50,22 @@ public interface AlarmInboxDao extends BaseMapper<FaultInformation> {
 	Map<String, FaultInformation> selectFaultInformationByAll();
 	
 	/**
- 	 * @Description: 重点机位统计数据
+ 	 * @Description: 重点机位统计数据-图表
  	 *   重点风机的报警统计
  	 * @author wch
  	 * @date 2020-04-07
  	 * @return
  	 */
 	List<FaultInformationVO> selectKeyPositionByCount(@Param("bean") KeyPosition bean);
+	
+	/**
+ 	 * @Description: 重点机位统计数据-列表
+ 	 *   重点风机的报警统计
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	List<FaultInformationVO> selectKeyPositionByList(@Param("bean") KeyPosition bean);
 	
 
 }
