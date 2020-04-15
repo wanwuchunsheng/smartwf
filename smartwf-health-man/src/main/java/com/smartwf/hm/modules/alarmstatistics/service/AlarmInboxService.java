@@ -86,6 +86,13 @@ public interface AlarmInboxService {
  	 * @return
  	 */
 	Result<?> selectKeyPositionByList(KeyPosition bean);
+	/**
+ 	 * @Description: 重点机位已添加机位数据查询接口
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	Result<?> selectKeyPosition(KeyPosition bean);
 	
 	
 

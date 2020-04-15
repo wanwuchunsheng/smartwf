@@ -291,6 +291,28 @@ public class AlarmInboxController {
 	       }
 	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有机位信息错误！"));
 	    }
+	    
+	    /**
+	 	 * @Description: 重点机位已添加机位数据查询接口
+	 	 * @author wch
+	 	 * @date 2020-04-07
+	 	 * @return
+	 	 */
+	    @PostMapping("selectKeyPosition")
+	    @ApiOperation(value = "重点机位已添加机位数据查询接口", notes = "重点机位已添加机位数据查询")
+	    @ApiImplicitParams({
+	     	   @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
+	    })
+	    public ResponseEntity<Result<?>> selectKeyPosition(KeyPosition bean) {
+	       try {
+	    	   Result<?> result = this.alarmInboxService.selectKeyPosition(bean);
+	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
+	       } catch (Exception e) {
+	           log.error("重点机位已添加机位数据查询错误！{}", e.getMessage(), e);
+	       }
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("重点机位已添加机位数据查询错误！"));
+	    }
+	    
 	    /**
 	 	 * @Description: 重点机位添加
 	 	 *  批量添加，格式: 设备编号,设备名称,资产编码@设备编号,设备名称,资产编码
@@ -324,7 +346,8 @@ public class AlarmInboxController {
 	    @PostMapping("deleteKeyPosition")
 	    @ApiOperation(value = "重点机位删除接口", notes = "重点机位删除")
 	    @ApiImplicitParams({
-	     	   @ApiImplicitParam(paramType = "query", name = "id", value = "重点机位主键（id）", dataType = "String", required = true)
+	     	   @ApiImplicitParam(paramType = "query", name = "id", value = "重点机位主键（id）", dataType = "String"),
+	     	  @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编号", dataType = "String")
 	    })
 	    public ResponseEntity<Result<?>> deleteKeyPosition(KeyPosition bean) {
 	       try {

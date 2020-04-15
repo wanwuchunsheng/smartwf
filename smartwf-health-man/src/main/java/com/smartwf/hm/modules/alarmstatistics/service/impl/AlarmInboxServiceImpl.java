@@ -242,7 +242,17 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
  	 */
 	@Override
 	public void deleteKeyPosition(KeyPosition bean) {
-		this.keyPositionDao.deleteById(bean);
+		QueryWrapper<KeyPosition> queryWrapper = new QueryWrapper<>();
+  		//id
+		if(StringUtils.isNotBlank(bean.getId())) {
+			queryWrapper.eq("id", bean.getId()); 
+		}
+		//设备编号
+  		if (StringUtils.isNotBlank(bean.getDeviceCode()) ) { 
+  			queryWrapper.eq("device_code", bean.getDeviceCode()); 
+  		}
+		//2）设备编码删除
+		this.keyPositionDao.delete(queryWrapper);
 	}
 
 	/**
@@ -268,6 +278,18 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	@Override
 	public Result<?> selectKeyPositionByList(KeyPosition bean) {
 		List<FaultInformationVO> list=this.alarmInboxDao.selectKeyPositionByList(bean);
+		return Result.data(list);
+	}
+	
+	/**
+ 	 * @Description: 重点机位已添加机位数据查询接口
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	@Override
+	public Result<?> selectKeyPosition(KeyPosition bean) {
+		List<KeyPosition> list=this.keyPositionDao.selectKeyPosition(bean);
 		return Result.data(list);
 	}
 	
