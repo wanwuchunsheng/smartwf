@@ -241,6 +241,9 @@
         <if test="bean.tenantCode != null ">
           and b.tenant_code = #{bean.tenantCode}
         </if>
+        <if test="bean.deviceCode != null ">
+          and a.device_code = #{bean.deviceCode}
+        </if>
           order by b.start_time desc
     </select>
    

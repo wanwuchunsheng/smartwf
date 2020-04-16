@@ -93,6 +93,13 @@ public interface AlarmInboxService {
  	 * @return
  	 */
 	Result<?> selectKeyPosition(KeyPosition bean);
+	/**
+ 	 * @Description: 单个重点机位所有故障报警数据
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	Result<?> selectKeyPositionByDeviceCode(KeyPosition bean);
 	
 	
 

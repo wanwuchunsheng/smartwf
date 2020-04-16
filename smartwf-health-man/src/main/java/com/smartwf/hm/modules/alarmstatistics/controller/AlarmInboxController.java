@@ -403,5 +403,26 @@ public class AlarmInboxController {
 	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有重点机位统计列表数据错误！"));
 	    }
 	    
-        
+	    /**
+	 	 * @Description: 单个重点机位所有故障报警数据
+	 	 * @author wch
+	 	 * @date 2020-04-07
+	 	 * @return
+	 	 */
+	    @PostMapping("selectKeyPositionByDeviceCode")
+	    @ApiOperation(value = "单个重点机位所有故障报警数据查询接口", notes = "单个重点机位所有故障报警数据查询")
+	    @ApiImplicitParams({
+	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true),
+	     	    @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码", dataType = "String", required = true)
+	    })
+	    public ResponseEntity<Result<?>> selectKeyPositionByDeviceCode(KeyPosition bean) {
+	       try {
+	       	 Result<?> result = this.alarmInboxService.selectKeyPositionByDeviceCode(bean);
+	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
+	       } catch (Exception e) {
+	           log.error("单个重点机位所有故障报警数据查询错误！{}", e.getMessage(), e);
+	       }
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("单个重点机位所有故障报警数据查询错误！"));
+	    }
+	    
 }

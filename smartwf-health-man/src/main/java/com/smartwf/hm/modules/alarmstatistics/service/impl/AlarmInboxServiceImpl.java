@@ -292,5 +292,17 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		List<KeyPosition> list=this.keyPositionDao.selectKeyPosition(bean);
 		return Result.data(list);
 	}
+
+	/**
+ 	 * @Description: 单个重点机位所有故障报警数据
+ 	 * @author wch
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
+	@Override
+	public Result<?> selectKeyPositionByDeviceCode(KeyPosition bean) {
+		List<FaultInformationVO> list=this.alarmInboxDao.selectKeyPositionByList(bean);
+		return Result.data(list);
+	}
 	
 }
