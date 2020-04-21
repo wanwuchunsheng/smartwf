@@ -54,6 +54,12 @@ public interface UserInfoDao extends BaseMapper<UserInfo> {
 	 */
 	UserInfo selectUserInfoById(@Param("bean") UserInfo bean);
 
+	/**
+     * @Description： 修改用户密码
+     * @return
+     */
+	void updateUserPwd(@Param("id") Integer id, @Param("oldPwd") String oldPwd, @Param("newPwd") String newPwd);
+
 
     
 }
