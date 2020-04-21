@@ -12,6 +12,7 @@ import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.PersonalCenterService;
+import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 import io.swagger.annotations.Api;
@@ -33,7 +34,7 @@ public class PersonalCenterController {
 	
 	@Autowired
 	private PersonalCenterService personalCenterService;
-
+	
 	
 	/**
      * @Description： 修改用户密码
@@ -49,13 +50,46 @@ public class PersonalCenterController {
     @TraceLog(content = "修改密码错误", paramIndexs = {0})
     public ResponseEntity<Result<?>> updateUserPwd(Integer id,String oldPwd,String newPwd) {
         try {
-        	System.out.println(id+"/"+oldPwd+"/"+newPwd);
         	ResponseEntity<Result<?>> result= this.personalCenterService.updateUserPwd(id,oldPwd,newPwd);
             return result;
         } catch (Exception e) {
             log.error("修改密码错误！{}", e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("修改密码错误！"));
+    }
+    
+    
+    /**
+     * @Description： 修改用户资料
+     * @return
+     */
+    @PutMapping("updateUserInfo")
+    @ApiOperation(value = "修改用户资料接口", notes = "修改用户资料资料")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
+        @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录账号", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "sex", value = "性别（0-女 1-男）", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "mobile", value = "手机号", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "address", value = "联系地址", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "avatar", value = "头像路径", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "phone", value = "电话", dataType = "String"),
+ 	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "等级（0-普通 1-管理员 2-超级管理员）", dataType = "Integer"),
+ 	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
+ 	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "Integer"),
+ 	    @ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String"),
+ 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
+    })
+    @TraceLog(content = "修改用户资料", paramIndexs = {0})
+    public ResponseEntity<Result<?>> updateSysUser(UserInfoVO bean) {
+        try {
+            this.personalCenterService.updateUserInfo(bean);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
+        } catch (Exception e) {
+            log.error("修改用户资料信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("修改用户资料信息错误！"));
     }
 	
 	/**
@@ -69,7 +103,7 @@ public class PersonalCenterController {
     })
     public ResponseEntity<Result<?>> selectSysUserById(UserInfo bean) {
         try {
-            Result<?> result =null;// this.personalCenterService.selectUserInfoById(bean);
+            Result<?> result = this.personalCenterService.selectUserInfoById(bean);
             if (result != null) {
                 return ResponseEntity.ok(result);
             }
