@@ -63,8 +63,8 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
      */
 	@Override
 	public Result<?> selectUserInfoById(UserInfo bean) {
-		// TODO Auto-generated method stub
-		return null;
+		UserInfo userInfo= this.userInfoDao.selectUserInfoById(bean);
+		return Result.data(userInfo);
 	}
    
 }

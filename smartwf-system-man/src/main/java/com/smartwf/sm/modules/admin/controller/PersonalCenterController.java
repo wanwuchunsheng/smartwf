@@ -12,7 +12,6 @@ import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.PersonalCenterService;
-import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 import io.swagger.annotations.Api;
@@ -97,7 +96,7 @@ public class PersonalCenterController {
      * @return
      */
     @GetMapping("selectUserInfoById")
-    @ApiOperation(value = "主键查询接口", notes = "主键查询用户资料")
+    @ApiOperation(value = "主键查询个人资料接口", notes = "主键查询个人资料")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int",required = true)
     })
@@ -108,8 +107,8 @@ public class PersonalCenterController {
                 return ResponseEntity.ok(result);
             }
         } catch (Exception e) {
-            log.error("主键查询用户资料信息错误！{}", e.getMessage(), e);
+            log.error("主键查询个人用户资料信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询用户信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询个人用户信息错误！"));
     }
 }
