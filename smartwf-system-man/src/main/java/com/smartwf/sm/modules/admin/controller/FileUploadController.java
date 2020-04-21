@@ -6,14 +6,18 @@ import java.io.FileOutputStream;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +46,6 @@ public class FileUploadController {
 	public ResponseEntity<Result<?>> upload(@ApiParam(value = "用户图片", required = true) MultipartFile file) {
 	    if (!file.isEmpty()) {
 	        if (file.getContentType().contains("image")) {
-	        	StringBuffer sb=null;
 	            try {
 	                String temp = "images" + File.separator ;
 	                // 获取图片的文件名
@@ -69,6 +72,30 @@ public class FileUploadController {
 	        }
 	    }
 	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("失败！请检查上传的文件"));
+	}
+	
+	
+	/**
+     * @Description： 删除操作日志
+     * @param filePath images/11.png
+     * @return
+     */
+    @DeleteMapping("deleteFile")
+    @ApiOperation(value = "删除文件接口", notes = "删除文件")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "filePath", value = "删除路径", dataType = "String",required = true)
+    })
+    @TraceLog(content = "删除文件", paramIndexs = {0})
+	public void delFile(String filePath) {
+    	StringBuffer sb=new StringBuffer();
+    	File delFile=null;
+		try {
+			filePath=sb.append(localFilePath).append("/").append(filePath).toString();
+			delFile = new File(filePath);
+			delFile.delete();
+		} catch (Exception e) {
+			log.error("删除文件异常！{}", e.getMessage(), e);
+		}
 	}
 	
 	/**
