@@ -11,7 +11,10 @@ server:
     basedir: ${user.home}/tomcat/tmps
     # 最大连接数
     max-connections: 2000
-
+#挂载本地路径
+web:
+    upload-path: ${user.home}/file/smartwf-sys-man/upload
+    
 # spring
 spring:
   application:
@@ -79,6 +82,9 @@ spring:
         time-between-eviction-runs-millis: 30000
         # 每次释放连接的最大数目
         num-tests-per-eviction-run: 1024
+  #file url
+  resources:
+    static-locations: file:${web.upload-path}  
 
 # 日志
 logging:
