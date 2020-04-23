@@ -48,7 +48,7 @@ public class LoginUtils {
             headers.put("client_secret", "qMS_RXTSfS5NU8JkLuX0NG4opHAa");
             headers.put("code", code);
             headers.put("grant_type", "authorization_code");
-            headers.put("redirect_uri", "http://192.168.3.48:8300/globaldata/oauth2client");
+            headers.put("redirect_uri", "http://192.168.3.33:8081/callback");
         	String str= HttpClientUtil.doPost(url, headers,"utf-8");
         	Map<String,Object> map=JsonUtil.jsonToMap(str);
         	for(Entry<String, Object> m:map.entrySet()) {
@@ -72,41 +72,42 @@ public class LoginUtils {
         	for(Entry<String, Object> m:map2.entrySet()) {
         		log.info("Code换取Token返回结果："+m.getKey()+"    "+m.getValue());
         	}
+        }else {
+	        /** 
+	         * 已登录
+	         * 
+	         *  */
+	        // 7.验证token是否失效
+	        String mapStr = redisService.get(token);
+	        if (StringUtils.isBlank(mapStr)) {
+	            //8.登录失效，重新登录
+	        	log.warn("token失效：{}，用户请求uri：{}", token, request.getRequestURI());
+	        	throw new CommonException(Constants.UNAUTHORIZED, "用户登录已失效！请重新登录！");
+	        }
+	    	//9.重新设置redis时间
+	    	redisService.expire(token, 3000);
+	        //10.重新设置wso2令牌时间
+	    	Map<String,Object> map=JsonUtil.jsonToMap(mapStr);
+	    	String url="https://192.168.1.132:9443/oauth2/token";
+	    	headers = new HashMap<String,String>();
+	    	headers.put("client_id", "nqenKoLbjFswa_PQY3CcQacsiqka");
+	    	headers.put("client_secret", "qMS_RXTSfS5NU8JkLuX0NG4opHAa");
+	    	headers.put("refresh_token", String.valueOf(map.get("refresh_token")));
+	    	headers.put("grant_type", "refresh_token");
+	        String str2= HttpClientUtil.doPost(url, headers,"utf-8");
+	    	Map<String,Object> map2=JsonUtil.jsonToMap(str2);
+	    	for(Entry<String, Object> m:map2.entrySet()) {
+	    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
+	    	}
+	    	//10.1刷新失败，wso2令牌失效，重新登录
+	    	/**
+	    	if(StringUtils.isBlank(String.valueOf(map2.get("")))) {
+	    		//8.登录失效，重新登录
+	        	log.warn("token失效：{}，用户请求uri：{}", token, request.getRequestURI());
+	        	throw new CommonException(Constants.UNAUTHORIZED, "用户登录已失效！请重新登录！");
+	    	}
+	    	*/
         }
-        /** 
-         * 已登录
-         * 
-         *  */
-        // 7.验证token是否失效
-        String mapStr = redisService.get(token);
-        if (StringUtils.isBlank(mapStr)) {
-            //8.登录失效，重新登录
-        	log.warn("token失效：{}，用户请求uri：{}", token, request.getRequestURI());
-        	throw new CommonException(Constants.UNAUTHORIZED, "用户登录已失效！请重新登录！");
-        }
-    	//9.重新设置redis时间
-    	redisService.expire(token, 3000);
-        //10.重新设置wso2令牌时间
-    	Map<String,Object> map=JsonUtil.jsonToMap(mapStr);
-    	String url="https://192.168.1.132:9443/oauth2/token";
-    	headers = new HashMap<String,String>();
-    	headers.put("client_id", "nqenKoLbjFswa_PQY3CcQacsiqka");
-    	headers.put("client_secret", "qMS_RXTSfS5NU8JkLuX0NG4opHAa");
-    	headers.put("refresh_token", String.valueOf(map.get("refresh_token")));
-    	headers.put("grant_type", "refresh_token");
-        String str2= HttpClientUtil.doPost(url, headers,"utf-8");
-    	Map<String,Object> map2=JsonUtil.jsonToMap(str2);
-    	for(Entry<String, Object> m:map2.entrySet()) {
-    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
-    	}
-    	//10.1刷新失败，wso2令牌失效，重新登录
-    	/**
-    	if(StringUtils.isBlank(String.valueOf(map2.get("")))) {
-    		//8.登录失效，重新登录
-        	log.warn("token失效：{}，用户请求uri：{}", token, request.getRequestURI());
-        	throw new CommonException(Constants.UNAUTHORIZED, "用户登录已失效！请重新登录！");
-    	}
-    	*/
         return true;
     }
     

@@ -197,8 +197,9 @@ public class GlobalDataController {
     })
     public ResponseEntity<Result<?>> oauth2client(Oauth2Client bean) {
         try {
-        	String token=MD5Utils.md5(bean.getSmartwfCode());
-        	if(StringUtils.isBlank(redisService.get(token))) {
+        	String token=MD5Utils.md5(bean.getCode());
+        	String mapstr=redisService.get(token);
+        	if(!mapstr.equals("")) {
         		bean=new Oauth2Client();
         		bean.setSmartwfToken(token);
         		return ResponseEntity.ok(Result.data(bean));
@@ -207,5 +208,30 @@ public class GlobalDataController {
             log.error("授权令牌错误！{}", e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权令牌错误！"));
+    }
+    
+    /**
+     * @Description：模拟wso2用户创建
+     * @param code,session_state和state
+     * @return
+     */
+    @GetMapping("addWSO2User")
+    @ApiOperation(value = "wso2用户添加接口", notes = "wso2用户添加")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "password", value = "密码", dataType = "String")
+    })
+    public ResponseEntity<Result<?>> addWSO2User() {
+        try {
+        	Map<String,String> headers=new HashMap<String,String>();
+            headers.put("accept", "application/scim+json");
+            headers.put("Content-Type", "application/scim+json");
+            headers.put("userName", "admin");
+            headers.put("password", "admin");
+        	String str= HttpClientUtil.doPost("https://identity.windmagics.com/scim2/Users", headers,"utf-8");
+        } catch (Exception e) {
+            log.error("wso2用户添加错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("wso2用户添加错误！"));
     }
 }
