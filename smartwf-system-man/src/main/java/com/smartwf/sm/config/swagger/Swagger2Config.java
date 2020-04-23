@@ -28,7 +28,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @SpringBootConfiguration
 @EnableSwagger2
-@Profile({"dev", "test"})
+@Profile({"dev", "test", "prod"})
 public class Swagger2Config {
 
 
