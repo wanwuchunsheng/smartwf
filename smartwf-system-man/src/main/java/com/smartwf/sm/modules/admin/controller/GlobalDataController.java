@@ -184,39 +184,22 @@ public class GlobalDataController {
      */
     @GetMapping("oauth2client")
     @ApiOperation(value = "授权登录", notes = "授权登录，接收参数")
+    /**
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tag", value = "", dataType = "String", required = true)
+    })
+    */
     public ResponseEntity<Result<?>> oauth2client(Oauth2Client bean) {
         try {
-        	//获取token
-        	String url="https://identity.windmagics.com/oauth2/token";
-            Map<String,String> headers = new HashMap<String,String>();
-            headers.put("client_id", "fTHeymlRX7unpsP011mcncmi1K0a");
-            headers.put("client_secret", "899tgF6ulZ7ubYfqOijLMTAfn9ga");
-            headers.put("code", bean.getCode());
-            headers.put("grant_type", "authorization_code");
-            headers.put("redirect_uri", "http://192.168.3.48:8300/globaldata/oauth2client");
-        	String str= HttpClientUtil.doPost(url, headers,"utf-8");
-        	Map<String,Object> map=JsonUtil.jsonToMap(str);
-        	for(Entry<String, Object> m:map.entrySet()) {
-        		System.out.println(m.getKey()+"    "+m.getValue());
+        	/**
+        	if() {
+        		
         	}
-        	
-        	
-        	//刷新token
-        	Map<String,String> headers2 = new HashMap<String,String>();
-        	headers2.put("client_id", "fTHeymlRX7unpsP011mcncmi1K0a");
-        	headers2.put("client_secret", "899tgF6ulZ7ubYfqOijLMTAfn9ga");
-        	headers2.put("refresh_token", (String) map.get("refresh_token"));
-        	headers2.put("grant_type", "refresh_token");
-            String str2= HttpClientUtil.doPost(url, headers2,"utf-8");
-        	Map<String,Object> map2=JsonUtil.jsonToMap(str2);
-        	for(Entry<String, Object> m:map2.entrySet()) {
-        		System.out.println(m.getKey()+"    "+m.getValue());
-        	}
+        	*/
         	return ResponseEntity.ok(Result.data(bean));
-           // return ResponseEntity.status(HttpStatus.OK).body(Result.msg("成功"));
         } catch (Exception e) {
-            log.error("授权登录错误！{}", e.getMessage(), e);
+            log.error("授权令牌错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权登录错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权令牌错误！"));
     }
 }
