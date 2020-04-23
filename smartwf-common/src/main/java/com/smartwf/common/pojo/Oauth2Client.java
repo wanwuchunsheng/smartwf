@@ -10,23 +10,19 @@ import lombok.Data;
 @Data
 public class Oauth2Client implements Serializable {
 
-   
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 授权临时票据 code 参数
 	 */
-	private String code;
-    private String session_state;
-    private String state;
-    
-    private String access_token;
-    private String refresh_token;
-    private String scope;
-    private String id_token;
-    private String token_type;
-    private Integer expires_in;
+	private String smartwfCode;
+	/**
+	 * 返回类型：
+	 * null:默认返回token 1：返回token&用户基本信息   
+	 */
+    private String smartwfType; 
+    /**
+	 * 前端系统token
+	 */
+    private String smartwfToken;
     
 }

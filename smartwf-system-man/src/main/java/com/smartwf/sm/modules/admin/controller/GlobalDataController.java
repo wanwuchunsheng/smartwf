@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smartwf.common.pojo.Oauth2Client;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.JsonUtil;
+import com.smartwf.common.utils.MD5Utils;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Post;
@@ -40,6 +43,10 @@ public class GlobalDataController {
 	
 	@Autowired
     private GlobalDataService globalDataService;
+	
+	@Autowired
+    private RedisService redisService;
+	
 	 /**
      * @Description 租户列表
      * @return
@@ -184,19 +191,18 @@ public class GlobalDataController {
      */
     @GetMapping("oauth2client")
     @ApiOperation(value = "授权登录", notes = "授权登录，接收参数")
-    /**
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "tag", value = "", dataType = "String", required = true)
+    	@ApiImplicitParam(paramType = "query", name = "smartwfCode", value = "授权编码", dataType = "String", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "smartwfType", value = "返回默认:token 1:token&&用户基本信息", dataType = "String")
     })
-    */
     public ResponseEntity<Result<?>> oauth2client(Oauth2Client bean) {
         try {
-        	/**
-        	if() {
-        		
+        	String token=MD5Utils.md5(bean.getSmartwfCode());
+        	if(StringUtils.isBlank(redisService.get(token))) {
+        		bean=new Oauth2Client();
+        		bean.setSmartwfToken(token);
+        		return ResponseEntity.ok(Result.data(bean));
         	}
-        	*/
-        	return ResponseEntity.ok(Result.data(bean));
         } catch (Exception e) {
             log.error("授权令牌错误！{}", e.getMessage(), e);
         }
