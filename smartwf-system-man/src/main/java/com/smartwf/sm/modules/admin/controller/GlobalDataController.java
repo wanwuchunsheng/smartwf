@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.smartwf.common.pojo.Oauth2Client;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.service.RedisService;
@@ -193,7 +194,7 @@ public class GlobalDataController {
     @ApiOperation(value = "授权登录", notes = "授权登录，接收参数")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "smartwfCode", value = "授权编码", dataType = "String", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "smartwfType", value = "返回默认:token 1:token&&用户基本信息", dataType = "String")
+    	@ApiImplicitParam(paramType = "query", name = "smartwfType", value = "0:默认smartwToken  1:accessToken ", dataType = "String")
     })
     public ResponseEntity<Result<?>> oauth2client(Oauth2Client bean) {
         try {
@@ -202,6 +203,10 @@ public class GlobalDataController {
         	if(!mapstr.equals("")) {
         		bean=new Oauth2Client();
         		bean.setSmartwfToken(token);
+        		if("1".equals(bean.getSmartwfType())) { //1：返回access_token
+        			Map<String,Object> map=JsonUtil.jsonToMap(mapstr);
+            		bean.setAccessToken(String.valueOf(map.get("access_token")));
+        		}
         		return ResponseEntity.ok(Result.data(bean));
         	}
         } catch (Exception e) {

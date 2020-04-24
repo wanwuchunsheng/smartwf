@@ -24,5 +24,9 @@ public class Oauth2Client implements Serializable {
 	 * 前端系统token
 	 */
     private String smartwfToken;
+    /**
+	 * wso2 accesstoken
+	 */
+    private String accessToken;
     
 }
