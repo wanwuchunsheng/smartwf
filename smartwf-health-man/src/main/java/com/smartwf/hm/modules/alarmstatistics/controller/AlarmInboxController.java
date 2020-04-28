@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("api/alarminbox")
 @Slf4j
-@Api(description = "报警收件箱控制器")
+@Api(description = "报警收件箱/重点机位控制器")
 public class AlarmInboxController {
 	
 	@Autowired
