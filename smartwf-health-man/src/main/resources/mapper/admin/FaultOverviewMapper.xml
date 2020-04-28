@@ -9,7 +9,7 @@
 			select 
 				date_format(start_time,'%Y-%m-%d') as fname
 			from fault_information 
-			where fault_type=0
+			where incident_type=1 and fault_type=0
 			and start_time between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantCode != null ">
                 and tenant_code = #{bean.tenantCode}
@@ -24,7 +24,7 @@
 			select 
 				date_format(start_time,'%Y-%m-%d') as fname
 			from fault_information 
-			where fault_type=1
+			where incident_type=1 and fault_type=1
 			and start_time between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantCode != null ">
                 and tenant_code = #{bean.tenantCode}
@@ -39,7 +39,7 @@
 			select 
 				date_format(start_time,'%Y-%m-%d') as fname
 			from fault_information 
-			where fault_type=2
+			where incident_type=2 and fault_type=2
 			and start_time between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantCode != null ">
                 and tenant_code = #{bean.tenantCode}
@@ -55,7 +55,7 @@
 				date_format(start_time,'%Y-%m-%d') as fname,
 				alarm_level
 			from fault_information 
-			where 1=1 
+			where incident_type=1
 			and start_time between #{bean.stime} and #{bean.etime}
 			<if test="bean.alarmLevel != null ">
                 and alarm_level = #{bean.alarmLevel}
@@ -73,7 +73,7 @@
 				date_format(start_time,'%Y-%m-%d') as fname,
 				alarm_status
 			from fault_information 
-			where 1=1
+			where incident_type=1
 			and start_time between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantCode != null ">
                 and tenant_code = #{bean.tenantCode}
@@ -88,7 +88,7 @@
 				date_format(start_time,'%Y-%m-%d') as fname,
 				alarm_location
 			from fault_information 
-			where 1=1
+			where incident_type=1
 			and start_time between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantCode != null ">
                 and tenant_code = #{bean.tenantCode}
