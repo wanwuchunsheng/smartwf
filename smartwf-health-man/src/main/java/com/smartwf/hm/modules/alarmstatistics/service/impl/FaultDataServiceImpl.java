@@ -42,6 +42,7 @@ public class FaultDataServiceImpl implements FaultDataService {
 		bean.setCreateTime(new Date());
 		bean.setUpdateTime(bean.getCreateTime());
 		bean.setAlarmStatus(Constants.ZERO);//0-未处理
+		bean.setIncidentType(Constants.ONE);//1故障类型 2缺陷类型
 		//1）保存mysql
 		this.faultDataDao.insert(bean);
 		//2）获取redis缓存数据,并更新缓存数据，保存

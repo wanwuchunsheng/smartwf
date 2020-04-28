@@ -6,6 +6,7 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.smartwf.common.pojo.BasePojo;
 
 import lombok.Data;
 /**
@@ -13,7 +14,7 @@ import lombok.Data;
  */
 @Data
 @TableName("fault_information")
-public class FaultInformation implements Serializable{
+public class FaultInformation extends BasePojo implements Serializable{
 	/**
 	 * 
 	 */
@@ -52,15 +53,26 @@ public class FaultInformation implements Serializable{
 	 */
 	private Date endTime;
 	/**
+	 * 事变类型
+	 *  1-	故障类型
+		2-	缺陷类型
+	 */
+	private Integer IncidentType;
+	/**
 	 * 报警级别
-	    0红：严重
-	    1橙：普通
-	    2紫：一般
-	    3灰：位置     
+	   0红：危急
+		1橙：严重
+		2紫：一般
+		3灰：未知
+  
 	 */
 	private Integer alarmLevel;
 	/**
 	 * 故障类型
+	 * 0-系统报警
+		1-预警信息
+		2-人工提交
+
 	 */
 	private String faultType;
 	/**
@@ -80,36 +92,34 @@ public class FaultInformation implements Serializable{
 	 */
 	private String windFarm;
 	/**
+	 * 资产编码
+	 */
+	private String assetNumber;
+	/**
+	 * 工单号
+	 */
+	private String orderNumber;
+	/**
 	 * 故障状态
-	 *  0未处理
+	 * 5待审核
+		6驳回
+		0未处理
 		1已转工单
 		2处理中
 		3已处理
 		4已关闭
-
+		7回收站
+		8未解决
 	 */
 	private Integer alarmStatus;
+	
 	/**
-	 * 创建时间
-	 */
-	private Date createTime;
-	/**
-	 * 修改时间
-	 */
-	private Date updateTime;
-	/**
-	 * 租户表id
+	 * 租户表code
 	 */
 	private String tenantCode;
-	
-	/**
-	 * 资产编码
-	 */
-	private String assetNumber;
-	
 	/**
 	 * 操作状态
-	 *  0-重点关注
+	 *  1-重点关注
 	 */
 	private Integer operatingStatus;
 }
