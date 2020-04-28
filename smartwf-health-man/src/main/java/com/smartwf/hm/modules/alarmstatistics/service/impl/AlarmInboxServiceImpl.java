@@ -122,18 +122,17 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		fr.setCreateTime(bean.getUpdateTime()); //时间
 		fr.setRemark(bean.getRemark()); //备注
 		fr.setClosureReason(bean.getClosureReason()); //关闭原因
-		switch (bean.getAlarmStatus()) {
+		switch (bean.getAlarmStatus()) { //5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
 			case 1:
 				fr.setClosureReason("已转工单");
-				rmFaultInformationByRedis(bean.getId());
+				rmFaultInformationByRedis(bean.getId()); //删除redis对应数据
+				//向生产中心发送相关数据 1.id查询对象， 2封装对象调用生产中心api接口
 				break;
 			case 2:
 				fr.setClosureReason("处理中");
-				//rmFaultInformationByRedis(bean.getId());
 				break;
 			case 3:
 				fr.setClosureReason("已处理");
-				//rmFaultInformationByRedis(bean.getId());
 				break;
 			case 4:
 				fr.setClosureReason("已关闭");

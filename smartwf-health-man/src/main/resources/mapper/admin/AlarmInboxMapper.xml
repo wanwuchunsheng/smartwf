@@ -25,7 +25,7 @@
 			a.update_time,
 			a.tenant_code
         from fault_information a
-        where 1=1
+        where a.incident_type=1
         <if test="bean.tenantCode != null ">
           and a.tenant_code = #{bean.tenantCode}
         </if>
@@ -83,7 +83,7 @@
 			a.update_time,
 			a.tenant_code
         from fault_information a
-        where 1=1
+        where a.incident_type=1
         <if test="bean.id != null ">
           and a.id = #{bean.id}
         </if>
@@ -142,7 +142,7 @@
 			create_time,
 			update_time,
 			tenant_code
-		 from fault_information where alarm_status=0 order by start_time desc
+		 from fault_information where alarm_status=0 and incident_type=1 order by start_time desc
     </select>
     
     
@@ -165,37 +165,39 @@
 				d4.fault_type_all
 				,d5.start_time 
 			from 
-			(select device_code,count(*) as alarm_status from fault_information where 1=1
+			(select device_code,count(*) as alarm_status from fault_information where  incident_type=1
 				<if test="bean.tenantCode != null ">
 		          and tenant_code = #{bean.tenantCode}
 		        </if>
 				and alarm_status=0  group by device_code,device_name
 			) d1,
-			(select device_code,device_name,count(*) as fault_type_day from fault_information  where 1=1
+			(select device_code,device_name,count(*) as fault_type_day from fault_information  where  incident_type=1
 				<if test="bean.tenantCode != null ">
 		          and tenant_code = #{bean.tenantCode}
 		        </if>
 		        and to_days(start_time) = to_days(now()) group by device_code,device_name
 			) d2,
-			(select device_code,device_name,count(*) as fault_type_mouth from fault_information  where 1=1
+			(select device_code,device_name,count(*) as fault_type_mouth from fault_information  where incident_type=1
 				<if test="bean.tenantCode != null ">
 		          and tenant_code = #{bean.tenantCode}
 		        </if>
 		        and DATE_FORMAT( start_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) group by device_code,device_name
 			) d3,
-			(select device_code,device_name,count(*) as fault_type_all from fault_information  where 1=1
-				
+			(select device_code,device_name,count(*) as fault_type_all from fault_information  where incident_type=1
+				<if test="bean.tenantCode != null ">
+		          and tenant_code = #{bean.tenantCode}
+		        </if>
 		        group by device_code,device_name
 			) d4,
 			(select a.device_code,a.device_name,
 				CASE
-						WHEN a.start_time &lt;= 60 THEN concat(start_time ,'分钟')
-						WHEN a.start_time>60 and  a.start_time &lt;= 1440 THEN  concat( TRUNCATE(start_time/60,0),' 小时')
-						WHEN a.start_time>1440 and  a.start_time &lt;= 43200 THEN  concat( TRUNCATE(start_time/1440,0),' 天')
+						WHEN a.start_time &gt;= 0 and  a.start_time &lt; 60 THEN concat(start_time ,'分钟')
+						WHEN a.start_time &gt;= 60 and  a.start_time &lt; 1440 THEN  concat( TRUNCATE(start_time/60,0),' 小时')
+						WHEN a.start_time &gt;= 1440 and  a.start_time &lt; 43200 THEN  concat( TRUNCATE(start_time/1440,0),' 天')
 				ELSE '大于一个月'
 				END 'start_time'
 				from (
-					select device_code,device_name,TIMESTAMPDIFF(MINUTE,max(start_time),now() ) as start_time from fault_information where 1=1 
+					select device_code,device_name,TIMESTAMPDIFF(MINUTE,max(start_time),now() ) as start_time from fault_information where incident_type=1 
 					<if test="bean.tenantCode != null ">
 			          and tenant_code = #{bean.tenantCode}
 			        </if>
@@ -237,7 +239,7 @@
 			b.update_time,
 			b.tenant_code 
 		from key_position a left join fault_information b on a.device_code=b.device_code
-        where 1=1
+        where  b.incident_type=1
         <if test="bean.tenantCode != null ">
           and b.tenant_code = #{bean.tenantCode}
         </if>
