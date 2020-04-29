@@ -120,6 +120,7 @@ public class DefectServiceImpl implements DefectService {
 			foRecord.setFaultInfoId(bean.getId());
 			foRecord.setClosureStatus(bean.getAlarmStatus());
 			foRecord.setClosureType(1);//1处理记录  2处理意见
+			foRecord.setRemark(bean.getRemark());
 			switch (bean.getAlarmStatus()) {
 				case 6:
 					foRecord.setClosureReason("缺陷录入信息被驳回");

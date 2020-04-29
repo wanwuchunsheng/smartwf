@@ -100,6 +100,10 @@ public class FaultInformation extends BasePojo implements Serializable{
 	 */
 	private String orderNumber;
 	/**
+	 * 备注
+	 */
+	private String remark;
+	/**
 	 * 故障状态
 	 * 5待审核
 		6驳回
