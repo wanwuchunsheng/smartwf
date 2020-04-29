@@ -24,9 +24,30 @@ public class FaultOperationRecord implements Serializable {
 	 */
 	private String faultInfoId;
 	/**
-	 * 关闭原因
+	 * 操作状态
+	 * 5待审核
+		6驳回
+		0未处理
+		1已转工单
+		2处理中
+		3已处理
+		4已关闭
+		7回收站
+		8未解决
+	 * 
+	 */
+	private Integer closureStatus;
+	/**
+	 * 操作说明
+	 * 
 	 */
 	private String closureReason;
+	/**
+	 * 操作类型
+	 * 1.处理记录
+	 * 2.处理意见
+	 */
+	private Integer closureType;
 	/**
 	 * 备注
 	 */
@@ -39,5 +60,14 @@ public class FaultOperationRecord implements Serializable {
 	 * 创建人
 	 */
 	private String createUserName;
+	/**
+	 * 创建人id
+	 */
+	private String createUserId;
+	
+	/**
+	 * 租户编码
+	 */
+	private String tenantCode;
 	
 }

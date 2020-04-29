@@ -156,13 +156,13 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 
 	/**
 	 * @Description: 初始化未结束的故障
+	 *  1.查询mysql未处理记录
+	 *  2.保存redis最新未处理记录
 	 * @return
 	 */
 	@Override
 	public void selectFaultInformationByAll() {
-		//查询mysql所有未处理的redis数据
 		Map<String,FaultInformation> list = this.alarmInboxDao.selectFaultInformationByAll();
-		//保存redis数据
 		this.redisService.set("faultCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
 	}
 

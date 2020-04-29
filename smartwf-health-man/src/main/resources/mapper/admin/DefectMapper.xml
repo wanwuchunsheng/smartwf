@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.hm.modules.alarmstatistics.dao.DefectDao" >
+    <!-- 查询所有未处理的故障  -->
+    <select id="initDefectAll" resultType="java.util.HashMap">
+          select 
+			id,
+			alarm_code,
+			alarm_source,
+			alarm_description,
+			alarm_location,
+			start_time,
+			end_time,
+			incident_type,
+			alarm_level,
+			fault_type,
+			manufacturers,
+			device_code,
+			device_name,
+			wind_farm,
+			asset_number,
+			order_number,
+			alarm_status,
+			operating_status,
+			discoverer_id,
+			discoverer_name,
+			remark,
+			create_time,
+			create_user_id,
+			create_user_name,
+			update_time,
+			update_user_id,
+			update_user_name,
+			tenant_code
+		 from fault_information where alarm_status=0 and incident_type=2 order by start_time desc
+    </select>
+    
+    <!-- 缺陷信息主键查询  -->
+    <select id="initDefectAll" resultType="com.smartwf.hm.modules.alarmstatistics.vo.DefectVO">
+          select 
+			a.id,
+			a.alarm_code,
+			a.alarm_source,
+			a.alarm_description,
+			a.alarm_location,
+			a.start_time,
+			a.end_time,
+			a.incident_type,
+			a.alarm_level,
+			a.fault_type,
+			a.manufacturers,
+			a.device_code,
+			a.device_name,
+			a.wind_farm,
+			a.asset_number,
+			a.order_number,
+			a.alarm_status,
+			a.operating_status,
+			a.discoverer_id,
+			a.discoverer_name,
+			a.remark,
+			a.create_time,
+			a.create_user_id,
+			a.create_user_name,
+			a.update_time,
+			a.update_user_id,
+			a.update_user_name,
+			a.tenant_code,
+			b.filePath
+		from fault_information a left join  
+		(
+		 select pid,group_concat(file_path separator ',') as filePath from file_upload_record group by pid 
+		) b on a.id=b.pid
+		where a.id= #{bean.id}
+    </select>
+    
+   <!-- 缺陷信息分页查询  -->
+    <select id="selectDefectByPage" resultType="com.smartwf.hm.modules.alarmstatistics.vo.DefectVO">
+          select 
+			a.id,
+			a.alarm_code,
+			a.alarm_source,
+			a.alarm_description,
+			a.alarm_location,
+			a.start_time,
+			a.end_time,
+			a.incident_type,
+			a.alarm_level,
+			a.fault_type,
+			a.manufacturers,
+			a.device_code,
+			a.device_name,
+			a.wind_farm,
+			a.asset_number,
+			a.order_number,
+			a.alarm_status,
+			a.operating_status,
+			a.discoverer_id,
+			a.discoverer_name,
+			a.remark,
+			a.create_time,
+			a.create_user_id,
+			a.create_user_name,
+			a.update_time,
+			a.update_user_id,
+			a.update_user_name,
+			a.tenant_code,
+			b.filePath
+		from fault_information a left join  
+		(
+		 select pid,group_concat(file_path separator ',') as filePath from file_upload_record group by pid 
+		) b on a.id=b.pid
+		where a.incident_type=2
+        <if test="bean.tenantCode != null ">
+            and a.tenant_code=#{bean.tenantCode}
+        </if>
+        <if test="bean.alarmCode != null ">
+            and a.alarm_code=#{bean.alarmCode}
+        </if>
+        <if test="bean.alarmSource != null ">
+            and a.alarm_source=#{bean.alarmSource}
+        </if>
+        <if test="bean.alarmDescription != null ">
+            and a.alarm_description like '%${bean.alarmDescription}%'
+        </if>
+        <if test="bean.alarmLocation != null ">
+            and a.alarm_location like '%${bean.alarmLocation}%'
+        </if>
+        <if test="bean.alarmLevel != null ">
+            and a.alarm_level=#{bean.alarmLevel}
+        </if>
+        <if test="bean.alarmStatus != null ">
+            and a.alarm_status =#{bean.alarmStatus}
+        </if>
+        <if test="bean.faultType != null ">
+            and a.fault_type =#{bean.faultType}
+        </if>
+        <if test="bean.deviceCode != null ">
+            and a.device_code like '%${bean.deviceCode}%'
+        </if>
+        <if test="bean.assetNumber != null ">
+            and a.asset_number like '%${bean.assetNumber}%'
+        </if>
+        <if test="bean.operatingStatus != null ">
+            and a.operating_status =#{bean.operatingStatus}
+        </if>
+        <if test="bean.discovererId != null ">
+            and a.discoverer_id like '%${bean.discovererId}%'
+        </if>
+        <if test="bean.sTime != null" >
+          and a.start_time between #{bean.sTime} and #{bean.eTime}
+        </if>
+        order by a.start_time desc
+    </select>
+</mapper>
