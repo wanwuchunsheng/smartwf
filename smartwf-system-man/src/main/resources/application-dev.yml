@@ -13,7 +13,7 @@ server:
     max-connections: 2000
 #挂载本地路径
 web:
-    upload-path: ${user.home}/file/smartwf-sys-man/upload
+    upload-path: ${user.home}/file/smartwf-sm/upload
     
 # spring
 spring:
