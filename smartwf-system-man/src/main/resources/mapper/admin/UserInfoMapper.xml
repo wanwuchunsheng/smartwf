@@ -134,5 +134,38 @@
     <update id="updateUserPwd">
          update sys_user_info set pwd=#{newPwd} where pwd=#{oldPwd} and id=#{id}
     </update>
+    
+    
+    
+    <!-- 通过用户编码查询用户 -->
+     <select id="selectUserInfoByUserCode" resultType="com.smartwf.common.pojo.User">
+        select 
+			a.id,
+			a.user_code,
+			a.login_code,
+			a.user_name,
+			a.email,
+			a.mobile,
+			a.phone,
+			a.sex,
+			a.avatar,
+			a.sign,
+			a.wx_openid,
+			a.qq_openid,
+			a.address,mgr_type,
+		  a.remark,
+		  a.tenant_id,
+		  b.tenant_code,
+		  b.tenant_name,
+		  b.sel
+		from sys_user_info a left join sys_tenant b on a.tenant_id=b.id 
+		where a.enable=0  and b.enable=0
+        <if test="bean.userCode != null ">
+            and a.user_code = #{bean.userCode}
+        </if>
+        <if test="bean.tenantId != null ">
+            and a.tenant_id = #{bean.tenantId}
+        </if>
+    </select>
 	
 </mapper>

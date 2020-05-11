@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.smartwf.common.pojo.TreeResource;
+import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Resource;
 import com.smartwf.sm.modules.admin.vo.PermissionVO;
 import com.smartwf.sm.modules.admin.vo.ResourceVO;
@@ -66,6 +68,11 @@ public interface ResourceDao extends BaseMapper<Resource> {
      * @return
      */
 	ResourceVO selecResourcetById(@Param("bean") Resource bean);
+	/**
+     * @Description: 通过用户ID查询资源
+     * @return
+     */
+	List<TreeResource> selectResourceByUserId(@Param("bean") User userInfo);
 	
 
 }

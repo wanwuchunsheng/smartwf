@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.pojo.TreeOrganization;
+import com.smartwf.common.pojo.TreePost;
+import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.UserPost;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
@@ -42,11 +45,12 @@ public interface OrganizationDao extends BaseMapper<Organization> {
 	 * @Description: 通过组织架构id，查询用户组织架构集合
 	 */
 	List<UserPost> queryUserPostByOrgId(@Param("bean") OrganizationVO bean);
+	/**
+	 * @Description: 通过用户id，查询用户组织架构集合
+	 */
+	List<TreeOrganization> selectOrganizationByUserId(@Param("bean") User userInfo);
 	
 	
-	
-	
-
 
     
 }

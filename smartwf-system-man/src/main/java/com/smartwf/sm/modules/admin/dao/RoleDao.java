@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.smartwf.common.pojo.TreeRole;
+import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.vo.RoleVO;
 
@@ -33,6 +35,11 @@ public interface RoleDao extends BaseMapper<Role> {
 	 * 
 	 * */
 	void deleteRolePermissionById(@Param("bean") RoleVO bean);
+	/**
+	 * @Deprecated 通过用户ID查询角色
+	 * 
+	 * */
+	List<TreeRole> selectRoleByUserId(@Param("bean") User userInfo);
 
 
     

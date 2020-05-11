@@ -1,7 +1,9 @@
 package com.smartwf.sm.modules.admin.service;
 
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
@@ -42,5 +44,9 @@ public interface UserInfoService {
      */
 	void deleteUserInfo(UserInfoVO bean);
 	
-
+	/**
+     * @Description: 用户名密码查询用户基本信息
+     * @return
+     */
+	User selectUserInfoByUserCode(User bean);
 }

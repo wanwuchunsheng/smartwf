@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONArray;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.exception.CommonException;
+import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -59,8 +60,14 @@ public class LoginUtils {
         		throw new CommonException(Constants.BAD_REQUEST, "参数已过期！");
         	}
         	//5.生成新token，保存redis
-        	String smartToken=MD5Utils.md5(code);
-        	redisService.set(smartToken, JSONArray.toJSONString(map),3000);//过期时间50分钟
+        	String smartwfToken=MD5Utils.md5(code);
+        	//封装存储
+        	User user= new User();
+        	user.setAccessToken(String.valueOf(map.get("access_token")));
+        	user.setRefreshToken(String.valueOf(map.get("refresh_token")));
+        	user.setSmartwfToken(smartwfToken);
+        	user.setCode(code);
+        	redisService.set(smartwfToken, JSONArray.toJSONString(user),3000);//过期时间50分钟
         	//6.刷新token过期时间
         	headers = new HashMap<String,String>();
         	headers.put("client_id", "nqenKoLbjFswa_PQY3CcQacsiqka");
@@ -87,12 +94,12 @@ public class LoginUtils {
 	    	//9.重新设置redis时间
 	    	redisService.expire(token, 3000);
 	        //10.重新设置wso2令牌时间
-	    	Map<String,Object> map=JsonUtil.jsonToMap(mapStr);
+	    	User user=JsonUtil.jsonToPojo(mapStr, User.class);
 	    	String url="https://192.168.1.132:9443/oauth2/token";
 	    	headers = new HashMap<String,String>();
 	    	headers.put("client_id", "nqenKoLbjFswa_PQY3CcQacsiqka");
 	    	headers.put("client_secret", "qMS_RXTSfS5NU8JkLuX0NG4opHAa");
-	    	headers.put("refresh_token", String.valueOf(map.get("refresh_token")));
+	    	headers.put("refresh_token", user.getRefreshToken());
 	    	headers.put("grant_type", "refresh_token");
 	        String str2= HttpClientUtil.doPost(url, headers,"utf-8");
 	    	Map<String,Object> map2=JsonUtil.jsonToMap(str2);

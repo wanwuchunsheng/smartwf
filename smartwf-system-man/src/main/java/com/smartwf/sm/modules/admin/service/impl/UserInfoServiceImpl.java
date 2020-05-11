@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.MD5Utils;
 import com.smartwf.common.utils.StrUtils;
+import com.smartwf.sm.modules.admin.dao.OrganizationDao;
+import com.smartwf.sm.modules.admin.dao.PostDao;
+import com.smartwf.sm.modules.admin.dao.ResourceDao;
+import com.smartwf.sm.modules.admin.dao.RoleDao;
 import com.smartwf.sm.modules.admin.dao.UserInfoDao;
 import com.smartwf.sm.modules.admin.dao.UserOrganizationDao;
 import com.smartwf.sm.modules.admin.dao.UserPostDao;
@@ -48,7 +51,20 @@ public class UserInfoServiceImpl implements UserInfoService{
 	
 	@Autowired
 	private UserRoleDao userRoleDao;
+	
+	@Autowired
+	private OrganizationDao organizationDao;
+	
+	@Autowired
+	private PostDao postDao;
+	
+	@Autowired
+	private RoleDao roleDao;
 
+	@Autowired
+	private ResourceDao resourceDao;
+
+	
 	/**
 	 * @Description:查询用户资料分页
 	 * @ MgrType：2超级管理员  1管理员  0普通
@@ -247,5 +263,32 @@ public class UserInfoServiceImpl implements UserInfoService{
 		}
 	}
 
+	/**
+     * @Description：获取用户基础信息
+     *   角色，权限，组织架构
+     * @return
+     */
+	@Transactional
+	@Override
+	public User selectUserInfoByUserCode(User user) {
+		//获取用户信息
+		User userInfo= this.userInfoDao.selectUserInfoByUserCode(user);
+		if(userInfo !=null) {
+			userInfo.setCode(user.getCode());
+			userInfo.setSmartwfToken(user.getSmartwfToken());
+			userInfo.setRefreshToken(user.getRefreshToken());
+			userInfo.setAccessToken(user.getAccessToken());
+			//获取组织架构
+			userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
+			//职务
+			userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
+			//角色
+			userInfo.setRoleList(this.roleDao.selectRoleByUserId(userInfo));
+			//资源权限
+			userInfo.setResouceList(this.resourceDao.selectResourceByUserId(userInfo));
+		}
+		return userInfo;
+	}
 
+	 
 }

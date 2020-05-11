@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.pojo.TreePost;
+import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.PostVO;
@@ -35,6 +37,11 @@ public interface PostDao extends BaseMapper<Post> {
 	 * 
 	 * */
 	List<PostVO> selectPostByPage(@Param("bean") PostVO bean, Page<Post> page);
+	/**
+	 * @Deprecated 通过用户ID查询职务
+	 * 
+	 * */
+	List<TreePost> selectPostByUserId(@Param("bean") User userInfo);
 
 
     

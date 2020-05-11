@@ -2,12 +2,14 @@ package com.smartwf.sm.modules.admin.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
@@ -59,6 +61,12 @@ public interface UserInfoDao extends BaseMapper<UserInfo> {
      * @return
      */
 	void updateUserPwd(@Param("id") Integer id, @Param("oldPwd") String oldPwd, @Param("newPwd") String newPwd);
+
+	/**
+     * @Description： 获取用户基础信息
+     * @return
+     */
+	User selectUserInfoByUserCode(@Param("bean") User user);
 
 
     

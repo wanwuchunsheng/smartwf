@@ -69,4 +69,24 @@
 	   </foreach>
 	</delete>
 	
+	 <!-- 根据用户ID查询所有组织架构 -->
+    <select id="selectOrganizationByUserId" resultType="com.smartwf.common.pojo.TreeOrganization">
+        select 
+			b.id,
+			b.pid,
+			b.uid,
+			b.sort,
+			b.org_code,
+			b.org_name,
+			b.org_type
+		from sys_user_organization a ,sys_organization b  
+		where a.organization_id=b.id and b.enable = 0
+        <if test="bean.id != null ">
+            and a.user_id = #{bean.id}
+        </if>
+        <if test="bean.tenantId != null ">
+            and b.tenant_id = #{bean.tenantId}
+        </if>
+    </select>
+    
 </mapper>

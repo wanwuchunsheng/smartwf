@@ -61,7 +61,24 @@
         <if test="bean.remark != null ">
             and a.remark like '%${bean.remark}%'
         </if>
-		
+    </select>
+    
+    
+    <!-- 根据用户ID查询所有职务 -->
+    <select id="selectPostByUserId" resultType="com.smartwf.common.pojo.TreePost">
+        select
+			b.id,
+			b.organization_id,
+			b.post_code,
+			b.post_name,
+			b.post_type
+		from sys_user_post a, sys_post b where a.post_id=b.id and b.enable=0 
+        <if test="bean.id != null ">
+            and a.user_id = #{bean.id}
+        </if>
+        <if test="bean.tenantId != null ">
+            and b.tenant_id = #{bean.tenantId}
+        </if>
     </select>
   
 </mapper>

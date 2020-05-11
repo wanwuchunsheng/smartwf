@@ -40,7 +40,6 @@ public class UserThreadLocal {
      		user.setSex(1);
      		user.setAddress("湖北武汉");
      		user.setRemark("湖北武汉江夏区");
-     		user.setEnable(0);
      		user.setId(2);
      		user.setMgrType(1);
      		user.setTenantId(1);

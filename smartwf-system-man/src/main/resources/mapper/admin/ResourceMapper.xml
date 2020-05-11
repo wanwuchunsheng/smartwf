@@ -201,5 +201,20 @@
     </select>
     
     
-    
+     <!-- 根据用户ID查询所有资源权限 -->
+    <select id="selectResourceByUserId" resultType="com.smartwf.common.pojo.TreeRole">
+        select 
+			b.id,
+			b.role_code,
+			b.role_name,
+			b.tenant_id
+		from sys_user_role a ,sys_role b 
+		where a.role_id=b.id and b.enable = 0
+        <if test="bean.id != null ">
+            and a.user_id = #{bean.id}
+        </if>
+        <if test="bean.tenantId != null ">
+            and b.tenant_id = #{bean.tenantId}
+        </if>
+    </select>
 </mapper>

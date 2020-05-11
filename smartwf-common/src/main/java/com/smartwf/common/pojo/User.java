@@ -1,22 +1,40 @@
 package com.smartwf.common.pojo;
 
-import lombok.Data;
-
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
+
+import lombok.Data;
 
 /**
  * @Description: 用户
  */
 @Data
-public class User extends BasePojo implements Serializable{
+public class User implements Serializable{
 
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * 授权临时票据 code 参数
+	 */
+	private String code;
+	
+    /**
+	 * 前端系统token
+	 */
+    private String smartwfToken;
+    /**
+	 * wso2 accesstoken
+	 */
+    private String accessToken;
+    
+    /**
+     * 刷新token凭证
+     * */
+    private String refreshToken;
+	
 	/**
      * id
      */
@@ -99,33 +117,21 @@ public class User extends BasePojo implements Serializable{
 	 */
 	private Integer mgrType;
 	/**
-	 * 保密问题
+	 * 组织架构 
 	 */
-	private String pwdQuestion;
+	private List<TreeOrganization> organizationList;
 	/**
-	 * 保密问题答案
+	 * 职务
 	 */
-	private String pwdQuestionAnswer;
-	/**
-	 * 保密问题2
-	 */
-	private String pwdQuestion2;
-	/**
-	 * 保密问题答案2
-	 */
-	private String pwdQuestionAnswer2;
-	/**
-	 * 保密问题3
-	 */
-	private String pwdQuestion3;
-	/**
-	 * 保密问题答案3
-	 */
-	private String pwdQuestionAnswer3;
-	/**
-	 * 是否有效 0有效  1无效 
-	 */
-	private Integer enable;
+	private List<TreePost> postList;
 	
-
+	/**
+	 * 角色
+	 */
+	private List<TreeRole> roleList;
+	
+	/**
+	 * 资源菜单
+	 */
+	private List<TreeResource> resouceList;
 }

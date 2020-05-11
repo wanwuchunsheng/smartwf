@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("lgrecord")
 @Slf4j
-@Api(description ="组织架构控制器")
+@Api(description ="登录记录控制器")
 public class LoginRecordController {
 	
 	@Autowired
