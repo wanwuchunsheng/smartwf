@@ -43,7 +43,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- 使用dependencyManagement进行版本管理 -->
+            <!-- 使用dependencyManagement进行版本管理 
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -51,6 +51,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+             -->
             <!-- SpringBoot开发工具 热部署  
             <dependency>
                 <groupId>org.springframework.boot</groupId>

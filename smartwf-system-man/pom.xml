@@ -82,11 +82,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
         </dependency>
-        <!-- zipkin -->
+        <!-- zipkin 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zipkin</artifactId>
         </dependency>
+        -->
         <!-- rocketmq -->
         <dependency>
             <groupId>org.apache.rocketmq</groupId>

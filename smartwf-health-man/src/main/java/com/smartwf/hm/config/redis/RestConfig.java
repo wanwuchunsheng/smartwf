@@ -1,7 +1,7 @@
 package com.smartwf.hm.config.redis;
 
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+//import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 public class RestConfig {
 	
 	@Bean
-	@LoadBalanced
+	//@LoadBalanced
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
