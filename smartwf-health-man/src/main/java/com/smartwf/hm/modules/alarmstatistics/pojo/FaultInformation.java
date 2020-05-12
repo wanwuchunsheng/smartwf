@@ -23,7 +23,9 @@ public class FaultInformation extends BasePojo implements Serializable{
 	/**
 	 * 主键
 	 */
-	//@TableId
+	/**
+	 * 主键
+	 */
 	@TableId(type = IdType.UUID)
 	private String id;
 
@@ -100,10 +102,6 @@ public class FaultInformation extends BasePojo implements Serializable{
 	 */
 	private String orderNumber;
 	/**
-	 * 备注
-	 */
-	private String remark;
-	/**
 	 * 故障状态
 	 * 5待审核
 		6驳回
@@ -116,14 +114,29 @@ public class FaultInformation extends BasePojo implements Serializable{
 		8未解决
 	 */
 	private Integer alarmStatus;
-	
-	/**
-	 * 租户表code
-	 */
-	private String tenantCode;
 	/**
 	 * 操作状态
 	 *  1-重点关注
 	 */
 	private Integer operatingStatus;
+	/**
+	 * 发现人姓名
+	 */
+	private String discovererName;
+	/**
+	 * 发现人ID
+	 */
+	private String discovererId;
+	
+	/**
+	 * 备注
+	 */
+	private String remark;
+	
+	
+	/**
+	 * 租户表code
+	 */
+	private String tenantCode;
+	
 }

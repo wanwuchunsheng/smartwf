@@ -45,7 +45,7 @@ public class FaultDataController {
 	 * @return
 	 */
     @PostMapping("saveFaultInformation")
-    @ApiOperation(value = "故障报警缺陷数据保存接口", notes = "故障报警缺陷数据保存")
+    @ApiOperation(value = "故障报警数据录入接口", notes = "故障报警数据录入")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String",required = true),

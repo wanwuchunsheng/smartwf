@@ -45,7 +45,7 @@ public class DefectController {
      *
 	 */
     @PutMapping("updateDefectById")
-    @ApiOperation(value = "缺陷工单处理接口", notes = "缺陷工单处理")
+    @ApiOperation(value = "缺陷工单审批（处理）接口", notes = "缺陷工单处理")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
@@ -94,7 +94,7 @@ public class DefectController {
 	 * @return
 	 */
     @PostMapping("selectDefectByPage")
-    @ApiOperation(value = "分页查询缺陷信息 接口", notes = "分页查询缺陷信息查询")
+    @ApiOperation(value = "分页查询缺陷接口", notes = "分页查询缺陷信息查询")
     @ApiImplicitParams({
 	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),

@@ -3,6 +3,8 @@ package com.smartwf.hm.modules.alarmstatistics.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -16,16 +18,19 @@ import lombok.Data;
  * @date 2019-12-27 13:02:48
  */
 @Data
-@TableName("file_upload_record")
+@TableName("fault_file_record")
 public class FileUploadRecord implements Serializable {
-
-	private static final long serialVersionUID = 1L;
 	 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
      * 主键id
      */
-	@TableId(type = IdType.AUTO)
-	private Integer id;
+	@TableId(type = IdType.UUID)
+	private String id;
 	
 	/**
 	 * 外键pid

@@ -97,6 +97,7 @@ public class DefectServiceImpl implements DefectService {
 					fuRecord.setPid(bean.getId());
 					fuRecord.setFilePath(s);
 					fuRecord.setTenantCode(bean.getTenantCode());
+					fuRecord.setCreateTime(new Date());
 					this.fileUploadRecordDao.insert(fuRecord);
 				}
 			}

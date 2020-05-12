@@ -36,7 +36,7 @@
     </select>
     
     <!-- 缺陷信息主键查询  -->
-    <select id="initDefectAll" resultType="com.smartwf.hm.modules.alarmstatistics.vo.DefectVO">
+    <select id="selectDefectById" resultType="com.smartwf.hm.modules.alarmstatistics.vo.DefectVO">
           select 
 			a.id,
 			a.alarm_code,
@@ -69,7 +69,7 @@
 			b.filePath
 		from fault_information a left join  
 		(
-		 select pid,group_concat(file_path separator ',') as filePath from file_upload_record group by pid 
+		 select pid,group_concat(file_path separator ',') as filePath from fault_file_record group by pid 
 		) b on a.id=b.pid
 		where a.id= #{bean.id}
     </select>
@@ -108,7 +108,7 @@
 			b.filePath
 		from fault_information a left join  
 		(
-		 select pid,group_concat(file_path separator ',') as filePath from file_upload_record group by pid 
+		 select pid,group_concat(file_path separator ',') as filePath from fault_file_record group by pid 
 		) b on a.id=b.pid
 		where a.incident_type=2
         <if test="bean.tenantCode != null ">
