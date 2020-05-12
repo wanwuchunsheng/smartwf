@@ -230,6 +230,7 @@ public class GlobalDataController {
     @ApiOperation(value = "获取用户基础信息接口", notes = "获取用户基础信息")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "smartwfToken", value = "令牌token", dataType = "String", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "resType", value = "资源类型（1.全部信息  2.用户基础信息 3.用户基础信息+组织机构 4，用户基础信息+组织机构+职务 5.用户基础信息+组织机构+职务+角色）", dataType = "String"),
     	@ApiImplicitParam(paramType = "query", name = "userCode", value = "wso2用户编码", dataType = "String")
     })
     public ResponseEntity<Result<?>> selectUserInfoByToken(User bean) {

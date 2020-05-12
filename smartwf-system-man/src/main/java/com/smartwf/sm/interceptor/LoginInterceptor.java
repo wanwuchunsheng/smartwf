@@ -30,7 +30,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    	return LoginUtils.checkLogin(request, response, handler, redisService);
+    	//return LoginUtils.checkLogin(request, response, handler, redisService);
+    	return true;
     }
 
 

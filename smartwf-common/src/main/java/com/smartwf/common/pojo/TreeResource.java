@@ -1,6 +1,7 @@
 package com.smartwf.common.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 
@@ -67,5 +68,17 @@ public class TreeResource implements Serializable{
      *      
 	 */
 	private Integer enable;
+	/**
+	 * 用户操作ID
+     *      
+	 */
+	private String actId;
+	/**
+	 * 用户操作CODE 
+     *      
+	 */
+	private String actCode;
+	
+	private List<TreeResource> children;
 	
 }

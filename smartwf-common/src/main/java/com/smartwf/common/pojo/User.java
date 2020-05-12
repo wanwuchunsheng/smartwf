@@ -20,6 +20,14 @@ public class User implements Serializable{
 	 * 授权临时票据 code 参数
 	 */
 	private String code;
+	/**
+	 * 获取类型
+	 * 1.获取用户基础信息
+	 * 2.用户基础信息+组织机构
+	 * 3.用户基础信息+组织机构+职务
+	 * 4.用户基础信息+组织机构+职务+资源
+	 */
+	private String resType;
 	
     /**
 	 * 前端系统token

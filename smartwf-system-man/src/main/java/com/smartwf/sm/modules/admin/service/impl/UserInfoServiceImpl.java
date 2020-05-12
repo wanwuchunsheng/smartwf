@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.pojo.TreeResource;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.MD5Utils;
@@ -28,6 +29,7 @@ import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.pojo.UserPost;
 import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
+import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 import lombok.extern.log4j.Log4j;
@@ -278,17 +280,74 @@ public class UserInfoServiceImpl implements UserInfoService{
 			userInfo.setSmartwfToken(user.getSmartwfToken());
 			userInfo.setRefreshToken(user.getRefreshToken());
 			userInfo.setAccessToken(user.getAccessToken());
-			//获取组织架构
-			userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
-			//职务
-			userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
-			//角色
-			userInfo.setRoleList(this.roleDao.selectRoleByUserId(userInfo));
-			//资源权限
-			userInfo.setResouceList(this.resourceDao.selectResourceByUserId(userInfo));
+			switch (user.getResType()) {
+			case "1":
+				//获取组织架构
+				userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
+				//职务
+				userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
+				//角色
+				userInfo.setRoleList(this.roleDao.selectRoleByUserId(userInfo));
+				//资源权限
+				List<TreeResource> reslist=buildByRecursive(this.resourceDao.selectResourceByUserId(userInfo) );
+				userInfo.setResouceList(reslist);
+				break;
+            case "2":
+				break;
+            case "3":
+            	//获取组织架构
+				userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
+				break;
+            case "4":
+            	//获取组织架构
+				userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
+				//职务
+				userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
+				break;
+            case "5":
+            	//获取组织架构
+				userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
+				//职务
+				userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
+				//角色
+				userInfo.setRoleList(this.roleDao.selectRoleByUserId(userInfo));
+				break;
+			default:
+				break;
+			}
 		}
 		return userInfo;
 	}
 
-	 
+	
+	 /**
+     * 使用递归方法建树
+	* @param treeNodes
+	* @return
+	*/
+	public static List<TreeResource> buildByRecursive(List<TreeResource> treeNodes) {
+		List<TreeResource> trees = new ArrayList<TreeResource>();
+		for (TreeResource treeNode : treeNodes) {
+			 if (treeNode.getUid()==0) {
+			     trees.add(findChildren(treeNode,treeNodes));
+			 }
+		}
+		return trees;
+	}
+	/**
+	* 递归查找子节点
+	* @param treeNodes
+	* @return
+	*/
+	public static TreeResource findChildren(TreeResource treeNode,List<TreeResource> treeNodes) {
+		for (TreeResource it : treeNodes) {
+			 if(treeNode.getId().equals(it.getUid())) {
+			     if (treeNode.getChildren() == null ) {
+			         treeNode.setChildren(new ArrayList<TreeResource>());
+			     }
+			     treeNode.getChildren().add(findChildren(it,treeNodes));
+			 }
+		}
+		return treeNode;
+	}
 }

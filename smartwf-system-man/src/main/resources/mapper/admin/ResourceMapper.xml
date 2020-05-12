@@ -26,7 +26,7 @@
 	</delete>
 	
     
-    <!-- 查询模块下所以子模块 -->
+    <!-- 查询模块下所有子模块 -->
     <select id="selectResourceById" parameterType="com.smartwf.sm.modules.admin.pojo.Resource">
         select 
 	        id,
@@ -202,19 +202,27 @@
     
     
      <!-- 根据用户ID查询所有资源权限 -->
-    <select id="selectResourceByUserId" resultType="com.smartwf.common.pojo.TreeRole">
-        select 
-			b.id,
-			b.role_code,
-			b.role_name,
-			b.tenant_id
-		from sys_user_role a ,sys_role b 
-		where a.role_id=b.id and b.enable = 0
-        <if test="bean.id != null ">
-            and a.user_id = #{bean.id}
+    <select id="selectResourceByUserId" resultType="com.smartwf.common.pojo.TreeResource">
+        select e.act_id,e.act_code,r.id,r.pid,r.uid,r.sort,r.level,r.res_code,r.res_name,r.res_type from sys_resource r left join 
+		(
+			select 
+				group_concat( f.id separator ',' ) as act_id, 
+				group_concat( f.permission_code separator ',' ) as act_code,
+				f.res_id 
+			from sys_user_role a,sys_role b,sys_role_permission c,sys_permission f 
+			where a.role_id = b.id 
+			and b.id=c.role_id 
+			and a.tenant_id=b.tenant_id  and b.tenant_id=c.tenant_id and c.tenant_id=f.tenant_id
+			and f.id = c.permission_id 
+			and b.enable=0  
+			<if test="bean.id != null ">
+	            and a.user_id = #{bean.id}
+	        </if>
+	         group by f.tenant_id,f.res_id
+		) e on e.res_id=r.id  where r.enable=0
+		<if test="bean.tenantId != null ">
+            and r.tenant_id = #{bean.tenantId}
         </if>
-        <if test="bean.tenantId != null ">
-            and b.tenant_id = #{bean.tenantId}
-        </if>
+        
     </select>
 </mapper>
