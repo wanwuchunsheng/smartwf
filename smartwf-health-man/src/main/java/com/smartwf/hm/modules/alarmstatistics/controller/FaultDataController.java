@@ -124,24 +124,24 @@ public class FaultDataController {
             	//保存图片
             	for(MultipartFile fl: files) {
         	        if (fl.getContentType().contains("image")) {
-        	                String temp = "images" + File.separator ;
-        	                // 获取图片的文件名
-        	                String fileName = fl.getOriginalFilename();
-        	                // 获取图片的扩展名
-        	                String extensionName = fileName.substring(fileName.indexOf("."));
-        	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
-        	                String newFileName = String.valueOf(System.currentTimeMillis())  + extensionName;
-        	                // 数据库保存的目录
-        	                String datdDirectory = temp.concat(newFileName);
-        	                // 文件路径
-        	                String filePath = localFilePath+File.separator+temp;
-        	                File dest = new File(filePath, newFileName);
-        	                if (!dest.getParentFile().exists()) {
-        	                    dest.getParentFile().mkdirs();
-        	                }
-        	                // 上传到指定目录
-        	                fl.transferTo(dest);
-        	                sb.append(datdDirectory).append(",");
+    	                String temp = "images" + File.separator ;
+    	                // 获取图片的文件名
+    	                String fileName = fl.getOriginalFilename();
+    	                // 获取图片的扩展名
+    	                String extensionName = fileName.substring(fileName.indexOf("."));
+    	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
+    	                String newFileName = String.valueOf(System.currentTimeMillis())  + extensionName;
+    	                // 数据库保存的目录
+    	                String datdDirectory = temp.concat(newFileName);
+    	                // 文件路径
+    	                String filePath = localFilePath+File.separator+temp;
+    	                File dest = new File(filePath, newFileName);
+    	                if (!dest.getParentFile().exists()) {
+    	                    dest.getParentFile().mkdirs();
+    	                }
+    	                // 上传到指定目录
+    	                fl.transferTo(dest);
+    	                sb.append(datdDirectory).append(",");
         	        }
             	}
             }
