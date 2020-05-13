@@ -21,6 +21,9 @@ public class Result<T> implements Serializable {
      * 消息
      */
     private String msg;
+    /**
+     * 状态标识
+     */
     private Integer code;
 
     /**
@@ -37,6 +40,11 @@ public class Result<T> implements Serializable {
 
     public Result(String msg) {
         this.msg = msg;
+    }
+    
+    public Result(Integer code,String msg) {
+        this.msg = msg;
+        this.code = code;
     }
 
 
@@ -82,6 +90,15 @@ public class Result<T> implements Serializable {
      */
     public static Result<String> msg(String msg) {
         return new Result(msg);
+    }
+    
+    /**
+     * 返回自定义信息
+     * @param msg
+     * @return
+     */
+    public static Result<String> msg(Integer code,String msg) {
+        return new Result(code,msg);
     }
 
 

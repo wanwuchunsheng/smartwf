@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Description: 文件上传控制器
  */
 @RestController
-@RequestMapping("api/file")
+@RequestMapping("smartwf_health/file")
 @Slf4j
 @Api(description = "文件上传控制器")
 public class FileUploadController {

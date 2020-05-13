@@ -86,6 +86,11 @@ spring:
   #挂载本地路径
   resources:
     static-locations: file:${web.upload-path}
+  servlet:
+    multipart:
+      max-file-size: 200MB #单个文件上传大小
+      max-request-size: 600MB #连续上传文件大小
+      enabled: true
     
 # 日志
 logging:

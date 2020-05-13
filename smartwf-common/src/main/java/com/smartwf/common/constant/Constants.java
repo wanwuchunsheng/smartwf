@@ -50,6 +50,8 @@ public class Constants {
     public static final int UNAUTHORIZED = 401;
 
     public static final int BAD_REQUEST = 400;
+    
+    public static final int EQU_SUCCESS = 200;
 
     /**
      * 状态码========================================================

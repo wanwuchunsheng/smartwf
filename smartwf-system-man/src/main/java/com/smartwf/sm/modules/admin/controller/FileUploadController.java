@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.smartwf.common.annotation.TraceLog;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 
 import io.swagger.annotations.Api;
@@ -67,7 +68,7 @@ public class FileUploadController {
 	                return ResponseEntity.status(HttpStatus.OK).body(Result.msg(datdDirectory));
 	            }catch (Exception e){
 	            	log.error("文件上传异常！{}", e.getMessage(), e);
-	            	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("失败！上传异常"));
+	            	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"失败！上传异常"));
 	            }
 	        }
 	    }

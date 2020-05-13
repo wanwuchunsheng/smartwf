@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
-import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Description: 缺陷收件箱控制器
  */
 @RestController
-@RequestMapping("api/defect")
+@RequestMapping("smartwf_health/defect")
 @Slf4j
 @Api(description = "缺陷收件箱控制器")
 public class DefectController {
@@ -58,7 +56,7 @@ public class DefectController {
     public ResponseEntity<Result<?>> updateDefectById(DefectVO bean) {
         try {
         	 this.defectService.updateDefectById(bean);
-        	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
+        	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"修改成功"));
         } catch (Exception e) {
             log.error("缺陷工单处理错误！{}", e.getMessage(), e);
         }
