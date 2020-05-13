@@ -60,7 +60,7 @@ public class DefectController {
         } catch (Exception e) {
             log.error("缺陷工单处理错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("缺陷工单处理错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"缺陷工单处理错误！"));
     }
 	   
     /**
@@ -81,7 +81,7 @@ public class DefectController {
         } catch (Exception e) {
             log.error("缺陷信息主键查询错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("缺陷信息主键查询错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"缺陷信息主键查询错误！"));
     }
 
     /**
@@ -125,7 +125,7 @@ public class DefectController {
         } catch (Exception e) {
             log.error("分页查询缺陷信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询缺陷信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"分页查询缺陷信息错误！"));
     }
  
     /**
@@ -162,6 +162,6 @@ public class DefectController {
 	       } catch (Exception e) {
 	           log.error("查询所有缺陷记录信息错误！{}", e.getMessage(), e);
 	       }
-	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有缺陷记录信息错误！"));
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"查询所有缺陷记录信息错误！"));
       }
 }

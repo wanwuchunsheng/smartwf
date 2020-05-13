@@ -27,6 +27,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -82,7 +83,7 @@ public class FaultDataController {
         } catch (Exception e) {
             log.error("保存实时故障报警信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("保存实时故障报警信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"保存实时故障报警信息错误！"));
     }
     
     
@@ -121,11 +122,11 @@ public class FaultDataController {
             if(files!=null && files.size()>0) {
             	sb=new StringBuffer();
             	//保存图片
-            	for(MultipartFile file: files) {
-        	        if (file.getContentType().contains("image")) {
+            	for(MultipartFile fl: files) {
+        	        if (fl.getContentType().contains("image")) {
         	                String temp = "images" + File.separator ;
         	                // 获取图片的文件名
-        	                String fileName = file.getOriginalFilename();
+        	                String fileName = fl.getOriginalFilename();
         	                // 获取图片的扩展名
         	                String extensionName = fileName.substring(fileName.indexOf("."));
         	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
@@ -139,7 +140,7 @@ public class FaultDataController {
         	                    dest.getParentFile().mkdirs();
         	                }
         	                // 上传到指定目录
-        	                file.transferTo(dest);
+        	                fl.transferTo(dest);
         	                sb.append(datdDirectory).append(",");
         	        }
             	}
@@ -169,7 +170,7 @@ public class FaultDataController {
         } catch (Exception e) {
             log.error("初始化故障数据信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("初始化故障数据信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"初始化故障数据信息错误！"));
     }
     
     /**
@@ -185,7 +186,7 @@ public class FaultDataController {
         } catch (Exception e) {
             log.error("初始化缺陷数据信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("初始化缺陷数据信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"初始化缺陷数据信息错误！"));
     }
 
 }
