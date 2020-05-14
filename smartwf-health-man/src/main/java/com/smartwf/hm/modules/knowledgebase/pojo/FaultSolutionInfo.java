@@ -48,6 +48,10 @@ public class FaultSolutionInfo implements Serializable {
 	 */
 	private String remark;
 	/**
+	 * 是否启用  0启用   1禁用
+	 */
+	private Integer enable;
+	/**
 	 * 状态 0默认  1审核通过
 	 */
 	private Integer status;

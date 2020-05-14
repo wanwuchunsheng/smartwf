@@ -215,7 +215,7 @@ public class AlarmInboxController {
 	 	 * @return
 	 	 */
 	    @PostMapping("selectKeyPositionByAll")
-	    @ApiOperation(value = "重点机批量机位查询接口", notes = "查询所有机位数据")
+	    @ApiOperation(value = "重点机位批量查询接口", notes = "查询所有机位数据")
 	    @ApiImplicitParams({
 	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
 	    })
@@ -410,10 +410,10 @@ public class AlarmInboxController {
 	 	 * @return
 	 	 */
 	    @PostMapping("selectKeyPositionByDeviceCode")
-	    @ApiOperation(value = "单个重点机位所有故障报警数据查询接口", notes = "单个重点机位所有故障报警数据查询")
+	    @ApiOperation(value = "重点机位(单个/全部)故障报警数据查询接口", notes = "单个重点机位所有故障报警数据查询")
 	    @ApiImplicitParams({
 	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true),
-	     	    @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码", dataType = "String", required = true)
+	     	    @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码", dataType = "String")
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByDeviceCode(KeyPosition bean) {
 	       try {

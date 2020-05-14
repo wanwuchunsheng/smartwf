@@ -15,7 +15,7 @@ import lombok.Data;
  * @date 2020-05-14 11:02:23
  */
 @Data
-@TableName("fault_file_record")
+@TableName("fault_code_base")
 public class FaultCodeBase implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -65,6 +65,10 @@ public class FaultCodeBase implements Serializable {
 	 * 备注
 	 */
 	private String remark;
+	/**
+	 * 是否启用  0启用   1禁用
+	 */
+	private Integer enable;
 	/**
 	 * 状态 0默认  1审核通过
 	 */
