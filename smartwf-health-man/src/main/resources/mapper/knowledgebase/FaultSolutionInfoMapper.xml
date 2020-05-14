@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.hm.modules.knowledgebase.dao.FaultSolutionInfoDao" >
+    
+    <!-- 分页查询故障报警信息 -->
+    <select id="selectAlarmInforByPage" resultType="com.smartwf.hm.modules.knowledgebase.pojo.FaultSolutionInfo">
+        select 
+        	a.id,
+			a.alarm_code,
+			a.alarm_source,
+			a.alarm_description,
+			a.alarm_location,
+			a.start_time,
+			a.end_time,
+			a.alarm_level,
+			a.fault_type,
+			a.manufacturers,
+			a.device_code,
+			a.device_name,
+			a.wind_farm,
+			a.alarm_status,
+			a.asset_number,
+			a.operating_status,
+			a.create_time,
+			a.update_time,
+			a.tenant_code
+        from fault_information a
+        where a.incident_type=1
+        <if test="bean.tenantCode != null ">
+          and a.tenant_code = #{bean.tenantCode}
+        </if>
+        <if test="bean.alarmSource != null ">
+          and a.alarm_source like '%${bean.alarmSource}%'
+        </if>
+        <if test="bean.alarmDescription != null ">
+          and a.alarm_description like '%${bean.alarmDescription}%' 
+        </if>
+        <if test="bean.alarmLocation != null ">
+          and a.alarm_location = #{bean.alarmLocation}
+        </if>
+        <if test="bean.alarmLevel != null ">
+          and a.alarm_level = #{bean.alarmLevel}
+        </if>
+        <if test="bean.faultType != null ">
+          and a.fault_type = #{bean.faultType}
+        </if>
+        <if test="bean.assetNumber != null ">
+          and a.asset_number = #{bean.assetNumber}
+        </if>
+        <if test="bean.alarmStatus != null ">
+          and a.alarm_status = #{bean.alarmStatus}
+        </if>
+        <if test="bean.operatingStatus != null ">
+          and a.operating_status = #{bean.operatingStatus}
+        </if>
+        <if test="bean.startTime != null ">
+          and a.start_time between #{bean.startTime} and #{bean.endTime}
+        </if>
+          order by a.start_time desc
+    </select>
+    
+    
+   
+   
+</mapper>
