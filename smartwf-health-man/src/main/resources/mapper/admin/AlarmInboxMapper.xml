@@ -247,7 +247,7 @@
 			b.create_time,
 			b.update_time,
 			b.tenant_code 
-		from key_position a left join fault_information b on a.device_code=b.device_code
+		from key_position a left join fault_information b on a.asset_number=b.asset_number
         where  b.incident_type=1
         <if test="bean.tenantCode != null ">
           and b.tenant_code = #{bean.tenantCode}
