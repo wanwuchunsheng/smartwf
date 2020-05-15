@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Description: 故障总览控制器
  */
 @RestController
-@RequestMapping("smartwf_health/faultoverview")
+@RequestMapping("faultoverview")
 @Slf4j
 @Api(description = "故障总览控制器")
 public class FaultOverviewController {

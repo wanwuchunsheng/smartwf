@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Description: 缺陷收件箱控制器
  */
 @RestController
-@RequestMapping("smartwf_health/defect")
+@RequestMapping("defect")
 @Slf4j
 @Api(description = "缺陷收件箱控制器")
 public class DefectController {

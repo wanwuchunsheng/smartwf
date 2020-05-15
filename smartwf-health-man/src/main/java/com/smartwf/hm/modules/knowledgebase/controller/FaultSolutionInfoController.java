@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Description: 故障解决方案控制器
  */
 @RestController
-@RequestMapping("smartwf_health/solution")
+@RequestMapping("solution")
 @Slf4j
 @Api(description = "故障解决方案控制器")
 public class FaultSolutionInfoController {

@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Description: 报警收件箱控制器
  */
 @RestController
-@RequestMapping("smartwf_health/alarminbox")
+@RequestMapping("alarminbox")
 @Slf4j
 @Api(description = "报警收件箱/重点机位控制器")
 public class AlarmInboxController {

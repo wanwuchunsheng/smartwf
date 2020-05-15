@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Description: 故障代码控制器
  */
 @RestController
-@RequestMapping("smartwf_health/faultcode")
+@RequestMapping("faultcode")
 @Slf4j
 @Api(description = "故障代码控制器")
 public class FaultCodeBaseController {

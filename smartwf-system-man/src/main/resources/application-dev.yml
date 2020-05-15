@@ -11,6 +11,8 @@ server:
     basedir: ${user.home}/tomcat/tmps
     # 最大连接数
     max-connections: 2000
+  servlet:
+    context-path: /smartwf_sys_backend
 #挂载本地路径
 web:
     upload-path: ${user.home}/file/smartwf-sm/upload
