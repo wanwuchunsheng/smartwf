@@ -191,7 +191,7 @@ public class GlobalDataController {
      * @param code,session_state和state
      * @return
      */
-    @GetMapping("oauth2client")
+    @PostMapping("oauth2client")
     @ApiOperation(value = "授权登录", notes = "授权登录，获取用户基础信息")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "code", value = "wso2编码", dataType = "String", required = true)
