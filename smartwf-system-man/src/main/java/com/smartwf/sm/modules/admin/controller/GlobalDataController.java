@@ -191,7 +191,7 @@ public class GlobalDataController {
      * @param code,session_state和state
      * @return
      */
-    @PostMapping("oauth2client")
+    @GetMapping("oauth2client")
     @ApiOperation(value = "授权登录", notes = "授权登录，获取用户基础信息")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "code", value = "wso2编码", dataType = "String", required = true)
@@ -207,8 +207,8 @@ public class GlobalDataController {
         		String userCode="XF001"; //后期是通过accessToken去wso2获取
         		//4 通过userCode查询用户基础信息，存储redis
         		user.setUserCode(userCode);
-        		User userInfo=this.userInfoService.selectUserInfoByUserCode(user);
-        		this.redisService.set(userInfo.getSmartwfToken(), JSONArray.toJSONString(userInfo),3000);//过期时间50分钟
+        		//------User userInfo=this.userInfoService.selectUserInfoByUserCode(user);
+        		//------this.redisService.set(userInfo.getSmartwfToken(), JSONArray.toJSONString(userInfo),3000);//过期时间50分钟
         		//5 封装返回
         		bean.setSmartwfToken(user.getSmartwfToken());
         		bean.setAccessToken(user.getAccessToken());

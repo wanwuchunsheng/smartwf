@@ -43,17 +43,19 @@ public class LoginUtils {
         		throw new CommonException(Constants.UNAUTHORIZED, "用户未登录！请登录！");
         	}
         	//4.授权后，通过code换取token
-        	String url="https://192.168.1.132:9443/oauth2/token";
+        	//String url="https://192.168.1.132:9443/oauth2/token";
+        	String url="https://10.104.111.193:9443/oauth2/token";
             headers=new HashMap<String,String>();
-            headers.put("client_id", "nqenKoLbjFswa_PQY3CcQacsiqka");
-            headers.put("client_secret", "qMS_RXTSfS5NU8JkLuX0NG4opHAa");
+            headers.put("client_id", "eKuGjrJu2egL_YGvbL3EALsObyca");
+            headers.put("client_secret", "MthWlk6gQY3JrGu61r3swzuG0OIa");
             headers.put("code", code);
             headers.put("grant_type", "authorization_code");
-            headers.put("redirect_uri", "http://192.168.3.33:8081/callback");
+            headers.put("redirect_uri", "http://10.105.227.93:8300/smartwf_sys_backend/globaldata/oauth2client");
         	String str= HttpClientUtil.doPost(url, headers,"utf-8");
         	Map<String,Object> map=JsonUtil.jsonToMap(str);
         	for(Entry<String, Object> m:map.entrySet()) {
         		System.out.println(m.getKey()+"    "+m.getValue());
+        		log.error(m.getKey()+"    "+m.getValue());
         	}
         	//4.1验证code换取token是否成功
         	if(!map.containsKey("access_token")) {
