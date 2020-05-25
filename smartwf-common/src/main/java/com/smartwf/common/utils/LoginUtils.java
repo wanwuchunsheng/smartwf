@@ -50,7 +50,7 @@ public class LoginUtils {
             headers.put("client_secret", "MthWlk6gQY3JrGu61r3swzuG0OIa");
             headers.put("code", code);
             headers.put("grant_type", "authorization_code");
-            headers.put("redirect_uri", "http://10.105.227.93:8300/smartwf_sys_backend/globaldata/oauth2client");
+            headers.put("redirect_uri", "http://smartwf.system.com/smartwf_sys_backend/globaldata/oauth2client");
         	String str= HttpClientUtil.doPost(url, headers,"utf-8");
         	Map<String,Object> map=JsonUtil.jsonToMap(str);
         	for(Entry<String, Object> m:map.entrySet()) {
