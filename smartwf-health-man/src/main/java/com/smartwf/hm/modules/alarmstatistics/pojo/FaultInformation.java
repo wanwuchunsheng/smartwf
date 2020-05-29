@@ -3,6 +3,8 @@ package com.smartwf.hm.modules.alarmstatistics.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -49,10 +51,12 @@ public class FaultInformation extends BasePojo implements Serializable{
 	/**
 	 * 故障开始时间
 	 */
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date startTime;
 	/**
 	 * 故障最后时间
 	 */
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date endTime;
 	/**
 	 * 事变类型
