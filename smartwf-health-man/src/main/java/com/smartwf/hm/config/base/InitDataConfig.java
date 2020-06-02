@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
+import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,14 +19,17 @@ public class InitDataConfig implements CommandLineRunner{
 	
 	@Autowired
 	private AlarmInboxService alarmInboxService;
+	@Autowired
+	private DefectService defectService;
 	
 	/**
-	 * @Description: 初始化未处理的故障
+	 * @Description: 初始化未处理的故障/缺陷
 	 *    保证redis最新的数据和mysql一致
 	 */
     public void InitDataListener() {
     	try {
     		this.alarmInboxService.selectFaultInformationByAll();
+    		this.defectService.initDefectAll();
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}

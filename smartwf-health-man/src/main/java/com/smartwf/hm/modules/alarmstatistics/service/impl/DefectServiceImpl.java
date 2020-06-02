@@ -25,7 +25,6 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FileUploadRecord;
 import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
-import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -60,7 +59,7 @@ public class DefectServiceImpl implements DefectService {
 	@Override
 	public void initDefectAll() {
 		Map<String,FaultInformation> list = this.defectDao.initDefectAll();
-		this.redisService.set("DefectCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		this.redisService.set("defectCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
 	}
 
 	
@@ -148,7 +147,7 @@ public class DefectServiceImpl implements DefectService {
 					break;
 				case 0:
 					foRecord.setClosureReason("缺陷录入信息审核通过");
-					//初始化，跟新redis
+					//初始化，更新redis
 					this.initDefectAll();
 					break;
 				default:
