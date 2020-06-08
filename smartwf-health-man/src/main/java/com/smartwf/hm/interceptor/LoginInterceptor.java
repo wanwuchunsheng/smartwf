@@ -1,7 +1,5 @@
 package com.smartwf.hm.interceptor;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +12,7 @@ import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.PermissionThreadLocal;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.LoginUtils;
+import com.smartwf.common.wso2.Wso2Config;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,12 +27,15 @@ public class LoginInterceptor implements HandlerInterceptor {
 	
     @Autowired
     private RedisService redisService;
+    
+    @Autowired
+    private Wso2Config wso2Config;
 
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-    	//return LoginUtils.checkLogin(request, response, handler, redisService);
-    	return true;
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    	return LoginUtils.checkLogin(request, response, handler, redisService,wso2Config);
+    	//return true;
     }
 
 

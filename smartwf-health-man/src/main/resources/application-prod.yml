@@ -93,6 +93,15 @@ spring:
       max-file-size: 200MB #单个文件上传大小
       max-request-size: 600MB #连续上传文件大小
       enabled: true
+  #wso2
+  wso2:
+    user:
+      #user-server-uri: https://identity.windmagics.com
+      user-server-uri: https://10.104.111.193:9443
+      user-authorization: Basic YWRtaW46YWRtaW4=
+    token:
+      token-server-uri: https://identity.windmagics.com
+      token-refresh-time: 300
 
 # 日志
 logging:
