@@ -89,6 +89,7 @@ public class UserInfoController {
     
     /**
      * @Description: 添加用户资料
+     *   已融入wso2用户管理
      * @return
      */
     @PostMapping("saveUserInfo")
@@ -113,8 +114,8 @@ public class UserInfoController {
     })
     public ResponseEntity<Result<?>> saveSysUser(HttpSession session,UserInfoVO bean) {
         try {
-    		this.userService.saveUserInfo(bean);
-        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
+        	Result<?> result = this.userService.saveUserInfo(bean);
+        	return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
             log.error("添加用户资料信息错误！{}", e.getMessage(), e);
         }
@@ -171,8 +172,13 @@ public class UserInfoController {
     })
     @TraceLog(content = "删除用户资料", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteUserInfo(UserInfoVO bean) {
-        this.userService.deleteUserInfo(bean);
-        return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
+        try {
+        	Result<?> result = this.userService.deleteUserInfo(bean);
+        	return ResponseEntity.status(HttpStatus.OK).body(result);
+		} catch (Exception e) {
+			log.error("删除用户资料信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除用户资料信息错误！"));
     }
 
 

@@ -3,6 +3,8 @@ package com.smartwf.sm.modules.admin.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.TreeResource;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.utils.MD5Utils;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.OrganizationDao;
@@ -29,8 +33,8 @@ import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.pojo.UserPost;
 import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
-import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
+import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
 import lombok.extern.log4j.Log4j;
 /**
@@ -65,6 +69,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 
 	@Autowired
 	private ResourceDao resourceDao;
+	
+	@Autowired
+	private Wso2UserService wso2UserService;
 
 	
 	/**
@@ -95,11 +102,17 @@ public class UserInfoServiceImpl implements UserInfoService{
 	
 	/**
      * @Description: 添加用户资料
+     * @author WCH
+     *  步骤：
+     *   1.向wso2添加用户
+     *   2.成功后，返回wso2唯一编码
+     *   3.保存系统中心用户，将唯一编码和用户信息绑定
+     *   4.绑定租户，组织机构，职务，角色信息
      * @return
      */
 	@Transactional
 	@Override
-	public void saveUserInfo(UserInfoVO bean) {
+	public Result<?> saveUserInfo(UserInfoVO bean) {
 		//添加创建人基本信息
 		User user=UserThreadLocal.getUser();
 		bean.setCreateTime(new Date());
@@ -112,6 +125,13 @@ public class UserInfoServiceImpl implements UserInfoService{
 		if(StringUtils.isNotBlank(bean.getPwd())) {
 			bean.setPwd(MD5Utils.convertMd5(bean.getPwd()));
 		}
+		//保存wso2用户
+		Map<String,Object> map=this.wso2UserService.addUser(bean);
+		//验证wso2插入是否成功，成功返回ID
+		if(map!=null && !map.containsKey("id")) {
+			return Result.data(Constants.BAD_REQUEST,"失败，wso2用户保存失败！"+JsonUtil.objectToJson(map));
+		}
+		bean.setUserCode(String.valueOf(map.get("id")) );
 		//保存用户资料
 		this.userInfoDao.insert(bean);
 		//批量添加与用户相关联表
@@ -158,12 +178,15 @@ public class UserInfoServiceImpl implements UserInfoService{
 				}
 			}
 		}
+		return Result.data(Constants.EQU_SUCCESS,"成功!");
 	}
 
 	/**
      * @Description： 修改用户资料
-     *    1.用户信息修改
-     *    2.用户关联表修改
+     *    1.修改Wso2用户资料，
+     *    2.修改系统中心用户资料
+     *    3.删除已绑定的组织结构
+     *    4.生成修改提交时的组织结构
      * @return
      */
 	@Transactional
@@ -174,13 +197,26 @@ public class UserInfoServiceImpl implements UserInfoService{
 		bean.setUpdateTime(new Date());
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
+		//系统管理中心用户ID主键查询loginCode
+		UserInfo uf=this.userInfoDao.selectById(bean);
+		bean.setLoginCode(uf.getLoginCode());
+		bean.setUserName(uf.getUserName());
+		bean.setUserCode(uf.getUserCode());
+		/**
+		//修改wso2用户
+		Map<String, Object> resmap=this.wso2UserService.updateByUserCode(bean);
+		if(resmap!=null && resmap.size()>0) {
+			for(Entry<String, Object> m: resmap.entrySet() ) {
+				log.info("wso2用户修改返回信息："+m.getKey()+"    "+ m.getValue() );
+			}
+		}
+		*/
 		//md5加密
 		if(StringUtils.isNotBlank(bean.getPwd())) {
 			bean.setPwd(MD5Utils.convertMd5(bean.getPwd()));
 		}
 		//1)修改用户资料
 		this.userInfoDao.updateById(bean);
-		
 		//2）删除原始用户对应的关系表（清空）
 		//删除用户组织架构表
 		this.userInfoDao.deleteUserOrgById(bean);
@@ -233,8 +269,12 @@ public class UserInfoServiceImpl implements UserInfoService{
      */
 	@Transactional
 	@Override
-	public void deleteUserInfo(UserInfoVO bean) {
+	public Result<?> deleteUserInfo(UserInfoVO bean) {
 		if( null!=bean.getId()) {
+			//接入wso2,删除系统中心用户前，先删除wso2
+			UserInfo uben= this.userInfoDao.selectById(bean);
+			String res=this.wso2UserService.deleteUserByUserCode(uben);
+			log.info("wso2用户删除成功，返回信息内容{}"+res);
 			//单个对象删除
 			this.userInfoDao.deleteUserInfoById(bean);
 			//删除用户组织架构表
@@ -248,7 +288,15 @@ public class UserInfoServiceImpl implements UserInfoService{
 			String ids=StrUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
+				UserInfo userinfo=null;
 				for(String val:ids.split(",")) {
+					//批量删除wso2用户
+					userinfo=new UserInfo();
+					userinfo.setId(Integer.valueOf(val));
+					UserInfo uben= this.userInfoDao.selectById(userinfo);
+					String res=this.wso2UserService.deleteUserByUserCode(uben);
+					log.info("wso2用户删除成功，返回信息内容{}"+res);
+					//拼接用户ID
 					list.add(val);
 					bean = new UserInfoVO();
 					bean.setId(Integer.valueOf(val));
@@ -259,10 +307,11 @@ public class UserInfoServiceImpl implements UserInfoService{
 					//删除用户角色表
 					this.userInfoDao.deleteUserRoleById(bean);
 				}
-				//批量删除
+				//批量删除用户
 				this.userInfoDao.deleteUserInfoByIds(list);
 			}
 		}
+		return null;
 	}
 
 	/**
@@ -280,41 +329,19 @@ public class UserInfoServiceImpl implements UserInfoService{
 			userInfo.setSmartwfToken(user.getSmartwfToken());
 			userInfo.setRefreshToken(user.getRefreshToken());
 			userInfo.setAccessToken(user.getAccessToken());
-			switch (user.getResType()) {
-			case "1":
-				//获取组织架构
-				userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
-				//职务
-				userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
-				//角色
-				userInfo.setRoleList(this.roleDao.selectRoleByUserId(userInfo));
-				//资源权限
-				List<TreeResource> reslist=buildByRecursive(this.resourceDao.selectResourceByUserId(userInfo) );
-				userInfo.setResouceList(reslist);
-				break;
-            case "2":
-				break;
-            case "3":
-            	//获取组织架构
-				userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
-				break;
-            case "4":
-            	//获取组织架构
-				userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
-				//职务
-				userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
-				break;
-            case "5":
-            	//获取组织架构
-				userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
-				//职务
-				userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
-				//角色
-				userInfo.setRoleList(this.roleDao.selectRoleByUserId(userInfo));
-				break;
-			default:
-				break;
-			}
+			userInfo.setIdToken(user.getIdToken());
+			userInfo.setClientKey(user.getClientKey());
+			userInfo.setClientSecret(user.getClientSecret());
+			userInfo.setRedirectUrI(user.getRedirectUrI());
+			//获取组织架构
+			userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
+			//职务
+			userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
+			//角色
+			userInfo.setRoleList(this.roleDao.selectRoleByUserId(userInfo));
+			//资源权限
+			List<TreeResource> reslist=buildByRecursive(this.resourceDao.selectResourceByUserId(userInfo) );
+			userInfo.setResouceList(reslist);
 		}
 		return userInfo;
 	}

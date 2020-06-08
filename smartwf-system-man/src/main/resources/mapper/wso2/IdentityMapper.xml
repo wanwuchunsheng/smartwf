@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.wso2.dao.IdentityConfigDao" >
+
+	<!-- 查询identity配置信息-->
+	<select id="selectIdentityConfig" resultType="com.smartwf.sm.modules.wso2.pojo.IdentityConfig">  
+		 select 
+			id,
+			open_id,
+			client_key,
+			client_secret,
+			redirect_uri,
+			remark
+		 from sys_identity
+		 where enable=0
+    </select>
+  
+</mapper>

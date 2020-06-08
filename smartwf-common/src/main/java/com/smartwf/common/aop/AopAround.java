@@ -14,10 +14,10 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.alibaba.fastjson.JSON;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.queue.LogQueue;
+import com.smartwf.common.utils.JsonUtil;
 
 /**
  * @Auther: 
@@ -77,9 +77,9 @@ public class AopAround {
             for (int i = 0; i < paramIndexs.length; i++) {
                 Object arg = args[paramIndexs[i]];
                 if (argsJson == null) {
-                    argsJson = JSON.toJSONString(arg);
+                    argsJson = JsonUtil.objectToJson(arg);
                 } else {
-                    argsJson += ";" + JSON.toJSONString(arg);
+                    argsJson += ";" + JsonUtil.objectToJson(arg);
                 }
 
             }
@@ -88,6 +88,6 @@ public class AopAround {
         if (retValue instanceof ResponseEntity) {
             statusCodeValue = ((ResponseEntity) retValue).getStatusCodeValue();
         }
-        LogQueue.setQueue(request, content, JSON.toJSONString(argsJson), statusCodeValue);
+        LogQueue.setQueue(request, content, JsonUtil.objectToJson(argsJson), statusCodeValue);
     }
 }

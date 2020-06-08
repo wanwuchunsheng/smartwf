@@ -30,7 +30,7 @@ public interface UserInfoService {
      * @Description： 添加用户资料
      * @return
      */
-	void saveUserInfo(UserInfoVO bean);
+	Result<?> saveUserInfo(UserInfoVO bean);
 	
 	/**
      * @Description： 修改用户资料
@@ -42,7 +42,7 @@ public interface UserInfoService {
      * @Description： 删除用户资料
      * @return
      */
-	void deleteUserInfo(UserInfoVO bean);
+	Result<?> deleteUserInfo(UserInfoVO bean);
 	
 	/**
      * @Description: 用户名密码查询用户基本信息

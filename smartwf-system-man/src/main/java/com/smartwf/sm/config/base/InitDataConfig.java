@@ -10,12 +10,17 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.common.utils.JsonUtil;
+import com.smartwf.common.utils.MD5Utils;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.DictionaryService;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.service.TenantService;
+import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
+import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
+import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,6 +48,9 @@ public class InitDataConfig implements CommandLineRunner{
 	
 	@Autowired
     private DictionaryService dictionaryService;
+	
+	@Autowired
+    private IdentityConfigService identityConfigService;
     
 
 	/**
@@ -50,7 +58,7 @@ public class InitDataConfig implements CommandLineRunner{
 	 */
     public void InitDataListener() {
     	try {
-    		//租户
+    		//租户初始化数据
     		List<Tenant> tenantList=this.tenantService.InitTenantDatas();
     		if(tenantList!=null && tenantList.size()>0) {
     			this.redisService.set("initTenant", JSON.toJSONString(tenantList));
@@ -67,8 +75,14 @@ public class InitDataConfig implements CommandLineRunner{
             	log.info("职务基础数据{}",redisService.get("initPost"));
             	log.info("角色基础数据{}",redisService.get("initRole"));
             	log.info("数据字典数据{}",redisService.get("initDictionary"));
-    		}else {
-    			log.info(">>>>>>>>租户信息为空，初始化信息失败！");
+    		}
+    		//wos2配置初始化数据
+    		List<IdentityConfig> idtconfig=this.identityConfigService.initIdentityConfig();
+    		if(idtconfig!=null && idtconfig.size()>0) {
+    			for(IdentityConfig idt: idtconfig) {
+            		this.redisService.set(MD5Utils.md5(idt.getRedirectUri()), JsonUtil.objectToJson(idt));
+            		log.info("wso2配置信息{}",MD5Utils.md5(idt.getRedirectUri()), JsonUtil.objectToJson(idt));
+    			}
     		}
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);

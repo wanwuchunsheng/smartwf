@@ -10,8 +10,6 @@ import lombok.Data;
  */
 @Data
 public class User implements Serializable{
-
-
 	/**
 	 * 
 	 */
@@ -21,13 +19,21 @@ public class User implements Serializable{
 	 */
 	private String code;
 	/**
-	 * 获取类型
-	 * 1.获取用户基础信息
-	 * 2.用户基础信息+组织机构
-	 * 3.用户基础信息+组织机构+职务
-	 * 4.用户基础信息+组织机构+职务+资源
-	 */
-	private String resType;
+	 * wso2子系统注册 key
+	 * 
+	 * */
+	private String clientKey;
+	
+	/**
+	 * wso2子系统注册 secret
+	 * 
+	 * */
+	private String clientSecret;
+	/**
+	 * wso2子系统注册 redirect_Uri
+	 * 
+	 * */
+	private String redirectUrI;
 	
     /**
 	 * 前端系统token
@@ -42,6 +48,10 @@ public class User implements Serializable{
      * 刷新token凭证
      * */
     private String refreshToken;
+    /**
+     * wso2 id_token凭证
+     * */
+    private String idToken;
 	
 	/**
      * id

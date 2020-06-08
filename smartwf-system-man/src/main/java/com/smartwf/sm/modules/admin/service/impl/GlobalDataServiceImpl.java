@@ -16,6 +16,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.JsonUtil;
+import com.smartwf.common.utils.MD5Utils;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
@@ -29,6 +30,8 @@ import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
+import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
+import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
 
 import lombok.extern.log4j.Log4j2;
 /**
@@ -57,6 +60,9 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	
 	@Autowired
     private DictionaryService dictionaryService;
+	
+	@Autowired
+	private IdentityConfigService identityConfigService;
 
 	 /**
      * @Description 租户列表
@@ -254,6 +260,14 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	    		}
 	    	}
 	    }
+    	//wos2配置初始化数据
+		List<IdentityConfig> idtconfig=this.identityConfigService.initIdentityConfig();
+		if(idtconfig!=null && idtconfig.size()>0) {
+			for(IdentityConfig idt: idtconfig) {
+        		this.redisService.set(MD5Utils.md5(idt.getRedirectUri()), JsonUtil.objectToJson(idt));
+        		log.info("wso2配置信息{}",MD5Utils.md5(idt.getRedirectUri()), JsonUtil.objectToJson(idt));
+			}
+		}
 	}
 	
 

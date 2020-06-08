@@ -30,6 +30,7 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.queue.LogQueue;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.MathUtils;
+import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.pojo.ExceptionLog;
 import com.smartwf.sm.modules.admin.service.ExceptionLogService;
 import com.smartwf.sm.modules.admin.service.LogService;
@@ -52,6 +53,9 @@ public class LogAspect {
     
     @Autowired
     private ExceptionLogService exceptionLogService;
+    
+    @Autowired
+    private Wso2Config wso2Config;
 
 
     /**
@@ -114,7 +118,7 @@ public class LogAspect {
     		// 获取请求的类名
     		excepLog.setLogRequParam( JSON.toJSONString(request.getParameterMap()) ); //请求参数
     		excepLog.setLogModul(traceLog.content());//模块说明
-    		excepLog.setLogType(Constants.SMARTWF_HEALTH_MAN);//请求类型
+    		excepLog.setLogType(wso2Config.smartwfSystemMan);//请求类型
     		excepLog.setLogDesc(stackTraceToString(e.getClass().getName() , e.getMessage() , e.getStackTrace() )); //异常信息 		
     		excepLog.setLogMethod(new StringBuffer().append(joinPoint.getTarget().getClass().getName()).append(".").append(method.getName()).toString()); //请求方法名
     		excepLog.setLogUri(request.getRequestURI()); //操作uri
