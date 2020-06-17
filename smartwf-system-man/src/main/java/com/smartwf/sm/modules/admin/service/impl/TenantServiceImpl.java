@@ -153,6 +153,7 @@ public class TenantServiceImpl implements TenantService{
      * @Description： 修改租户
      * @return
      */
+	@Transactional
 	@Override
 	public void updateTenant(Tenant bean) {
 		//添加修改人信息
@@ -167,6 +168,18 @@ public class TenantServiceImpl implements TenantService{
 		}
 		//修改
 		this.tenantDao.updateById(bean);
+		//wso2租户启用、禁用判断
+		if(null !=bean.getEnable()) {
+			Wso2Tenant wt= new Wso2Tenant();
+			Tenant tinfo=this.tenantDao.selectById(bean);
+			wt.setTenantDomain(String.valueOf(new StringBuffer().append(tinfo.getTenantCode()).append(".com")));
+	        if(1==bean.getEnable()) {
+	        	wt.setActive(false);
+	        }else {
+	        	wt.setActive(true);
+	        }
+	        this.wso2TenantService.deactivateTenant(wt);
+		}
 	}
 
 	/**

@@ -96,7 +96,7 @@ public class Wso2TenantController {
     }
     
     /**
-     * @Description：模拟wso2删除租户{wso2 修改后不起作用，后期研究}
+     * @Description：模拟wso2删除租户{wso2租户无法删除，可以使用禁用租户}
      * @param code,session_state和state
      * @return
      */
@@ -121,7 +121,7 @@ public class Wso2TenantController {
     }
     
     /**
-     * @Description：模拟wso2租户修改{wso2 修改后不起作用，后期研究}
+     * @Description：模拟wso2租户修改
      * @param code,session_state和state
      * @return
      */
@@ -152,5 +152,31 @@ public class Wso2TenantController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("wso2租户修改错误！"));
     }
     
-   
+    /**
+     * @Description：模拟wso2租户禁用/启用
+     *   true 启用
+     *   fale 禁用
+     * @param code,session_state和state
+     * @return
+     */
+    @PutMapping("deactivateTenant")
+    @ApiOperation(value = "wso2租户禁用接口", notes = "wso2租户禁用")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域（一般后面带.com）", dataType = "String",required = true),
+    	@ApiImplicitParam(paramType = "query", name = "active", value = "true:启用   false：禁用", dataType = "Boolean",required = true)
+    })
+    public ResponseEntity<Result<?>> deactivateTenant(Wso2Tenant bean) {
+        try {
+        	Map<String,Object> map =this.wso2TenantService.deactivateTenant(bean);
+        	if(!map.isEmpty()) {
+        		for(java.util.Map.Entry<String,Object> m:map.entrySet()) {
+            		log.info("返回信息內容："+m.getKey()+"    "+m.getValue());
+            	}
+        	}
+        	return ResponseEntity.ok().body(Result.data(null, map, Constants.EQU_SUCCESS, "成功！"));
+        } catch (Exception e) {
+            log.error("wso2租户禁用错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("wso2租户禁用错误！"));
+    }
 }

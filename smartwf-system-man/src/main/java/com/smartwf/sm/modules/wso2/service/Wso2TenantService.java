@@ -26,6 +26,12 @@ public interface Wso2TenantService {
      * @return
      */
 	Map<String, Object> updateTenant(Wso2Tenant bean);
+	/**
+     * @Description：模拟wso2租户禁用
+     * @param code,session_state和state
+     * @return
+     */
+	Map<String, Object> deactivateTenant(Wso2Tenant bean);
 
 	
 

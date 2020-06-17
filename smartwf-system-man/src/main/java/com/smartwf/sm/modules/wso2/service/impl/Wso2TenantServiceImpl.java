@@ -53,17 +53,13 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		}
 		sb.append(" </ser:tenantInfoBean> </ser:addTenant> </soapenv:Body> ");
 		sb.append(" </soapenv:Envelope>");
-        try {
-        	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
-        	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-        	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null);
-        	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-        	if(StringUtils.isNoneBlank(res)) {
-        		return JsonUtil.multilayerXmlToMap(res);
-        	}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
+    	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+    	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null);
+    	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+    	if(StringUtils.isNoneBlank(res)) {
+    		return JsonUtil.multilayerXmlToMap(res);
+    	}
 		return null;
 	}
 
@@ -81,17 +77,13 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" <ser:tenantDomain>").append(bean.getTenantDomain()).append("</ser:tenantDomain>");
 		sb.append("  </ser:getTenant> </soapenv:Body> ");
 		sb.append(" </soapenv:Envelope> ");
-        try {
-        	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
-        	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-        	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null);
-        	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-        	if(StringUtils.isNoneBlank(res)) {
-        		return JsonUtil.multilayerXmlToMap(res);
-        	}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
+    	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+    	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null);
+    	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+    	if(StringUtils.isNoneBlank(res)) {
+    		return JsonUtil.multilayerXmlToMap(res);
+    	}
 		return null;
 	}
 
@@ -109,17 +101,13 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" <ser:tenantDomain>").append(bean.getTenantDomain()).append("</ser:tenantDomain>");
 		sb.append(" </ser:deleteTenant> </soapenv:Body> ");
 		sb.append(" </soapenv:Envelope> ");
-        try {
-        	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
-        	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-        	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null);
-        	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-        	if(StringUtils.isNoneBlank(res)) {
-        		return JsonUtil.multilayerXmlToMap(res);
-        	}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
+    	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+    	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null);
+    	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+    	if(StringUtils.isNoneBlank(res)) {
+    		return JsonUtil.multilayerXmlToMap(res);
+    	}
 		return null;
 	}
 	
@@ -160,17 +148,43 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		}
 		sb.append(" </ser:tenantInfoBean> </ser:updateTenant> </soapenv:Body> ");
 		sb.append(" </soapenv:Envelope>");
-        try {
-        	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
-        	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-        	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null);
-        	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-        	if(StringUtils.isNoneBlank(res)) {
-        		return JsonUtil.multilayerXmlToMap(res);
-        	}
-		} catch (Exception e) {
-			e.printStackTrace();
+    	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
+    	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+    	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null);
+    	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+    	if(StringUtils.isNoneBlank(res)) {
+    		return JsonUtil.multilayerXmlToMap(res);
+    	}
+		return null;
+	}
+	
+	/**
+     * @Description：模拟wso2租户禁用
+     * @param code,session_state和state
+     * @return
+     */
+	@Override
+	public Map<String, Object> deactivateTenant(Wso2Tenant bean) {
+		//封装wso2参数规范
+		StringBuffer sb=new StringBuffer();
+		sb.append(" <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://services.mgt.tenant.carbon.wso2.org\">");
+		sb.append(" <soapenv:Header/> <soapenv:Body>");
+		if(bean.getActive()) {
+			//启用
+			sb.append(" <ser:activateTenant><ser:tenantDomain>").append(bean.getTenantDomain()).append("</ser:tenantDomain></ser:activateTenant>");
+		}else {
+			//禁用
+			sb.append(" <ser:deactivateTenant><ser:tenantDomain>").append(bean.getTenantDomain()).append("</ser:tenantDomain></ser:deactivateTenant>");
 		}
+		sb.append("  </soapenv:Body> ");
+		sb.append(" </soapenv:Envelope>");
+    	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
+    	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+    	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null);
+    	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+    	if(StringUtils.isNoneBlank(res)) {
+    		return JsonUtil.multilayerXmlToMap(res);
+    	}
 		return null;
 	}
 	
