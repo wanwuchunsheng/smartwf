@@ -17,6 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.queue.LogQueue;
+import com.smartwf.common.utils.GsonUtils;
 import com.smartwf.common.utils.JsonUtil;
 
 /**
@@ -77,9 +78,9 @@ public class AopAround {
             for (int i = 0; i < paramIndexs.length; i++) {
                 Object arg = args[paramIndexs[i]];
                 if (argsJson == null) {
-                    argsJson = JsonUtil.objectToJson(arg);
+                    argsJson = GsonUtils.objectToJson(arg);//JsonUtil.objectToJson(arg);
                 } else {
-                    argsJson += ";" + JsonUtil.objectToJson(arg);
+                    argsJson += ";" + GsonUtils.objectToJson(arg);
                 }
 
             }
@@ -88,6 +89,6 @@ public class AopAround {
         if (retValue instanceof ResponseEntity) {
             statusCodeValue = ((ResponseEntity) retValue).getStatusCodeValue();
         }
-        LogQueue.setQueue(request, content, JsonUtil.objectToJson(argsJson), statusCodeValue);
+        LogQueue.setQueue(request, content, GsonUtils.objectToJson(argsJson), statusCodeValue);
     }
 }

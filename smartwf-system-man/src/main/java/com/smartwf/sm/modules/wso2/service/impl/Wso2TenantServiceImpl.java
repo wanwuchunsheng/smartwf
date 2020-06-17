@@ -48,7 +48,9 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" <xsd:firstname>").append(bean.getFirstname()).append("</xsd:firstname>");
 		sb.append(" <xsd:lastname>").append(bean.getLastname()).append("</xsd:lastname>");
 		sb.append(" <xsd:tenantDomain>").append(bean.getTenantDomain()).append("</xsd:tenantDomain>");
-		sb.append(" <xsd:tenantId>").append(bean.getTenantId()).append("</xsd:tenantId>");
+		if(StringUtils.isNotBlank(bean.getTenantId())) {
+			sb.append(" <xsd:tenantId>").append(bean.getTenantId()).append("</xsd:tenantId>");
+		}
 		sb.append(" </ser:tenantInfoBean> </ser:addTenant> </soapenv:Body> ");
 		sb.append(" </soapenv:Envelope>");
         try {

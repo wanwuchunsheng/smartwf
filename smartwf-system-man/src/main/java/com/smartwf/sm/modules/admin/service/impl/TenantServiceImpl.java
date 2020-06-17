@@ -3,12 +3,14 @@ package com.smartwf.sm.modules.admin.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.druid.sql.ast.statement.SQLWithSubqueryClause.Entry;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,6 +26,8 @@ import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
+import com.smartwf.sm.modules.wso2.pojo.Wso2Tenant;
+import com.smartwf.sm.modules.wso2.service.Wso2TenantService;
 
 import lombok.extern.log4j.Log4j;
 /**
@@ -40,6 +44,9 @@ public class TenantServiceImpl implements TenantService{
 	
 	@Autowired
 	private DictionaryDao dictionaryDao;
+	
+	@Autowired
+	Wso2TenantService wso2TenantService;
 
 	/**
 	 * @Description:查询租户分页
@@ -107,6 +114,17 @@ public class TenantServiceImpl implements TenantService{
 			this.tenantDao.updateBySel();//置空默认租户
 		}
 		this.tenantDao.insert(bean);
+		//wso2租户添加，模拟默认用户
+		Wso2Tenant wt=new Wso2Tenant();
+		wt.setActive(true);
+		wt.setAdmin(bean.getTenantCode());
+		wt.setAdminPassword("000000");
+		wt.setEmail("admin@windmagics.com");
+		wt.setFirstname("admin");
+		wt.setLastname("admin");
+		wt.setTenantDomain(String.valueOf(new StringBuffer().append(bean.getTenantCode()).append(".com")));
+		//wt.setTenantId(String.valueOf(bean.getId()));
+		this.wso2TenantService.addTenant(wt);
 		//3）批量添加新租户数据字典（从默认租户拷贝的数据字典）
 		if( null !=dict) {
 			QueryWrapper<Dictionary> queryWrapper2 = new QueryWrapper<>();
