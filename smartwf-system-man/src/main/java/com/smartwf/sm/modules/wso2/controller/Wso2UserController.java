@@ -31,9 +31,9 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * */
 @RestController
-@RequestMapping("wso2")
+@RequestMapping("wso2/user")
 @Slf4j
-@Api(description = "WSO2全局数据控制器")
+@Api(description = "WSO2用户控制器")
 public class Wso2UserController {
 	
 	@Autowired

@@ -54,5 +54,8 @@ public class Constants {
     /**
      * 状态码========================================================
      */
+    //wso2 soap请求响应时间
+    public static final int SOCKET_TIME_OUT = 90000;// 请求超时时间
+    public static final int CONNECT_TIME_OUT = 90000;// 传输超时时间
 
 }

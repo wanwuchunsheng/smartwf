@@ -20,11 +20,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <org.springframework.cloud>Finchley.SR2</org.springframework.cloud>
         <org.mybatis.spring.boot>2.0.1</org.mybatis.spring.boot>
         <com.alibaba.druid>1.1.10</com.alibaba.druid>
         <mysql.connector.java>8.0.15</mysql.connector.java>
-        <com.alibaba.fastjson>1.2.9</com.alibaba.fastjson>
         <io.springfox>2.8.0</io.springfox>
         <net.javacrumbs.shedlock>0.18.2</net.javacrumbs.shedlock>
         <org.iherus>1.3.1</org.iherus>
@@ -36,10 +34,14 @@
         <org.slf4j>1.7.25</org.slf4j>
         <lombok.version>1.18.4</lombok.version>
         <redis.clients>2.9.0</redis.clients>
-        <io.zipkin.java>2.9.4</io.zipkin.java>
+        <dom.version>1.6.1</dom.version>
         <commons.httpclient>3.1</commons.httpclient>
         <org.apache.rocketmq>4.3.0</org.apache.rocketmq>
         <mybatis-plus.version>3.1.2</mybatis-plus.version>
+        <!-- 
+          <org.springframework.cloud>Finchley.SR2</org.springframework.cloud>
+          <com.alibaba.fastjson>1.2.9</com.alibaba.fastjson>
+        -->
     </properties>
 
     <dependencyManagement>
@@ -186,6 +188,12 @@
 			   <version>${lombok.version}</version>
 			   <scope>provided</scope>
 			</dependency>
+			<!-- dom4j  -->
+			<dependency>
+	            <groupId>dom4j</groupId>
+	            <artifactId>dom4j</artifactId>
+	            <version>${dom.version}</version>
+	        </dependency>
         </dependencies>
     </dependencyManagement>
     

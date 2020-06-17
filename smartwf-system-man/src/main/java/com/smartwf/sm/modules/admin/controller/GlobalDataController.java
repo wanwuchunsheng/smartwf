@@ -222,13 +222,13 @@ public class GlobalDataController {
             	}
     			//4验证是否成功
     			if(!resmap.containsKey("user_id")) {
-    				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，accessToken查询用户信息异常！"));
+    				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，WSO2 user_id为空！"));
     			}
     			user.setUserCode(String.valueOf(resmap.get("user_id")));
 				//5通过user_id查询用户基础信息	
         		User userInfo=this.userInfoService.selectUserInfoByUserCode(user);
         		if(null==userInfo) {
-        			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，user_id查询！"));
+        			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，user_id查询用户信息异常！"));
         		}
         		this.redisService.set(userInfo.getSmartwfToken(), JsonUtil.objectToJson(userInfo) ,wso2Config.tokenRefreshTime);//过期时间50分钟
         		//成功返回

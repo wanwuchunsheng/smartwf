@@ -90,8 +90,8 @@ public class LoginUtils {
 	        //9.验证token是否失效
 	        String mapStr = redisService.get(token);
 	        if (StringUtils.isBlank(mapStr)) {
-	        	log.warn("token失效：{}，用户请求uri：{}", token, request.getRequestURI());
-	        	throw new CommonException(Constants.UNAUTHORIZED, "用户登录已失效！请重新登录！");
+	        	log.warn("请求失败！token过期：{}，用户请求uri：{}", token, request.getRequestURI());
+	        	throw new CommonException(Constants.UNAUTHORIZED, "请求失败！token过期，请重新登录！");
 	        }
 	        //10.重置wso2令牌时间
 	    	User user=JsonUtil.jsonToPojo(mapStr, User.class);
@@ -101,8 +101,8 @@ public class LoginUtils {
 	    	}
 	    	//11.验证刷新
 	    	if(StringUtils.isBlank(String.valueOf(refmap.get("refresh_token")))) {
-	        	log.warn("token失效：{}，用户请求uri：{}", token, request.getRequestURI());
-	        	throw new CommonException(Constants.UNAUTHORIZED, "用户登录已失效！请重新登录！");
+	        	log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
+	        	throw new CommonException(Constants.UNAUTHORIZED, "accesstoken刷新失败！请重新登录！");
 	    	}
 	    	//12.刷新成功，更新之前保存的wso2相关信息
 	    	user.setAccessToken(String.valueOf(refmap.get("access_token")));

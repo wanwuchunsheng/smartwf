@@ -8,16 +8,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.dom4j.DocumentException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class JsonUtil { 
 
 	 // 定义jackson对象
@@ -134,6 +139,53 @@ public class JsonUtil {
             list.add(value);
         }
         return list;
+    }
+    
+    
+    /**
+     * (多层)xml格式字符串转换为map
+     *
+     * @param xml xml字符串
+     * @return 第一个为Root节点，Root节点之后为Root的元素，如果为多层，可以通过key获取下一层Map
+     */
+    public static Map<String, Object> multilayerXmlToMap(String xml) {
+        org.dom4j.Document doc = null;
+        try {
+            doc = DocumentHelper.parseText(xml);
+        } catch (DocumentException e) {
+            log.error("xml字符串解析，失败 --> {}", e);
+        }
+        Map<String, Object> map = new HashMap<>();
+        if (null == doc) {
+            return map;
+        }
+        // 获取根元素
+        Element rootElement = doc.getRootElement();
+        recursionXmlToMap(rootElement,map);
+        return map;
+    }
+
+    /**
+     * multilayerXmlToMap核心方法，递归调用
+     * 
+     * @param element 节点元素
+     * @param outmap 用于存储xml数据的map
+     */
+    @SuppressWarnings("unchecked")
+    private static void recursionXmlToMap(Element element, Map<String, Object> outmap) {
+        // 得到根元素下的子元素列表
+        List<Element> list = element.elements();
+        int size = list.size();
+        if (size == 0) {
+            // 如果没有子元素,则将其存储进map中
+            outmap.put(element.getName(), element.getTextTrim());
+        } else {
+            // innermap用于存储子元素的属性名和属性值
+            Map<String, Object> innermap = new HashMap<>();
+            // 遍历子元素
+            list.forEach(childElement -> recursionXmlToMap(childElement, innermap));
+            outmap.put(element.getName(), innermap);
+        }
     }
 
 }
