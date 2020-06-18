@@ -1,5 +1,6 @@
 package com.smartwf.sm.modules.wso2.service;
 
+import java.io.IOException;
 import java.util.Map;
 
 import com.smartwf.sm.modules.admin.pojo.UserInfo;

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
 
 /**
@@ -83,6 +84,11 @@ public interface TenantDao extends BaseMapper<Tenant> {
 	void deleteUserActionByTenantIds(@Param("list") List<String> list);
 
 	void deleteDictionaryByTenantIds(@Param("list") List<String> list);
+
+	/**
+	 * 查询租户
+	 * */
+	Tenant selectTenantById(@Param("bean") UserInfo bean);
 
 	
 

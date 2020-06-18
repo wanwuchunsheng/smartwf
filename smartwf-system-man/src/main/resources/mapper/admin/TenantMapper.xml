@@ -152,4 +152,22 @@
 	    </foreach>
 	</delete>
 	
+	<!-- 查询租户-->
+    <select id="selectTenantById" resultType="com.smartwf.sm.modules.admin.pojo.Tenant">
+        select 
+			b.id,
+			b.tenant_code,
+			b.tenant_name,
+			b.logo_url,
+			b.sel,
+			b.enable,
+			b.remark
+		from sys_user_info a ,sys_tenant b where a.tenant_id=b.id and b.enable=0
+		<if test="bean.id != null ">
+            and a.id = #{bean.id}
+        </if>
+    </select>
+	
+	
+	
 </mapper>

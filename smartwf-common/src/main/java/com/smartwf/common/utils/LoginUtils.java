@@ -100,8 +100,9 @@ public class LoginUtils {
 	    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
 	    	}
 	    	//11.验证刷新
-	    	if(StringUtils.isBlank(String.valueOf(refmap.get("refresh_token")))) {
-	        	log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
+	    	if(refmap.containsKey("error")) {
+	    		redisService.del(token);//wso2刷新失败，删除redis记录
+	    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
 	        	throw new CommonException(Constants.UNAUTHORIZED, "accesstoken刷新失败！请重新登录！");
 	    	}
 	    	//12.刷新成功，更新之前保存的wso2相关信息

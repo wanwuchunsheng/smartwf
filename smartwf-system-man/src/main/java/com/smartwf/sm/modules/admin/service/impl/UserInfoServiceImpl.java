@@ -128,7 +128,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		//保存wso2用户
 		Map<String,Object> map=this.wso2UserService.addUser(bean);
 		//验证wso2插入是否成功，成功返回ID
-		if(map!=null && !map.containsKey("id")) {
+		if(map==null || !map.containsKey("id")) {
 			return Result.data(Constants.BAD_REQUEST,"失败，wso2用户保存失败！"+JsonUtil.objectToJson(map));
 		}
 		bean.setUserCode(String.valueOf(map.get("id")) );

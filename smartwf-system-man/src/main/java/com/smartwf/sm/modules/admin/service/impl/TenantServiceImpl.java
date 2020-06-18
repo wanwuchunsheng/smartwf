@@ -118,7 +118,7 @@ public class TenantServiceImpl implements TenantService{
 		Wso2Tenant wt=new Wso2Tenant();
 		wt.setActive(true);
 		wt.setAdmin(bean.getTenantCode());
-		wt.setAdminPassword("000000");
+		wt.setAdminPassword(Constants.WSO2_PASSWORD);
 		wt.setEmail("admin@windmagics.com");
 		wt.setFirstname("admin");
 		wt.setLastname("admin");

@@ -46,7 +46,7 @@ public class Wso2TenantController {
     @PostMapping("addTenant")
     @ApiOperation(value = "wso2租户添加接口", notes = "wso2租户添加")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "active", value = "添加租户是否启用（true和false）", dataType = "String" ,required = true),
+    	@ApiImplicitParam(paramType = "query", name = "active", value = "添加租户默认启用（true和false）", dataType = "String" ,required = true),
     	@ApiImplicitParam(paramType = "query", name = "admin",  value = "登录名", dataType = "String",required = true),
     	@ApiImplicitParam(paramType = "query", name = "adminPassword",  value = "密码（长度不小于5）", dataType = "String",required = true),
     	@ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String",required = true),
