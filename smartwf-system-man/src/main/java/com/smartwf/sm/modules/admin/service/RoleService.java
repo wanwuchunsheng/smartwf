@@ -32,7 +32,7 @@ public interface RoleService {
      * @Description： 添加角色
      * @return
      */
-	void saveRole(Role bean);
+	Result<?> saveRole(Role bean);
 	
 	/**
      * @Description： 修改角色

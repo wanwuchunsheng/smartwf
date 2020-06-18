@@ -32,8 +32,13 @@ public class Role extends BasePojo implements Serializable{
     /**
 	 * 角色编号
 	 */
-	@NotNull(message = "角色编号不能为空", groups = Add.class)
 	private String roleCode;
+	
+	/**
+	 * 角色英文名称
+	 */
+	@NotNull(message = "角色英文名称不能为空", groups = Add.class)
+	private String engName;
 	/**
 	 * 角色名称
 	 */

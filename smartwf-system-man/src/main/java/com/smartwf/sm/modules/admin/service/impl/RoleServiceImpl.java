@@ -20,13 +20,11 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.RoleDao;
-import com.smartwf.sm.modules.admin.pojo.Organization;
-import com.smartwf.sm.modules.admin.pojo.Post;
-import com.smartwf.sm.modules.admin.pojo.Resource;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.vo.RoleVO;
+import com.smartwf.sm.modules.wso2.service.Wso2RoleService;
 
 import lombok.extern.log4j.Log4j;
 /**
@@ -40,6 +38,9 @@ public class RoleServiceImpl implements RoleService{
 	
 	@Autowired
 	private RoleDao roleDao;
+	
+	@Autowired
+	private Wso2RoleService wso2RoleService;
 
 	/**
 	 * @Description:查询角色分页
@@ -92,17 +93,24 @@ public class RoleServiceImpl implements RoleService{
      * @return
      */
 	@Override
-	public void saveRole(Role bean) {
-		//添加创建人基本信息
-		User user=UserThreadLocal.getUser();
-		bean.setCreateTime(new Date());
-		bean.setCreateUserId(user.getId());
-		bean.setCreateUserName(user.getUserName());
-		bean.setUpdateTime(bean.getCreateTime());
-		bean.setUpdateUserId(bean.getCreateUserId());
-		bean.setUpdateUserName(bean.getCreateUserName());
-		//保存
-		this.roleDao.insert(bean);
+	public Result<?> saveRole(Role bean) {
+		/**添加wso2角色*/
+		Map<String,Object> map=this.wso2RoleService.addRole(bean);
+		if(null!=map && map.size()>0 && map.containsKey("id")) {
+			bean.setRoleCode(String.valueOf(map.get("id")));
+			//添加创建人基本信息
+			User user=UserThreadLocal.getUser();
+			bean.setCreateTime(new Date());
+			bean.setCreateUserId(user.getId());
+			bean.setCreateUserName(user.getUserName());
+			bean.setUpdateTime(bean.getCreateTime());
+			bean.setUpdateUserId(bean.getCreateUserId());
+			bean.setUpdateUserName(bean.getCreateUserName());
+			//保存
+			this.roleDao.insert(bean);
+			return Result.data(Constants.EQU_SUCCESS,"添加成功！");
+		}
+		return Result.data(Constants.BAD_REQUEST,"失败，wso2角色添加失败！");
 	}
 
 	/**
@@ -111,6 +119,12 @@ public class RoleServiceImpl implements RoleService{
      */
 	@Override
 	public void updateRole(Role bean) {
+		/** 修改wso2角色 */
+		if(StringUtils.isNotBlank(bean.getEngName())) {
+			Role rl=this.roleDao.selectById(bean);
+			rl.setEngName(bean.getEngName());
+			this.wso2RoleService.updateRole(rl);
+		}
 		//添加修改人信息
 		User user=UserThreadLocal.getUser();
 		bean.setUpdateTime(new Date());
@@ -128,6 +142,9 @@ public class RoleServiceImpl implements RoleService{
 	@Override
 	public void deleteRole(RoleVO bean) {
 		if( null!=bean.getId()) {
+			/** 删除wso2角色 */
+			Role rl=this.roleDao.selectById(bean);
+			this.wso2RoleService.deleteRole(rl);
 			//删除角色
 			this.roleDao.deleteById(bean);
 			//删除用户角色
@@ -142,6 +159,9 @@ public class RoleServiceImpl implements RoleService{
 					list.add(val);
 					bean=new RoleVO();
 					bean.setId(Integer.valueOf(val));
+					/** 删除wso2角色 */
+					Role rl=this.roleDao.selectById(bean);
+					this.wso2RoleService.deleteRole(rl);
 					//删除用户角色
 					this.roleDao.deleteUserRoleById(bean);
 					//删除角色权限

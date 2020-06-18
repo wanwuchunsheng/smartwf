@@ -103,7 +103,7 @@ public class RoleController {
     @ApiOperation(value = "添加接口", notes = "添加角色接口")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
-		    @ApiImplicitParam(paramType = "query", name = "roleCode", value = "角色编码", dataType = "String", required = true),
+		    @ApiImplicitParam(paramType = "query", name = "engName", value = "角色英文名称（Wso2扩展字段）", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "roleName", value = "角色名称", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
@@ -111,8 +111,8 @@ public class RoleController {
     })
     public ResponseEntity<Result<?>> saveRole(HttpSession session,@Validated(value = Add.class) Role bean) {
         try {
-    		this.RoleService.saveRole(bean);
-        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
+        	Result<?> result=this.RoleService.saveRole(bean);
+        	return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
             log.error("添加角色信息错误！{}", e.getMessage(), e);
         }
@@ -129,6 +129,7 @@ public class RoleController {
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "roleCode", value = "角色编码", dataType = "String"),
+	    @ApiImplicitParam(paramType = "query", name = "engName", value = "角色英文名称", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "roleName", value = "角色名称", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
