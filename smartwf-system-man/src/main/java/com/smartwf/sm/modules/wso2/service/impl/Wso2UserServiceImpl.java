@@ -16,8 +16,10 @@ import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
+import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
+import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
@@ -136,7 +138,22 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 		}
 		return null;
 	}
+
+	
 	
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

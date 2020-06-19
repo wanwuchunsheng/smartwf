@@ -1,23 +1,31 @@
 package com.smartwf.sm.modules.wso2.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.codec.binary.Base64;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.pojo.Wso2Group;
+import com.smartwf.common.utils.GsonUtils;
 import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.service.Wso2RoleService;
 
+import ch.qos.logback.core.joran.spi.XMLUtil;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -125,24 +133,91 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com").append("/scim2/Groups/").append(bean.getRoleCode());
 	        //发送请求
 			try {
-				//1）查询
+				//查询角色已绑定的用户
 				String res=HttpClientUtil.get(String.valueOf(sb), headers);
 				Map<String,Object> map=JsonUtil.jsonToMap(res);
 				for( Entry<String, Object> m: map.entrySet()) {
 					log.info(m.getKey()+"   "+m.getValue());
 				}
-				if(!map.isEmpty() && map.containsKey("members")) {
+				if(null!=map && map.containsKey("members")) {
 					data.put("members", map.get("members"));
-					String str=HttpClientUtil.put(String.valueOf(sb), JsonUtil.objectToJson(data),headers);
-					log.info("返回的数据："+str);
-					return JsonUtil.jsonToMap(str);
 				}
+				String str=HttpClientUtil.put(String.valueOf(sb), JsonUtil.objectToJson(data),headers);
+				log.info("返回的数据："+str);
+				return JsonUtil.jsonToMap(str);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		return null;
 	}
+
+	/**
+     * @Description：模拟wso2用户角色绑定
+     * 1）Wso2给不同的角色绑定新用户
+     * a.当前角色已绑定用户，查询出来后，追加新用户保存
+     * b.当前角色没有绑定角色，直接角色和用户绑定保存
+     * @author WCH
+     * @return
+     */
+	@Override
+	public Map<String, Object> addRoleOrUser(Role ur, UserInfoVO bean) {
+		//1）通过租户ID查询租户信息
+		Tenant tinfo=new Tenant();
+		tinfo.setId(bean.getTenantId());
+		Tenant resInfo=this.tenantDao.selectById(tinfo);
+		if(null!=resInfo) {
+			//2）角色查询带出已绑定用户
+			StringBuffer sb=new StringBuffer();
+			//封装http请求头
+			Map<String,String> headers=new HashMap<>();
+			headers.put("content-type", "application/json");
+			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantCode()).append(".com:").append(Constants.WSO2_PASSWORD);
+			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
+			//封装数据
+	        Wso2Group wg=new Wso2Group();
+	        wg.setDisplayName(ur.getEngName());
+			//拼接uri
+	        sb=new StringBuffer();
+	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com").append("/scim2/Groups/").append(ur.getRoleCode());
+			try {
+				//查询角色已绑定的用户
+				String res=HttpClientUtil.get(String.valueOf(sb), headers);
+				Map<String, Object> map=GsonUtils.jsonToMap(res);
+				List<Map<String,Object>> listmap=null;
+				Map<String,Object> lmap=null;
+				//3）判断当前角色是否已绑定用户
+				if(null!=map && map.containsKey("members")) {
+					//已绑定
+					Wso2Group wgf=GsonUtils.jsonToPojo(res, Wso2Group.class);
+					//获得已绑定所有用户
+					listmap=wgf.getMembers();
+					//封装新用户，在已绑定用户集合追加新用户
+					lmap=new HashMap<>();
+					lmap.put("display", bean.getLoginCode());
+					lmap.put("value", bean.getUserCode());
+					listmap.add(lmap);
+					wg.setMembers(listmap);
+				}else {
+					//未绑定
+					listmap=new ArrayList<>();
+					lmap=new HashMap<>();
+					lmap.put("display", bean.getLoginCode());
+					lmap.put("value", bean.getUserCode());
+					listmap.add(lmap);
+					wg.setMembers(listmap);
+				}
+				//4）角色用户绑定保存
+				String str=HttpClientUtil.put(String.valueOf(sb), JsonUtil.objectToJson(wg),headers);
+				log.info("返回的数据："+str);
+				return JsonUtil.jsonToMap(str);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
 	
 	
 }

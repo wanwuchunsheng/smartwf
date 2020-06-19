@@ -100,7 +100,7 @@ public class JsonUtil {
      *
      * @param json json对象
      */
-    public static Map<String, Object> jsonToMap(JSONObject json) throws JSONException {
+    public static Map<String, Object> jsonToMap(JSONObject json) {
         Map<String, Object> retMap = new HashMap<>();
 
         if (json != JSONObject.NULL) {

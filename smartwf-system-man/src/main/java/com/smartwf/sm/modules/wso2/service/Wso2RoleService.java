@@ -3,6 +3,7 @@ package com.smartwf.sm.modules.wso2.service;
 import java.util.Map;
 
 import com.smartwf.sm.modules.admin.pojo.Role;
+import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 public interface Wso2RoleService {
 
@@ -21,6 +22,11 @@ public interface Wso2RoleService {
 	 * 
 	 * */
 	Map<String,Object> updateRole(Role bean);
-
+	/**
+     * @Description：模拟wso2用户角色绑定
+     * @param code,session_state和state
+     * @return
+     */
+	Map<String,Object> addRoleOrUser(Role ur, UserInfoVO bean);
 	
 }

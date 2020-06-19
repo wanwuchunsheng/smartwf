@@ -124,7 +124,7 @@ public class RoleServiceImpl implements RoleService{
 			Role rl=this.roleDao.selectById(bean);
 			rl.setEngName(bean.getEngName());
 			Map<String ,Object> map=this.wso2RoleService.updateRole(rl);
-			if(!map.isEmpty()) {
+			if(null!=map) {
 				//添加修改人信息
 				User user=UserThreadLocal.getUser();
 				bean.setUpdateTime(new Date());

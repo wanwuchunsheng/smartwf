@@ -34,6 +34,7 @@ import com.smartwf.sm.modules.admin.pojo.UserPost;
 import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
+import com.smartwf.sm.modules.wso2.service.Wso2RoleService;
 import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
 import lombok.extern.log4j.Log4j;
@@ -73,6 +74,8 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Autowired
 	private Wso2UserService wso2UserService;
 
+	@Autowired
+	private Wso2RoleService wso2RoleService;
 	
 	/**
 	 * @Description:查询用户资料分页
@@ -175,6 +178,8 @@ public class UserInfoServiceImpl implements UserInfoService{
 					ur.setTenantId(bean.getTenantId());
 					ur.setRoleId(Integer.valueOf(id));
 					this.userRoleDao.insert(ur);
+					//wso2角色和用户绑定
+					Map<String,Object> resmap=this.wso2RoleService.addRoleOrUser(this.roleDao.selectById(id),bean);
 				}
 			}
 		}
@@ -259,6 +264,8 @@ public class UserInfoServiceImpl implements UserInfoService{
 				ur.setTenantId(bean.getTenantId());
 				ur.setRoleId(Integer.valueOf(id));
 				this.userRoleDao.insert(ur);
+				//wso2用户和角色绑定
+				
 			}
 		}
 	}
@@ -311,7 +318,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 				this.userInfoDao.deleteUserInfoByIds(list);
 			}
 		}
-		return null;
+		return Result.data(Constants.EQU_SUCCESS,"成功!");
 	}
 
 	/**
