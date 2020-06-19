@@ -137,8 +137,13 @@ public class RoleController {
     })
     @TraceLog(content = "修改角色", paramIndexs = {0})
     public ResponseEntity<Result<?>> updateRole(@Validated(value = Update.class) Role bean) {
-        this.RoleService.updateRole(bean);
-        return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
+    	try {
+        	Result<?> result=this.RoleService.updateRole(bean);
+        	return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            log.error("修改角色信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("修改角色信息错误！"));
     }
     
     /**

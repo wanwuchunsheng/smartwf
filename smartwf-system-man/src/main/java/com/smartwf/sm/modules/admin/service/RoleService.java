@@ -38,7 +38,7 @@ public interface RoleService {
      * @Description： 修改角色
      * @return
      */
-	void updateRole(Role bean);
+	Result<?>  updateRole(Role bean);
 
 	/**
      * @Description： 删除角色

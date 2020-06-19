@@ -118,20 +118,24 @@ public class RoleServiceImpl implements RoleService{
      * @return
      */
 	@Override
-	public void updateRole(Role bean) {
+	public Result<?> updateRole(Role bean) {
 		/** 修改wso2角色 */
 		if(StringUtils.isNotBlank(bean.getEngName())) {
 			Role rl=this.roleDao.selectById(bean);
 			rl.setEngName(bean.getEngName());
-			this.wso2RoleService.updateRole(rl);
+			Map<String ,Object> map=this.wso2RoleService.updateRole(rl);
+			if(!map.isEmpty()) {
+				//添加修改人信息
+				User user=UserThreadLocal.getUser();
+				bean.setUpdateTime(new Date());
+				bean.setUpdateUserId(user.getId());
+				bean.setUpdateUserName(user.getUserName());
+				//修改
+				this.roleDao.updateById(bean);
+				return Result.data(Constants.EQU_SUCCESS,"修改成功！");
+			}
 		}
-		//添加修改人信息
-		User user=UserThreadLocal.getUser();
-		bean.setUpdateTime(new Date());
-		bean.setUpdateUserId(user.getId());
-		bean.setUpdateUserName(user.getUserName());
-		//修改
-		this.roleDao.updateById(bean);
+		return Result.data(Constants.BAD_REQUEST,"失败，wso2角色修改失败！");
 	}
 
 	/**
