@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.exception.CommonException;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.TreeResource;
 import com.smartwf.common.pojo.User;
@@ -28,6 +29,7 @@ import com.smartwf.sm.modules.admin.dao.UserInfoDao;
 import com.smartwf.sm.modules.admin.dao.UserOrganizationDao;
 import com.smartwf.sm.modules.admin.dao.UserPostDao;
 import com.smartwf.sm.modules.admin.dao.UserRoleDao;
+import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.pojo.UserPost;
@@ -180,6 +182,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 					this.userRoleDao.insert(ur);
 					//wso2角色和用户绑定
 					Map<String,Object> resmap=this.wso2RoleService.addRoleOrUser(this.roleDao.selectById(id),bean);
+					if(null==resmap) {
+		        		throw new CommonException(Constants.UNAUTHORIZED, "Wso2用户角色绑定异常！");
+					}
 				}
 			}
 		}
@@ -207,15 +212,8 @@ public class UserInfoServiceImpl implements UserInfoService{
 		bean.setLoginCode(uf.getLoginCode());
 		bean.setUserName(uf.getUserName());
 		bean.setUserCode(uf.getUserCode());
-		/**
-		//修改wso2用户
-		Map<String, Object> resmap=this.wso2UserService.updateByUserCode(bean);
-		if(resmap!=null && resmap.size()>0) {
-			for(Entry<String, Object> m: resmap.entrySet() ) {
-				log.info("wso2用户修改返回信息："+m.getKey()+"    "+ m.getValue() );
-			}
-		}
-		*/
+		bean.setTenantId(uf.getTenantId());
+		
 		//md5加密
 		if(StringUtils.isNotBlank(bean.getPwd())) {
 			bean.setPwd(MD5Utils.convertMd5(bean.getPwd()));
@@ -231,43 +229,61 @@ public class UserInfoServiceImpl implements UserInfoService{
 		this.userInfoDao.deleteUserRoleById(bean);
 		//3）重新添加新的关联关系
 		//添加用户组织机构
-		String orgIds=StrUtils.regex(bean.getOrganizationIds());
-		if(StringUtils.isNotBlank(orgIds)) {
-			UserOrganization uo=null;
-			for(String id:orgIds.split(",")) {
-				uo=new UserOrganization();
-				uo.setUserId(bean.getId());
-				uo.setTenantId(bean.getTenantId());
-				uo.setOrganizationId(Integer.valueOf(id));
-				this.userOrganizationDao.insert(uo);
+		if(StringUtils.isNotBlank(bean.getOrganizationIds())){
+			String orgIds=StrUtils.regex(bean.getOrganizationIds());
+			if(StringUtils.isNotBlank(orgIds)) {
+				UserOrganization uo=null;
+				for(String id:orgIds.split(",")) {
+					uo=new UserOrganization();
+					uo.setUserId(bean.getId());
+					uo.setTenantId(bean.getTenantId());
+					uo.setOrganizationId(Integer.valueOf(id));
+					this.userOrganizationDao.insert(uo);
+				}
 			}
 		}
 		//添加用户职务
-		String postIds=StrUtils.regex(bean.getPostIds());
-		if(StringUtils.isNotBlank(postIds)) {
-			UserPost up = null;
-			for(String id:postIds.split(",")) {
-				up=new UserPost();
-				up.setUserId(bean.getId());
-				up.setTenantId(bean.getTenantId());
-				up.setPostId(Integer.valueOf(id));
-				this.userPostDao.insert(up);
+		if(StringUtils.isNotBlank(bean.getPostIds())){
+			String postIds=StrUtils.regex(bean.getPostIds());
+			if(StringUtils.isNotBlank(postIds)) {
+				UserPost up = null;
+				for(String id:postIds.split(",")) {
+					up=new UserPost();
+					up.setUserId(bean.getId());
+					up.setTenantId(bean.getTenantId());
+					up.setPostId(Integer.valueOf(id));
+					this.userPostDao.insert(up);
+				}
 			}
 		}
+		
 		//添加用户角色
-		String roleIds=StrUtils.regex(bean.getRoleIds());
-		if(StringUtils.isNotBlank(roleIds)) {
-			UserRole ur = null;
-			for(String id:roleIds.split(",")) {
-				ur=new UserRole();
-				ur.setUserId(bean.getId());
-				ur.setTenantId(bean.getTenantId());
-				ur.setRoleId(Integer.valueOf(id));
-				this.userRoleDao.insert(ur);
-				//wso2用户和角色绑定
-				
+		if(StringUtils.isNotBlank(bean.getRoleIds())){
+			String roleIds=StrUtils.regex(bean.getRoleIds());
+			if(StringUtils.isNotBlank(roleIds)) {
+				List<String> list=new ArrayList<>();
+				UserRole ur = null;
+				for(String id:roleIds.split(",")) {
+					list.add(id);
+					ur=new UserRole();
+					ur.setUserId(bean.getId());
+					ur.setTenantId(bean.getTenantId());
+					ur.setRoleId(Integer.valueOf(id));
+					this.userRoleDao.insert(ur);
+				}
+				//Wso2实时更新
+				if(!list.isEmpty()) {
+					//查询所有角色集合对象
+					List<Role> listRole=this.roleDao.selectRoleByIds(list);
+					//wso2角色和用户绑定
+					Map<String,Object> resmap=this.wso2RoleService.updateRoleOrUser(listRole,bean);
+					if(null==resmap) {
+		        		throw new CommonException(Constants.UNAUTHORIZED, "Wso2用户角色绑定异常！");
+					}
+				}
 			}
 		}
+		
 	}
 
 	/**

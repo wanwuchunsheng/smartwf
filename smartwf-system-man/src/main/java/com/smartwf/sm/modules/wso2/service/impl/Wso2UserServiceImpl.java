@@ -141,7 +141,34 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 
 	
 	
-
+	/**
+     * @Description：模拟wso2用户查询
+     * @param userName,password
+     * @return maps
+     */
+	@Override
+	public Map<String,Object> selectUser(UserInfoVO bean, Tenant resInfo){
+		try {
+			StringBuffer sb=new StringBuffer();
+			//封装http请求头
+			Map<String,String> headers=new HashMap<>();
+			headers.put("content-type", "application/json");
+			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantCode()).append(".com:").append(Constants.WSO2_PASSWORD);
+			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
+	        //拼接uri
+	        sb=new StringBuffer();
+	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com").append("/scim2/Users/").append(bean.getUserCode());
+	        //发送请求
+	        String str=HttpClientUtil.get(String.valueOf(sb), headers);
+	        Map<String,Object> map=JsonUtil.jsonToMap(str);
+	        //返回
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 	
 	
 	

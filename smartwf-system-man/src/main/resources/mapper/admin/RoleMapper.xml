@@ -53,4 +53,23 @@
             and b.tenant_id = #{bean.tenantId}
         </if>
     </select>
+    
+    
+    <!-- 查询所有角色集合对象 -->
+    <select id="selectRoleByIds" resultType="com.smartwf.sm.modules.admin.pojo.Role">
+	    select 
+			id,
+			role_code,
+			eng_name,
+			role_name,
+			tenant_id,
+			enable,
+			sort,
+			remark
+		from sys_role where enable=0
+         and id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+    </select>
 </mapper>

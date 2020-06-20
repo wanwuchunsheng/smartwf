@@ -130,9 +130,9 @@ public class UserInfoController {
     @ApiOperation(value = "修改接口", notes = "修改用户资料资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "organizationIds", value = "组织架构（主键），逗号拼接", dataType = "String", required = true),
-	    @ApiImplicitParam(paramType = "query", name = "postIds", value = "职务（主键），逗号拼接", dataType = "String", required = true),
-	    @ApiImplicitParam(paramType = "query", name = "roleIds", value = "角色（主键），逗号拼接", dataType = "String", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "organizationIds", value = "组织架构（主键），逗号拼接", dataType = "String"),
+	    @ApiImplicitParam(paramType = "query", name = "postIds", value = "职务（主键），逗号拼接", dataType = "String"),
+	    @ApiImplicitParam(paramType = "query", name = "roleIds", value = "角色（主键），逗号拼接", dataType = "String"),
     	@ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录账号", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String"),

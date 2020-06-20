@@ -7,16 +7,17 @@ import java.util.Map;
 import lombok.Data;
 
 /**
- * @Description: 用户
+ * @Description: 用户角色
  */
 @Data
-public class Wso2Group implements Serializable{
+public class Wso2User implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private String displayName;
 	private List<Map<String,Object>> members;
+	private List<Map<String,Object>> groups;
 	
 	
 }

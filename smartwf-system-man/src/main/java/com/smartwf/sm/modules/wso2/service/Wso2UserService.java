@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.wso2.service;
 import java.util.Map;
 
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
@@ -25,6 +26,13 @@ public interface Wso2UserService {
      * @return
      */
 	Map<String, Object> updateByUserCode(UserInfoVO bean);
+
+	/**
+     * @Description：模拟wso2用户查询
+     * @param code,session_state和state
+     * @return
+     */
+	Map<String, Object> selectUser(UserInfoVO bean, Tenant resInfo);
 	
 	
 

@@ -40,6 +40,11 @@ public interface RoleDao extends BaseMapper<Role> {
 	 * 
 	 * */
 	List<TreeRole> selectRoleByUserId(@Param("bean") User userInfo);
+	/**
+	 * @Deprecated 查询所有角色集合对象
+	 * 
+	 * */
+	List<Role> selectRoleByIds(@Param("list") List<String> list);
 
 
     
