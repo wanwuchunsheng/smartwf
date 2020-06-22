@@ -207,28 +207,13 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
  	 */
 	@Override
 	public void addKeyPosition(KeyPosition bean) {
-		//1)获取当前登录人信息
-		User user=UserThreadLocal.getUser();
-		//2)将字符串转换成字符串数组对象
-		String[] strObj= bean.getRemark().split("@");
-		KeyPosition keyPost=null;
-		for(String s:strObj) {
-			//3）将字符串数组对象转换成数组
-			String[] str=s.split(",");
-			keyPost=new KeyPosition();
-			keyPost.setDeviceCode(str[0]);//设备编码
-			keyPost.setDeviceName(str[1]);//设备名称
-			keyPost.setAssetNumber(str[2]);//资产编码
-			keyPost.setCreateTime(new Date());
-			keyPost.setCreateUserId(user.getId());
-			keyPost.setCreateUserName(user.getUserName());
-			keyPost.setTenantCode(user.getTenantCode());
-			//4)保存前判断是否存在
-			KeyPosition kp=this.keyPositionDao.selectByDeviceCode(keyPost);
-			if(kp==null) {
-				//5）保存
-				this.keyPositionDao.insert(keyPost);
-			}
+		//1)将字符串转换成字符串数组对象
+		bean.setCreateTime(new Date());
+		//2）保存前判断是否存在
+		KeyPosition kp=this.keyPositionDao.selectByDeviceCode(bean);
+		if(kp==null) {
+			//3）保存
+			this.keyPositionDao.insert(bean);
 		}
 	}
 
@@ -241,15 +226,10 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
  	 */
 	@Override
 	public void deleteKeyPosition(KeyPosition bean) {
+		//1)封装参数
 		QueryWrapper<KeyPosition> queryWrapper = new QueryWrapper<>();
-  		//id
-		if(StringUtils.isNotBlank(bean.getId())) {
-			queryWrapper.eq("id", bean.getId()); 
-		}
-		//设备编号
-  		if (StringUtils.isNotBlank(bean.getDeviceCode()) ) { 
-  			queryWrapper.eq("device_code", bean.getDeviceCode()); 
-  		}
+  		queryWrapper.eq("device_code", bean.getDeviceCode()); 
+  		queryWrapper.eq("tenant_code", bean.getTenantCode()); 
 		//2）设备编码删除
 		this.keyPositionDao.delete(queryWrapper);
 	}

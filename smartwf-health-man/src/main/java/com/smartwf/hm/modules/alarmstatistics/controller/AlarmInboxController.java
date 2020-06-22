@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -314,7 +315,7 @@ public class AlarmInboxController {
 	    }
 	    
 	    /**
-	 	 * @Description: 重点机位添加
+	 	 * @Description: 重点机位添加{提供生产中心调用}
 	 	 *  批量添加，格式: 设备编号,设备名称,资产编码@设备编号,设备名称,资产编码
 	 	 * @author wch
 	 	 * @date 2020-04-07
@@ -323,8 +324,12 @@ public class AlarmInboxController {
 	    @PostMapping("addKeyPosition")
 	    @ApiOperation(value = "重点机位添加接口", notes = "重点机位添加")
 	    @ApiImplicitParams({
-	     	   @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
-	     	   @ApiImplicitParam(paramType = "query", name = "remark", value = "批量添加格式:设备编号,设备名称,资产编码@设备编号,设备名称,资产编码", dataType = "String", required = true)
+	     	  @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true ),
+	     	  @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码 ", dataType = "String", required = true ),
+	     	  @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码 ", dataType = "String", required = true ),
+	     	  @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称 ", dataType = "String", required = true ),
+	     	  @ApiImplicitParam(paramType = "query", name = "createUserId", value = "创建人ID ", dataType = "String"),
+	     	  @ApiImplicitParam(paramType = "query", name = "createUserName", value = "创建人姓名 ", dataType = "String")
 	    })
 	    public ResponseEntity<Result<?>> addKeyPosition(KeyPosition bean) {
 	       try {
@@ -337,17 +342,17 @@ public class AlarmInboxController {
 	    }
 	    
 	    /**
-	 	 * @Description: 重点机位删除
+	 	 * @Description: 重点机位删除{提供生产中心调用}
 	 	 *  通过重点机位表主键ID删除
 	 	 * @author wch
 	 	 * @date 2020-04-07
 	 	 * @return
 	 	 */
-	    @PostMapping("deleteKeyPosition")
+	    @DeleteMapping("deleteKeyPosition")
 	    @ApiOperation(value = "重点机位删除接口", notes = "重点机位删除")
 	    @ApiImplicitParams({
-	     	   @ApiImplicitParam(paramType = "query", name = "id", value = "重点机位主键（id）", dataType = "String"),
-	     	  @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编号", dataType = "String")
+	    	  @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true ),
+	     	  @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编号", dataType = "String", required = true)
 	    })
 	    public ResponseEntity<Result<?>> deleteKeyPosition(KeyPosition bean) {
 	       try {
