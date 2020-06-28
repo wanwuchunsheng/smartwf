@@ -52,6 +52,12 @@ public class User implements Serializable{
      * wso2 id_token凭证
      * */
     private String idToken;
+    /**
+     * wso2 注销凭证
+     * */
+    private String sessionState;
+    
+    
 	
 	/**
      * id

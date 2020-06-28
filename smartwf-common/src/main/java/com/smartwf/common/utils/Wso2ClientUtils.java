@@ -1,16 +1,25 @@
 package com.smartwf.common.utils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.method.HandlerMethod;
+
+import com.smartwf.common.annotation.RequiresPermissions;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.wso2.Wso2Config;
+
+import lombok.extern.log4j.Log4j2;
 /**
  * 
  * wso2身份验证授权控制器
  * @author WCH
  * 
  * */
+@Log4j2
 public class Wso2ClientUtils {
 	
 	/**
@@ -19,13 +28,13 @@ public class Wso2ClientUtils {
      * @param redUri 返回的路径
      * 
      * */
-    public static String reqWso2Token(Wso2Config wso2Config,Map<String,Object> idtmap, Object reftoken) {
+    public static String reqWso2Token(Wso2Config wso2Config,Map<String,Object> idtmap, Object reftoken,String redirectUri) {
     	Map<String,String> headers=new HashMap<String,String>();
         headers.put("client_id",String.valueOf(idtmap.get("clientKey")));
         headers.put("client_secret",String.valueOf(idtmap.get("clientSecret")));
         headers.put("grant_type", "authorization_code");
         headers.put("code",String.valueOf(reftoken));//code换取token
-        headers.put("redirect_uri",String.valueOf(idtmap.get("redirectUri")));
+        headers.put("redirect_uri",redirectUri);
         String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/oauth2/token").toString();
     	return HttpClientUtil.doPost(url , headers,"utf-8");
     }
@@ -57,6 +66,39 @@ public class Wso2ClientUtils {
         headers.put("Authorization",new StringBuffer().append("Bearer ").append(user.getAccessToken()).toString());
         String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/oauth2/userinfo").toString();
     	return HttpClientUtil.get(url,headers);
+    }
+    
+    /**
+     * wso2请求-api接口权限验证
+     * @param 
+     * @return boolean
+     * */
+    public static Boolean entitlementApiReq(HttpServletRequest request,Wso2Config wso2Config,User user,Object handler) {
+    	try {
+    		HandlerMethod handlerMethod = (HandlerMethod)handler;
+            RequiresPermissions annotation = handlerMethod.getMethodAnnotation(RequiresPermissions.class);
+            System.out.println(annotation.logical());
+            String[] value = annotation.value();
+            //验证本地api是否提供参数
+            if( null!=value && value.length>0 ) {
+            	//封装wso2参数规范
+        		StringBuffer sb=new StringBuffer();
+        		sb.append(" <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://org.apache.axis2/xsd\">");
+        		sb.append(" <soapenv:Header/> <soapenv:Body> <xsd:getBooleanDecision> ");
+        		sb.append(" <xsd:subject>").append(user.getLoginCode()).append("</xsd:subject>");
+        		sb.append(" <xsd:resource>").append(request.getRequestURI()).append("</xsd:resource>");
+        		sb.append(" <xsd:action>").append(value[0]).append("</xsd:action>");
+        		sb.append(" </xsd:getBooleanDecision> </soapenv:Body> ");
+        		sb.append(" </soapenv:Envelope> ");
+            	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+            	String res=HttpClientUtil.doPostApiEntitlement(String.valueOf(new StringBuffer().append(wso2Config.tokenServerUri).append("/services/EntitlementService?wsdl")), String.valueOf(sb),user.getTenantCode());
+            	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+            	log.info("res="+res);
+            }
+		} catch (Exception e) {
+			log.info("api权限验证请求异常{}",e.getMessage(),e);
+		}
+    	return false;
     }
 
 }

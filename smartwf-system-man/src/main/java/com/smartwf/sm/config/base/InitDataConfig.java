@@ -80,8 +80,8 @@ public class InitDataConfig implements CommandLineRunner{
     		List<IdentityConfig> idtconfig=this.identityConfigService.initIdentityConfig();
     		if(idtconfig!=null && idtconfig.size()>0) {
     			for(IdentityConfig idt: idtconfig) {
-            		this.redisService.set(MD5Utils.md5(idt.getRedirectUri()), JsonUtil.objectToJson(idt));
-            		log.info("wso2配置信息{}",MD5Utils.md5(idt.getRedirectUri()), JsonUtil.objectToJson(idt));
+            		this.redisService.set(idt.getClientKey(), JsonUtil.objectToJson(idt));
+            		log.info("wso2配置信息{}",idt.getClientKey(), JsonUtil.objectToJson(idt));
     			}
     		}
 		} catch (Exception e) {

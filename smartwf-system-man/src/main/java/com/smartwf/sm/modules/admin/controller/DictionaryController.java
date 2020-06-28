@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.annotation.RequiresPermissions;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
@@ -74,6 +75,7 @@ public class DictionaryController {
      */
     @GetMapping("selectDictionaryById")
     @ApiOperation(value = "主键查询接口", notes = "主键查询数据字典")
+    @RequiresPermissions("dict.read")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int",required = true)
     })

@@ -34,9 +34,9 @@ public class IdentityConfig implements Serializable{/**
 	 */
 	private String clientSecret;
 	/**
-	 * 子系统前端地址
+	 * wso2租户名称
 	 */
-	private String redirectUri;
+	private String TenantCode;
 	/**
 	 * 备注
 	 */

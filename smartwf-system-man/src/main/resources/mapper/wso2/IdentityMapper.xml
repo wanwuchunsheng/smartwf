@@ -9,7 +9,7 @@
 			open_id,
 			client_key,
 			client_secret,
-			redirect_uri,
+			tenant_code,
 			remark
 		 from sys_identity
 		 where enable=0

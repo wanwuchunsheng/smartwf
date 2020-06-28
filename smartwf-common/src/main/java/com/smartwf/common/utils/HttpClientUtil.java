@@ -327,5 +327,45 @@ public class HttpClientUtil {
 		}
 		return null;
 	}
+	
+	
+	/**
+	 * 说明api鉴权
+	 * 
+	 * @param postUrl
+	 * @param soapXml
+	 * @param soapAction
+	 * @return
+	 */
+	public static String doPostApiEntitlement(String postUrl, String soapXml,String tenantCode) {
+		// 创建HttpClientBuilder
+		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+		// HttpClient
+		CloseableHttpClient closeableHttpClient = httpClientBuilder.build();
+		HttpPost httpPost = new HttpPost(postUrl);
+        // 设置请求和传输超时时间
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(Constants.SOCKET_TIME_OUT).setConnectTimeout(Constants.CONNECT_TIME_OUT).build();
+		httpPost.setConfig(requestConfig);
+		try {
+			httpPost.setHeader("Content-Type", "text/xml;charset=UTF-8");
+			httpPost.setHeader("SOAPAction", null);
+			httpPost.setHeader(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String((tenantCode+":"+Constants.WSO2_PASSWORD).getBytes())));
+			StringEntity data = new StringEntity(soapXml, Charset.forName("UTF-8"));
+			httpPost.setEntity(data);
+			CloseableHttpResponse response = closeableHttpClient.execute(httpPost);
+			HttpEntity httpEntity = response.getEntity();
+			if (httpEntity != null) {
+				// 打印响应内容
+				String retStr = EntityUtils.toString(httpEntity, "UTF-8");
+				log.info("response:" + retStr);
+				return retStr;
+			}
+			// 释放资源
+			closeableHttpClient.close();
+		} catch (Exception e) {
+			log.error("exception in doPostApiEntitlement", e);
+		}
+		return null;
+	}
    
 }
