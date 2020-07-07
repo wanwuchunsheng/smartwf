@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.PermissionThreadLocal;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.LoginUtils;
+import com.smartwf.common.utils.LoginUtilsBak;
 import com.smartwf.common.wso2.Wso2Config;
 
 import lombok.extern.slf4j.Slf4j;

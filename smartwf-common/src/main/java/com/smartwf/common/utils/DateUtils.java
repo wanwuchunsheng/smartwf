@@ -820,6 +820,23 @@ public class DateUtils {
             c.set(Calendar.MILLISECOND, 999);  
             return c.getTime();  
     }  
+    /** 
+     * 输入日期，转化为毫秒数
+     * @param date 
+     * @return 
+     */  
+    public static long getDayTimeToLong(final String datetime) {  
+		try {
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_FORMAT_YYYY_MM_DD_HH_MI_SS);//24小时制
+			return simpleDateFormat.parse(datetime).getTime()/1000;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    	return 0;
+    }
+    
+    
+
      
  /*     
     public static void main(String [] args){  

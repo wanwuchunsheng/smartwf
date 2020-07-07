@@ -33,7 +33,7 @@ public class User implements Serializable{
 	 * wso2子系统注册 redirect_Uri
 	 * 
 	 * */
-	private String redirectUrI;
+	private String redirectUri;
 	
     /**
 	 * 前端系统token
@@ -56,9 +56,11 @@ public class User implements Serializable{
      * wso2 注销凭证
      * */
     private String sessionState;
+    /**
+     * 过期时间
+     * */
+    private Long dateTime;
     
-    
-	
 	/**
      * id
      */
@@ -141,14 +143,9 @@ public class User implements Serializable{
 	 */
 	private Integer mgrType;
 	/**
-	 * 组织架构 
-	 */
-	private List<TreeOrganization> organizationList;
-	/**
 	 * 职务
 	 */
 	private List<TreePost> postList;
-	
 	/**
 	 * 角色
 	 */
@@ -157,5 +154,9 @@ public class User implements Serializable{
 	/**
 	 * 资源菜单
 	 */
-	private List<TreeResource> resouceList;
+	//private List<TreeResource> resouceList;
+	/**
+	 * 组织架构 
+	 */
+	//private List<TreeOrganization> organizationList;
 }

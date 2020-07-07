@@ -6,12 +6,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.message.BasicHeader;
 import org.springframework.web.method.HandlerMethod;
 
 import com.smartwf.common.annotation.RequiresPermissions;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.wso2.Wso2Config;
 
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 /**
  * 
@@ -51,7 +54,7 @@ public class Wso2ClientUtils {
         headers.put("client_secret",user.getClientSecret());
         headers.put("grant_type", "refresh_token"); 
         headers.put("refresh_token", user.getRefreshToken()); //token刷新
-        headers.put("redirect_uri",user.getRedirectUrI());
+        headers.put("redirect_uri",user.getRedirectUri());
         String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/oauth2/token").toString();
     	return HttpClientUtil.doPost(url, headers,"utf-8");
     }
@@ -77,7 +80,6 @@ public class Wso2ClientUtils {
     	try {
     		HandlerMethod handlerMethod = (HandlerMethod)handler;
             RequiresPermissions annotation = handlerMethod.getMethodAnnotation(RequiresPermissions.class);
-            System.out.println(annotation.logical());
             String[] value = annotation.value();
             //验证本地api是否提供参数
             if( null!=value && value.length>0 ) {
@@ -100,5 +102,35 @@ public class Wso2ClientUtils {
 		}
     	return false;
     }
+    
+    /**
+     * wso2请求-api接口Token验证
+     * @param 
+     * @return boolean
+     * */
+	public static String reqWso2CheckToken(Wso2Config wso2Config, User user) {
+		/**
+		Map<String,String> headers=new HashMap<String,String>();
+        headers.put("token",new StringBuffer().append("Bearer ").append(user.getAccessToken()).toString());
+        String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/t/").append(user.getTenantCode()).append(".com/oauth2/introspect").toString();
+        Map<String,String> headers2=new HashMap<String,String>();
+        headers2.put(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String(("admin:admin").getBytes())));
+    	return HttpClientUtil.post(url, GsonUtils.objectToJson(headers), headers2);
+    	**/
+    	return null;
+	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

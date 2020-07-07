@@ -354,16 +354,20 @@ public class UserInfoServiceImpl implements UserInfoService{
 			userInfo.setIdToken(user.getIdToken());
 			userInfo.setClientKey(user.getClientKey());
 			userInfo.setClientSecret(user.getClientSecret());
-			userInfo.setRedirectUrI(user.getRedirectUrI());
-			//获取组织架构
-			userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
+			userInfo.setRedirectUri(user.getRedirectUri());
+			userInfo.setDateTime(user.getDateTime());
 			//职务
 			userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
 			//角色
 			userInfo.setRoleList(this.roleDao.selectRoleByUserId(userInfo));
+			/**
+			//获取组织架构
+			userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
 			//资源权限
-			List<TreeResource> reslist=buildByRecursive(this.resourceDao.selectResourceByUserId(userInfo) );
+			//List<TreeResource> reslist=buildByRecursive(this.resourceDao.selectResourceByUserId(userInfo) );
 			userInfo.setResouceList(reslist);
+			 * 
+			 */
 		}
 		return userInfo;
 	}
