@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import com.smartwf.common.constant.Constants;
@@ -86,7 +85,7 @@ public class LoginUtils {
         	user.setSmartwfToken(MD5Utils.md5(code));
         	user.setCode(code);
         	user.setSessionState(sessionState);
-        	log.info("code="+MD5Utils.md5(code));
+        	log.info("code= "+MD5Utils.md5(code));
         	redisService.set(MD5Utils.md5(code),JsonUtil.objectToJson(user) ,wso2Config.tokenRefreshTime);//过期时间50分钟
         }else {
 	        /** 
@@ -132,7 +131,6 @@ public class LoginUtils {
 	        	 throw new CommonException(Constants.FORBIDDEN, "api接口访问无权限！");
 	    	 };
 	    	 * */
-	    	 
         }
         return true;
     }

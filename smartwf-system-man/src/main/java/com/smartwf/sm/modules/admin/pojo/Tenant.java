@@ -32,6 +32,16 @@ public class Tenant extends BasePojo implements Serializable{
 	 * 租户代码
 	 */
 	private String tenantCode;
+	
+    /**
+	 * wso2默认租户租户域
+	 */
+	private String tenantDomain;
+	
+	/**
+	 * wso2默认租户管理员密码
+	 */
+	private String tenantPw;
 	/**
 	 * 租户名称
 	 */

@@ -119,6 +119,16 @@ public class Wso2ClientUtils {
     	**/
     	return null;
 	}
+	
+	/**
+     * 功能说明:返回前端用户基础信息，过滤铭感信息
+     * @param 
+     * @return obj
+     * */
+	public static User resUserInfo( User user) {
+		user.setAccessToken(null);
+    	return user;
+	}
 
 	
 	

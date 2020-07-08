@@ -64,14 +64,14 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 			//封装http请求头
 			Map<String,String> headers=new HashMap<>();
 			headers.put("content-type", "application/json");
-			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantCode()).append(".com:").append(Constants.WSO2_PASSWORD);
+			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 	        //封装数据
 	        Map<String,String> data=new HashMap<>();
 	        data.put("displayName", bean.getEngName());
 	        //拼接uri
 	        sb=new StringBuffer();
-	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com").append("/scim2/Groups");
+	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Groups");
 	        //发送请求
 	        String str=HttpClientUtil.post(String.valueOf(sb), JsonUtil.objectToJson(data),headers);
 	        Map<String,Object> map=JsonUtil.jsonToMap(str);
@@ -96,11 +96,11 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 			//封装http请求头
 			Map<String,String> headers=new HashMap<>();
 			headers.put("content-type", "application/json");
-			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantCode()).append(".com:").append(Constants.WSO2_PASSWORD);
+			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 			//拼接uri
 	        sb=new StringBuffer();
-	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com").append("/scim2/Groups/").append(rl.getRoleCode());
+	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Groups/").append(rl.getRoleCode());
 	        //发送请求
 			try {
 				HttpClientUtil.delete(String.valueOf(sb), headers);
@@ -129,14 +129,14 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 			//封装http请求头
 			Map<String,String> headers=new HashMap<>();
 			headers.put("content-type", "application/json");
-			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantCode()).append(".com:").append(Constants.WSO2_PASSWORD);
+			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 			//封装数据
 	        Map<String,Object> data=new HashMap<>();
 	        data.put("displayName", bean.getEngName());
 			//拼接uri
 	        sb=new StringBuffer();
-	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com").append("/scim2/Groups/").append(bean.getRoleCode());
+	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Groups/").append(bean.getRoleCode());
 	        //发送请求
 			try {
 				//查询角色已绑定的用户
@@ -178,14 +178,14 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 			//封装http请求头
 			Map<String,String> headers=new HashMap<>();
 			headers.put("content-type", "application/json");
-			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantCode()).append(".com:").append(Constants.WSO2_PASSWORD);
+			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 			//封装数据
 	        Wso2Group wg=new Wso2Group();
 	        wg.setDisplayName(ur.getEngName());
 			//拼接uri
 	        sb=new StringBuffer();
-	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com").append("/scim2/Groups/").append(ur.getRoleCode());
+	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Groups/").append(ur.getRoleCode());
 			try {
 				//查询角色已绑定的用户
 				String res=HttpClientUtil.get(String.valueOf(sb), headers);
@@ -253,11 +253,11 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 							//4）封装http请求头
 							Map<String,String> headers=new HashMap<>();
 							headers.put("content-type", "application/json");
-							sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantCode()).append(".com:").append(Constants.WSO2_PASSWORD);
+							sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 							headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 							//5）拼接uri
 					        sb=new StringBuffer();
-					        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com").append("/scim2/Groups/").append(String.valueOf(m.get("value")));
+					        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Groups/").append(String.valueOf(m.get("value")));
 							//6）查询角色已绑定的用户，过滤当前用户
 							String res=HttpClientUtil.get(String.valueOf(sb), headers);
 							Wso2Group wgs=GsonUtils.jsonToPojo(res, Wso2Group.class);

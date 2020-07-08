@@ -19,6 +19,7 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.GenerateUtils;
+import com.smartwf.common.utils.MD5Utils;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.DictionaryDao;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
@@ -109,7 +110,10 @@ public class TenantServiceImpl implements TenantService{
 		bean.setUpdateTime(bean.getCreateTime());
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
-		bean.setTenantCode(GenerateUtils.getSelfIdByUUId());//生成唯一编号
+		String wso2TenantCode=GenerateUtils.getSelfIdByUUId();
+		bean.setTenantCode(wso2TenantCode);//租户编码
+		bean.setTenantDomain(new StringBuffer().append(wso2TenantCode).append(".com").toString());//wso2租户域
+		bean.setTenantPw(Constants.WSO2_PASSWORD);//wso2租户默认密码
 		if(bean.getSel().equals(Constants.ISSEL)) {
 			this.tenantDao.updateBySel();//置空默认租户
 		}
@@ -117,12 +121,12 @@ public class TenantServiceImpl implements TenantService{
 		//wso2租户添加，模拟默认用户
 		Wso2Tenant wt=new Wso2Tenant();
 		wt.setActive(true);
-		wt.setAdmin(bean.getTenantCode());
-		wt.setAdminPassword(Constants.WSO2_PASSWORD);
+		wt.setAdmin(wso2TenantCode);
+		wt.setAdminPassword(bean.getTenantPw());
 		wt.setEmail("admin@windmagics.com");
 		wt.setFirstname("admin");
 		wt.setLastname("admin");
-		wt.setTenantDomain(String.valueOf(new StringBuffer().append(bean.getTenantCode()).append(".com")));
+		wt.setTenantDomain(bean.getTenantDomain());
 		//wt.setTenantId(String.valueOf(bean.getId()));
 		this.wso2TenantService.addTenant(wt);
 		//3）批量添加新租户数据字典（从默认租户拷贝的数据字典）

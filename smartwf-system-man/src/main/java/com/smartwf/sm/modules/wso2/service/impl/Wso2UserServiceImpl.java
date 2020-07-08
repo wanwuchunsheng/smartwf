@@ -14,6 +14,7 @@ import com.alibaba.druid.support.json.JSONUtils;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.JsonUtil;
+import com.smartwf.common.utils.MD5Utils;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Role;
@@ -56,8 +57,7 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 			//封装http请求头
 			Map<String,String> headers=new HashMap<>();
 			headers.put("content-type", "application/json");
-	        //headers.put("authorization", wso2Config.userAuthorization);
-			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantCode()).append(".com:").append(Constants.WSO2_PASSWORD);
+			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 	        //封装数据
 	        Map<String,String> data=new HashMap<>();
@@ -65,7 +65,7 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 	        data.put("password", bean.getPwd());
 	        //拼接uri
 	        sb=new StringBuffer();
-	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com").append("/scim2/Users");
+	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Users");
 	        //发送请求
 	        String str=HttpClientUtil.post(String.valueOf(sb), JsonUtil.objectToJson(data),headers);
 	        Map<String,Object> map=JsonUtil.jsonToMap(str);
@@ -93,12 +93,11 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 			StringBuffer sb=new StringBuffer();
 			//删除租户下的用户
 			Map<String,String> handlers=new HashMap<>();
-			//handlers.put("authorization", wso2Config.userAuthorization);
-			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantCode()).append(".com:").append(Constants.WSO2_PASSWORD);
+			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			handlers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 			try {
 				sb=new StringBuffer();
-				String url=sb.append(this.wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com/scim2/Users/").append(bean.getUserCode()).toString();
+				String url=sb.append(this.wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Users/").append(bean.getUserCode()).toString();
 				return HttpClientUtil.delete(url,  handlers);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -153,11 +152,11 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 			//封装http请求头
 			Map<String,String> headers=new HashMap<>();
 			headers.put("content-type", "application/json");
-			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantCode()).append(".com:").append(Constants.WSO2_PASSWORD);
+			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 	        //拼接uri
 	        sb=new StringBuffer();
-	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantCode()).append(".com").append("/scim2/Users/").append(bean.getUserCode());
+	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Users/").append(bean.getUserCode());
 	        //发送请求
 	        String str=HttpClientUtil.get(String.valueOf(sb), headers);
 	        Map<String,Object> map=JsonUtil.jsonToMap(str);
@@ -167,20 +166,6 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 			e.printStackTrace();
 		}
 		return null;
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
