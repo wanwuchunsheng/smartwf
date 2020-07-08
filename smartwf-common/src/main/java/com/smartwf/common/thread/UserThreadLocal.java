@@ -31,7 +31,7 @@ public class UserThreadLocal {
      * 获取用户
      */
     public static User getUser() {
-    	
+    	/**
         //初始化用户，等有登录功能再注释掉
   		User user=new User();
   		user.setUserCode("T52EXF");
@@ -48,10 +48,10 @@ public class UserThreadLocal {
   		user.setMgrType(1);
   		user.setTenantId(1);
   		return user;
-  		/**
+  		**/
       log.info(GsonUtils.objectToJson(userThreadLocal.get()));
       return userThreadLocal.get();
-      **/
+     
       
     }
    
