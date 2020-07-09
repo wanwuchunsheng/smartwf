@@ -110,10 +110,6 @@ public class TenantServiceImpl implements TenantService{
 		bean.setUpdateTime(bean.getCreateTime());
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
-		String wso2TenantCode=GenerateUtils.getSelfIdByUUId();
-		bean.setTenantCode(wso2TenantCode);//租户编码
-		bean.setTenantDomain(new StringBuffer().append(wso2TenantCode).append(".com").toString());//wso2租户域
-		bean.setTenantPw(Constants.WSO2_PASSWORD);//wso2租户默认密码
 		if(bean.getSel().equals(Constants.ISSEL)) {
 			this.tenantDao.updateBySel();//置空默认租户
 		}
@@ -121,13 +117,12 @@ public class TenantServiceImpl implements TenantService{
 		//wso2租户添加，模拟默认用户
 		Wso2Tenant wt=new Wso2Tenant();
 		wt.setActive(true);
-		wt.setAdmin(wso2TenantCode);
+		wt.setAdmin(bean.getTenantCode());
 		wt.setAdminPassword(bean.getTenantPw());
-		wt.setEmail("admin@windmagics.com");
-		wt.setFirstname("admin");
-		wt.setLastname("admin");
+		wt.setEmail("email@windmagics.com");
+		wt.setFirstname("firstname");
+		wt.setLastname("lastname");
 		wt.setTenantDomain(bean.getTenantDomain());
-		//wt.setTenantId(String.valueOf(bean.getId()));
 		this.wso2TenantService.addTenant(wt);
 		//3）批量添加新租户数据字典（从默认租户拷贝的数据字典）
 		if( null !=dict) {
@@ -137,7 +132,7 @@ public class TenantServiceImpl implements TenantService{
 			if(list!=null && list.size()>0){
 				int tenantId=bean.getId();
 				for(Dictionary dt: list) {
-					if(0==dt.getUid()) {
+					if(Constants.ZERO==dt.getUid()) {
 						dt.setTenantId(tenantId);
 						dictionaryDao.insert(dt);
 						for(Dictionary udt: list) {
@@ -177,7 +172,7 @@ public class TenantServiceImpl implements TenantService{
 			Wso2Tenant wt= new Wso2Tenant();
 			Tenant tinfo=this.tenantDao.selectById(bean);
 			wt.setTenantDomain(String.valueOf(new StringBuffer().append(tinfo.getTenantCode()).append(".com")));
-	        if(1==bean.getEnable()) {
+	        if(Constants.ONE==bean.getEnable()) {
 	        	wt.setActive(false);
 	        }else {
 	        	wt.setActive(true);

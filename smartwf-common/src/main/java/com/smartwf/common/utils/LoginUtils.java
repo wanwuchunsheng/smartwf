@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
  * @Date: 2018/11/5 15:09
  * @Description: 登录工具类
+ *    服务端托管过期验证
  */
 @Component
 @Slf4j
@@ -92,35 +93,35 @@ public class LoginUtils {
 	         * 已登录
 	         * 
 	         * */
-	        //9.验证token是否失效
+	        //10.验证token是否失效
 	        String mapStr = redisService.get(token);
 	        if (StringUtils.isBlank(mapStr)) {
 	        	log.warn("请求失败！token过期：{}，用户请求uri：{}", token, request.getRequestURI());
 	        	throw new CommonException(Constants.UNAUTHORIZED, "请求失败！token过期，请重新登录！");
 	        }
-	        //10.验证wso2登录信息是否过期
+	        //11.验证wso2登录信息是否过期
 	        User user=JsonUtil.jsonToPojo(mapStr, User.class);
 	        long nowtime=DateUtils.getDayTimeToLong(DateUtils.parseDateToStr(new Date(), "yyyy-MM-dd HH:mm:ss"));
-	        //11.提前60s*15=900过期{过期时间-当前时间},刷新令牌
+	        //12.提前60s*15=900过期{过期时间-当前时间},刷新令牌
 	        if( (user.getDateTime()-nowtime)<900 ) {
 	        	//重置wso2令牌时间
 		    	Map<String,Object> refmap=JsonUtil.jsonToMap(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
 		    	for(Entry<String, Object> m:refmap.entrySet()) {
 		    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
 		    	}
-		    	//11.验证刷新
+		    	//13.验证刷新
 		    	if(refmap.containsKey("error")) {
 		    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
 		        	throw new CommonException(Constants.FORBIDDEN, "accesstoken刷新失败！请重新登录！");
 		    	}
-	    		//12.刷新成功，更新之前保存的wso2相关信息
+	    		//14.刷新成功，更新之前保存的wso2相关信息
 		    	user.setAccessToken(String.valueOf(refmap.get("access_token")));
 		    	user.setRefreshToken(String.valueOf(refmap.get("refresh_token")));
 		    	user.setIdToken(String.valueOf(refmap.get("id_token")));
 		    	String day=DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss");
 		    	user.setDateTime(Long.valueOf(refmap.get("expires_in").toString()) + DateUtils.getDayTimeToLong(day));
 	        }
-	        //13.重置redis过期时间
+	        //15.重置redis过期时间
 	        redisService.set(token,JsonUtil.objectToJson(user),wso2Config.tokenRefreshTime);
 	        UserThreadLocal.setUser(user);
 	        /**

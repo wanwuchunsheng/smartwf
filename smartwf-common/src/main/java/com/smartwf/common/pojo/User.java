@@ -135,6 +135,15 @@ public class User implements Serializable{
 	 */
 	private String tenantName;
 	/**
+	 * 租户域
+	 */
+	private String tenantDomain;
+	/**
+	 * 租户密码
+	 */
+	private String tenantPw;
+	
+	/**
 	 * 审批状态 0-审批通过 1-审批中 2-待审批
 	 */
 	private String status;

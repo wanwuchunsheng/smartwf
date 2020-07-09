@@ -31,16 +31,19 @@ public class Tenant extends BasePojo implements Serializable{
     /**
 	 * 租户代码
 	 */
+	@NotNull(message = "租户名称不能为空！", groups = Add.class)
 	private String tenantCode;
 	
     /**
 	 * wso2默认租户租户域
 	 */
+	@NotNull(message = "租户名称不能为空！", groups = Add.class)
 	private String tenantDomain;
 	
 	/**
 	 * wso2默认租户管理员密码
 	 */
+	@NotNull(message = "租户名称不能为空！", groups = Add.class)
 	private String tenantPw;
 	/**
 	 * 租户名称

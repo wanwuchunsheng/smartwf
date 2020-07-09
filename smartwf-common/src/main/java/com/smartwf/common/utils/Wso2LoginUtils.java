@@ -13,6 +13,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.exception.CommonException;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.wso2.Wso2Config;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 
  * @Date: 2018/11/5 15:09
  * @Description: 登录工具类
- */
+ *    服务端不托管过期验证，由wso2授权服务器验证
+ */ 
 @Component
 @Slf4j
-public class LoginUtilsBak {
+public class Wso2LoginUtils {
     public static boolean checkLogin(HttpServletRequest request, HttpServletResponse response, Object handler, RedisService redisService,Wso2Config wso2Config) throws Exception{	
     	//1.判断是否登录
         String token = request.getHeader(Constants.SMARTWF_TOKEN);
@@ -64,82 +66,65 @@ public class LoginUtilsBak {
         	for(Entry<String, Object> m:tkmap.entrySet()) {
         		log.info("================"+m.getKey()+"    "+m.getValue());
         	}
-        	//8验证code换取token是否成功
+        	//8.验证code换取token是否成功
         	if(!tkmap.containsKey("access_token")) {
         		log.warn("参数已过期：{}，用户请求uri：{}", JsonUtil.objectToJson(tkmap), request.getRequestURI());
         		throw new CommonException(Constants.UNAUTHORIZED, "参数已过期！");
         	}
-        	//9刷新token
+        	//9.存储值
         	User user= new User();
-        	user.setRedirectUri(redirectUri);
         	user.setClientKey(String.valueOf(idtmap.get("clientKey")));
         	user.setClientSecret(String.valueOf(idtmap.get("clientSecret")));
         	user.setRefreshToken(String.valueOf(tkmap.get("refresh_token")));
-        	Map<String,Object> refmap=JsonUtil.jsonToMap(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
-        	for(Entry<String, Object> m:refmap.entrySet()) {
-        		log.info(m.getKey()+"    "+m.getValue());
-        	}
-	    	//10.验证刷新
-	    	if(StringUtils.isBlank(String.valueOf(refmap.get("refresh_token")))) {
-	        	log.warn("token失效：{}，用户请求uri：{}", token, request.getRequestURI());
-	        	throw new CommonException(Constants.UNAUTHORIZED, "用户登录已失效！请重新登录！");
-	    	}
-        	//11.生成新token用户子系统通信，保存redis
-        	String smartwfToken=MD5Utils.md5(code);
-        	user.setClientKey(String.valueOf(idtmap.get("clientKey")));
-        	user.setClientSecret(String.valueOf(idtmap.get("clientSecret")));
-        	user.setAccessToken(String.valueOf(refmap.get("access_token")));
-        	user.setRefreshToken(String.valueOf(refmap.get("refresh_token")));
-        	user.setIdToken(String.valueOf(refmap.get("id_token")));
+        	user.setAccessToken(String.valueOf(tkmap.get("access_token")));
+        	user.setIdToken(String.valueOf(tkmap.get("id_token")));
         	user.setRedirectUri(redirectUri);
-        	user.setSmartwfToken(smartwfToken);
+        	user.setSmartwfToken(MD5Utils.md5(code));
         	user.setCode(code);
         	user.setSessionState(sessionState);
-        	redisService.set(smartwfToken,JsonUtil.objectToJson(user) ,wso2Config.tokenRefreshTime);//过期时间50分钟
+        	log.info("code= "+MD5Utils.md5(code));
+        	redisService.set(MD5Utils.md5(code),JsonUtil.objectToJson(user) ,wso2Config.tokenRefreshTime);//过期时间50分钟
         }else {
 	        /** 
 	         * 已登录
 	         * 
 	         * */
-	        //9.验证token是否失效
+	        //10.验证token是否失效
 	        String mapStr = redisService.get(token);
 	        if (StringUtils.isBlank(mapStr)) {
 	        	log.warn("请求失败！token过期：{}，用户请求uri：{}", token, request.getRequestURI());
 	        	throw new CommonException(Constants.UNAUTHORIZED, "请求失败！token过期，请重新登录！");
 	        }
-	        /**
-	        //10.重置wso2令牌时间
-	    	User user=JsonUtil.jsonToPojo(mapStr, User.class);
-	    	Map<String,Object> refmap=JsonUtil.jsonToMap(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
-	    	for(Entry<String, Object> m:refmap.entrySet()) {
-	    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
-	    	}
-	    	//11.验证刷新
-	    	if(refmap.containsKey("error")) {
-	    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
-	        	throw new CommonException(Constants.FORBIDDEN, "accesstoken刷新失败！请重新登录！");
-	    	}
-    		//12.刷新成功，更新之前保存的wso2相关信息
-	    	user.setAccessToken(String.valueOf(refmap.get("access_token")));
-	    	user.setRefreshToken(String.valueOf(refmap.get("refresh_token")));
-	    	user.setIdToken(String.valueOf(refmap.get("id_token")));
-	    	redisService.set(token,JsonUtil.objectToJson(user) ,wso2Config.tokenRefreshTime);//过期时间50分钟
-	    	//向头部中写入token
-	        //response.setHeader("Authorization","token_value");
-	        //response.setHeader("smartwfToken","1111111111111111111111111");
-	         * 
-	         */
+	        //11.验证accessToken是否失效{由wso2帮忙验证}
+	        User user=JsonUtil.jsonToPojo(mapStr, User.class);
+	    	if(!Wso2ClientUtils.reqWso2CheckToken(wso2Config,user)) {
+	    		//12.重置wso2令牌时间
+		    	Map<String,Object> refmap=JsonUtil.jsonToMap(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
+		    	for(Entry<String, Object> m:refmap.entrySet()) {
+		    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
+		    	}
+		    	//13.验证刷新
+		    	if(refmap.containsKey("error")) {
+		    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
+		        	throw new CommonException(Constants.FORBIDDEN, "accesstoken刷新失败！请重新登录！");
+		    	}
+	    		//14.刷新成功，更新之前保存的wso2相关信息
+		    	user.setAccessToken(String.valueOf(refmap.get("access_token")));
+		    	user.setRefreshToken(String.valueOf(refmap.get("refresh_token")));
+		    	user.setIdToken(String.valueOf(refmap.get("id_token")));
+	    	};
+	    	//15.重置redis过期时间
+	        redisService.set(token,JsonUtil.objectToJson(user),wso2Config.tokenRefreshTime);
+	        UserThreadLocal.setUser(user);
 	        
 	        /**
 	         * 通过登录验证后，继续验证api接口权限
 	         * 
-	         
 	    	 if(!Wso2ClientUtils.entitlementApiReq(request,wso2Config,user, handler)){
 	    		 log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
 	        	 throw new CommonException(Constants.FORBIDDEN, "api接口访问无权限！");
 	    	 };
 	    	 * * */
-	    	
         }
         return true;
     }

@@ -1,6 +1,6 @@
 package com.smartwf.common.utils;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -10,12 +10,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.ParseException;
+import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -24,46 +25,23 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
-import org.springframework.http.HttpStatus;
 
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.pojo.Result;
 import com.smartwf.common.webservice.SSLClient;
-import lombok.extern.log4j.Log4j2;  
 
-import org.apache.http.Header;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.*;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class HttpClientUtil {
@@ -251,47 +229,10 @@ public class HttpClientUtil {
         }
     }
     
-    /**
-	 * 使用SOAP1.2发送消息
-	 * 
-	 * @param postUrl
-	 * @param soapXml
-	 * @param soapAction
-	 * @return
-	 */
-	public static String doPostSoap1_2(String postUrl, String soapXml,String soapAction) {
-		// 创建HttpClientBuilder
-		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-		// HttpClient
-		CloseableHttpClient closeableHttpClient = httpClientBuilder.build();
-		HttpPost httpPost = new HttpPost(postUrl);
-        // 设置请求和传输超时时间
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(Constants.SOCKET_TIME_OUT).setConnectTimeout(Constants.CONNECT_TIME_OUT).build();
-		httpPost.setConfig(requestConfig);
-		try {
-			httpPost.setHeader("Content-Type", "application/soap+xml;charset=UTF-8");
-			httpPost.setHeader("SOAPAction", soapAction);
-			httpPost.setHeader(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String(("admin:admin").getBytes())));
-			StringEntity data = new StringEntity(soapXml, Charset.forName("UTF-8"));
-			httpPost.setEntity(data);
-			CloseableHttpResponse response = closeableHttpClient.execute(httpPost);
-			HttpEntity httpEntity = response.getEntity();
-			if (httpEntity != null) {
-				// 打印响应内容
-				String retStr = EntityUtils.toString(httpEntity, "UTF-8");
-				log.info("response:" + retStr);
-				return retStr;
-			}
-			// 释放资源
-			closeableHttpClient.close();
-		} catch (Exception e) {
-			log.error("exception in doPostSoap1_2", e);
-		}
-		return null;
-	}
+    
 	/**
-	 * 使用SOAP1.1发送消息
-	 * 
+	 * 使用SOAP 
+	 *   请求wso2发送消息
 	 * @param postUrl
 	 * @param soapXml
 	 * @param soapAction
@@ -330,8 +271,8 @@ public class HttpClientUtil {
 	
 	
 	/**
-	 * 说明api鉴权
-	 * 
+	 * 说明 api鉴权
+	 *  
 	 * @param postUrl
 	 * @param soapXml
 	 * @param soapAction
@@ -367,5 +308,53 @@ public class HttpClientUtil {
 		}
 		return null;
 	}
-   
+	
+	
+	/**
+	 * 说明：wso2 accessToken 过期验证
+	 * @throws Exception 
+	 * 
+	 * */
+	public static String expVerification(String postUrl,String basic) {
+		InputStream input = null;
+		BufferedReader br =null;
+		try {
+			HttpClient httpclient = new SSLClient();
+	        HttpPost httpget = new HttpPost(postUrl);
+	        httpget.setHeader("Authorization", basic);
+	        HttpResponse response = httpclient.execute(httpget);
+	        StatusLine statusLine = response.getStatusLine();
+	        int responseCode = statusLine.getStatusCode();
+	        if (responseCode == 200) {
+	            HttpEntity entity = response.getEntity();
+	            input = entity.getContent();
+	            br = new BufferedReader(new InputStreamReader(input));
+	            String str = br.readLine();
+	            //String result = new String(str1.getBytes("gbk"), "utf-8");
+	            log.info("AccessToken验证返回："+str);
+	            return str;
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			//安全关流
+			if(input!=null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(br !=null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+        return null;
+	}
+
+	
 }

@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.LoginUtils;
+import com.smartwf.common.utils.Wso2LoginUtils;
 import com.smartwf.common.wso2.Wso2Config;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    	return LoginUtils.checkLogin(request, response, handler, redisService, wso2Config);
+    	return Wso2LoginUtils.checkLogin(request, response, handler, redisService, wso2Config);
     	//return true;
     }
 

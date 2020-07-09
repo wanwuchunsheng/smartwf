@@ -230,7 +230,7 @@ public class GlobalDataController {
         		if(null==userInfo) {
         			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，user_id查询用户信息异常！"));
         		}
-        		this.redisService.set(userInfo.getSmartwfToken(), JsonUtil.objectToJson(userInfo));//过期时间50分钟
+        		this.redisService.set(userInfo.getSmartwfToken(), JsonUtil.objectToJson(userInfo));
         		//成功返回
         		return ResponseEntity.ok(Result.data(userInfo));
         	}

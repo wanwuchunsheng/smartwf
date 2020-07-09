@@ -97,8 +97,10 @@ public class TenantController {
     @PostMapping("saveTenant")
     @ApiOperation(value = "添加接口", notes = "添加租户接口")
     @ApiImplicitParams({
-	    	@ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户代码", dataType = "String"),
-		    @ApiImplicitParam(paramType = "query", name = "tenantName", value = "租户名称", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantName", value = "租户名称", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+	    	@ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户管理员账号", dataType = "String", required = true),
+	    	@ApiImplicitParam(paramType = "query", name = "tenantPw", value = "租户管理员密码", dataType = "String", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "sel", value = "默认租户（0-否 1-是）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")

@@ -3,10 +3,12 @@ package com.smartwf.common.utils;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.message.BasicHeader;
 import org.springframework.web.method.HandlerMethod;
 
@@ -108,16 +110,23 @@ public class Wso2ClientUtils {
      * @param 
      * @return boolean
      * */
-	public static String reqWso2CheckToken(Wso2Config wso2Config, User user) {
-		/**
-		Map<String,String> headers=new HashMap<String,String>();
-        headers.put("token",new StringBuffer().append("Bearer ").append(user.getAccessToken()).toString());
-        String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/t/").append(user.getTenantCode()).append(".com/oauth2/introspect").toString();
-        Map<String,String> headers2=new HashMap<String,String>();
-        headers2.put(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String(("admin:admin").getBytes())));
-    	return HttpClientUtil.post(url, GsonUtils.objectToJson(headers), headers2);
-    	**/
-    	return null;
+	public static boolean reqWso2CheckToken(Wso2Config wso2Config, User user) {
+		try {
+			//拼接url
+	        String postUrl= new StringBuffer().append(wso2Config.userServerUri).append("/oauth2/introspect?token=").append(user.getAccessToken()).toString();
+	        //发送请求
+	        String str=HttpClientUtil.expVerification(postUrl, wso2Config.userAuthorization);
+	        if(StringUtils.isNotBlank(str)) {
+	        	//转换map
+	        	Map<String,Object> map=JsonUtil.jsonToMap(str);
+	            if(map.containsKey("active")) {
+	            	return Boolean.valueOf(map.get("active").toString());
+	            }
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return false;
 	}
 	
 	/**
@@ -129,18 +138,4 @@ public class Wso2ClientUtils {
 		user.setAccessToken(null);
     	return user;
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
