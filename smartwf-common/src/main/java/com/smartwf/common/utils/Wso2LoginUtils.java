@@ -106,7 +106,7 @@ public class Wso2LoginUtils {
 		    	//13.验证刷新
 		    	if(refmap.containsKey("error")) {
 		    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
-		        	throw new CommonException(Constants.FORBIDDEN, "accesstoken刷新失败！请重新登录！");
+		        	throw new CommonException(Constants.UNAUTHORIZED, "accesstoken刷新失败！请重新登录！");
 		    	}
 	    		//14.刷新成功，更新之前保存的wso2相关信息
 		    	user.setAccessToken(String.valueOf(refmap.get("access_token")));

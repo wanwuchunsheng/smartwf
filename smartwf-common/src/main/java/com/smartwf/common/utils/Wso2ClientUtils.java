@@ -3,20 +3,16 @@ package com.smartwf.common.utils;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.message.BasicHeader;
 import org.springframework.web.method.HandlerMethod;
 
 import com.smartwf.common.annotation.RequiresPermissions;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.wso2.Wso2Config;
 
-import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 /**
  * 

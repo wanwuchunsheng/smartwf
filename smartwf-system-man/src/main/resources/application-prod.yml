@@ -95,7 +95,7 @@ spring:
       user-authorization: Basic YWRtaW46YWRtaW4=
     token:
       token-server-uri: https://identity.windmagics.com
-      token-refresh-time: 6000
+      token-refresh-time: 1200
         
 # 日志
 logging:
