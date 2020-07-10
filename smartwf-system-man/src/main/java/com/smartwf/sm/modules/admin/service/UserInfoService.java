@@ -4,6 +4,7 @@ package com.smartwf.sm.modules.admin.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
@@ -49,4 +50,9 @@ public interface UserInfoService {
      * @return
      */
 	User selectUserInfoByUserCode(User bean);
+	/**
+     * @Description: wso2租户默认用户保存
+     * @return
+     */
+	void saveWso2UserInfo(UserInfoVO tv,Tenant bean);
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ import com.smartwf.sm.modules.admin.dao.UserOrganizationDao;
 import com.smartwf.sm.modules.admin.dao.UserPostDao;
 import com.smartwf.sm.modules.admin.dao.UserRoleDao;
 import com.smartwf.sm.modules.admin.pojo.Role;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.pojo.UserPost;
@@ -78,6 +78,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 
 	@Autowired
 	private Wso2RoleService wso2RoleService;
+	
 	
 	/**
 	 * @Description:查询用户资料分页
@@ -402,5 +403,27 @@ public class UserInfoServiceImpl implements UserInfoService{
 			 }
 		}
 		return treeNode;
+	}
+
+	/**
+     * @Description: wso2租户默认用户保存
+     * @return
+     */
+	@Override
+	public void saveWso2UserInfo(UserInfoVO tv,Tenant bean) {
+		//查询wso2 租户默认用户id
+		Map<String,Object> maplist=wso2UserService.selectUserByName(tv, bean);
+		if(maplist.containsKey("Resources")) {
+			List<Map> list=JsonUtil.jsonToList(JsonUtil.objectToJson(maplist.get("Resources")), Map.class);
+			if(list!=null && list.size()>0) {
+				Map<String,Object> map=JsonUtil.jsonToMap(JsonUtil.objectToJson(list.get(0)));
+				if(map.containsKey("id")) {
+					//给用户添加关联的wso2 userId
+					tv.setUserCode(String.valueOf(map.get("id")));
+				}
+			}
+		}
+		//保存
+		this.userInfoDao.insert(tv);
 	}
 }

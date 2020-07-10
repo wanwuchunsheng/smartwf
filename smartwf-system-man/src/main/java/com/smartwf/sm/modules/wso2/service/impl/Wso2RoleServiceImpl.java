@@ -239,7 +239,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 		Tenant resInfo=this.tenantDao.selectById(tinfo);
 		if(null!=resInfo) {
 			//1）通过当前用户，查询已绑定的角色
-			Map<String,Object> roleOrUser=this.wso2UserService.selectUser(bean,resInfo);
+			Map<String,Object> roleOrUser=this.wso2UserService.selectUserById(bean,resInfo);
 			log.info(roleOrUser.containsKey("groups"));
 			if(null!=roleOrUser && roleOrUser.containsKey("groups")) {
 				Wso2User wg=GsonUtils.jsonToPojo(GsonUtils.objectToJson(roleOrUser), Wso2User.class);

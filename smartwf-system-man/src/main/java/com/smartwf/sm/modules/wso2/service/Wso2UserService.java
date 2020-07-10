@@ -32,7 +32,14 @@ public interface Wso2UserService {
      * @param code,session_state和state
      * @return
      */
-	Map<String, Object> selectUser(UserInfoVO bean, Tenant resInfo);
+	Map<String, Object> selectUserById(UserInfoVO bean, Tenant resInfo);
+	
+	/**
+     * @Description：模拟wso2用户查询
+     * @param code,session_state和state
+     * @return
+     */
+	Map<String, Object> selectUserByName(UserInfoVO bean, Tenant resInfo);
 	
 	
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.druid.support.json.JSONUtils;
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.utils.GsonUtils;
 import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.utils.MD5Utils;
@@ -146,7 +147,7 @@ public class Wso2UserServiceImpl implements Wso2UserService {
      * @return maps
      */
 	@Override
-	public Map<String,Object> selectUser(UserInfoVO bean, Tenant resInfo){
+	public Map<String,Object> selectUserById(UserInfoVO bean, Tenant resInfo){
 		try {
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
@@ -160,6 +161,34 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 	        //发送请求
 	        String str=HttpClientUtil.get(String.valueOf(sb), headers);
 	        Map<String,Object> map=JsonUtil.jsonToMap(str);
+	        //返回
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+     * @Description：模拟wso2用户查询
+     * @param userName,password
+     * @return maps
+     */
+	@Override
+	public Map<String,Object> selectUserByName(UserInfoVO bean, Tenant resInfo){
+		try {
+			StringBuffer sb=new StringBuffer();
+			//封装http请求头
+			Map<String,String> headers=new HashMap<>();
+			headers.put("content-type", "application/json");
+			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
+			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
+	        //拼接uri
+	        sb=new StringBuffer();
+	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Users?userName=").append(bean.getLoginCode());
+	        //发送请求
+	        String str=HttpClientUtil.get(String.valueOf(sb), headers);
+	        Map<String,Object> map=GsonUtils.jsonToMap(str);
 	        //返回
 			return map;
 		} catch (Exception e) {

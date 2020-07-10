@@ -26,7 +26,9 @@ import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.TenantService;
+import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
+import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.pojo.Wso2Tenant;
 import com.smartwf.sm.modules.wso2.service.Wso2TenantService;
 
@@ -48,6 +50,9 @@ public class TenantServiceImpl implements TenantService{
 	
 	@Autowired
 	Wso2TenantService wso2TenantService;
+	
+	@Autowired
+	UserInfoService userInfoService;
 
 	/**
 	 * @Description:查询租户分页
@@ -124,6 +129,13 @@ public class TenantServiceImpl implements TenantService{
 		wt.setLastname("lastname");
 		wt.setTenantDomain(bean.getTenantDomain());
 		this.wso2TenantService.addTenant(wt);
+		//系统中心用户表添加用户信息
+		UserInfoVO tv=new UserInfoVO();
+		tv.setLoginCode(bean.getTenantCode());//登录名
+		tv.setUserName(bean.getTenantCode());//用户名
+		tv.setPwd(bean.getTenantPw());//密码
+		tv.setTenantId(bean.getId()); //租户ID
+		this.userInfoService.saveWso2UserInfo(tv,bean);
 		//3）批量添加新租户数据字典（从默认租户拷贝的数据字典）
 		if( null !=dict) {
 			QueryWrapper<Dictionary> queryWrapper2 = new QueryWrapper<>();
