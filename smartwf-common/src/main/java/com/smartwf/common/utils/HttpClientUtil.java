@@ -40,6 +40,7 @@ import org.apache.http.util.EntityUtils;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.webservice.SSLClient;
+import com.smartwf.common.wso2.Wso2Config;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -238,7 +239,7 @@ public class HttpClientUtil {
 	 * @param soapAction
 	 * @return
 	 */
-	public static String doPostSoap1_1(String postUrl, String soapXml,String soapAction) {
+	public static String doPostSoap1_1(String postUrl, String soapXml,String soapAction,Wso2Config wso2Config) {
 		// 创建HttpClientBuilder
 		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 		// HttpClient
@@ -250,7 +251,7 @@ public class HttpClientUtil {
 		try {
 			httpPost.setHeader("Content-Type", "text/xml;charset=UTF-8");
 			httpPost.setHeader("SOAPAction", soapAction);
-			httpPost.setHeader(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String(("admin:admin").getBytes())));
+			httpPost.setHeader(new BasicHeader("Authorization",wso2Config.userAuthorization));
 			StringEntity data = new StringEntity(soapXml, Charset.forName("UTF-8"));
 			httpPost.setEntity(data);
 			CloseableHttpResponse response = closeableHttpClient.execute(httpPost);
