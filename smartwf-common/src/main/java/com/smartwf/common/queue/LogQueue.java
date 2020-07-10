@@ -12,6 +12,7 @@ import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.MathUtils;
 
 /**
+ * @author WCH
  * @Date: 2019-10-25 15:46:23
  * @Description: 日志队列
  */

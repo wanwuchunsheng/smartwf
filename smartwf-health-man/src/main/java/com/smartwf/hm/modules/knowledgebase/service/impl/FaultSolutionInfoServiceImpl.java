@@ -16,6 +16,7 @@ import com.smartwf.hm.modules.knowledgebase.service.FaultSolutionInfoService;
 
 import lombok.extern.log4j.Log4j2;
 /**
+ * @author WCH
  * @Date: 2019-11-27 11:25:24
  * @Description: 故障解决方案业务层实现
  */
@@ -41,7 +42,8 @@ public class FaultSolutionInfoServiceImpl implements FaultSolutionInfoService{
 		if(!fslist.isEmpty()) {
 			for(FaultSolutionInfo fb :fslist) {
 				fb.setTenantCode(bean.getTenantCode());
-				fb.setStatus(Constants.ONE); //0默认  1审核通过
+				//0默认  1审核通过
+				fb.setStatus(Constants.ONE); 
 				this.faultSolutionInfoDao.insert(fb);
 			}
 		}

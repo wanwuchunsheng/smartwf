@@ -7,7 +7,7 @@ import com.smartwf.common.annotation.ParamValidated;
 import lombok.Data;
 
 /**
- * @Auther: 
+ * @author WCH
  * @Description: 基础javaBean
  */
 @Data

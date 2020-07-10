@@ -20,6 +20,7 @@ import com.smartwf.hm.modules.knowledgebase.vo.FaultCodeBaseVO;
 
 import lombok.extern.log4j.Log4j2;
 /**
+ * @author WCH
  * @Date: 2019-11-27 11:25:24
  * @Description: 故障代码业务层实现
  */
@@ -44,7 +45,8 @@ public class FaultCodeBaseServiceImpl implements FaultCodeBaseService{
 		if(!fcblist.isEmpty()) {
 			for(FaultCodeBase fb :fcblist) {
 				fb.setTenantCode(bean.getTenantCode());
-				fb.setStatus(Constants.ONE); //0默认  1审核通过
+				//0默认  1审核通过
+				fb.setStatus(Constants.ONE); 
 				this.faultCodeBaseDao.insert(fb);
 			}
 		}
@@ -113,7 +115,8 @@ public class FaultCodeBaseServiceImpl implements FaultCodeBaseService{
 	@Override
 	public Result<?> selectFaultCodeBaseByPage(Page<FaultCodeBase> page, FaultCodeBaseVO bean) {
 		QueryWrapper<FaultCodeBase> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("create_time"); //降序
+		//降序
+		queryWrapper.orderByDesc("create_time"); 
   		//租户
   		if (StringUtils.isNotBlank(bean.getTenantCode()) ) { 
   			queryWrapper.eq("tenant_code", bean.getTenantCode()); 

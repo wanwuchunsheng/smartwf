@@ -8,6 +8,7 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.admin.pojo.Log;
 
 /**
+ * @author WCH
  * @Date: 2018/12/18 15:43
  * @Description: 日志业务层接口
  */
@@ -31,15 +32,19 @@ public interface LogService {
     Result selectLogByPage(Page<Log> page);
 
     /**
-     * @Description: 主键查询操作日志
+     * 主键查询操作日志
+     * @author WCH
+     * @param bean
      * @return
      */
 	Result<?> selectLogById(Log bean);
 
 	/**
-     * @Description： 删除操作日志
+     *  删除操作日志
+     * @author WCH
      * @param id 单个删除
      * @param ids 批量删除，逗号拼接
+     * @param bean
      * @return
      */
 	void deleteLog(Log bean);

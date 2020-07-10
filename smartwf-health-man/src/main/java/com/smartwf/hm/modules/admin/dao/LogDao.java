@@ -12,6 +12,7 @@ import com.smartwf.hm.modules.admin.pojo.Log;
 
 
 /**
+ * @author WCH
  * @Date: 2019-10-25 16:05:30
  * @Description: 日志持久层接口
  * Mapper接口

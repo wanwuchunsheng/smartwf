@@ -21,7 +21,7 @@ import com.smartwf.common.utils.GsonUtils;
 import com.smartwf.common.utils.JsonUtil;
 
 /**
- * @Auther: 
+ * @author WCH
  * @Description: AOP切面
  */
 public class AopAround {
@@ -78,7 +78,7 @@ public class AopAround {
             for (int i = 0; i < paramIndexs.length; i++) {
                 Object arg = args[paramIndexs[i]];
                 if (argsJson == null) {
-                    argsJson = GsonUtils.objectToJson(arg);//JsonUtil.objectToJson(arg);
+                    argsJson = GsonUtils.objectToJson(arg);
                 } else {
                     argsJson += ";" + GsonUtils.objectToJson(arg);
                 }

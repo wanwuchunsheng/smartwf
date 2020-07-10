@@ -50,8 +50,12 @@ public class FaultDataController {
 	@Autowired
 	private DefectService defectService;
 	
+	/**
+	 * 获取上传地址
+	 * 
+	 * */
 	@Value("${web.upload-path}")
-	private String localFilePath;  //获取上传地址
+	private String localFilePath;  
 	
 	/**
 	 * @Description: 实时故障报警数据

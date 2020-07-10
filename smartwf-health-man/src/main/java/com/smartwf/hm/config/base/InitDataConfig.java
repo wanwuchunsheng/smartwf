@@ -10,6 +10,7 @@ import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * @author WCH
  * @Date: 2019-11-29 10:29:44
  * @Description: 初始化基础数据
  */
@@ -26,7 +27,7 @@ public class InitDataConfig implements CommandLineRunner{
 	 * @Description: 初始化未处理的故障/缺陷
 	 *    保证redis最新的数据和mysql一致
 	 */
-    public void InitDataListener() {
+    public void initDataListener() {
     	try {
     		this.alarmInboxService.selectFaultInformationByAll();
     		this.defectService.initDefectAll();
@@ -37,7 +38,7 @@ public class InitDataConfig implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-        this.InitDataListener();
+        this.initDataListener();
     }
 
 }

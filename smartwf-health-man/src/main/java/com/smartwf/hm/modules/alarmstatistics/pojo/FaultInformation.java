@@ -12,6 +12,7 @@ import com.smartwf.common.pojo.BasePojo;
 
 import lombok.Data;
 /**
+ * @author WCH
  * @Description: 故障报警表
  */
 @Data
@@ -63,7 +64,7 @@ public class FaultInformation extends BasePojo implements Serializable{
 	 *  1-	故障类型
 		2-	缺陷类型
 	 */
-	private Integer IncidentType;
+	private Integer incidentType;
 	/**
 	 * 报警级别
 	   0红：危急

@@ -20,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
 
 
 /**
+ * @author WCH
  * @Date: 2019-11-27 11:25:24
  * @Description: 故障总览业务层实现
  */
@@ -58,7 +59,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 				master[i][1]=fivo.getFvalue();
 				i++;
 			}
-			fr = new HashMap<String,Object>();
+			fr = new HashMap<String,Object>(4);
 			fr.put("id", 0);
 			fr.put("title", "故障");
 			fr.put("content",master);
@@ -74,7 +75,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 				master[i][1]=fivo.getFvalue();
 				i++;
 			}
-			fr = new HashMap<String,Object>();
+			fr = new HashMap<String,Object>(4);
 			fr.put("id", 1);
 			fr.put("title", "报警");
 			fr.put("content",master);
@@ -89,7 +90,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 				master[i][1]=fivo.getFvalue();
 				i++;
 			}
-			fr = new HashMap<String,Object>();
+			fr = new HashMap<String,Object>(4);
 			fr.put("id", 2);
 			fr.put("title", "缺陷");
 			fr.put("content",master);
@@ -134,13 +135,14 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 								master[i][1]=fivo.getFvalue();
 								break;
 							}
-							master[i][1]="0"; //当前日期没有值，赋默认值0
+							//当前日期没有值，赋默认值0
+							master[i][1]="0"; 
 						}
 					}
 					i++;
 				}
 				//封装参数对象
-				fr = new HashMap<String,Object>();
+				fr = new HashMap<String,Object>(4);
 				fr.put("id", t);
 				fr.put("content",master);
 				list.add(fr);
@@ -161,8 +163,10 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		List<Map<String,Object>> list=new ArrayList<>();
 		Map<String,Object> fr=null;
 		String[][] master=null;
-		List<FaultInformationVO> alarmStatus= this.faultOverviewDao.selectFaultStatusByDate(bean);//故障状态，数量统计
-		List<FaultInformationVO> alarmLocation= this.faultOverviewDao.selectFaultLocationByDate(bean);//故障部位，数量统计
+		//故障状态，数量统计
+		List<FaultInformationVO> alarmStatus= this.faultOverviewDao.selectFaultStatusByDate(bean);
+		//故障部位，数量统计
+		List<FaultInformationVO> alarmLocation= this.faultOverviewDao.selectFaultLocationByDate(bean);
 		//故障状态
 		if(alarmStatus!=null && alarmStatus.size()>0) {
 			master =new String[alarmStatus.size()][2];
@@ -172,7 +176,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 				master[i][1]=fivo.getFvalue();
 				i++;
 			}
-			fr = new HashMap<String,Object>();
+			fr = new HashMap<String,Object>(4);
 			fr.put("id", 1);
 			fr.put("title", "故障处理状态统计");
 			fr.put("content",master);
@@ -187,7 +191,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 				master[i][1]=fivo.getFvalue();
 				i++;
 			}
-			fr = new HashMap<String,Object>();
+			fr = new HashMap<String,Object>(4);
 			fr.put("id", 2);
 			fr.put("title", "故障部位统计");
 			fr.put("content",master);

@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.knowledgebase.pojo.FaultCodeBase;
 import com.smartwf.hm.modules.knowledgebase.vo.FaultCodeBaseVO;
-
+/**
+ * @author WCH
+ * 
+ * */
 public interface FaultCodeBaseService {
 
 	/**

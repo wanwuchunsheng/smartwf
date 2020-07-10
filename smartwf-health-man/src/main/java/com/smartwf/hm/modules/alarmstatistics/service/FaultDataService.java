@@ -3,6 +3,7 @@ package com.smartwf.hm.modules.alarmstatistics.service;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 
 /**
+ * @author WCH
  * @Date: 2018/12/18 15:43
  * @Description: 实时故障数据业务层接口
  */

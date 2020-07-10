@@ -5,9 +5,12 @@ import lombok.Data;
 import java.util.Date;
 
 /**
+ * @author WCH
  * @Date: 2018/12/18 15:41
  * @Description: 日志DTO
+ * @author WCH
  */
+
 @Data
 public class LogDTO {
 

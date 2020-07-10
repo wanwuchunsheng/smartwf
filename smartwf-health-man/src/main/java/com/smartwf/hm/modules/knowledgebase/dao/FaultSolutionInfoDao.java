@@ -7,7 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.hm.modules.knowledgebase.pojo.FaultSolutionInfo;
-
+/**
+ * @author WCH
+ * 
+ * */
 @Repository
 public interface FaultSolutionInfoDao extends BaseMapper<FaultSolutionInfo> {
 

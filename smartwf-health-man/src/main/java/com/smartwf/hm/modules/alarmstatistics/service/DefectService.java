@@ -6,6 +6,7 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
 
 /**
+ * @author WCH
  * @Date: 2018/12/18 15:43
  * @Description: 缺陷业务层接口
  */

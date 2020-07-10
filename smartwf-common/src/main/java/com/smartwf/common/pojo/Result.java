@@ -8,6 +8,7 @@ import com.smartwf.common.constant.Constants;
 import lombok.Data;
 
 /**
+ * @author WCH
  * @Date: 2019/12/19 13:26
  * @Description: 返回结果类
  */

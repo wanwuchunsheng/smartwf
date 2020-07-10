@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 自定义注解，日志注解。
+ * @author WCH
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

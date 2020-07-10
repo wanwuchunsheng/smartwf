@@ -6,6 +6,11 @@ import java.util.Date;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 
 import lombok.Data;
+
+/**
+ *@Deprecated 实体类  
+ *@author WCH
+ * */
 @Data
 public class DefectVO extends FaultInformation implements Serializable{
 

@@ -9,6 +9,7 @@ import lombok.Data;
 /**
  * @Date: 2018/12/19 13:26
  * @Description: 返回结果类
+ * @author WCH
  */
 @Data
 public class AppResult<T> implements Serializable {

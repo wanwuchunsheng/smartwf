@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * @author WCH
  * @Date: 2020-4-21 11:46:56
  * @Description: 文件上传控制器
  */
@@ -32,8 +33,13 @@ import lombok.extern.slf4j.Slf4j;
 @Api(description = "文件上传控制器")
 public class FileUploadController {
 	
+	
+	/**
+	 * 获取上传地址
+	 * 
+	 * */
 	@Value("${web.upload-path}")
-	private String localFilePath;  //获取上传地址
+	private String localFilePath;  
 	
 	
 	/**
@@ -45,7 +51,8 @@ public class FileUploadController {
 	@ApiOperation(value = "上传图片接口", notes = "上传图片")
 	public ResponseEntity<Result<?>> upload(@ApiParam(value = "用户图片", required = true) MultipartFile file) {
 	    if (!file.isEmpty()) {
-	        if (file.getContentType().contains("image")) {
+	    	String image="image";
+	        if (file.getContentType().contains(image)) {
 	            try {
 	                String temp = "images" + File.separator ;
 	                // 获取图片的文件名

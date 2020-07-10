@@ -9,6 +9,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
 
+/**
+ * @author WCH
+ * @deprecated 故障记录实体类
+ * 
+ * */
+
 @Data
 @TableName("fault_operation_record")
 public class FaultOperationRecord implements Serializable {

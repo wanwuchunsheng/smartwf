@@ -10,6 +10,7 @@ import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 /**
  * @Date: 2018/12/18 15:43
  * @Description: 报警收件箱业务层接口
+ * @author WCH
  */
 public interface AlarmInboxService {
 

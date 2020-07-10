@@ -5,9 +5,19 @@ import java.util.Date;
 import com.smartwf.hm.modules.knowledgebase.pojo.FaultCodeBase;
 
 import lombok.Data;
+
+/**
+ * @author WCH
+ * 
+ * */
+
 @Data
 public class FaultCodeBaseVO extends FaultCodeBase{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 开始时间
 	 */

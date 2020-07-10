@@ -17,6 +17,7 @@ import java.util.List;
 
 
 /**
+ * @author WCH
  * redis配置
  */
 @SpringBootConfiguration

@@ -11,6 +11,7 @@ import com.smartwf.common.dto.LogDTO;
 import lombok.Data;
 
 /**
+ * @author WCH
  * @Date: 2019-10-25 15:35:18
  * @Description: 日志
  */
@@ -24,6 +25,7 @@ public class Log extends LogDTO {
      * id
      */
 	@TableId(type = IdType.AUTO)
+	
     private Integer id;
 
 }

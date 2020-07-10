@@ -4,6 +4,7 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 /**
+ * @author WCH
  * @Date: 2018/12/18 15:43
  * @Description: 故障总览业务层接口,
  */

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
+ * @author WCH
  * @Description: 组织架构
  */
 @Data

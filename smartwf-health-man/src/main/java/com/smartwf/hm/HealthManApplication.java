@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 /**
+ * @author WCH
  * 启动类
  */
 @SpringBootApplication

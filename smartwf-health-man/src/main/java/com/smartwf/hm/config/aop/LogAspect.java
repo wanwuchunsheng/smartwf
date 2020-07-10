@@ -20,6 +20,7 @@ import com.smartwf.hm.modules.admin.service.LogService;
 
 
 /**
+ * @author WCH
  * 日志AOP
  */
 @Aspect
@@ -61,7 +62,8 @@ public class LogAspect {
     public void doAfterAdvice(){
         // 判断队列是有数据。大于100，批量插入数据库
         Queue<LogDTO> queue = LogQueue.getQueue();
-        if (queue.size() >= 2) {
+        int le=2;
+        if (queue.size() >= le) {
             int size = queue.size();
             List<LogDTO> list = new ArrayList<>();
             for (int i = 0; i < size; i++) {

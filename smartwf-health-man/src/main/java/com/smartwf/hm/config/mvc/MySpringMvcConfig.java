@@ -17,12 +17,13 @@ import com.smartwf.hm.interceptor.LoginInterceptor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * @author WCH
  * @Date: 2018/11/2 10:13
  * @Description: springMVC配置
  */
 @SpringBootConfiguration
 @Slf4j
-public class MySpringMVCConfig implements WebMvcConfigurer {
+public class MySpringMvcConfig implements WebMvcConfigurer {
 
 
     @Autowired

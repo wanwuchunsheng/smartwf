@@ -12,6 +12,7 @@ import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 
 /**
+ * @author WCH
  * @Date: 2019-10-25 16:05:30
  * @Description: 持久层接口
  * Mapper接口

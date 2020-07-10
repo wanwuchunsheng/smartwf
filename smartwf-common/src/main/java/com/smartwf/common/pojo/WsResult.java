@@ -3,6 +3,7 @@ package com.smartwf.common.pojo;
 import lombok.Data;
 
 /**
+ * @author WCH
  * @Date: 2019/2/27 15:38
  * @Description: webservice返回实体类
  */

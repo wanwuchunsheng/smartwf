@@ -10,6 +10,7 @@ import com.smartwf.common.pojo.BasePojo;
 import lombok.Data;
 
 /**
+ * @author WCH
  * 字典数据表
  * 
  * @email sunlightcs@gmail.com

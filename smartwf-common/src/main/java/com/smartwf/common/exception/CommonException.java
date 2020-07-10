@@ -5,6 +5,7 @@ import lombok.Setter;
 
 /**
  * 自定义异常
+ * @author WCH
  */
 @Getter
 @Setter

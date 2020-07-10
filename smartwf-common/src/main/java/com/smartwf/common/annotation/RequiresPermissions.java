@@ -9,6 +9,7 @@ import com.smartwf.common.pojo.Logical;
 
 /**
  * 自定义注解，权限注解。
+ * @author WCH
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

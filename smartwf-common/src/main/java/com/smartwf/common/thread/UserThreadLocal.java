@@ -7,14 +7,16 @@ import com.smartwf.common.utils.MD5Utils;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * @Auther: 
+ * @author WCH
  * @Description: 用户本地线程
  */
 @Log4j2
 public class UserThreadLocal {
 
 
-    // 本地线程，存放登录用户信息
+    /**
+     * 本地线程，存放登录用户信息
+     * */ 
     private static ThreadLocal<User> userThreadLocal = new ThreadLocal<>();
 
 
@@ -23,6 +25,10 @@ public class UserThreadLocal {
      * @param user
      */
     public static void setUser(User user) {
+    	/**
+    	 * 先清理，再添加
+    	 * */
+    	userThreadLocal.remove();
         userThreadLocal.set(user);
     }
 

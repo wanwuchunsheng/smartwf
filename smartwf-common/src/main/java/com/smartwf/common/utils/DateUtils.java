@@ -179,10 +179,11 @@ public class DateUtils {
             DateFormat dateFormat=new SimpleDateFormat(timeFromat);  
             return dateFormat.format(time);  
         }catch (Exception e){  
-            if(defaultValue!=null)  
+            if(defaultValue!=null) {  
                 return parseDateToStr(defaultValue, timeFromat);  
-            else  
+            }else{  
                 return parseDateToStr(new Date(), timeFromat);  
+            }
         }  
     }  
       
@@ -246,9 +247,9 @@ public class DateUtils {
      * @return 
      */  
     public static Date strToDate(String strTime) {  
-        if(strTime==null || strTime.trim().length()<=0)  
+        if(strTime==null || strTime.trim().length()<=0) { 
             return null;  
-          
+        }
         Date date = null;  
         List<String> list = new ArrayList<String>(0);  
           
@@ -267,17 +268,20 @@ public class DateUtils {
           
         for (Iterator iter = list.iterator(); iter.hasNext();) {  
             String format = (String) iter.next();  
-            if(strTime.indexOf("-")>0 && format.indexOf("-")<0)  
+            if(strTime.indexOf("-")>0 && format.indexOf("-")<0) {
                 continue;  
-            if(strTime.indexOf("-")<0 && format.indexOf("-")>0)  
+            }
+            if(strTime.indexOf("-")<0 && format.indexOf("-")>0) { 
+                continue; 
+            }
+            if(strTime.length()>format.length()) { 
                 continue;  
-            if(strTime.length()>format.length())  
-                continue;  
+            }
             date = parseStrToDate(strTime, format);  
-            if (date != null)  
-                break;  
+            if (date != null) {  
+                break; 
+            }
         }  
-  
         return date;  
     }  
       
@@ -297,8 +301,8 @@ public class DateUtils {
         Date beginDate = null;    
         Date endDate = null;    
     
-        GregorianCalendar beginGC = null;    
-        GregorianCalendar endGC = null;    
+        GregorianCalendar beginGc = null;    
+        GregorianCalendar endGc = null;    
         List<String> list = new ArrayList<String>();    
     
         try {    
@@ -307,19 +311,19 @@ public class DateUtils {
             endDate = f.parse(endDateStr);    
     
             // 设置日历    
-            beginGC = new GregorianCalendar();    
-            beginGC.setTime(beginDate);    
+            beginGc = new GregorianCalendar();    
+            beginGc.setTime(beginDate);    
     
-            endGC = new GregorianCalendar();    
-            endGC.setTime(endDate);    
+            endGc = new GregorianCalendar();    
+            endGc.setTime(endDate);    
     
             // 直到两个时间相同    
-            while (beginGC.getTime().compareTo(endGC.getTime()) <= 0) {    
-                sRet = beginGC.get(Calendar.YEAR) + "-"    
-                        + (beginGC.get(Calendar.MONTH) + 1);    
+            while (beginGc.getTime().compareTo(endGc.getTime()) <= 0) {    
+                sRet = beginGc.get(Calendar.YEAR) + "-"    
+                        + (beginGc.get(Calendar.MONTH) + 1);    
                 list.add(sRet);    
                 // 以月为单位，增加时间    
-                beginGC.add(Calendar.MONTH, 1);    
+                beginGc.add(Calendar.MONTH, 1);    
             }    
             return list;    
         } catch (Exception e) {    
@@ -562,9 +566,9 @@ public class DateUtils {
          cal.setTime(date);  
   
          int w = cal.get(Calendar.DAY_OF_WEEK) - 1;  
-         if (w < 0)  
+         if (w < 0) {  
              w = 0;  
-           
+         }
          return weekDays[w];  
     }    
       
@@ -580,50 +584,7 @@ public class DateUtils {
         return weekDay;  
     }  
       
-    /** 
-     * 验证字符串是否为日期 
-     * 验证格式:YYYYMMDD、YYYY_MM_DD、YYYYMMDDHHMISS、YYYYMMDD_HH_MI、YYYY_MM_DD_HH_MI、YYYYMMDDHHMISSSSS、YYYY_MM_DD_HH_MI_SS 
-     * @param strTime 
-     * @return null时返回false;true为日期，false不为日期 
-     */  
-    public static boolean validateIsDate(String strTime) {  
-        if (strTime == null || strTime.trim().length() <= 0)  
-            return false;  
-          
-        Date date = null;  
-        List<String> list = new ArrayList<String>(0);  
-          
-        list.add(DATE_TIME_FORMAT_YYYY_MM_DD_HH_MI_SS);  
-        list.add(DATE_TIME_FORMAT_YYYYMMDDHHMISSSSS);  
-        list.add(DATE_TIME_FORMAT_YYYY_MM_DD_HH_MI);  
-        list.add(DATE_TIME_FORMAT_YYYYMMDD_HH_MI);  
-        list.add(DATE_TIME_FORMAT_YYYYMMDDHHMISS);  
-        list.add(DATE_FORMAT_YYYY_MM_DD);  
-        //list.add(DATE_FORMAT_YY_MM_DD);  
-        list.add(DATE_FORMAT_YYYYMMDD);  
-        //list.add(DATE_FORMAT_YYYY_MM);  
-        //list.add(DATE_FORMAT_YYYYMM);  
-        //list.add(DATE_FORMAT_YYYY);  
-          
-        for (Iterator iter = list.iterator(); iter.hasNext();) {  
-            String format = (String) iter.next();  
-            if(strTime.indexOf("-")>0 && format.indexOf("-")<0)  
-                continue;  
-            if(strTime.indexOf("-")<0 && format.indexOf("-")>0)  
-                continue;  
-            if(strTime.length()>format.length())  
-                continue;  
-            date = parseStrToDate(strTime.trim(), format);  
-            if (date != null)  
-                break;  
-        }  
-          
-        if (date != null) {   
-            return true;  
-        }  
-        return false;  
-    }  
-      
+    
     /** 
      * 将指定日期的时分秒格式为零 
      * @param date 
@@ -683,16 +644,18 @@ public class DateUtils {
      * @return 
      */  
     public static Boolean compareIsSameMonth(Date date1,Date date2){  
-        boolean flag = false;  
-        int year1  = getYear(date1);  
-        int year2 = getYear(date2);  
-        if(year1 == year2){  
-            int month1 = getMonth(date1);  
-            int month2 = getMonth(date2);  
-            if(month1 == month2)flag = true;  
-        }  
-        return flag;  
-    }  
+		boolean flag = false;
+		int year1  = getYear(date1);
+		int year2 = getYear(date2);
+		if(year1 == year2){
+		    int month1 = getMonth(date1);
+		    int month2 = getMonth(date2);
+		    if(month1 == month2) {
+		    	flag = true;
+		    }
+		}
+		return flag;  
+	}  
       
      /**  
      * 获得两个时间相差距离多少天多少小时多少分多少秒  

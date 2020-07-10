@@ -8,13 +8,16 @@ import redis.clients.jedis.ShardedJedisPool;
 import java.util.Set;
 
 /**
+ * @author WCH
  * 通用的Redis工具类
  *
  */
 @Service
 public class RedisService {
 
-    // 注入分片的连接池
+    /**
+     * 注入分片的连接池
+     * */ 
     @Autowired
     private ShardedJedisPool pool;
 
@@ -177,7 +180,11 @@ public class RedisService {
      * @param <R>
      */
     private interface Function<R> {
-        // 包含要执行语句的方法，因为返回值未知，所以用泛型
+        /** 
+         * 包含要执行语句的方法，因为返回值未知，所以用泛型
+         * @param jedis
+         * @return R
+         *  */ 
         R commond(ShardedJedis jedis);
     }
 }

@@ -18,6 +18,7 @@ import com.smartwf.hm.modules.alarmstatistics.service.FaultDataService;
 
 
 /**
+ * @author WCH
  * @Date: 2019-11-27 11:25:24
  * @Description: 实时故障数据业务层实现
  */
@@ -41,14 +42,16 @@ public class FaultDataServiceImpl implements FaultDataService {
 	public void saveFaultInformation(FaultInformation bean) {
 		bean.setCreateTime(new Date());
 		bean.setUpdateTime(bean.getCreateTime());
-		bean.setAlarmStatus(Constants.ZERO);//0-未处理
-		bean.setIncidentType(Constants.ONE);//1故障类型 2缺陷类型
+		//0-未处理
+		bean.setAlarmStatus(Constants.ZERO);
+		//1故障类型 2缺陷类型
+		bean.setIncidentType(Constants.ONE);
 		//1）保存mysql
 		this.faultDataDao.insert(bean);
 		//2）获取redis缓存数据,并更新缓存数据，保存
 		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("faultCount"));
 		if(maps==null) {
-			maps=new HashMap<>();
+			maps=new HashMap<>(4);
 		}
 		maps.put(bean.getId(), bean);
 		//3）将新数据保存redis

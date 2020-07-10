@@ -8,6 +8,11 @@ import org.springframework.stereotype.Repository;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.hm.modules.knowledgebase.pojo.FaultCodeBase;
 
+/**
+ * @Deprecated 故障基础代码数据层
+ * @author WCH
+ * */
+
 @Repository
 public interface FaultCodeBaseDao extends BaseMapper<FaultCodeBase> {
 	/**

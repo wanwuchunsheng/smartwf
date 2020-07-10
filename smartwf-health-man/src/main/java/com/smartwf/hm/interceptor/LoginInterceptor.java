@@ -9,7 +9,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smartwf.common.service.RedisService;
-import com.smartwf.common.thread.PermissionThreadLocal;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.Wso2LoginUtils;
 import com.smartwf.common.wso2.Wso2Config;
@@ -17,6 +16,7 @@ import com.smartwf.common.wso2.Wso2Config;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * @author WCH
  * 登录拦截器
  */
 
@@ -47,7 +47,6 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         // 当请求完成之后，消除用户信息、权限信息
-        PermissionThreadLocal.setPermission(null);
         UserThreadLocal.setUser(null);
     }
    

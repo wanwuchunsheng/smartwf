@@ -22,6 +22,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
+ * @author WCH
  * Swagger2配置类s
  * 通过@SpringBootConfiguration注解，让Spring来加载该类配置。
  * 再通过@EnableSwagger2注解来启用Swagger2。

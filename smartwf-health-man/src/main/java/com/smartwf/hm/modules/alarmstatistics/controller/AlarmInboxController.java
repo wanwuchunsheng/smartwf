@@ -31,6 +31,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * @author WCH
  * @Date: 2019-10-25 15:04:26
  * @Description: 报警收件箱控制器
  */
@@ -224,62 +225,62 @@ public class AlarmInboxController {
 	       try {
 	    	 //调用生产管理子系统API接口返回数据
 	    	 List<Map<String,String>> list = new ArrayList<Map<String,String>>();
-	    	   Map<String,String> map=null;//new HashMap<String, String>();
-	    	   map=new HashMap<String, String>();
+	    	   Map<String,String> map=null;
+	    	   map=new HashMap<>(3);
 	    	   map.put("DEVICE_NAME", "2号风机");
 	    	   map.put("kks_full_code","equ002");
 	    	   map.put("uuid","94105248410062197");
 	    	   list.add(map);
 	    	   
-	    	   map=new HashMap<String, String>();
+	    	   map=new HashMap<String, String>(3);
 	    	   map.put("DEVICE_NAME", "1号风机");
 	    	   map.put("kks_full_code","equ001");
 	    	   map.put("uuid","94105248410062198");
 	    	   list.add(map);
 	    	   
-	    	   map=new HashMap<String, String>();
+	    	   map=new HashMap<String, String>(3);
 	    	   map.put("DEVICE_NAME", "3号风机");
 	    	   map.put("kks_full_code","equ003");
 	    	   map.put("uuid","94105248410062193");
 	    	   list.add(map);
 	    	   
-	    	   map=new HashMap<String, String>();
+	    	   map=new HashMap<String, String>(3);
 	    	   map.put("DEVICE_NAME", "4号风机");
 	    	   map.put("kks_full_code","equ004");
 	    	   map.put("uuid","94105248410062194");
 	    	   list.add(map);
 	    	   
-	    	   map=new HashMap<String, String>();
+	    	   map=new HashMap<String, String>(3);
 	    	   map.put("DEVICE_NAME", "5号风机");
 	    	   map.put("kks_full_code","equ005");
 	    	   map.put("uuid","94105248410062155");
 	    	   list.add(map);
 	    	   
-	    	   map=new HashMap<String, String>();
+	    	   map=new HashMap<String, String>(3);
 	    	   map.put("DEVICE_NAME", "6号风机");
 	    	   map.put("kks_full_code","equ006");
 	    	   map.put("uuid","94105248410062156");
 	    	   list.add(map);
 	    	   
-	    	   map=new HashMap<String, String>();
+	    	   map=new HashMap<String, String>(3);
 	    	   map.put("DEVICE_NAME", "9号风机");
 	    	   map.put("kks_full_code","equ009");
 	    	   map.put("uuid","94105248410062199");
 	    	   list.add(map);
 	    	   
-	    	   map=new HashMap<String, String>();
+	    	   map=new HashMap<String, String>(3);
 	    	   map.put("DEVICE_NAME", "11号风机");
 	    	   map.put("kks_full_code","equ011");
 	    	   map.put("uuid","941052484100621111");
 	    	   list.add(map);
 	    	   
-	    	   map=new HashMap<String, String>();
+	    	   map=new HashMap<String, String>(3);
 	    	   map.put("DEVICE_NAME", "13号风机");
 	    	   map.put("kks_full_code","equ013");
 	    	   map.put("uuid","941052484100621113");
 	    	   list.add(map);
 	    	   
-	    	   map=new HashMap<String, String>();
+	    	   map=new HashMap<String, String>(3);
 	    	   map.put("DEVICE_NAME", "37号风机");
 	    	   map.put("kks_full_code","equ037");
 	    	   map.put("uuid","941052484100621137");

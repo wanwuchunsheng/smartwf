@@ -1,6 +1,7 @@
 package com.smartwf.common.constant;
 
 /**
+ * @author WCH
  * @Date: 2018/9/17 15:53
  * @Description: 常量
  */
@@ -26,12 +27,13 @@ public class Constants {
     
     public static final int ADMIN = 2;
     
-    public static final int ALARMLEVEL = 4; //0故障 1严重  2一般  3普通
+    /** 0故障 1严重  2一般  3普通 */
+    public static final int ALARMLEVEL = 4; 
     
     /**
      * 默认租户状态========================================================
      */ 
-    public static final Integer ISSEL = 1;//默认租户
+    public static final Integer ISSEL = 1;
     
 
     /**
@@ -54,10 +56,14 @@ public class Constants {
     /**
      * 状态码========================================================
      */
-    //wso2 soap请求响应时间
+    /**
+     * wso2 soap请求响应时间
+     * */
     public static final int SOCKET_TIME_OUT = 90000;
     public static final int CONNECT_TIME_OUT = 90000;
-    //wso2 各租户默认密码
+    /**
+     * wso2 各租户默认密码
+     * */
     public static final String WSO2_PASSWORD = "000000";
 
 }

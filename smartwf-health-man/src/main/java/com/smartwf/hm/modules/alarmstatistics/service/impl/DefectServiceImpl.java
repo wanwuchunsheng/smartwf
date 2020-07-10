@@ -30,6 +30,7 @@ import lombok.extern.log4j.Log4j2;
 
 
 /**
+ * @author WCH
  * @Date: 2019-11-27 11:25:24
  * @Description: 缺陷业务层实现
  */
@@ -75,20 +76,23 @@ public class DefectServiceImpl implements DefectService {
 		//添加工单
 		bean.setCreateTime(new Date());
 		bean.setUpdateTime(bean.getCreateTime());
-		bean.setAlarmStatus(5);//5待审核 6驳回 0未处理 1已转工单 2处理中 3已处理 4已关闭 7回收站 8未解决
+		//5待审核 6驳回 0未处理 1已转工单 2处理中 3已处理 4已关闭 7回收站 8未解决
+		bean.setAlarmStatus(5);
 		this.defectDao.insert(bean);
 		//添加工单处理记录
 		FaultOperationRecord fr=new FaultOperationRecord();
 		fr.setFaultInfoId(bean.getId());
-		fr.setClosureStatus(5);//待审核
+		//待审核
+		fr.setClosureStatus(5);
 		fr.setClosureReason("缺陷工单录入");
-		fr.setClosureType(1);//1处理记录  2处理意见
+		//1处理记录  2处理意见
+		fr.setClosureType(1);
 		fr.setCreateTime(new Date());
 		fr.setTenantCode(bean.getTenantCode());
 		this.faultOperationRecordDao.insert(fr);
 		//添加附件
 		if(StringUtils.isNotBlank(bean.getFilePath()) ) {
-			String str[]=bean.getFilePath().split(",");
+			String[] str=bean.getFilePath().split(",");
 			if(str != null && str.length>0) {
 				FileUploadRecord fuRecord=null;
 				for(String s:str) {
@@ -119,7 +123,8 @@ public class DefectServiceImpl implements DefectService {
 			FaultOperationRecord foRecord=new FaultOperationRecord();
 			foRecord.setFaultInfoId(bean.getId());
 			foRecord.setClosureStatus(bean.getAlarmStatus());
-			foRecord.setClosureType(1);//1处理记录  2处理意见
+			//1处理记录  2处理意见
+			foRecord.setClosureType(1);
 			foRecord.setRemark(bean.getRemark());
 			switch (bean.getAlarmStatus()) {
 				case 6:
@@ -216,7 +221,8 @@ public class DefectServiceImpl implements DefectService {
 	@Override
 	public Result<?> selectDefectByAll(FaultOperationRecord bean) {
 		QueryWrapper<FaultOperationRecord> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByAsc("create_time"); //升序
+		//升序
+		queryWrapper.orderByAsc("create_time"); 
 		//故障报警表ID
 		if(StringUtils.isNotBlank(bean.getFaultInfoId())) {
 			queryWrapper.eq("fault_info_id", bean.getFaultInfoId());

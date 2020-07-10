@@ -33,6 +33,7 @@ import lombok.extern.log4j.Log4j2;
 
 
 /**
+ * @author WCH
  * @Date: 2019-11-27 11:25:24
  * @Description: 报警收件箱业务层实现
  */
@@ -117,15 +118,22 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		this.alarmInboxDao.updateById(bean);
 		//3）插入修改记录
 		FaultOperationRecord fr=new FaultOperationRecord();
-		fr.setFaultInfoId(bean.getId());//故障表主键
-		fr.setCreateUserName(user.getUserName()); //操作人
-		fr.setCreateTime(bean.getUpdateTime()); //时间
-		fr.setRemark(bean.getRemark()); //备注
-		fr.setClosureReason(bean.getClosureReason()); //关闭原因
-		switch (bean.getAlarmStatus()) { //5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
+		//故障表主键
+		fr.setFaultInfoId(bean.getId());
+		//操作人
+		fr.setCreateUserName(user.getUserName()); 
+		//时间
+		fr.setCreateTime(bean.getUpdateTime()); 
+		//备注
+		fr.setRemark(bean.getRemark()); 
+		//关闭原因
+		fr.setClosureReason(bean.getClosureReason()); 
+		//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
+		switch (bean.getAlarmStatus()) { 
 			case 1:
 				fr.setClosureReason("已转工单");
-				rmFaultInformationByRedis(bean.getId()); //删除redis对应数据
+				//删除redis对应数据
+				rmFaultInformationByRedis(bean.getId()); 
 				//向生产中心发送相关数据 1.id查询对象， 2封装对象调用生产中心api接口
 				break;
 			case 2:

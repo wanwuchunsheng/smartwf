@@ -11,7 +11,7 @@ import lombok.Data;
 
 /**
  * @Description: 重点机位表
- * 
+ * @author WCH
  */
 @Data
 @TableName("key_position")

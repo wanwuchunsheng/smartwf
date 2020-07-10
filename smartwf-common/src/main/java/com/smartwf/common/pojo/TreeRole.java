@@ -5,6 +5,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
+ * @author WCH
  * @Description: 角色
  */
 @Data

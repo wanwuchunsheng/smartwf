@@ -11,6 +11,7 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import lombok.Data;
 /**
  * @Description: 故障报警表
+ * @author WCH
  */
 @Data
 public class FaultInformationVO extends FaultInformation implements Serializable{
