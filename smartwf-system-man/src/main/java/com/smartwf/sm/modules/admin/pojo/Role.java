@@ -14,6 +14,7 @@ import lombok.Data;
 
 /**
  * @Description: 角色表
+ * @author WCH
  */
 @Data
 @TableName("sys_role")

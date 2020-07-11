@@ -9,6 +9,7 @@ import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 用户组织架构持久层接口
+ * @author WCH
  */
 @Repository
 public interface UserOrganizationDao extends BaseMapper<UserOrganization> {

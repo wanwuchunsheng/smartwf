@@ -10,6 +10,7 @@ import lombok.Data;
 
 /**
  * @Description: 用户职务表
+ * @author WCH
  */
 @Data
 @TableName("sys_user_post")

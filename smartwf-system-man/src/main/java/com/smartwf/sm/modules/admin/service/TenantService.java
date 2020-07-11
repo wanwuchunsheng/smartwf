@@ -15,40 +15,43 @@ import com.smartwf.sm.modules.admin.vo.TenantVO;
 public interface TenantService {
 
 	/**
-	 * @Description: 查询租户分页
-	 * @result: 
+	 * 查询租户分页
+	 * @param page
+	 * @param bean
+	 * @return
 	 */
 	Result<?> selectTenantByPage(Page<Tenant> page, TenantVO bean);
 
 	/**
-     * @Description: 主键查询租户
+     * 主键查询租户
+     * @param bean
      * @return
      */
 	Result<?> selectTenantById(Tenant bean);
 
 	/**
-     * @Description： 添加租户
-     * @return
+     * 添加租户
+     * @param bean
      */
 	void saveTenant(Tenant bean);
 	
 	/**
-     * @Description： 修改租户
-     * @return
+     *  修改租户
+     * @param bean
      */
 	void updateTenant(Tenant bean);
 
 	/**
-     * @Description： 删除租户
-     * @return
+     *  删除租户
+     * @param bean
      */
 	void deleteTenant(TenantVO bean);
 
 	/**
-     * @Description：初始化租户信息
+     * 初始化租户信息
      * @return
      */
-	List<Tenant> InitTenantDatas();
+	List<Tenant> initTenantDatas();
 	
 	
 	

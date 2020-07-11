@@ -17,29 +17,36 @@ import com.smartwf.sm.modules.admin.vo.PostVO;
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 职务持久层接口
+ * @author WCH
  */
 @Repository
 public interface PostDao extends BaseMapper<Post> {
 
 	/**
-	 * @Description: 批量删除职务
+	 * 批量删除职务
+	 * @param list
 	 * @result:
 	 */
 	void deletePostByIds(@Param("list") List<String> list);
 
 	/**
-	 * @Deprecated 删除用户职务
+	 * 删除用户职务
+	 * @param bean
 	 * 
 	 * */
 	void deleteUserPostById(@Param("bean") PostVO bean);
 	/**
-	 * @Deprecated 分页查询职务所有数据=删除用户职务
+	 * 分页查询职务所有数据=删除用户职务
+	 * @param page 
+	 * @param bean
+	 * @return
 	 * 
 	 * */
 	List<PostVO> selectPostByPage(@Param("bean") PostVO bean, Page<Post> page);
 	/**
-	 * @Deprecated 通过用户ID查询职务
-	 * 
+	 * 通过用户ID查询职务
+	 * @param userInfo
+	 * @return
 	 * */
 	List<TreePost> selectPostByUserId(@Param("bean") User userInfo);
 

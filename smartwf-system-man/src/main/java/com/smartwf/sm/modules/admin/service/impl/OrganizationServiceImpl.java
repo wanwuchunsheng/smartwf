@@ -46,7 +46,8 @@ public class OrganizationServiceImpl implements OrganizationService{
 	@Override
 	public Result<?> selectOrganizationByPage(Page<Organization> page, OrganizationVO bean) {
 		QueryWrapper<Organization> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("update_time"); //降序
+		//降序
+		queryWrapper.orderByDesc("update_time"); 
   		//租户
   		if (null!=bean.getTenantId() ) { 
   			queryWrapper.eq("tenant_id", bean.getTenantId()); 
@@ -122,8 +123,8 @@ public class OrganizationServiceImpl implements OrganizationService{
      */
 	@Override
 	public Result<?> selectOrganizationById(Organization bean) {
-		Organization Organization= this.organizationDao.selectById(bean.getId());
-		return Result.data(Organization);
+		Organization organization= this.organizationDao.selectById(bean.getId());
+		return Result.data(organization);
 	}
 	
 	/**
@@ -163,7 +164,7 @@ public class OrganizationServiceImpl implements OrganizationService{
      * @Description： 删除组织架构
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deleteOrganization(OrganizationVO bean) {
 		//删除组织机构
@@ -194,8 +195,10 @@ public class OrganizationServiceImpl implements OrganizationService{
 		OrganizationVO bean=null;
 		for(Tenant t:list) {
 			bean = new OrganizationVO();
-			bean.setTenantId(t.getId());//租户
-			bean.setEnable(0);//0启用  1禁用
+			//租户
+			bean.setTenantId(t.getId());
+			//0启用  1禁用
+			bean.setEnable(0);
 			map.put(t.getId(), this.organizationDao.selectOrganizationByAll(bean));
 		}
 		return map;

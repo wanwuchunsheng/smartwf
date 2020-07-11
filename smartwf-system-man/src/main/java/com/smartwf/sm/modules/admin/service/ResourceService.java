@@ -15,47 +15,52 @@ import com.smartwf.sm.modules.admin.vo.ResourceVO;
 public interface ResourceService {
 
 	/**
-	 * @Description: 查询资源分页
-	 * @result: 
+	 * 查询资源分页
+	 * @param page
+	 * @param bean
+	 * @return
 	 */
 	Result<?> selectResourceByPage(Page<Resource> page, ResourceVO bean);
 
 	/**
-     * @Description: 主键查询资源
+     * 主键查询资源
+     * @param bean
      * @return
      */
 	Result<?> selectResourceById(Resource bean);
 
 	/**
-     * @Description： 添加资源
-     * @return
+     *  添加资源
+     * @param bean
      */
 	void saveResource(Resource bean);
 	
 	/**
-     * @Description： 修改资源
-     * @return
+     * 修改资源
+     * @param bean
      */
 	void updateResource(Resource bean);
 
 	/**
-     * @Description： 删除资源
-     * @return
+     * 删除资源
+     * @param bean
      */
 	void deleteResource(ResourceVO bean);
 	
 	/**
-     * @Description： 初始化资源
+     *  初始化资源
      * @return
      */
 	List<Resource> queryResourceAll();
 	/**
-	 * @Description: 查询资源子系统
+	 * 查询资源子系统
+	 * @param bean
 	 * @return
 	 */
 	Result<?> selectResourceByPid(ResourceVO bean);
 	/**
-	 * @Description: 查询所有资源，树形结构
+	 * 查询所有资源，树形结构
+	 * @param bean
 	 * @return
 	 */
 	Result<?> selectResourceByAll(ResourceVO bean);

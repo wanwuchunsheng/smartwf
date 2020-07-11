@@ -92,8 +92,8 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Override
 	public Result<?> selectUserInfoByPage(Page<UserInfo> page, UserInfo bean) {
 		//查询
-		List<UserInfo> UserInfoList = this.userInfoDao.selectUserInfoByPage(bean,page);
-		return Result.data(page.getTotal(), UserInfoList);
+		List<UserInfo> userInfoList = this.userInfoDao.selectUserInfoByPage(bean,page);
+		return Result.data(page.getTotal(), userInfoList);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class UserInfoServiceImpl implements UserInfoService{
      *   4.绑定租户，组织机构，职务，角色信息
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public Result<?> saveUserInfo(UserInfoVO bean) {
 		//添加创建人基本信息
@@ -134,7 +134,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		//保存wso2用户
 		Map<String,Object> map=this.wso2UserService.addUser(bean);
 		//验证wso2插入是否成功，成功返回ID
-		if(map==null || !map.containsKey("id")) {
+		if(map==null || !map.containsKey(Constants.ID)) {
 			return Result.data(Constants.BAD_REQUEST,"失败，wso2用户保存失败！"+JsonUtil.objectToJson(map));
 		}
 		bean.setUserCode(String.valueOf(map.get("id")) );
@@ -146,7 +146,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			String orgIds=StrUtils.regex(bean.getOrganizationIds());
 			if(StringUtils.isNotBlank(orgIds)) {
 				UserOrganization uo=null;
-				for(String id:orgIds.split(",")) {
+				for(String id:orgIds.split(Constants.CHAR)) {
 					uo=new UserOrganization();
 					uo.setUserId(bean.getId());
 					uo.setTenantId(bean.getTenantId());
@@ -161,7 +161,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			String postIds=StrUtils.regex(bean.getPostIds());
 			if(StringUtils.isNotBlank(postIds)) {
 				UserPost up = null;
-				for(String id:postIds.split(",")) {
+				for(String id:postIds.split(Constants.CHAR)) {
 					up=new UserPost();
 					up.setUserId(bean.getId());
 					up.setTenantId(bean.getTenantId());
@@ -175,7 +175,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			String roleIds=StrUtils.regex(bean.getRoleIds());
 			if(StringUtils.isNotBlank(roleIds)) {
 				UserRole ur = null;
-				for(String id:roleIds.split(",")) {
+				for(String id:roleIds.split(Constants.CHAR)) {
 					ur=new UserRole();
 					ur.setUserId(bean.getId());
 					ur.setTenantId(bean.getTenantId());
@@ -200,7 +200,7 @@ public class UserInfoServiceImpl implements UserInfoService{
      *    4.生成修改提交时的组织结构
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void updateUserInfo(UserInfoVO bean) {
 		//添加修改人信息
@@ -234,7 +234,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			String orgIds=StrUtils.regex(bean.getOrganizationIds());
 			if(StringUtils.isNotBlank(orgIds)) {
 				UserOrganization uo=null;
-				for(String id:orgIds.split(",")) {
+				for(String id:orgIds.split(Constants.CHAR)) {
 					uo=new UserOrganization();
 					uo.setUserId(bean.getId());
 					uo.setTenantId(bean.getTenantId());
@@ -248,7 +248,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			String postIds=StrUtils.regex(bean.getPostIds());
 			if(StringUtils.isNotBlank(postIds)) {
 				UserPost up = null;
-				for(String id:postIds.split(",")) {
+				for(String id:postIds.split(Constants.CHAR)) {
 					up=new UserPost();
 					up.setUserId(bean.getId());
 					up.setTenantId(bean.getTenantId());
@@ -264,7 +264,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			if(StringUtils.isNotBlank(roleIds)) {
 				List<String> list=new ArrayList<>();
 				UserRole ur = null;
-				for(String id:roleIds.split(",")) {
+				for(String id:roleIds.split(Constants.CHAR)) {
 					list.add(id);
 					ur=new UserRole();
 					ur.setUserId(bean.getId());
@@ -290,7 +290,7 @@ public class UserInfoServiceImpl implements UserInfoService{
      * @Description： 删除用户资料
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public Result<?> deleteUserInfo(UserInfoVO bean) {
 		if( null!=bean.getId()) {
@@ -312,7 +312,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
 				UserInfo userinfo=null;
-				for(String val:ids.split(",")) {
+				for(String val:ids.split(Constants.CHAR)) {
 					//批量删除wso2用户
 					userinfo=new UserInfo();
 					userinfo.setId(Integer.valueOf(val));
@@ -342,7 +342,7 @@ public class UserInfoServiceImpl implements UserInfoService{
      *   角色，权限，组织架构
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public User selectUserInfoByUserCode(User user) {
 		//获取用户信息
@@ -413,11 +413,11 @@ public class UserInfoServiceImpl implements UserInfoService{
 	public void saveWso2UserInfo(UserInfoVO tv,Tenant bean) {
 		//查询wso2 租户默认用户id
 		Map<String,Object> maplist=wso2UserService.selectUserByName(tv, bean);
-		if(maplist.containsKey("Resources")) {
+		if(maplist.containsKey(Constants.RESOURCES)) {
 			List<Map> list=JsonUtil.jsonToList(JsonUtil.objectToJson(maplist.get("Resources")), Map.class);
 			if(list!=null && list.size()>0) {
 				Map<String,Object> map=JsonUtil.jsonToMap(JsonUtil.objectToJson(list.get(0)));
-				if(map.containsKey("id")) {
+				if(map.containsKey(Constants.ID)) {
 					//给用户添加关联的wso2 userId
 					tv.setUserCode(String.valueOf(map.get("id")));
 				}

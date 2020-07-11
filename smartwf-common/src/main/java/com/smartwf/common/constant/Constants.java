@@ -20,10 +20,26 @@ public class Constants {
     public static final String EMPTY = "empty";
 
     public static final String BLANK = "";
+    
+    public static final String IMAGE = "image";
+    
+    public static final String USERID = "user_id";
+    
+    public static final String CHAR = ",";
+    
+    public static final String ID = "id";
+    
+    public static final String RESOURCES = "Resources";
+    
+    public static final String MEMBERS = "members";
+    
+    public static final String GROUPS = "groups";
 
     public static final int ONE = 1;
 
     public static final int ZERO = 0;
+    
+    public static final int TWO = 2;
     
     public static final int ADMIN = 2;
     
@@ -65,5 +81,6 @@ public class Constants {
      * wso2 各租户默认密码
      * */
     public static final String WSO2_PASSWORD = "000000";
+    
 
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
@@ -44,8 +45,8 @@ public class DictionaryServiceImpl implements DictionaryService{
 	@Override
 	public Result<?> selectDictionaryByPage(Page<Dictionary> page, DictionaryVO bean) {
 		//查询
-		List<UserInfo> UserInfoList = this.dictionaryDao.selectDictionaryByPage(bean,page);
-		return Result.data(page.getTotal(), UserInfoList);
+		List<UserInfo> userInfoList = this.dictionaryDao.selectDictionaryByPage(bean,page);
+		return Result.data(page.getTotal(), userInfoList);
 	}
 
 	/**
@@ -54,8 +55,8 @@ public class DictionaryServiceImpl implements DictionaryService{
      */
 	@Override
 	public Result<?> selectDictionaryById(Dictionary bean) {
-		Dictionary Dictionary= this.dictionaryDao.selectById(bean);
-		return Result.data(Dictionary);
+		Dictionary dictionary= this.dictionaryDao.selectById(bean);
+		return Result.data(dictionary);
 	}
 	
 	/**
@@ -74,7 +75,7 @@ public class DictionaryServiceImpl implements DictionaryService{
      * @Description: 添加数据字典
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void saveDictionary(Dictionary bean) {
 		//添加创建人基本信息
@@ -108,7 +109,7 @@ public class DictionaryServiceImpl implements DictionaryService{
      * @Description： 删除数据字典
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deleteDictionary(DictionaryVO bean) {
 		if( null!=bean.getId()) {
@@ -119,7 +120,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 			//批量删除
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
-				for(String val:ids.split(",")) {
+				for(String val:ids.split(Constants.CHAR)) {
 					list.add(val);
 				}
 				//数据字典表
@@ -133,15 +134,19 @@ public class DictionaryServiceImpl implements DictionaryService{
      * @return
      */
 	@Override
-	public Map<Integer,List<Dictionary>> InitDictionaryDatas(List<Tenant> list) {
+	public Map<Integer,List<Dictionary>> initDictionaryDatas(List<Tenant> list) {
 		Map<Integer,List<Dictionary>> map =new HashMap<>();
 		QueryWrapper<Dictionary> queryWrapper =null;
 		for(Tenant t:list) {
 			queryWrapper = new QueryWrapper<>();
-			queryWrapper.orderByDesc("update_time"); //降序
-			queryWrapper.eq("enable", 0); //0启用  1禁用
-			queryWrapper.eq("tenant_id", t.getId());//租户
-			queryWrapper.ne("uid", 0);//租户
+			//降序
+			queryWrapper.orderByDesc("update_time"); 
+			//0启用  1禁用
+			queryWrapper.eq("enable", 0); 
+			//租户
+			queryWrapper.eq("tenant_id", t.getId());
+			//租户
+			queryWrapper.ne("uid", 0);
 			map.put(t.getId(), this.dictionaryDao.selectList(queryWrapper));
 		}
 		return map;

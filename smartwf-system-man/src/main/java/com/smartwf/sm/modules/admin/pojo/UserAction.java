@@ -13,6 +13,7 @@ import lombok.Data;
 
 /**
  * @Description: 用户操作表
+ * @author WCH
  */
 @Data
 @TableName("sys_user_action")

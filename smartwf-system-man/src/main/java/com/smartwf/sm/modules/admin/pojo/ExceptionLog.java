@@ -8,7 +8,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
-
+/**
+ * @author WCH
+ * 
+ * */
 @Data
 @TableName("sys_exception_log")
 public class ExceptionLog implements Serializable{
@@ -18,7 +21,6 @@ public class ExceptionLog implements Serializable{
 		/**
 		 * 主键
 		 */
-		//@TableId
 		@TableId(type = IdType.AUTO)
 		private Integer id;
 		/**

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 启动类
+ * @author WCH
  */
 @SpringBootApplication
 @MapperScan(basePackages = {"com.smartwf.sm.*.*.dao"})

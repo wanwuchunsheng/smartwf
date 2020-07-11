@@ -13,6 +13,7 @@ import lombok.Data;
 
 /**
  * @Description: 租户表
+ * @author WCH
  */
 @Data
 @TableName("sys_tenant")

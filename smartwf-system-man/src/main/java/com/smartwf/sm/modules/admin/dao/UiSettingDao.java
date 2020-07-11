@@ -9,9 +9,10 @@ import com.smartwf.sm.modules.admin.pojo.SysConfig;
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 前端持久层接口
+ * @author WCH
  */
 @Repository
-public interface UISettingDao extends BaseMapper<SysConfig> {
+public interface UiSettingDao extends BaseMapper<SysConfig> {
 
 	
     

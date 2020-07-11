@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 登录拦截器
+ * @author WCH
  */
 
 @Component

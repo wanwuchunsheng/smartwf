@@ -1,7 +1,5 @@
 package com.smartwf.sm.modules.admin.service;
 
-import java.util.List;
-
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Resource;
@@ -15,32 +13,35 @@ import com.smartwf.sm.modules.admin.vo.ResourceVO;
 public interface SubsystemService {
 
 	/**
-	 * @Description: 查询子系统分页
-	 * @result: 
+	 * 查询子系统分页
+	 * @param bean
+	 * @param page
+	 * @return
 	 */
 	Result<?> selectSubsystemByPage(Page<Resource> page, ResourceVO bean);
 
 	/**
-     * @Description: 主键查询子系统
+     * 主键查询子系统
+     * @param bean
      * @return
      */
 	Result<?> selectSubsystemById(Resource bean);
 
 	/**
-     * @Description： 添加子系统
-     * @return
+     * 添加子系统
+     * @param bean
      */
 	void saveSubsystem(Resource bean);
 	
 	/**
-     * @Description： 修改子系统
-     * @return
+     *  修改子系统
+     * @param bean
      */
 	void updateSubsystem(Resource bean);
 
 	/**
-     * @Description： 删除子系统
-     * @return
+     *  删除子系统
+     * @param bean
      */
 	void deleteSubsystem(ResourceVO bean);
 	

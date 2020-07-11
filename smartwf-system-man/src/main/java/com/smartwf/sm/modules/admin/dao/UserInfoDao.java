@@ -16,54 +16,67 @@ import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 用户资源持久层接口
+ * @author WCH
  */
 @Repository
 public interface UserInfoDao extends BaseMapper<UserInfo> {
 
 	/**
+	 * 
+	 * 查询用户资源分页
 	 * @param page 
-	 * @Description:查询用户资源分页
-	 * @result:
+	 * @param bean
+	 * @return
 	 */
 	List<UserInfo> selectUserInfoByPage(@Param("bean") UserInfo bean, Page<UserInfo> page);
 
 	/**
-	 * @Description: 批量删除
+	 *  批量删除
+	 *  @param list
 	 */
 	void deleteUserInfoByIds(@Param("list") List<String> list);
 
 	/**
-	 * @Description: 单个删除
+	 * 单个删除
+	 * @param bean
 	 */
 	void deleteUserInfoById(@Param("bean") UserInfoVO bean);
 
 	/**
-	 * @Description: 单个删除用户组织架构
+	 * 单个删除用户组织架构
+	 * @param bean
 	 */
 	void deleteUserOrgById(@Param("bean") UserInfoVO bean);
 
 	/**
-	 * @Description: 单个删除用户职务
+	 * 单个删除用户职务
+	 * @param bean
 	 */
 	void deleteUserPostById(@Param("bean") UserInfoVO bean);
 
 	/**
-	 * @Description: 单个删除用户角色
+	 * 单个删除用户角色
+	 * @param bean
 	 */
 	void deleteUserRoleById(@Param("bean") UserInfoVO bean);
 	/**
-	 * @Description: 主键查询用户资料
+	 * 主键查询用户资料
+	 * @param bean
+	 * @return
 	 */
 	UserInfo selectUserInfoById(@Param("bean") UserInfo bean);
 
 	/**
-     * @Description： 修改用户密码
-     * @return
+     *  修改用户密码
+     * @param id
+     * @param oldPwd
+     * @param newPwd
      */
 	void updateUserPwd(@Param("id") Integer id, @Param("oldPwd") String oldPwd, @Param("newPwd") String newPwd);
 
 	/**
-     * @Description： 获取用户基础信息
+     *  获取用户基础信息
+     *  @param user
      * @return
      */
 	User selectUserInfoByUserCode(@Param("bean") User user);

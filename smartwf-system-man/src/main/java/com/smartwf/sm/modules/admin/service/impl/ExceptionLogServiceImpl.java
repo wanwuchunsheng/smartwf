@@ -9,6 +9,7 @@ import com.smartwf.sm.modules.admin.service.ExceptionLogService;
 /**
  * @Date: 2019-11-27 11:25:24
  * @Description: 异常日志业务层实现
+ * @author WCH
  */
 @Service
 public class ExceptionLogServiceImpl implements ExceptionLogService{

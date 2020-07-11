@@ -14,88 +14,189 @@ import com.smartwf.sm.modules.admin.vo.TenantVO;
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 租户持久层接口
+ * @author WCH
  */
 @Repository
 public interface TenantDao extends BaseMapper<Tenant> {
 
 	/**
-	 * @Description: 批量删除租户
+	 * 批量删除租户
+	 * @param list
 	 * @result:
 	 */
 	void deleteTenantByIds(@Param("list") List<String> list);
 
 	/**
-	 * @Description: 将所有租户默认状态设置不选中
+	 * 将所有租户默认状态设置不选中
 	 */
 	void updateBySel();
 
 	/**
-	 * @Description: 级联删除
+	 * 级联删除
+	 * @param bean
 	 * 
 	 * */
 	void deleteOrgByTenantId(@Param("bean") TenantVO bean);
-
+	/**
+	 * 用户组织架构删除
+	 * @param bean
+	 * 
+	 * */
 	void deleteUserOrgByTenantId(@Param("bean") TenantVO bean);
-
+	/**
+	 * 职务删除
+	 * @param bean
+	 * 
+	 * */
 	void deletePostByTenantId(@Param("bean") TenantVO bean);
-
+	/**
+	 * 级联删除
+	 * @param bean
+	 * 
+	 * */
 	void deleteUserPostByTenantId(@Param("bean") TenantVO bean);
-
+	/**
+	 * 级联删除
+	 * @param bean
+	 * 
+	 * */
 	void deleteRoleByTenantId(@Param("bean") TenantVO bean);
-
+	/**
+	 * 级联删除
+	 * @param bean
+	 * 
+	 * */
 	void deleteUserRoleByTenantId(@Param("bean") TenantVO bean);
-
+	/**
+	 * 级联删除
+	 * @param bean
+	 * 
+	 * */
 	void deleteRolePermissionByTenantId(@Param("bean") TenantVO bean);
-	
+	/**
+	 * 级联删除
+	 * @param bean
+	 * 
+	 * */
 	void deleteUserByTenantId(@Param("bean") TenantVO bean);
-	
+	/**
+	 * 级联删除
+	 * @param bean
+	 * 
+	 * */
 	void deletePermissionByTenantId(@Param("bean") TenantVO bean);
-
+	/**
+	 * 级联删除
+	 * @param bean
+	 * 
+	 * */
 	void deleteResourceByTenantId(@Param("bean") TenantVO bean);
-
+	/**
+	 * 级联删除
+	 * @param bean
+	 * 
+	 * */
 	void deleteUserActionByTenantId(@Param("bean") TenantVO bean);
-	
+	/**
+	 * 级联删除
+	 * @param bean
+	 * 
+	 * */
 	void deleteDictionaryByTenantId(@Param("bean") TenantVO bean);
 
 	/**
-	 * @Description: 批量级联删除
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
 	 * 
 	 * */
 	void deleteOrgByTenantIds(@Param("list") List<String> list);
-
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deleteUserOrgByTenantIds(@Param("list") List<String> list);
-
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deletePostByTenantIds(@Param("list") List<String> list);
-
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deleteUserPostByTenantIds(@Param("list") List<String> list);
-
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deleteRoleByTenantIds(@Param("list") List<String> list);
-
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deleteUserRoleByTenantIds(@Param("list") List<String> list);
-
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deleteRolePermissionByTenantIds(@Param("list") List<String> list);
-
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deleteUserByTenantIds(@Param("list") List<String> list);
-	
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deletePermissionByTenantIds(@Param("list") List<String> list);
-
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deleteResourceByTenantIds(@Param("list") List<String> list);
-
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deleteUserActionByTenantIds(@Param("list") List<String> list);
-
+	/**
+	 * 批量级联删除
+	 * @author WCH
+	 * @param list
+	 * 
+	 * */
 	void deleteDictionaryByTenantIds(@Param("list") List<String> list);
 
 	/**
 	 * 查询租户
+	 * @return
+	 * @author WCH
+	 * @param bean
 	 * */
 	Tenant selectTenantById(@Param("bean") UserInfo bean);
 
 	
-
-	
-	
-
-	
-
     
 }

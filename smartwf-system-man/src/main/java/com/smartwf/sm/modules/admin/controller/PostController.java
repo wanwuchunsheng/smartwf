@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PostController {
 	
 	@Autowired
-	private PostService PostService;
+	private PostService postService;
 	
 	/**
 	 * @Description: 查询职务分页
@@ -67,7 +67,7 @@ public class PostController {
     })
     public ResponseEntity<Result<?>> selectPostByPage(Page<Post> page,@Validated(value = QueryParam.class) PostVO bean) {
         try {
-            Result<?> result = this.PostService.selectPostByPage(page, bean);
+            Result<?> result = this.postService.selectPostByPage(page, bean);
             if (result != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }
@@ -88,7 +88,7 @@ public class PostController {
     })
     public ResponseEntity<Result<?>> selectPostById(@Validated(value = Query.class) Post bean) {
         try {
-            Result<?> result = this.PostService.selectPostById(bean);
+            Result<?> result = this.postService.selectPostById(bean);
             if (result != null) {
                 return ResponseEntity.ok(result);
             }
@@ -116,7 +116,7 @@ public class PostController {
     })
     public ResponseEntity<Result<?>> savePost(HttpSession session,@Validated(value = Add.class) Post bean) {
         try {
-    		this.PostService.savePost(bean);
+    		this.postService.savePost(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
         } catch (Exception e) {
             log.error("添加职务信息错误！{}", e.getMessage(), e);
@@ -143,7 +143,7 @@ public class PostController {
     })
     @TraceLog(content = "修改职务", paramIndexs = {0})
     public ResponseEntity<Result<?>> updatePost(@Validated(value = Update.class) Post bean) {
-        this.PostService.updatePost(bean);
+        this.postService.updatePost(bean);
         return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
     }
     
@@ -164,7 +164,7 @@ public class PostController {
     	if(null==bean.getId() && StringUtils.isBlank(bean.getIds()) ) {
     		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除参数为空！"));
     	}
-    	this.PostService.deletePost(bean);
+    	this.postService.deletePost(bean);
         return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
     }
 

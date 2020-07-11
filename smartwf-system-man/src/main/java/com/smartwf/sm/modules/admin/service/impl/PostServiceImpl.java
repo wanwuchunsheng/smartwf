@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
@@ -44,8 +45,8 @@ public class PostServiceImpl implements PostService{
 	@Override
 	public Result<?> selectPostByPage(Page<Post> page, PostVO bean) {
 		//查询
-		List<PostVO> UserInfoList = this.postDao.selectPostByPage(bean,page);
-		return Result.data(page.getTotal(), UserInfoList);
+		List<PostVO> userInfoList = this.postDao.selectPostByPage(bean,page);
+		return Result.data(page.getTotal(), userInfoList);
 	}
 
 	/**
@@ -54,8 +55,8 @@ public class PostServiceImpl implements PostService{
      */
 	@Override
 	public Result<?> selectPostById(Post bean) {
-		Post Post= this.postDao.selectById(bean);
-		return Result.data(Post);
+		Post post= this.postDao.selectById(bean);
+		return Result.data(post);
 	}
 	
 	/**
@@ -95,7 +96,7 @@ public class PostServiceImpl implements PostService{
      * @Description： 删除职务
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deletePost(PostVO bean) {
 		if( null!=bean.getId()) {
@@ -107,7 +108,7 @@ public class PostServiceImpl implements PostService{
 			String ids=StrUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
-				for(String val:ids.split(",")) {
+				for(String val:ids.split(Constants.CHAR)) {
 					list.add(val);
 					bean=new PostVO();
 					bean.setId(Integer.valueOf(val));
@@ -130,9 +131,12 @@ public class PostServiceImpl implements PostService{
 		QueryWrapper<Post> queryWrapper =null;
 		for(Tenant t:list) {
 			queryWrapper = new QueryWrapper<>();
-			queryWrapper.orderByDesc("update_time"); //降序
-			queryWrapper.eq("enable", 0); //0启用  1禁用
-			queryWrapper.eq("tenant_id", t.getId());//租户
+			//降序
+			queryWrapper.orderByDesc("update_time"); 
+			//0启用  1禁用
+			queryWrapper.eq("enable", 0); 
+			//租户
+			queryWrapper.eq("tenant_id", t.getId());
 			map.put(t.getId(), this.postDao.selectList(queryWrapper));
 		}
 		return map;

@@ -10,6 +10,7 @@ import lombok.Data;
 
 /**
  * @Description: 用户组织架构表
+ * @author WCH
  */
 @Data
 @TableName("sys_user_organization")

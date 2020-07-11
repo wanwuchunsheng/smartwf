@@ -8,7 +8,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
-
+/**
+ * 
+ * @author WCH
+ * 
+ * */
 @Data
 @TableName("sys_identity")
 public class IdentityConfig implements Serializable{/**
@@ -36,7 +40,7 @@ public class IdentityConfig implements Serializable{/**
 	/**
 	 * wso2租户名称
 	 */
-	private String TenantCode;
+	private String tenantCode;
 	/**
 	 * 备注
 	 */

@@ -49,7 +49,8 @@ public class RoleServiceImpl implements RoleService{
 	@Override
 	public Result<?> selectRoleByPage(Page<Role> page, RoleVO bean) {
 		QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("update_time"); //降序
+		//降序
+		queryWrapper.orderByDesc("update_time"); 
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId()) { 
   			queryWrapper.eq("tenant_id", bean.getTenantId()); 
@@ -84,8 +85,8 @@ public class RoleServiceImpl implements RoleService{
      */
 	@Override
 	public Result<?> selectRoleById(Role bean) {
-		Role Role= this.roleDao.selectById(bean);
-		return Result.data(Role);
+		Role role= this.roleDao.selectById(bean);
+		return Result.data(role);
 	}
 	
 	/**
@@ -96,7 +97,7 @@ public class RoleServiceImpl implements RoleService{
 	public Result<?> saveRole(Role bean) {
 		/**添加wso2角色*/
 		Map<String,Object> map=this.wso2RoleService.addRole(bean);
-		if(null!=map && map.size()>0 && map.containsKey("id")) {
+		if(null!=map && map.size()>0 && map.containsKey(Constants.ID)) {
 			bean.setRoleCode(String.valueOf(map.get("id")));
 			//添加创建人基本信息
 			User user=UserThreadLocal.getUser();
@@ -142,7 +143,7 @@ public class RoleServiceImpl implements RoleService{
      * @Description： 删除角色
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deleteRole(RoleVO bean) {
 		if( null!=bean.getId()) {
@@ -159,7 +160,7 @@ public class RoleServiceImpl implements RoleService{
 			String ids=StrUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
-				for(String val:ids.split(",")) {
+				for(String val:ids.split(Constants.CHAR)) {
 					list.add(val);
 					bean=new RoleVO();
 					bean.setId(Integer.valueOf(val));
@@ -187,9 +188,12 @@ public class RoleServiceImpl implements RoleService{
 		QueryWrapper<Role> queryWrapper =null;
 		for(Tenant t:list) {
 			queryWrapper = new QueryWrapper<>();
-			queryWrapper.orderByDesc("update_time"); //降序
-			queryWrapper.eq("enable", 0); //0启用  1禁用
-			queryWrapper.eq("tenant_id", t.getId());//租户
+			//降序
+			queryWrapper.orderByDesc("update_time"); 
+			//0启用  1禁用
+			queryWrapper.eq("enable", 0); 
+			//租户
+			queryWrapper.eq("tenant_id", t.getId());
 			map.put(t.getId(), this.roleDao.selectList(queryWrapper));
 		}
 		return map;

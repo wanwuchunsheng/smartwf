@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.vo.PostVO;
@@ -18,37 +17,41 @@ import com.smartwf.sm.modules.admin.vo.PostVO;
 public interface PostService {
 
 	/**
-	 * @Description: 查询职务分页
-	 * @result: 
+	 * 查询职务分页
+	 * @param page
+	 * @param bean
+	 * @return 
 	 */
 	Result<?> selectPostByPage(Page<Post> page, PostVO bean);
 
 	/**
-     * @Description: 主键查询职务
+     * 主键查询职务
+     * @param bean
      * @return
      */
 	Result<?> selectPostById(Post bean);
 
 	/**
-     * @Description： 添加职务
-     * @return
+     * 添加职务
+     * @param bean
      */
 	void savePost(Post bean);
 	
 	/**
-     * @Description： 修改职务
-     * @return
+     *  修改职务
+     *  @param bean
      */
 	void updatePost(Post bean);
 
 	/**
-     * @Description： 删除职务
-     * @return
+     *  删除职务
+     *  @param bean
      */
 	void deletePost(PostVO bean);
 	
 	/**
-	 * @Description: 初始化职务
+	 * 初始化职务
+	 * @param list
 	 * @return
 	 */
 	Map<Integer,List<Post>> initPostDatas(List<Tenant> list);

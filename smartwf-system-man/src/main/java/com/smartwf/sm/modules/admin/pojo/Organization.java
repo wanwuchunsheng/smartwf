@@ -14,6 +14,7 @@ import lombok.Data;
 
 /**
  * @Description: 组织架构表
+ * @author WCH
  */
 @Data
 @TableName("sys_organization")

@@ -25,6 +25,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * Swagger2配置类s
  * 通过@SpringBootConfiguration注解，让Spring来加载该类配置。
  * 再通过@EnableSwagger2注解来启用Swagger2。
+ * @author WCH
  */
 @SpringBootConfiguration
 @EnableSwagger2

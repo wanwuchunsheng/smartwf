@@ -19,6 +19,7 @@ import com.smartwf.sm.modules.admin.vo.LoginRecordVO;
 /**
  * @Date: 2019-11-27 11:25:24
  * @Description: 登录记录业务层实现
+ * @author WCH
  */
 @Service
 public class LoginRecordServiceImpl implements LoginRecordService {
@@ -29,7 +30,8 @@ public class LoginRecordServiceImpl implements LoginRecordService {
 	@Override
 	public Result<?> selectLoginRecordByPage(Page<LoginRecord> page,LoginRecordVO bean) {
 		QueryWrapper<LoginRecord> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("create_time"); //降序
+		//降序
+		queryWrapper.orderByDesc("create_time"); 
         //租户ID
         if (null !=bean.getTenantId()) {
         	queryWrapper.like("tenant_id", Constants.PER_CENT + bean.getTenantId() + Constants.PER_CENT);

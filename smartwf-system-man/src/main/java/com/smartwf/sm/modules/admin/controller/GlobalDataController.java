@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
@@ -36,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @Date: 2019-10-25 15:04:26
  * @Description: 全局数据控制器
+ * @author WCH
  */
 @RestController
 @RequestMapping("globaldata")
@@ -110,9 +112,9 @@ public class GlobalDataController {
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "organizationId", value = "组织架构（主键）", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> PostAll(Post bean) {
+    public ResponseEntity<Result<?>> postAll(Post bean) {
         try {
-        	 Result<?> result= this.globalDataService.PostAll(bean);
+        	 Result<?> result= this.globalDataService.postAll(bean);
         	 if(result!=null) {
         		 return ResponseEntity.ok(result);
         	 }
@@ -134,9 +136,9 @@ public class GlobalDataController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
     })
-    public ResponseEntity<Result<?>> RoleAll(Role bean) {
+    public ResponseEntity<Result<?>> roleAll(Role bean) {
         try {
-        	 Result<?> result= this.globalDataService.RoleAll(bean);
+        	 Result<?> result= this.globalDataService.roleAll(bean);
         	 if(result!=null) {
         		 return ResponseEntity.ok(result);
         	 }
@@ -221,7 +223,7 @@ public class GlobalDataController {
             		log.info(m.getKey()+"    "+m.getValue());
             	}
     			//4验证是否成功
-    			if(!resmap.containsKey("user_id")) {
+    			if(!resmap.containsKey(Constants.USERID)) {
     				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，WSO2 user_id为空！"));
     			}
     			user.setUserCode(String.valueOf(resmap.get("user_id")));

@@ -17,37 +17,43 @@ import com.smartwf.sm.modules.admin.vo.RoleVO;
 public interface RoleService {
 
 	/**
-	 * @Description: 查询角色分页
-	 * @result: 
+	 * 查询角色分页
+	 * @param page
+	 * @param bean
+	 * @return
 	 */
 	Result<?> selectRoleByPage(Page<Role> page, RoleVO bean);
 
 	/**
-     * @Description: 主键查询角色
+     * 主键查询角色
+     * @param bean
      * @return
      */
 	Result<?> selectRoleById(Role bean);
 
 	/**
-     * @Description： 添加角色
+     * 添加角色
+     * @param bean
      * @return
      */
 	Result<?> saveRole(Role bean);
 	
 	/**
-     * @Description： 修改角色
+     *  修改角色
+     *  @param bean
      * @return
      */
 	Result<?>  updateRole(Role bean);
 
 	/**
-     * @Description： 删除角色
-     * @return
+     * 删除角色
+     * @param bean
      */
 	void deleteRole(RoleVO bean);
 	
 	/**
-     * @Description：初始化角色信息
+     * 初始化角色信息
+     * @param list
      * @return
      */
 	Map<Integer,List<Role>> initRoleDatas(List<Tenant> list);

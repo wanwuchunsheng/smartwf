@@ -19,6 +19,7 @@ import com.smartwf.sm.modules.admin.service.LogService;
 /**
  * @Date: 2019-11-27 11:25:24
  * @Description: 日志业务层实现
+ * @author WCH
  */
 @Service
 public class LogServiceImpl implements LogService {
@@ -32,7 +33,7 @@ public class LogServiceImpl implements LogService {
      * @param logDTOList
      * @return
      */
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public Integer saveLog(List<LogDTO> logDTOList) {
         return this.logDao.saveLog(logDTOList);

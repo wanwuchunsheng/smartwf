@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.SysConfig;
-import com.smartwf.sm.modules.admin.service.UISettingService;
+import com.smartwf.sm.modules.admin.service.UiSettingService;
 import com.smartwf.sm.modules.admin.vo.SysConfigVO;
 
 import io.swagger.annotations.Api;
@@ -34,10 +34,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("uisetting")
 @Slf4j
 @Api(description ="前端配置控制器")
-public class UISettingController {
+public class UiSettingController {
 	
 	@Autowired
-	private UISettingService uiSettingService;
+	private UiSettingService uiSettingService;
 	
 	/**
 	 * @Description: 查询前端配置分页
@@ -57,9 +57,9 @@ public class UISettingController {
             @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectUISettingByPage(Page<SysConfig> page, SysConfigVO bean) {
+    public ResponseEntity<Result<?>> selectUiSettingByPage(Page<SysConfig> page, SysConfigVO bean) {
         try {
-            Result<?> result = this.uiSettingService.selectUISettingByPage(page, bean);
+            Result<?> result = this.uiSettingService.selectUiSettingByPage(page, bean);
             if (result != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }
@@ -79,9 +79,9 @@ public class UISettingController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true)
     })
-    public ResponseEntity<Result<?>> selectUISettingById(SysConfig bean) {
+    public ResponseEntity<Result<?>> selectUiSettingById(SysConfig bean) {
         try {
-            Result<?> result = this.uiSettingService.selectUISettingById(bean);
+            Result<?> result = this.uiSettingService.selectUiSettingById(bean);
             if (result != null) {
                 return ResponseEntity.ok(result);
             }
@@ -107,9 +107,9 @@ public class UISettingController {
 	        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-默认启用 1-禁用）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
-    public ResponseEntity<Result<?>> saveUISetting(HttpSession session,SysConfig bean) {
+    public ResponseEntity<Result<?>> saveUiSetting(HttpSession session,SysConfig bean) {
         try {
-    		this.uiSettingService.saveUISetting(bean);
+    		this.uiSettingService.saveUiSetting(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
         } catch (Exception e) {
             log.error("添加前端配置信息错误！{}", e.getMessage(), e);
@@ -134,9 +134,9 @@ public class UISettingController {
  	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改前端配置", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updateUISetting(SysConfig bean) {
+    public ResponseEntity<Result<?>> updateUiSetting(SysConfig bean) {
         try {
-            this.uiSettingService.updateUISetting(bean);
+            this.uiSettingService.updateUiSetting(bean);
             return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
         } catch (Exception e) {
             log.error("修改前端配置信息错误！{}", e.getMessage(), e);
@@ -156,9 +156,9 @@ public class UISettingController {
 	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
     @TraceLog(content = "删除前端配置系统用户", paramIndexs = {0})
-    public ResponseEntity<Result<?>> deleteUISetting(SysConfigVO bean) {
+    public ResponseEntity<Result<?>> deleteUiSetting(SysConfigVO bean) {
         try {
-        	this.uiSettingService.deleteUISetting(bean);
+        	this.uiSettingService.deleteUiSetting(bean);
             return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
         } catch (Exception e) {
             log.error("删除前端配置信息错误！{}", e.getMessage(), e);

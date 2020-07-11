@@ -8,7 +8,11 @@ import org.springframework.stereotype.Service;
 import com.smartwf.sm.modules.wso2.dao.IdentityConfigDao;
 import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
 import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
-
+/**
+ * 
+ * @author WCH
+ * 
+ * */
 @Service
 public class IdentityConfigServiceImpl implements IdentityConfigService{
 	

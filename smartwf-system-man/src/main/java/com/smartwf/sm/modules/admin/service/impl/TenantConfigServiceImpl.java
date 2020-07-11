@@ -42,7 +42,8 @@ public class TenantConfigServiceImpl implements TenantConfigService{
 	@Override
 	public Result<?> selectTenantConfigByPage(Page<TenantConfig> page, TenantConfigVO bean) {
 		QueryWrapper<TenantConfig> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("update_time"); //降序
+		//降序
+		queryWrapper.orderByDesc("update_time"); 
         //租户ID
         if (!StringUtils.isEmpty(bean.getTenantId())) {
         	queryWrapper.eq("tenant_id", bean.getTenantId());
@@ -89,7 +90,7 @@ public class TenantConfigServiceImpl implements TenantConfigService{
      * @Description: 添加多租户配置
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void saveTenantConfig(TenantConfig bean) {
 		User user=UserThreadLocal.getUser();
@@ -121,7 +122,7 @@ public class TenantConfigServiceImpl implements TenantConfigService{
      * @Description： 删除多租户配置
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deleteTenantConfig(TenantConfigVO bean) {
 		if( null!=bean.getId()) {
@@ -132,7 +133,7 @@ public class TenantConfigServiceImpl implements TenantConfigService{
 			//批量删除
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
-				for(String val:ids.split(",")) {
+				for(String val:ids.split(Constants.CHAR)) {
 					list.add(val);
 				}
 				//多租户配置表

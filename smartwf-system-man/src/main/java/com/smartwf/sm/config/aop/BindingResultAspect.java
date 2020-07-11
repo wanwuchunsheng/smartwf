@@ -11,6 +11,7 @@ import com.smartwf.common.aop.AopAround;
 
 /**
  * 校验pojo参数AOP
+ * @author WCH
  */
 @Aspect
 @Component

@@ -15,37 +15,40 @@ import com.smartwf.sm.modules.admin.vo.UserActionVO;
 public interface UserActionService {
 
 	/**
-	 * @Description: 查询用户操作分页
-	 * @result: 
+	 * 查询用户操作分页
+	 * @param bean
+	 * @param page
+	 * @return 
 	 */
 	Result<?> selectUserActionByPage(Page<UserAction> page, UserActionVO bean);
 
 	/**
-     * @Description: 主键查询用户操作
-     * @return
+     * 主键查询用户操作
+     * @param bean
+     * @return 
      */
 	Result<?> selectUserActionById(UserAction bean);
 
 	/**
-     * @Description： 添加用户操作
-     * @return
+     *  添加用户操作
+     * @param bean
      */
 	void saveUserAction(UserAction bean);
 	
 	/**
-     * @Description： 修改用户操作
-     * @return
+     * 修改用户操作
+     * @param bean
      */
 	void updateUserAction(UserAction bean);
 
 	/**
-     * @Description： 删除用户操作
-     * @return
+     *  删除用户操作
+     * @param bean
      */
 	void deleteUserAction(UserActionVO bean);
 	
 	/**
-     * @Description： 初始化用户操作
+     *  初始化用户操作
      * @return
      */
 	List<UserAction> queryUserActionAll();

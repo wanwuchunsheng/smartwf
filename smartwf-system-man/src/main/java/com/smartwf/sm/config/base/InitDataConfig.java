@@ -26,7 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Date: 2019-11-29 10:29:44
- * @Description: 初始化基础数据
+ * 初始化基础数据
+ * @author WCH
  */
 @Component
 @Slf4j
@@ -56,10 +57,10 @@ public class InitDataConfig implements CommandLineRunner{
 	/**
 	 * @Description: 初始化基础数据
 	 */
-    public void InitDataListener() {
+    public void initDataListener() {
     	try {
     		//租户初始化数据
-    		List<Tenant> tenantList=this.tenantService.InitTenantDatas();
+    		List<Tenant> tenantList=this.tenantService.initTenantDatas();
     		if(tenantList!=null && tenantList.size()>0) {
     			this.redisService.set("initTenant", JSON.toJSONString(tenantList));
             	//组织机构
@@ -69,7 +70,7 @@ public class InitDataConfig implements CommandLineRunner{
             	//角色
             	this.redisService.set("initRole", JSON.toJSONString(this.roleService.initRoleDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
             	//数据字典
-            	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.InitDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+            	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.initDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
             	log.info("租户数据{}",redisService.get("initTenant"));
             	log.info("组织机构数据{}",redisService.get("initOrganization"));
             	log.info("职务基础数据{}",redisService.get("initPost"));
@@ -91,7 +92,7 @@ public class InitDataConfig implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-        this.InitDataListener();
+        this.initDataListener();
     }
 
 }

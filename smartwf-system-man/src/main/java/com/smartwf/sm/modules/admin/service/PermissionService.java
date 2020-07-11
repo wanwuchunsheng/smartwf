@@ -15,36 +15,40 @@ import com.smartwf.sm.modules.admin.vo.UserActionVO;
 public interface PermissionService {
 
 	/**
-	 * @Description: 查询权限分页
-	 * @result: 
+	 * 查询权限分页
+	 * @param bean
+	 * @return 
 	 */
 	Result<?> selectPermissionByPage( PermissionVO bean);
 
 	/**
-     * @Description： 添加权限
-     * @return
+     * 添加权限
+     * @param bean
      */
 	void savePermission(PermissionVO bean);
 	
 	/**
-     * @Description： 删除权限
-     * @return
+     *  删除权限
+     * @param bean
      */
 	void deletePermission(Permission bean);
 	/**
-	 * @Description: 资源与用户操作查询
+	 * 资源与用户操作查询
+	 * @param bean
 	 * @DateTime 2019-12-13 11:00:43
 	 * @return
 	 */
 	Result<?> selectResourceUserActByPage(PermissionVO bean);
 	/**
-	 * @Description: 用户操作
+	 * 用户操作
+	 * @param bean
 	 * @DateTime 2019-12-13 11:00:43
 	 * @return
 	 */
 	Result<?> selectUserActAll(UserActionVO bean);
 	/**
-	 * @Description: 查询资源子系统
+	 * 查询资源子系统
+	 * @param bean
 	 * @return
 	 */
 	Result<?> selectResourceByPid(ResourceVO bean);

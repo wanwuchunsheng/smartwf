@@ -14,6 +14,7 @@ import lombok.Data;
  * 
  * @email sunlightcs@gmail.com
  * @date 2019-12-27 13:02:48
+ * @author WCH
  */
 @Data
 @TableName("sys_dict_data")

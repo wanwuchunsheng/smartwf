@@ -5,23 +5,51 @@ import java.util.List;
 
 import com.smartwf.sm.modules.admin.pojo.Organization;
 
-import lombok.Data;
-@Data
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+/**
+ * 
+ * @author WCH
+ * 
+ * */
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true)
 public class OrganizationVO extends Organization {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	private String ids; //id批量删除
-	
-	private Date startTime;//开始时间
-	
-	private Date endTime;//结束时间
-	
-	private String label;//组织架构名称，为前端方便，扩展字段 
-	
-	private List<OrganizationVO> children;//封装树形结构
+	/**
+	 * 
+	 * id批量删除
+	 * */
+	private String ids; 
+	/**
+	 * 
+	 * 开始时间
+	 * */
+	private Date startTime;
+	/**
+	 * 结束时间
+	 * 
+	 * */
+	private Date endTime;
+	/**
+	 * 组织架构名称，为前端方便，扩展字段 
+	 * 
+	 * */
+	private String label;
+	/**
+	 * 封装树形结构
+	 * 
+	 * */
+	private List<OrganizationVO> children;
 
 }

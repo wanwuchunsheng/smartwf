@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RoleController {
 	
 	@Autowired
-	private RoleService RoleService;
+	private RoleService roleService;
 	
 	/**
 	 * @Description: 查询角色分页
@@ -64,7 +64,7 @@ public class RoleController {
     })
     public ResponseEntity<Result<?>> selectRoleByPage(Page<Role> page,@Validated(value = QueryParam.class) RoleVO bean) {
         try {
-            Result<?> result = this.RoleService.selectRoleByPage(page, bean);
+            Result<?> result = this.roleService.selectRoleByPage(page, bean);
             if (result != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(result);
             }
@@ -85,7 +85,7 @@ public class RoleController {
     })
     public ResponseEntity<Result<?>> selectRoleById(@Validated(value = Query.class) Role bean) {
         try {
-            Result<?> result = this.RoleService.selectRoleById(bean);
+            Result<?> result = this.roleService.selectRoleById(bean);
             if (result != null) {
                 return ResponseEntity.ok(result);
             }
@@ -111,7 +111,7 @@ public class RoleController {
     })
     public ResponseEntity<Result<?>> saveRole(HttpSession session,@Validated(value = Add.class) Role bean) {
         try {
-        	Result<?> result=this.RoleService.saveRole(bean);
+        	Result<?> result=this.roleService.saveRole(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
             log.error("添加角色信息错误！{}", e.getMessage(), e);
@@ -138,7 +138,7 @@ public class RoleController {
     @TraceLog(content = "修改角色", paramIndexs = {0})
     public ResponseEntity<Result<?>> updateRole(@Validated(value = Update.class) Role bean) {
     	try {
-        	Result<?> result=this.RoleService.updateRole(bean);
+        	Result<?> result=this.roleService.updateRole(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
             log.error("修改角色信息错误！{}", e.getMessage(), e);
@@ -163,7 +163,7 @@ public class RoleController {
     	if(null==bean.getId() && StringUtils.isBlank(bean.getIds()) ) {
     		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除数据为空！"));
     	}
-    	this.RoleService.deleteRole(bean);
+    	this.roleService.deleteRole(bean);
         return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
     }
 

@@ -17,43 +17,51 @@ import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 public interface OrganizationService {
 
 	/**
-	 * @Description: 查询组织架构分页
-	 * @result: 
+	 * 查询组织架构分页
+	 * @param bean
+	 * @param page
+	 * @return 
 	 */
 	Result<?> selectOrganizationByPage(Page<Organization> page, OrganizationVO bean);
 
 	/**
-     * @Description: 主键查询组织架构
+     * 主键查询组织架构
+     * @param bean
      * @return
      */
 	Result<?> selectOrganizationById(Organization bean);
 
 	/**
-     * @Description： 添加组织架构
+     * 添加组织架构
+     * @param bean
      * @return
      */
 	void saveOrganization(Organization bean);
 	
 	/**
-     * @Description： 修改组织架构
+     *  修改组织架构
+     *  @param bean
      * @return
      */
 	void updateOrganization(Organization bean);
 
 	/**
-     * @Description： 删除组织架构
+     *  删除组织架构
+     *  @param bean
      * @return
      */
 	void deleteOrganization(OrganizationVO bean);
 	
 	/**
-	 * @Description: 查询所有组织架构（树形结构）
+	 * 查询所有组织架构（树形结构）
+	 * @param bean
 	 * @return
 	 */
 	Result<?> selectOrganizationByAll(OrganizationVO bean);
 	
 	/**
-	 * @Description: 初始化组织机构
+	 * 初始化组织机构
+	 * @param list
 	 * @return
 	 */
 	Map<Integer,List<OrganizationVO>> initOrganizationDatas(List<Tenant> list);

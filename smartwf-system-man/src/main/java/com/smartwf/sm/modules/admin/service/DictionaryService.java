@@ -17,48 +17,53 @@ import com.smartwf.sm.modules.admin.vo.DictionaryVO;
 public interface DictionaryService {
 
 	/**
-	 * @Description: 查询数据字典分页
-	 * @result: 
+	 * 查询数据字典分页
+	 * @param bean
+	 * @param page
+	 * @return 
 	 */
 	Result<?> selectDictionaryByPage(Page<Dictionary> page, DictionaryVO bean);
 
 	/**
-     * @Description: 主键查询数据字典
+     * 主键查询数据字典
+     * @author WCH
+     * @param bean
      * @return
      */
 	Result<?> selectDictionaryById(Dictionary bean);
 	
 	/**
-     * @param tenantList 
-	 * @Description：主键查询数据字典子节点集合
+     *  
+	 * 主键查询数据字典子节点集合
+	 * @param bean
      * @return
      */
 	Result<?> selectDictionaryByUid(Dictionary bean);
 
 	/**
-     * @Description： 添加数据字典
-     * @return
+     *  添加数据字典
+     * @param bean
      */
 	void saveDictionary(Dictionary bean);
 	
 	/**
-     * @Description： 修改数据字典
-     * @return
+     *  修改数据字典
+     * @param bean
      */
 	void updateDictionary(Dictionary bean);
 
 	/**
-     * @Description： 删除数据字典
-     * @return
+     *  删除数据字典
+     *  @param bean
      */
 	void deleteDictionary(DictionaryVO bean);
 
 	/**
-     * @param tenantList 
-	 * @Description：初始化数据字典信息
+	 * 初始化数据字典信息
+     * @param list 
      * @return
      */
-	Map<Integer,List<Dictionary>> InitDictionaryDatas(List<Tenant> list);
+	Map<Integer,List<Dictionary>> initDictionaryDatas(List<Tenant> list);
 	
 	
 	

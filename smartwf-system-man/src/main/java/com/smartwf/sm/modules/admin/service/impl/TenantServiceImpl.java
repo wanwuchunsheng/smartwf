@@ -61,7 +61,8 @@ public class TenantServiceImpl implements TenantService{
 	@Override
 	public Result<?> selectTenantByPage(Page<Tenant> page, TenantVO bean) {
 		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("update_time"); //降序
+		//降序
+		queryWrapper.orderByDesc("update_time"); 
         //租户编码
         if (!StringUtils.isEmpty(bean.getTenantCode())) {
         	queryWrapper.like("tenant_code", Constants.PER_CENT + bean.getTenantCode() + Constants.PER_CENT);
@@ -100,12 +101,13 @@ public class TenantServiceImpl implements TenantService{
      * @Description: 添加租户
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void saveTenant(Tenant bean) {
 		//1）查询默认租户
 		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("sel", 1);//默认租户：0-否  1-是
+		//默认租户：0-否  1-是
+		queryWrapper.eq("sel", 1);
 		Tenant dict=this.tenantDao.selectOne(queryWrapper);
 		//2）添加新租户
 		User user=UserThreadLocal.getUser();
@@ -131,10 +133,14 @@ public class TenantServiceImpl implements TenantService{
 		this.wso2TenantService.addTenant(wt);
 		//系统中心用户表添加用户信息
 		UserInfoVO tv=new UserInfoVO();
-		tv.setLoginCode(bean.getTenantCode());//登录名
-		tv.setUserName(bean.getTenantCode());//用户名
-		tv.setPwd(bean.getTenantPw());//密码
-		tv.setTenantId(bean.getId()); //租户ID
+		//登录名
+		tv.setLoginCode(bean.getTenantCode());
+		//用户名
+		tv.setUserName(bean.getTenantCode());
+		//密码
+		tv.setPwd(bean.getTenantPw());
+		//租户ID
+		tv.setTenantId(bean.getId()); 
 		this.userInfoService.saveWso2UserInfo(tv,bean);
 		//3）批量添加新租户数据字典（从默认租户拷贝的数据字典）
 		if( null !=dict) {
@@ -164,7 +170,7 @@ public class TenantServiceImpl implements TenantService{
      * @Description： 修改租户
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void updateTenant(Tenant bean) {
 		//添加修改人信息
@@ -197,7 +203,7 @@ public class TenantServiceImpl implements TenantService{
      * @Description： 删除租户
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deleteTenant(TenantVO bean) {
 		if( null!=bean.getId()) {
@@ -232,7 +238,7 @@ public class TenantServiceImpl implements TenantService{
 			//批量删除
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
-				for(String val:ids.split(",")) {
+				for(String val:ids.split(Constants.CHAR)) {
 					list.add(val);
 				}
 				//租户表
@@ -270,10 +276,12 @@ public class TenantServiceImpl implements TenantService{
      * @return
      */
 	@Override
-	public List<Tenant> InitTenantDatas() {
+	public List<Tenant> initTenantDatas() {
 		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("update_time"); //降序
-		queryWrapper.eq("enable", 0); //0启用  1禁用
+		//降序
+		queryWrapper.orderByDesc("update_time");
+		 //0启用  1禁用
+		queryWrapper.eq("enable", 0);
 		return this.tenantDao.selectList(queryWrapper);
 	}
 

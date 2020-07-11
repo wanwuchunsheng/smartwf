@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @Date: 2019-10-25 15:04:26
  * @Description: 日志控制器
+ * @author WCH
  */
 @RestController
 @RequestMapping("log")

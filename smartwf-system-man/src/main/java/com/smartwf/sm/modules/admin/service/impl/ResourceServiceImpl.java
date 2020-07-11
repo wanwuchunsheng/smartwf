@@ -45,7 +45,8 @@ public class ResourceServiceImpl implements ResourceService{
 	@Override
 	public Result<?> selectResourceByPage(Page<Resource> page, ResourceVO bean) {
 		QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("update_time"); //降序
+		//降序
+		queryWrapper.orderByDesc("update_time"); 
 		//子系统
   		if (null!=bean.getId()) { 
   			queryWrapper.eq("id", bean.getId()).or().eq("pid", bean.getId()); 
@@ -122,8 +123,8 @@ public class ResourceServiceImpl implements ResourceService{
      */
 	@Override
 	public Result<?> selectResourceById(Resource bean) {
-		ResourceVO Resource= this.resourceDao.selecResourcetById(bean);
-		return Result.data(Resource);
+		ResourceVO resource= this.resourceDao.selecResourcetById(bean);
+		return Result.data(resource);
 	}
 	
 	/**
@@ -163,7 +164,7 @@ public class ResourceServiceImpl implements ResourceService{
      * @Description： 删除资源
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deleteResource(ResourceVO bean) {
 		//id判断正负值(正：删除资源 负：删除权限表)

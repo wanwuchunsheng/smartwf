@@ -6,6 +6,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 
+/**
+ * 
+ * 插件
+ * @author WCH
+ * 
+ * */
 @SpringBootConfiguration
 @EnableTransactionManagement
 public class MybatisPlusConfig {

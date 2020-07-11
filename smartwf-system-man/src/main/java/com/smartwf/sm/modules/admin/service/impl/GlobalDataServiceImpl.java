@@ -116,7 +116,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
      * @return
      */
 	@Override
-	public Result<?> PostAll(Post bean) {
+	public Result<?> postAll(Post bean) {
 		Map<Integer, List<Post>> map = (Map<Integer, List<Post>>) JSONObject.parseObject(redisService.get("initPost"), new TypeReference<Map<Integer, List<Post>>>() {} );
 		if(map!=null && map.size()> 0 ) {
 			List<Post> orglist=map.get(bean.getTenantId());
@@ -153,7 +153,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
      * @return
      */
 	@Override
-	public Result<?> RoleAll(Role bean) {
+	public Result<?> roleAll(Role bean) {
     	Map<Integer, List<Role>> map = (Map<Integer, List<Role>>) JSONObject.parseObject(redisService.get("initRole"), new TypeReference<Map<Integer, List<Role>>>() {} );
 		if(map!=null && map.size()> 0 ) {
 			List<Role> orglist=map.get(bean.getTenantId());
@@ -210,11 +210,11 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	@Override
 	public void flushCache(GlobalData bean) {
 		//租户
-		List<Tenant> tenantList=this.tenantService.InitTenantDatas();
+		List<Tenant> tenantList=this.tenantService.initTenantDatas();
     	if(StringUtils.isNotBlank(bean.getFlushType())) {
 	    	String flushTypes=StrUtils.regex(bean.getFlushType());
 	    	if(StringUtils.isNotBlank(flushTypes)) {
-	    		for(String val:flushTypes.split(",")) {
+	    		for(String val:flushTypes.split(Constants.CHAR)) {
 	    			switch (val) {
 		    			case "0":
 		    				//组织机构,职务,角色,数据字典
@@ -222,7 +222,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		                	this.redisService.set("initOrganization",JSON.toJSONString(this.organizationService.initOrganizationDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
 		                	this.redisService.set("initPost", JSON.toJSONString(this.postService.initPostDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
 		                	this.redisService.set("initRole", JSON.toJSONString(this.roleService.initRoleDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
-		                	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.InitDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		                	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.initDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
 		                	log.info("租户数据{}",redisService.get("initTenant"));
 		                	log.info("组织机构数据{}",redisService.get("initOrganization"));
 		                	log.info("职务基础数据{}",redisService.get("initPost"));
@@ -246,7 +246,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 							break;
 						case "4":
 							//数据字典
-		                	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.InitDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		                	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.initDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
                             log.info("角色基础数据{}",redisService.get("initRole"));
 		                	break;
 						case "5":

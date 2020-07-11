@@ -15,9 +15,9 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
-import com.smartwf.sm.modules.admin.dao.UISettingDao;
+import com.smartwf.sm.modules.admin.dao.UiSettingDao;
 import com.smartwf.sm.modules.admin.pojo.SysConfig;
-import com.smartwf.sm.modules.admin.service.UISettingService;
+import com.smartwf.sm.modules.admin.service.UiSettingService;
 import com.smartwf.sm.modules.admin.vo.SysConfigVO;
 
 import lombok.extern.log4j.Log4j;
@@ -28,19 +28,20 @@ import lombok.extern.log4j.Log4j;
  */
 @Service
 @Log4j
-public class UISettingServiceImpl implements UISettingService{
+public class UiSettingServiceImpl implements UiSettingService{
 	
 	@Autowired
-	private UISettingDao uiSettingDao;
+	private UiSettingDao uiSettingDao;
 	
 	/**
-	 * @Description:查询前端配置分页
+	 * 查询前端配置分页
 	 * @result:
 	 */
 	@Override
-	public Result<?> selectUISettingByPage(Page<SysConfig> page, SysConfigVO bean) {
+	public Result<?> selectUiSettingByPage(Page<SysConfig> page, SysConfigVO bean) {
 		QueryWrapper<SysConfig> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("update_time"); //降序
+		//降序
+		queryWrapper.orderByDesc("update_time"); 
   	    //租户
   		if (null!=bean.getTenantId() ) { 
   			queryWrapper.eq("tenant_id", bean.getTenantId()); 
@@ -78,21 +79,21 @@ public class UISettingServiceImpl implements UISettingService{
 	}
 
 	/**
-     * @Description: 主键查询前端配置
+     * 主键查询前端配置
      * @return
      */
 	@Override
-	public Result<?> selectUISettingById(SysConfig bean) {
+	public Result<?> selectUiSettingById(SysConfig bean) {
 		SysConfig sysConfig= this.uiSettingDao.selectById(bean);
 		return Result.data(sysConfig);
 	}
 	
 	/**
-     * @Description: 添加前端配置
+     * 添加前端配置
      * @return
      */
 	@Override
-	public void saveUISetting(SysConfig bean) {
+	public void saveUiSetting(SysConfig bean) {
 		//添加创建人基本信息
 		User user=UserThreadLocal.getUser();
 		bean.setCreateTime(new Date());
@@ -106,11 +107,11 @@ public class UISettingServiceImpl implements UISettingService{
 	}
 
 	/**
-     * @Description： 修改前端配置
+     * 修改前端配置
      * @return
      */
 	@Override
-	public void updateUISetting(SysConfig bean) {
+	public void updateUiSetting(SysConfig bean) {
 		//添加修改人信息
 		User user=UserThreadLocal.getUser();
 		bean.setUpdateTime(new Date());
@@ -121,12 +122,12 @@ public class UISettingServiceImpl implements UISettingService{
 	}
 
 	/**
-     * @Description： 删除前端配置
+     *  删除前端配置
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
-	public void deleteUISetting(SysConfigVO bean) {
+	public void deleteUiSetting(SysConfigVO bean) {
 		if( null!=bean.getId()) {
 			//删除
 			this.uiSettingDao.deleteById(bean);
@@ -134,7 +135,7 @@ public class UISettingServiceImpl implements UISettingService{
 			String ids=StrUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
 				SysConfigVO scv=null;
-				for(String val:ids.split(",")) {
+				for(String val:ids.split(Constants.CHAR)) {
 					scv = new SysConfigVO();
 					scv.setId(Integer.valueOf(val));
 					//删除

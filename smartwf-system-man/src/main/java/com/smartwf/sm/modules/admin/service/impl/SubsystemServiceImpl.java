@@ -41,8 +41,10 @@ public class SubsystemServiceImpl implements SubsystemService{
 	@Override
 	public Result<?> selectSubsystemByPage(Page<Resource> page, ResourceVO bean) {
 		QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("update_time"); //降序
-		queryWrapper.eq("pid",Constants.ZERO);//默认查询所有子系统
+		//降序
+		queryWrapper.orderByDesc("update_time"); 
+		//默认查询所有子系统
+		queryWrapper.eq("pid",Constants.ZERO);
         //租户
   		if (null!=bean.getTenantId()) {
   			queryWrapper.eq("tenant_id", bean.getTenantId());
@@ -91,11 +93,13 @@ public class SubsystemServiceImpl implements SubsystemService{
 		bean.setUpdateTime(bean.getCreateTime());
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
-		bean.setUid(0);//默认
-		bean.setPid(0);//默认
-		bean.setSort(0);//排序
-		bean.setLevel(1);//默认等级
-		bean.setResType(1);//1 系统  2模块 3资源
+		bean.setUid(0);
+		bean.setPid(0);
+		//排序
+		bean.setSort(0);
+		bean.setLevel(1);
+		//1 系统  2模块 3资源
+		bean.setResType(1);
 		//保存
 		this.subsystemDao.insert(bean);
 	}
@@ -119,7 +123,7 @@ public class SubsystemServiceImpl implements SubsystemService{
      * @Description： 删除资源
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deleteSubsystem(ResourceVO bean) {
 		if( null!=bean.getId()) {
@@ -129,7 +133,7 @@ public class SubsystemServiceImpl implements SubsystemService{
 			String ids=StrUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
 				SysConfigVO scv=null;
-				for(String val:ids.split(",")) {
+				for(String val:ids.split(Constants.CHAR)) {
 					scv = new SysConfigVO();
 					scv.setId(Integer.valueOf(val));
 					//删除

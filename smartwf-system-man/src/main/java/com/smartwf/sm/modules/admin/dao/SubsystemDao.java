@@ -9,6 +9,7 @@ import com.smartwf.sm.modules.admin.pojo.Resource;
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 子系统持久层接口
+ * @author WCH
  */
 @Repository
 public interface SubsystemDao extends BaseMapper<Resource> {

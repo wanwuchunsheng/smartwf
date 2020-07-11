@@ -145,7 +145,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 				for( Entry<String, Object> m: map.entrySet()) {
 					log.info(m.getKey()+"   "+m.getValue());
 				}
-				if(null!=map && map.containsKey("members")) {
+				if(null!=map && map.containsKey(Constants.MEMBERS)) {
 					data.put("members", map.get("members"));
 				}
 				String str=HttpClientUtil.put(String.valueOf(sb), JsonUtil.objectToJson(data),headers);
@@ -193,7 +193,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 				List<Map<String,Object>> listmap=null;
 				Map<String,Object> lmap=null;
 				//3）判断当前角色是否已绑定用户
-				if(null!=map && map.containsKey("members")) {
+				if(null!=map && map.containsKey(Constants.MEMBERS)) {
 					//已绑定
 					Wso2Group wgf=GsonUtils.jsonToPojo(res, Wso2Group.class);
 					//获得已绑定所有用户
@@ -241,7 +241,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 			//1）通过当前用户，查询已绑定的角色
 			Map<String,Object> roleOrUser=this.wso2UserService.selectUserById(bean,resInfo);
 			log.info(roleOrUser.containsKey("groups"));
-			if(null!=roleOrUser && roleOrUser.containsKey("groups")) {
+			if(null!=roleOrUser && roleOrUser.containsKey(Constants.GROUPS)) {
 				Wso2User wg=GsonUtils.jsonToPojo(GsonUtils.objectToJson(roleOrUser), Wso2User.class);
 				List<Map<String,Object>> list=wg.getGroups();
 				if( null !=list && list.size()>0 ) {

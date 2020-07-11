@@ -5,7 +5,11 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
-
+/**
+ * 
+ * @author WCH
+ * 
+ * */
 @Data
 @XmlRootElement
 public class Wso2Tenant implements Serializable{

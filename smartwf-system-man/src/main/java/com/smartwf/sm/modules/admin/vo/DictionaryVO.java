@@ -4,8 +4,23 @@ import java.util.Date;
 
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-@Data
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+/**
+ * @author WCH
+ * 
+ * */
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true)
 public class DictionaryVO extends Dictionary{
 
 	/**
@@ -13,12 +28,23 @@ public class DictionaryVO extends Dictionary{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-
-	private String ids; //id批量删除
+    /**
+     * id批量删除
+     * 
+     * */
+	private String ids; 
 	
-	private Date startTime;//开始时间
+	/**
+	 * 开始时间
+	 * 
+	 * */
+	private Date startTime;
 	
-	private Date endTime;//结束时间
+	/**
+	 * 结束时间
+	 * 
+	 * */
+	private Date endTime;
 	
 
 }

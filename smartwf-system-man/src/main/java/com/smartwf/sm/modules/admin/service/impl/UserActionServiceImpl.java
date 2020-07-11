@@ -33,7 +33,7 @@ import lombok.extern.log4j.Log4j;
 public class UserActionServiceImpl implements UserActionService{
 	
 	@Autowired
-	private UserActionDao UserActionDao;
+	private UserActionDao userActionDao;
 
 	/**
 	 * @Description:查询用户操作分页
@@ -42,7 +42,8 @@ public class UserActionServiceImpl implements UserActionService{
 	@Override
 	public Result<?> selectUserActionByPage(Page<UserAction> page, UserActionVO bean) {
 		QueryWrapper<UserAction> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByDesc("update_time"); //降序
+		//降序
+		queryWrapper.orderByDesc("update_time"); 
         //过滤租户（登录人为超级管理员，无需过滤，查询所有租户）
   		if (null!=bean.getTenantId()) { 
   			queryWrapper.eq("tenant_id", bean.getTenantId()); 
@@ -67,7 +68,7 @@ public class UserActionServiceImpl implements UserActionService{
         if (!StringUtils.isEmpty(bean.getRemark())) {
         	queryWrapper.like("remark", Constants.PER_CENT + bean.getRemark() + Constants.PER_CENT);
         }
-		IPage<UserAction> list=this.UserActionDao.selectPage(page, queryWrapper);
+		IPage<UserAction> list=this.userActionDao.selectPage(page, queryWrapper);
 		return Result.data(list.getTotal(), list.getRecords());
 	}
 
@@ -77,8 +78,8 @@ public class UserActionServiceImpl implements UserActionService{
      */
 	@Override
 	public Result<?> selectUserActionById(UserAction bean) {
-		UserAction UserAction= this.UserActionDao.selectById(bean);
-		return Result.data(UserAction);
+		UserAction userAction= this.userActionDao.selectById(bean);
+		return Result.data(userAction);
 	}
 	
 	/**
@@ -96,7 +97,7 @@ public class UserActionServiceImpl implements UserActionService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
-		this.UserActionDao.insert(bean);
+		this.userActionDao.insert(bean);
 	}
 
 	/**
@@ -111,29 +112,29 @@ public class UserActionServiceImpl implements UserActionService{
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		//修改
-		this.UserActionDao.updateById(bean);
+		this.userActionDao.updateById(bean);
 	}
 
 	/**
      * @Description： 删除用户操作
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deleteUserAction(UserActionVO bean) {
 		if( null!=bean.getId()) {
 			//删除用户操作表
-			this.UserActionDao.deleteById(bean);
+			this.userActionDao.deleteById(bean);
 		}else {
 			String ids=StrUtils.regex(bean.getIds());
 			//批量删除
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
-				for(String val:ids.split(",")) {
+				for(String val:ids.split(Constants.CHAR)) {
 					list.add(val);
 				}
 				//用户操作表
-				this.UserActionDao.deleteUserActionByIds(list);
+				this.userActionDao.deleteUserActionByIds(list);
 			}
 		}
 	}
@@ -144,7 +145,7 @@ public class UserActionServiceImpl implements UserActionService{
      */
 	@Override
 	public List<UserAction> queryUserActionAll() {
-		return this.UserActionDao.queryUserActionAll();
+		return this.userActionDao.queryUserActionAll();
 	}
 
 

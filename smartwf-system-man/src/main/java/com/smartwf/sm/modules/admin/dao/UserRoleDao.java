@@ -9,6 +9,7 @@ import com.smartwf.sm.modules.admin.pojo.UserRole;
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 用户角色持久层接口
+ * @author WCH
  */
 @Repository
 public interface UserRoleDao extends BaseMapper<UserRole> {

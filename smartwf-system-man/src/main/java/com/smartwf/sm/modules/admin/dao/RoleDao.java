@@ -15,34 +15,40 @@ import com.smartwf.sm.modules.admin.vo.RoleVO;
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 角色持久层接口
+ * @author WCH
  */
 @Repository
 public interface RoleDao extends BaseMapper<Role> {
 
 	/**
-	 * @Description: 批量删除角色
+	 * 批量删除角色
+	 * @param list
 	 * @result:
 	 */
 	void deleteRoleByIds(@Param("list") List<String> list);
 
 	/**
-	 * @Deprecated 删除用户角色
+	 * 删除用户角色
+	 * @param bean
 	 * 
 	 * */
 	void deleteUserRoleById(@Param("bean") RoleVO bean);
 	/**
-	 * @Deprecated 删除角色权限
+	 * 删除角色权限
+	 * @param bean
 	 * 
 	 * */
 	void deleteRolePermissionById(@Param("bean") RoleVO bean);
 	/**
-	 * @Deprecated 通过用户ID查询角色
-	 * 
+	 * 通过用户ID查询角色
+	 * @param userInfo
+	 * @return
 	 * */
 	List<TreeRole> selectRoleByUserId(@Param("bean") User userInfo);
 	/**
-	 * @Deprecated 查询所有角色集合对象
-	 * 
+	 * 查询所有角色集合对象
+	 * @param list
+	 * @return
 	 * */
 	List<Role> selectRoleByIds(@Param("list") List<String> list);
 

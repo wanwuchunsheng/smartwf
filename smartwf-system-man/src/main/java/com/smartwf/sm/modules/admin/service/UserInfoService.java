@@ -16,43 +16,50 @@ import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 public interface UserInfoService {
 
 	/**
-	 * @Description: 查询用户资料分页
-	 * @result: 
+	 * 查询用户资料分页
+	 * @param bean
+	 * @param page
+	 * @return
 	 */
 	Result<?> selectUserInfoByPage(Page<UserInfo> page, UserInfo bean);
 
 	/**
-     * @Description: 主键查询用户资料
+     * 主键查询用户资料
+     * @param bean
      * @return
      */
 	Result<?> selectUserInfoById(UserInfo bean);
 
 	/**
-     * @Description： 添加用户资料
+     * 添加用户资料
+     * @param bean
      * @return
      */
 	Result<?> saveUserInfo(UserInfoVO bean);
 	
 	/**
-     * @Description： 修改用户资料
-     * @return
+     * 修改用户资料
+     * @param bean
      */
 	void updateUserInfo(UserInfoVO bean);
 
 	/**
-     * @Description： 删除用户资料
+     *  删除用户资料
+     *  @param bean
      * @return
      */
 	Result<?> deleteUserInfo(UserInfoVO bean);
 	
 	/**
-     * @Description: 用户名密码查询用户基本信息
+     * 用户名密码查询用户基本信息
+     * @param bean
      * @return
      */
 	User selectUserInfoByUserCode(User bean);
 	/**
-     * @Description: wso2租户默认用户保存
-     * @return
+     * wso2租户默认用户保存
+     * @param bean
+     * @param tv
      */
 	void saveWso2UserInfo(UserInfoVO tv,Tenant bean);
 }

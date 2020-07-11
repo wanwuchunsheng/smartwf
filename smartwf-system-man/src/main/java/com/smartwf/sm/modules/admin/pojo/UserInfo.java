@@ -11,6 +11,7 @@ import lombok.Data;
 
 /**
  * @Description: 用户资料表
+ * @author WCH
  */
 @Data
 @TableName("sys_user_info")

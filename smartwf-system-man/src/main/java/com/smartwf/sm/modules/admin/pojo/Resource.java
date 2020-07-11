@@ -11,6 +11,7 @@ import lombok.Data;
 
 /**
  * @Description: 资源表
+ * @author WCH
  */
 @Data
 @TableName("sys_resource")

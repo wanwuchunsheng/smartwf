@@ -13,32 +13,37 @@ import com.smartwf.sm.modules.admin.vo.TenantConfigVO;
 public interface TenantConfigService {
 
 	/**
-	 * @Description: 查询多租户配置分页
-	 * @result: 
+	 * 查询多租户配置分页
+	 * @param page
+	 * @param bean
+	 * @return
 	 */
 	Result<?> selectTenantConfigByPage(Page<TenantConfig> page, TenantConfigVO bean);
 
 	/**
-     * @Description: 主键查询多租户配置
+     * 主键查询多租户配置
+     * @param bean
      * @return
      */
 	Result<?> selectTenantConfigById(TenantConfig bean);
 
 	/**
-     * @Description： 添加多租户配置
-     * @return
+     * 添加多租户配置
+     * @param bean
+     * 
      */
 	void saveTenantConfig(TenantConfig bean);
 	
 	/**
-     * @Description： 修改多租户配置
-     * @return
+     *  修改多租户配置
+     *  @param bean
+     * 
      */
 	void updateTenantConfig(TenantConfig bean);
 
 	/**
-     * @Description： 删除多租户配置
-     * @return
+     *  删除多租户配置
+     * @param bean
      */
 	void deleteTenantConfig(TenantConfigVO bean);
 

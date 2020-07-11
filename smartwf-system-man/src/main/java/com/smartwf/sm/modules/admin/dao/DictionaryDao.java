@@ -15,18 +15,22 @@ import com.smartwf.sm.modules.admin.vo.DictionaryVO;
 /**
  * @Date: 2019-11-27 11:29:02
  * @Description: 字典数据持久层接口
+ * @author WCH
  */
 @Repository
 public interface DictionaryDao extends BaseMapper<Dictionary> {
 
 	/**
-     * @Description：分页查询数据字典数据
+     * 分页查询数据字典数据
+     * @param bean
+     * @param page
      * @return
      */
 	List<UserInfo> selectDictionaryByPage(@Param("bean") DictionaryVO bean, Page<Dictionary> page);
 
 	/**
-     * @Description：批量 删除数据字典
+     * 批量 删除数据字典
+     * @param list
      * @return
      */
 	void deleteDictionaryByIds(@Param("list") List<String> list);

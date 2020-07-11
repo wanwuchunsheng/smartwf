@@ -103,7 +103,7 @@ public class PermissionServiceImpl implements PermissionService{
      * @Description: 添加权限
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void savePermission(PermissionVO bean) {
 		//添加创建人基本信息
@@ -136,7 +136,7 @@ public class PermissionServiceImpl implements PermissionService{
      * @Description： 删除权限
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deletePermission(Permission bean) {
 		this.permissionDao.deleteById(bean);

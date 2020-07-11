@@ -12,6 +12,7 @@ import lombok.Data;
 /**
  * 权限表
  * @date 2019-11-29 13:42:42
+ * @author WCH
  */
 @Data
 @TableName("sys_permission")
