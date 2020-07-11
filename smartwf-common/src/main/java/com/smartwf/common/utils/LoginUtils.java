@@ -105,8 +105,7 @@ public class LoginUtils {
 	        User user=JsonUtil.jsonToPojo(mapStr, User.class);
 	        long nowtime=DateUtils.getDayTimeToLong(DateUtils.parseDateToStr(new Date(), "yyyy-MM-dd HH:mm:ss"));
 	        //12.提前60s*15=900过期{过期时间-当前时间},刷新令牌
-	        int tm=900;
-	        if( (user.getDateTime()-nowtime)< tm ) {
+	        if( (user.getDateTime()-nowtime)< Constants.TOKEN_TIMEOUT ) {
 	        	//重置wso2令牌时间
 		    	Map<String,Object> refmap=JsonUtil.jsonToMap(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
 		    	for(Entry<String, Object> m:refmap.entrySet()) {

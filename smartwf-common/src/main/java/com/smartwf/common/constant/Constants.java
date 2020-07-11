@@ -85,6 +85,7 @@ public class Constants {
      * */
     public static final int SOCKET_TIME_OUT = 90000;
     public static final int CONNECT_TIME_OUT = 90000;
+    public static final int TOKEN_TIMEOUT = 900;
     /**
      * wso2 各租户默认密码
      * */
