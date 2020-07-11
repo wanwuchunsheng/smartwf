@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.common.utils.MD5Utils;
+import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.sm.modules.admin.dao.UserInfoDao;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.PersonalCenterService;
@@ -34,8 +34,8 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 	@Override
 	public ResponseEntity<Result<?>> updateUserPwd(Integer id, String oldPwd, String newPwd) {
 		//新旧密码加密
-		oldPwd=MD5Utils.convertMd5(oldPwd);
-		newPwd=MD5Utils.convertMd5(newPwd);
+		oldPwd=Md5Utils.convertMd5(oldPwd);
+		newPwd=Md5Utils.convertMd5(newPwd);
 		//旧密码正确性验证
 		QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
 		//主键

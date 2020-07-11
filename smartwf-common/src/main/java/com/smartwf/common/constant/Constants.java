@@ -34,6 +34,12 @@ public class Constants {
     public static final String MEMBERS = "members";
     
     public static final String GROUPS = "groups";
+    
+    public static final String ACCESSTOKEN = "access_token";
+    
+    public static final String ERRORCODE = "error";
+    
+    public static final String UNKNOWN = "unknown";
 
     public static final int ONE = 1;
 
@@ -68,6 +74,8 @@ public class Constants {
     public static final int BAD_REQUEST = 400;
     
     public static final int EQU_SUCCESS = 200;
+    
+    public static final int MULTIPLE_CHOICES = 300;
 
     /**
      * 状态码========================================================

@@ -30,11 +30,12 @@ public class Wso2ClientUtils {
      * 
      * */
     public static String reqWso2Token(Wso2Config wso2Config,Map<String,Object> idtmap, Object reftoken,String redirectUri) {
-    	Map<String,String> headers=new HashMap<String,String>();
+    	Map<String,String> headers=new HashMap<String,String>(16);
         headers.put("client_id",String.valueOf(idtmap.get("clientKey")));
         headers.put("client_secret",String.valueOf(idtmap.get("clientSecret")));
         headers.put("grant_type", "authorization_code");
-        headers.put("code",String.valueOf(reftoken));//code换取token
+        //code换取token
+        headers.put("code",String.valueOf(reftoken));
         headers.put("redirect_uri",redirectUri);
         String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/oauth2/token").toString();
     	return HttpClientUtil.doPost(url , headers,"utf-8");
@@ -47,11 +48,12 @@ public class Wso2ClientUtils {
      * @param code 用户编码
      * */
     public static String reqWso2RefToken(Wso2Config wso2Config,User user) {
-    	Map<String,String> headers=new HashMap<String,String>();
+    	Map<String,String> headers=new HashMap<String,String>(16);
         headers.put("client_id",user.getClientKey());
         headers.put("client_secret",user.getClientSecret());
         headers.put("grant_type", "refresh_token"); 
-        headers.put("refresh_token", user.getRefreshToken()); //token刷新
+        //token刷新
+        headers.put("refresh_token", user.getRefreshToken()); 
         headers.put("redirect_uri",user.getRedirectUri());
         String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/oauth2/token").toString();
     	return HttpClientUtil.doPost(url, headers,"utf-8");
@@ -63,7 +65,7 @@ public class Wso2ClientUtils {
      * @param accesstoken 
      * */
     public static String reqWso2UserInfo(Wso2Config wso2Config,User user) {
-    	Map<String,String> headers=new HashMap<String,String>();
+    	Map<String,String> headers=new HashMap<String,String>(16);
         headers.put("Authorization",new StringBuffer().append("Bearer ").append(user.getAccessToken()).toString());
         String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/oauth2/userinfo").toString();
     	return HttpClientUtil.get(url,headers);
@@ -115,7 +117,8 @@ public class Wso2ClientUtils {
 	        if(StringUtils.isNotBlank(str)) {
 	        	//转换map
 	        	Map<String,Object> map=JsonUtil.jsonToMap(str);
-	            if(map.containsKey("active")) {
+	        	String active="active";
+	            if(map.containsKey(active)) {
 	            	return Boolean.valueOf(map.get("active").toString());
 	            }
 	        }

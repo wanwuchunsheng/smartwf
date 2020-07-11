@@ -18,7 +18,7 @@ import com.smartwf.common.pojo.TreeResource;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.JsonUtil;
-import com.smartwf.common.utils.MD5Utils;
+import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.OrganizationDao;
 import com.smartwf.sm.modules.admin.dao.PostDao;
@@ -129,7 +129,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//md5加密
 		if(StringUtils.isNotBlank(bean.getPwd())) {
-			bean.setPwd(MD5Utils.convertMd5(bean.getPwd()));
+			bean.setPwd(Md5Utils.convertMd5(bean.getPwd()));
 		}
 		//保存wso2用户
 		Map<String,Object> map=this.wso2UserService.addUser(bean);
@@ -217,7 +217,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		
 		//md5加密
 		if(StringUtils.isNotBlank(bean.getPwd())) {
-			bean.setPwd(MD5Utils.convertMd5(bean.getPwd()));
+			bean.setPwd(Md5Utils.convertMd5(bean.getPwd()));
 		}
 		//1)修改用户资料
 		this.userInfoDao.updateById(bean);

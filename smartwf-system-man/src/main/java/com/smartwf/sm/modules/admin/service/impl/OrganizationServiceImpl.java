@@ -191,7 +191,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 	 */
 	@Override
 	public Map<Integer,List<OrganizationVO>> initOrganizationDatas(List<Tenant> list) {
-		Map<Integer,List<OrganizationVO>> map =new HashMap<>();
+		Map<Integer,List<OrganizationVO>> map =new HashMap<>(16);
 		OrganizationVO bean=null;
 		for(Tenant t:list) {
 			bean = new OrganizationVO();

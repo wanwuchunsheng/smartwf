@@ -2,7 +2,7 @@ package com.smartwf.common.thread;
 
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.utils.GsonUtils;
-import com.smartwf.common.utils.MD5Utils;
+import com.smartwf.common.utils.Md5Utils;
 
 import lombok.extern.log4j.Log4j2;
 

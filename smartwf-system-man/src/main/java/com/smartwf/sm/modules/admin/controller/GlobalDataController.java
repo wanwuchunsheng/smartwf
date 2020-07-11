@@ -17,7 +17,7 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.JsonUtil;
-import com.smartwf.common.utils.MD5Utils;
+import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
@@ -208,7 +208,7 @@ public class GlobalDataController {
     public ResponseEntity<Result<?>> oauth2client(User bean) {
         try {
         	//1 通过参数验证是否redis是否存在
-        	String userStr=redisService.get(MD5Utils.md5(bean.getCode()));
+        	String userStr=redisService.get(Md5Utils.md5(bean.getCode()));
         	if(StringUtils.isNoneBlank(userStr)) {
         		//2 转换成对象
         		User user=JsonUtil.jsonToPojo(userStr, User.class);

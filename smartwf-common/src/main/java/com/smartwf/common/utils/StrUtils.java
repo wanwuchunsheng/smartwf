@@ -5,7 +5,10 @@ import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-
+/**
+ * @author WCH
+ * 
+ * */
 public class StrUtils {
 	 /**
      * @ 去除前后逗号

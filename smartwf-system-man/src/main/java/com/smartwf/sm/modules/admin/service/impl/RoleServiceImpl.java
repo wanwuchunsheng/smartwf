@@ -184,7 +184,7 @@ public class RoleServiceImpl implements RoleService{
      */
 	@Override
 	public Map<Integer,List<Role>> initRoleDatas(List<Tenant> list) {
-		Map<Integer,List<Role>> map =new HashMap<>();
+		Map<Integer,List<Role>> map =new HashMap<>(16);
 		QueryWrapper<Role> queryWrapper =null;
 		for(Tenant t:list) {
 			queryWrapper = new QueryWrapper<>();

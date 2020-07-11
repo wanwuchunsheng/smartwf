@@ -55,7 +55,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" </soapenv:Envelope>");
     	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-    	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null,wso2Config);
+    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
     	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
     	if(StringUtils.isNoneBlank(res)) {
     		return JsonUtil.multilayerXmlToMap(res);
@@ -79,7 +79,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" </soapenv:Envelope> ");
     	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-    	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null,wso2Config);
+    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
     	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
     	if(StringUtils.isNoneBlank(res)) {
     		return JsonUtil.multilayerXmlToMap(res);
@@ -103,7 +103,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" </soapenv:Envelope> ");
     	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-    	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null,wso2Config);
+    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
     	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
     	if(StringUtils.isNoneBlank(res)) {
     		return JsonUtil.multilayerXmlToMap(res);
@@ -150,7 +150,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" </soapenv:Envelope>");
     	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-    	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null,wso2Config);
+    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
     	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
     	if(StringUtils.isNoneBlank(res)) {
     		return JsonUtil.multilayerXmlToMap(res);
@@ -180,7 +180,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" </soapenv:Envelope>");
     	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
-    	String res=HttpClientUtil.doPostSoap1_1(String.valueOf(path), String.valueOf(sb),null,wso2Config);
+    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
     	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
     	if(StringUtils.isNoneBlank(res)) {
     		return JsonUtil.multilayerXmlToMap(res);

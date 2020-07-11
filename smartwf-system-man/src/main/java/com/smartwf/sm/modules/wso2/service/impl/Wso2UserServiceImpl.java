@@ -15,7 +15,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.utils.GsonUtils;
 import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.JsonUtil;
-import com.smartwf.common.utils.MD5Utils;
+import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Role;
@@ -56,12 +56,12 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 		if(null!=resInfo) {
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
-			Map<String,String> headers=new HashMap<>();
+			Map<String,String> headers=new HashMap<>(16);
 			headers.put("content-type", "application/json");
 			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 	        //封装数据
-	        Map<String,String> data=new HashMap<>();
+	        Map<String,String> data=new HashMap<>(16);
 	        data.put("userName", bean.getLoginCode());
 	        data.put("password", bean.getPwd());
 	        //拼接uri
@@ -93,7 +93,7 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 		if( null != resInfo) {
 			StringBuffer sb=new StringBuffer();
 			//删除租户下的用户
-			Map<String,String> handlers=new HashMap<>();
+			Map<String,String> handlers=new HashMap<>(16);
 			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			handlers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 			try {
@@ -115,12 +115,12 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 	@Override
 	public Map<String, Object> updateByUserCode(UserInfoVO bean) {
 		//封装http请求头
-		Map<String,String> handlers=new HashMap<>();
+		Map<String,String> handlers=new HashMap<>(16);
 		handlers.put("authorization", wso2Config.userAuthorization);
 		handlers.put("content-type", "application/scim+json" );
 		handlers.put("accept", "application/scim+json" );
 		//封装数据
-		Map<String,String> data=new HashMap<>();
+		Map<String,String> data=new HashMap<>(16);
 		if(StringUtils.isNoneBlank(bean.getLoginCode())) {
 			data.put("userName", bean.getLoginCode());
 		}
@@ -151,7 +151,7 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 		try {
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
-			Map<String,String> headers=new HashMap<>();
+			Map<String,String> headers=new HashMap<>(16);
 			headers.put("content-type", "application/json");
 			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
@@ -179,7 +179,7 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 		try {
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
-			Map<String,String> headers=new HashMap<>();
+			Map<String,String> headers=new HashMap<>(16);
 			headers.put("content-type", "application/json");
 			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));

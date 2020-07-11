@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * wso2配置
+ * @author WCH
  */
 @Component
 public class Wso2Config {

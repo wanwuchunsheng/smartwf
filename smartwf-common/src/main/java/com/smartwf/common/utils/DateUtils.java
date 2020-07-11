@@ -13,7 +13,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-
+/**
+ * @author WCH
+ * 
+ * */
 public class DateUtils {
 	// ==格式到年==   
     /** 
@@ -69,7 +72,7 @@ public class DateUtils {
     /** 
      * 日期格式，年月日时分，例如：200506301210，200808081210 
      */  
-    public static final String DATE_FORMAT_YYYYMMDDHHmm = "yyyyMMddHHmm";  
+    public static final String DATE_FORMAT_YYYYMMDDHHMM = "yyyyMMddHHmm";  
   
     /** 
      * 日期格式，年月日时分，例如：20001230 12:00，20080808 20:08 
@@ -141,7 +144,7 @@ public class DateUtils {
     public static Integer getDay(Date date){  
         Calendar cal = Calendar.getInstance();  
         cal.setTime(date);  
-         int day=cal.get(Calendar.DATE);//获取日  
+         int day=cal.get(Calendar.DATE);
          return day;  
     }  
       
@@ -346,8 +349,8 @@ public class DateUtils {
         Date beginDate = null;    
         Date endDate = null;    
     
-        Calendar beginGC = null;    
-        Calendar endGC = null;    
+        Calendar beginGc = null;    
+        Calendar endGc = null;    
         List<String> list = new ArrayList<String>();    
     
         try {    
@@ -356,19 +359,19 @@ public class DateUtils {
             endDate = f.parse(endDateStr);    
     
             // 设置日历    
-            beginGC = Calendar.getInstance();    
-            beginGC.setTime(beginDate);    
+            beginGc = Calendar.getInstance();    
+            beginGc.setTime(beginDate);    
     
-            endGC = Calendar.getInstance();    
-            endGC.setTime(endDate);    
+            endGc = Calendar.getInstance();    
+            endGc.setTime(endDate);    
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");    
     
             // 直到两个时间相同    
-            while (beginGC.getTime().compareTo(endGC.getTime()) <= 0) {    
+            while (beginGc.getTime().compareTo(endGc.getTime()) <= 0) {    
     
-                list.add(sdf.format(beginGC.getTime()));    
+                list.add(sdf.format(beginGc.getTime()));    
                 // 以日为单位，增加时间    
-                beginGC.add(Calendar.DAY_OF_MONTH, 1);    
+                beginGc.add(Calendar.DAY_OF_MONTH, 1);    
             }    
             return list;    
         } catch (Exception e) {    
@@ -460,7 +463,7 @@ public class DateUtils {
         Calendar c = new GregorianCalendar();    
         c.setFirstDayOfWeek(Calendar.MONDAY);    
         c.setTime(date);    
-        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek()); // Monday    
+        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek()); 
         return c.getTime();    
     }    
     
@@ -473,7 +476,7 @@ public class DateUtils {
         Calendar c = new GregorianCalendar();  
         c.setFirstDayOfWeek(Calendar.MONDAY);  
         c.setTime(date);  
-        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek() + 6); // Sunday  
+        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek() + 6); 
         return c.getTime();  
     }  
     
@@ -615,13 +618,13 @@ public class DateUtils {
     public static Date addDate(Date date,int year,int month,int day,int hour,int minute,int second,int millisecond){  
         Calendar c = Calendar.getInstance();  
         c.setTime(date);  
-        c.add(Calendar.YEAR, year);//加减年数  
-        c.add(Calendar.MONTH, month);//加减月数  
-        c.add(Calendar.DATE, day);//加减天数  
-        c.add(Calendar.HOUR,hour);//加减小时数  
-        c.add(Calendar.MINUTE, minute);//加减分钟数  
-        c.add(Calendar.SECOND, second);//加减秒  
-        c.add(Calendar.MILLISECOND, millisecond);//加减毫秒数  
+        c.add(Calendar.YEAR, year);
+        c.add(Calendar.MONTH, month);
+        c.add(Calendar.DATE, day);
+        c.add(Calendar.HOUR,hour);
+        c.add(Calendar.MINUTE, minute); 
+        c.add(Calendar.SECOND, second);
+        c.add(Calendar.MILLISECOND, millisecond);
           
         return c.getTime();  
     }  
@@ -790,7 +793,8 @@ public class DateUtils {
      */  
     public static long getDayTimeToLong(final String datetime) {  
 		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_FORMAT_YYYY_MM_DD_HH_MI_SS);//24小时制
+			//24小时制
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_FORMAT_YYYY_MM_DD_HH_MI_SS);
 			return simpleDateFormat.parse(datetime).getTime()/1000;
 		} catch (ParseException e) {
 			e.printStackTrace();

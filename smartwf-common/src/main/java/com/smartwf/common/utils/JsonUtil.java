@@ -21,11 +21,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+/**
+ * 工具类
+ * @author WCH
+ * 
+ * */
 
 @Log4j2
 public class JsonUtil { 
 
-	 // 定义jackson对象
+	 /**
+	  * 定义jackson对象
+	  * 
+	  * */ 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     /**
@@ -101,7 +109,7 @@ public class JsonUtil {
      * @param json json对象
      */
     public static Map<String, Object> jsonToMap(JSONObject json) {
-        Map<String, Object> retMap = new HashMap<>();
+        Map<String, Object> retMap = new HashMap<>(16);
 
         if (json != JSONObject.NULL) {
             retMap = toMap(json);
@@ -110,7 +118,7 @@ public class JsonUtil {
     }
 
     private static Map<String, Object> toMap(JSONObject object) throws JSONException {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(16);
 
         Iterator<String> keysItr = object.keys();
         while (keysItr.hasNext()) {
@@ -155,7 +163,7 @@ public class JsonUtil {
         } catch (DocumentException e) {
             log.error("xml字符串解析，失败 --> {}", e);
         }
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(16);
         if (null == doc) {
             return map;
         }
@@ -181,7 +189,7 @@ public class JsonUtil {
             outmap.put(element.getName(), element.getTextTrim());
         } else {
             // innermap用于存储子元素的属性名和属性值
-            Map<String, Object> innermap = new HashMap<>();
+            Map<String, Object> innermap = new HashMap<>(16);
             // 遍历子元素
             list.forEach(childElement -> recursionXmlToMap(childElement, innermap));
             outmap.put(element.getName(), innermap);

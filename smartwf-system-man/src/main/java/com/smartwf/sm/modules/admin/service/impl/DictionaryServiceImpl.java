@@ -135,7 +135,7 @@ public class DictionaryServiceImpl implements DictionaryService{
      */
 	@Override
 	public Map<Integer,List<Dictionary>> initDictionaryDatas(List<Tenant> list) {
-		Map<Integer,List<Dictionary>> map =new HashMap<>();
+		Map<Integer,List<Dictionary>> map =new HashMap<>(16);
 		QueryWrapper<Dictionary> queryWrapper =null;
 		for(Tenant t:list) {
 			queryWrapper = new QueryWrapper<>();

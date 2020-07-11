@@ -11,9 +11,12 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient; 
-
-public class SSLClient extends DefaultHttpClient{  
-	  public SSLClient() throws Exception{  
+/**
+ * @author WCH
+ * 
+ * */
+public class SslClient extends DefaultHttpClient{  
+	  public SslClient() throws Exception{  
 	    super();  
 	    SSLContext ctx = SSLContext.getInstance("TLS");  
 	    X509TrustManager tm = new X509TrustManager() {  

@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.JsonUtil;
-import com.smartwf.common.utils.MD5Utils;
+import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.DictionaryService;
 import com.smartwf.sm.modules.admin.service.OrganizationService;

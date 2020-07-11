@@ -39,11 +39,14 @@ import org.apache.http.util.EntityUtils;
 
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.common.webservice.SSLClient;
+import com.smartwf.common.webservice.SslClient;
 import com.smartwf.common.wso2.Wso2Config;
 
 import lombok.extern.log4j.Log4j2;
-
+/**
+ * @author WCH
+ * 
+ * */
 @Log4j2
 public class HttpClientUtil {
 	
@@ -52,7 +55,7 @@ public class HttpClientUtil {
 	    HttpPost httpPost = null;  
 	    String result = null;  
 	    try{  
-	      httpClient = new SSLClient();  
+	      httpClient = new SslClient();  
 	      httpPost = new HttpPost(url);  
 	      //设置参数  
 	      List<NameValuePair> list = new ArrayList<NameValuePair>();  
@@ -101,7 +104,7 @@ public class HttpClientUtil {
             }
             // 执行请求
             response = httpclient.execute(httpGet);
-            if (response.getStatusLine().getStatusCode() == 200) {
+            if (response.getStatusLine().getStatusCode() == Constants.EQU_SUCCESS) {
                 result = EntityUtils.toString(response.getEntity(), "UTF-8");
             }
         } catch (Exception e) {
@@ -155,7 +158,7 @@ public class HttpClientUtil {
             // Create a custom response handler
             ResponseHandler< String > responseHandler = response -> {
 	            int status = response.getStatusLine().getStatusCode();
-	            if (status >= 200 && status < 300) {
+	            if (status >= Constants.EQU_SUCCESS && status < Constants.MULTIPLE_CHOICES) {
 	                HttpEntity entity = response.getEntity();
 	                return entity != null ? EntityUtils.toString(entity) : null;
 	            } else {
@@ -187,7 +190,7 @@ public class HttpClientUtil {
             // Create a custom response handler
             ResponseHandler < String > responseHandler = response -> {
 	            int status = response.getStatusLine().getStatusCode();
-	            if (status >= 200 && status < 300) {
+	            if (status >= Constants.EQU_SUCCESS && status < Constants.MULTIPLE_CHOICES) {
 	                HttpEntity entity = response.getEntity();
 	                return entity != null ? EntityUtils.toString(entity) : null;
 	            } else {
@@ -218,7 +221,7 @@ public class HttpClientUtil {
             // Create a custom response handler
             ResponseHandler < String > responseHandler = response -> {
 	            int status = response.getStatusLine().getStatusCode();
-	            if (status >= 200 && status < 300) {
+	            if (status >= Constants.EQU_SUCCESS && status < Constants.MULTIPLE_CHOICES) {
 	                HttpEntity entity = response.getEntity();
 	                return entity != null ? EntityUtils.toString(entity) : null;
 	            } else {
@@ -239,7 +242,7 @@ public class HttpClientUtil {
 	 * @param soapAction
 	 * @return
 	 */
-	public static String doPostSoap1_1(String postUrl, String soapXml,String soapAction,Wso2Config wso2Config) {
+	public static String doPostSoap(String postUrl, String soapXml,String soapAction,Wso2Config wso2Config) {
 		// 创建HttpClientBuilder
 		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 		// HttpClient
@@ -320,13 +323,13 @@ public class HttpClientUtil {
 		InputStream input = null;
 		BufferedReader br =null;
 		try {
-			HttpClient httpclient = new SSLClient();
+			HttpClient httpclient = new SslClient();
 	        HttpPost httpget = new HttpPost(postUrl);
 	        httpget.setHeader("Authorization", basic);
 	        HttpResponse response = httpclient.execute(httpget);
 	        StatusLine statusLine = response.getStatusLine();
 	        int responseCode = statusLine.getStatusCode();
-	        if (responseCode == 200) {
+	        if (responseCode == Constants.EQU_SUCCESS) {
 	            HttpEntity entity = response.getEntity();
 	            input = entity.getContent();
 	            br = new BufferedReader(new InputStreamReader(input));

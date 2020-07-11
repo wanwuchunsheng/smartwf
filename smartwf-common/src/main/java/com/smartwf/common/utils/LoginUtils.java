@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 2018/11/5 15:09
  * @Description: 登录工具类
  *    服务端托管过期验证
+ * @author WCH
  */
 @Component
 @Slf4j
@@ -68,7 +69,7 @@ public class LoginUtils {
         		log.info("================"+m.getKey()+"    "+m.getValue());
         	}
         	//8.验证code换取token是否成功
-        	if(!tkmap.containsKey("access_token")) {
+        	if(!tkmap.containsKey(Constants.ACCESSTOKEN)) {
         		log.warn("参数已过期：{}，用户请求uri：{}", JsonUtil.objectToJson(tkmap), request.getRequestURI());
         		throw new CommonException(Constants.UNAUTHORIZED, "参数已过期！");
         	}
@@ -83,11 +84,12 @@ public class LoginUtils {
         	user.setAccessToken(String.valueOf(tkmap.get("access_token")));
         	user.setIdToken(String.valueOf(tkmap.get("id_token")));
         	user.setRedirectUri(redirectUri);
-        	user.setSmartwfToken(MD5Utils.md5(code));
+        	user.setSmartwfToken(Md5Utils.md5(code));
         	user.setCode(code);
         	user.setSessionState(sessionState);
-        	log.info("code= "+MD5Utils.md5(code));
-        	redisService.set(MD5Utils.md5(code),JsonUtil.objectToJson(user) ,wso2Config.tokenRefreshTime);//过期时间50分钟
+        	log.info("code= "+Md5Utils.md5(code));
+        	//过期时间分钟
+        	redisService.set(Md5Utils.md5(code),JsonUtil.objectToJson(user) ,wso2Config.tokenRefreshTime);
         }else {
 	        /** 
 	         * 已登录
@@ -103,14 +105,15 @@ public class LoginUtils {
 	        User user=JsonUtil.jsonToPojo(mapStr, User.class);
 	        long nowtime=DateUtils.getDayTimeToLong(DateUtils.parseDateToStr(new Date(), "yyyy-MM-dd HH:mm:ss"));
 	        //12.提前60s*15=900过期{过期时间-当前时间},刷新令牌
-	        if( (user.getDateTime()-nowtime)<900 ) {
+	        int tm=900;
+	        if( (user.getDateTime()-nowtime)< tm ) {
 	        	//重置wso2令牌时间
 		    	Map<String,Object> refmap=JsonUtil.jsonToMap(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
 		    	for(Entry<String, Object> m:refmap.entrySet()) {
 		    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
 		    	}
 		    	//13.验证刷新
-		    	if(refmap.containsKey("error")) {
+		    	if(refmap.containsKey(Constants.ERROR)) {
 		    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
 		        	throw new CommonException(Constants.FORBIDDEN, "accesstoken刷新失败！请重新登录！");
 		    	}

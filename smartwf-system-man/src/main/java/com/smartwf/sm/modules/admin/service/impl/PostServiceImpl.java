@@ -127,7 +127,7 @@ public class PostServiceImpl implements PostService{
 	 */
 	@Override
 	public Map<Integer,List<Post>> initPostDatas(List<Tenant> list) {
-		Map<Integer,List<Post>> map =new HashMap<>();
+		Map<Integer,List<Post>> map =new HashMap<>(16);
 		QueryWrapper<Post> queryWrapper =null;
 		for(Tenant t:list) {
 			queryWrapper = new QueryWrapper<>();

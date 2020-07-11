@@ -62,12 +62,12 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 		if(null!=resInfo) {
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
-			Map<String,String> headers=new HashMap<>();
+			Map<String,String> headers=new HashMap<>(16);
 			headers.put("content-type", "application/json");
 			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 	        //封装数据
-	        Map<String,String> data=new HashMap<>();
+	        Map<String,String> data=new HashMap<>(16);
 	        data.put("displayName", bean.getEngName());
 	        //拼接uri
 	        sb=new StringBuffer();
@@ -94,7 +94,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 		if(null!=resInfo) {
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
-			Map<String,String> headers=new HashMap<>();
+			Map<String,String> headers=new HashMap<>(16);
 			headers.put("content-type", "application/json");
 			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
@@ -127,12 +127,12 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 		if(null!=resInfo) {
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
-			Map<String,String> headers=new HashMap<>();
+			Map<String,String> headers=new HashMap<>(16);
 			headers.put("content-type", "application/json");
 			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
 			//封装数据
-	        Map<String,Object> data=new HashMap<>();
+	        Map<String,Object> data=new HashMap<>(16);
 	        data.put("displayName", bean.getEngName());
 			//拼接uri
 	        sb=new StringBuffer();
@@ -176,7 +176,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 			//2）角色查询带出已绑定用户
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
-			Map<String,String> headers=new HashMap<>();
+			Map<String,String> headers=new HashMap<>(16);
 			headers.put("content-type", "application/json");
 			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
@@ -199,7 +199,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 					//获得已绑定所有用户
 					listmap=wgf.getMembers();
 					//封装新用户，在已绑定用户集合追加新用户
-					lmap=new HashMap<>();
+					lmap=new HashMap<>(16);
 					lmap.put("display", bean.getLoginCode());
 					lmap.put("value", bean.getUserCode());
 					listmap.add(lmap);
@@ -207,7 +207,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 				}else {
 					//未绑定
 					listmap=new ArrayList<>();
-					lmap=new HashMap<>();
+					lmap=new HashMap<>(16);
 					lmap.put("display", bean.getLoginCode());
 					lmap.put("value", bean.getUserCode());
 					listmap.add(lmap);
@@ -251,7 +251,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 							//3)查询角色下所有用户，过滤当前用户
 							StringBuffer sb=new StringBuffer();
 							//4）封装http请求头
-							Map<String,String> headers=new HashMap<>();
+							Map<String,String> headers=new HashMap<>(16);
 							headers.put("content-type", "application/json");
 							sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
 							headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
@@ -278,7 +278,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 								wgdata.setMembers(nmap);
 								dt=JsonUtil.objectToJson(wgdata);
 							}else {
-						        Map<String,Object> data=new HashMap<>();
+						        Map<String,Object> data=new HashMap<>(16);
 						        data.put("displayName", String.valueOf(m.get("display")));
 						        dt=JsonUtil.objectToJson(data);
 							}
