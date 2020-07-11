@@ -47,7 +47,6 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         // 当请求完成之后，消除用户信息、权限信息
-        //PermissionThreadLocal.setPermission(null);
         UserThreadLocal.setUser(null);
     }
    

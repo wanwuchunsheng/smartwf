@@ -11,7 +11,6 @@ import lombok.Data;
  *@Deprecated 实体类  
  *@author WCH
  * */
-@Data
 public class DefectVO extends FaultInformation implements Serializable{
 
 	/**
@@ -33,4 +32,31 @@ public class DefectVO extends FaultInformation implements Serializable{
 	 * 结束时间
 	 */
 	private Date etime;
+	
+	
+	public String getFilePath() {
+		return filePath;
+	}
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	public Date getStime() {
+		return stime;
+	}
+	public void setStime(Date stime) {
+		this.stime = stime;
+	}
+	public Date getEtime() {
+		return etime;
+	}
+	public void setEtime(Date etime) {
+		this.etime = etime;
+	}
+	
+	@Override
+	public String toString() {
+		return "DefectVO [filePath=" + filePath + ", stime=" + stime + ", etime=" + etime + "]";
+	}
+	
+	
 }

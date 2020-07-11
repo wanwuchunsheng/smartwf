@@ -31,9 +31,9 @@ public class LogServiceImpl implements LogService {
     /**
      * 保存日志
      * @param logDTOList
-     * @return
+     * @return Integer
      */
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public Integer saveLog(List<LogDTO> logDTOList) {
         return this.logDao.saveLog(logDTOList);

@@ -25,47 +25,53 @@ public interface FaultOverviewDao extends BaseMapper<FaultInformation> {
 	
 	
 	/**
-	 * @Description: 故障
+	 *  故障
 	 * @param faultType 0-故障  1-报警   2-缺陷
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	List<FaultInformationVO> selectFaultTypeByFault(@Param("bean") FaultInformationVO bean);
 	/**
-	 * @Description: 报警
+	 * 报警
 	 * @param faultType 0-故障  1-报警   2-缺陷
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	List<FaultInformationVO> selectFaultTypeByAlarm(@Param("bean") FaultInformationVO bean);
 	/**
-	 * @Description: 缺陷
+	 * 缺陷
 	 * @param faultType 0-故障  1-报警   2-缺陷
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	List<FaultInformationVO> selectFaultTypeByDefect(@Param("bean") FaultInformationVO bean);
 	/**
-	 * @Description: 故障等级分布统计 
+	 * 故障等级分布统计 
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	List<FaultInformationVO> selectFaultLevelByDate(@Param("bean") FaultInformationVO bean);
 	/**
-	 * @Description: 故障状态，数量统计
+	 *  故障状态，数量统计
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	List<FaultInformationVO> selectFaultStatusByDate(@Param("bean") FaultInformationVO bean);
 	/**
-	 * @Description: 故障部位，数量统计
+	 * 故障部位，数量统计
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	List<FaultInformationVO> selectFaultLocationByDate(@Param("bean") FaultInformationVO bean);

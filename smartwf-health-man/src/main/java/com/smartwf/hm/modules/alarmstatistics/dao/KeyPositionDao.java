@@ -18,12 +18,20 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition;
 @Repository
 public interface KeyPositionDao extends BaseMapper<KeyPosition> {
 
+	/**
+	 * 重点机位查询编码
+	 * @author WCH
+ 	 * @param keyPost
+ 	 * @date 2020-04-07
+ 	 * @return
+ 	 */
 	KeyPosition selectByDeviceCode(@Param("bean") KeyPosition keyPost);
 	
 	/**
+	 * 重点机位已添加机位数据查询接口
 	 * @author WCH
- 	 * @Description: 重点机位已添加机位数据查询接口
  	 * @author wch
+ 	 * @param bean
  	 * @date 2020-04-07
  	 * @return
  	 */

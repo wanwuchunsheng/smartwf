@@ -37,7 +37,7 @@ public class FaultCodeBaseServiceImpl implements FaultCodeBaseService{
 	 * @datetime 2020-5-14 11:27:13
 	 * @return
 	 */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void saveFaultCodeBase(FaultCodeBase bean) {
 		//将json字符串强制装换成对象
@@ -61,7 +61,7 @@ public class FaultCodeBaseServiceImpl implements FaultCodeBaseService{
      * @author WCH
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deleteFaultCodeBase(FaultCodeBase bean) {
 		//1)查询删除对应的代码库
@@ -84,7 +84,7 @@ public class FaultCodeBaseServiceImpl implements FaultCodeBaseService{
      *   //3）根据对象faultCode，删除故障解决方案  
      * @return
      */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void deleteFaultCodeBaseById(FaultCodeBase bean) {
 		//1）查询对象

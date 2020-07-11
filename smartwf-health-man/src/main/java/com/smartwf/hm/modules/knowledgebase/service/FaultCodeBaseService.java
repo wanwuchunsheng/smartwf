@@ -11,38 +11,44 @@ import com.smartwf.hm.modules.knowledgebase.vo.FaultCodeBaseVO;
 public interface FaultCodeBaseService {
 
 	/**
-	 * @Description: 故障代码批量录入
+	 *  故障代码批量录入
 	 * @author WCH
+	 * @param bean
 	 * @datetime 2020-5-14 11:27:13
 	 * @return
 	 */
 	void saveFaultCodeBase(FaultCodeBase bean);
 
 	/**
-     * @Description： 删除故障代码库
+     *  删除故障代码库
      *   id删除
+     * @param bean
      * @return
      */
 	void deleteFaultCodeBase(FaultCodeBase bean);
 
 	/**
-     * @Description： 故障代码库主键删除
+     *  故障代码库主键删除
      *   主键删除
+     * @param bean
      * @return
      */
 	void deleteFaultCodeBaseById(FaultCodeBase bean);
 	
 	/**
-     * @Description： 故障代码库(主键)查询
+     *  故障代码库(主键)查询
      *   主键查询
+     * @param bean
      * @return
      */
 	Result<?> selectFaultCodeBaseById(FaultCodeBase bean);
 
 	/**
-     * @Description： 故障代码库分页查询
+     *  故障代码库分页查询
      * @author WCH
-     * @datetime 2020-5-14 15:55:37
+     * @param bean
+     * @param page
+     * @Datetime 2020-5-14 15:55:37
      * @return
      */
 	Result<?> selectFaultCodeBaseByPage(Page<FaultCodeBase> page, FaultCodeBaseVO bean);

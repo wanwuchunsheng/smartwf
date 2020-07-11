@@ -10,24 +10,27 @@ import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
  */
 public interface FaultOverviewService {
 	/**
-	 * @Description: 故障类型统计
+	 *  故障类型统计
 	 *   1:30天   2:90天   3：一年   4 自定义
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	Result<?> selectFaultTypeByDate( FaultInformationVO bean);
 	/**
-	 * @Description: 故障等级分布统计
+	 * 故障等级分布统计
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	Result<?> selectFaultLevelByDate(FaultInformationVO bean);
 	/**
-	 * @Description: 故障处理状态&部件故障分析
+	 * 故障处理状态&部件故障分析
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	Result<?> selectFaultStatusByDate(FaultInformationVO bean);

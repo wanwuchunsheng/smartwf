@@ -16,21 +16,24 @@ import com.smartwf.hm.modules.knowledgebase.pojo.FaultCodeBase;
 @Repository
 public interface FaultCodeBaseDao extends BaseMapper<FaultCodeBase> {
 	/**
-     * @Description： 查询要删除的故障代码
+     *  查询要删除的故障代码
      * @author WCH
+     * @param bean
      * @return
      */
 	List<FaultCodeBase> selectFaultCodeBase(@Param("bean") FaultCodeBase bean);
 	/**
-     * @Description： 删除故障代码
+     *  删除故障代码
      * @author WCH
+     * @param bean
      * @return
      */
 	void deleteFaultCodeBase(@Param("bean") FaultCodeBase bean);
 	/**
-     * @Description： 删除故障代码对应的解决方案
+     *  删除故障代码对应的解决方案
      *    级联删除
      * @author WCH
+     * @param fcb
      * @return
      */
 	void deleteFaultSolutionInfo(@Param("bean") FaultCodeBase fcb);

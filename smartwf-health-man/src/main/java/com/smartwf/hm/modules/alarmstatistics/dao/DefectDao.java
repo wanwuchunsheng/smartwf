@@ -27,24 +27,27 @@ import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
 public interface DefectDao extends BaseMapper<FaultInformation> {
 
 	/**
-	 * @Description: 初始化缺陷数据
+	 * 初始化缺陷数据
 	 * @return
 	 */
 	@MapKey("id")
 	Map<String, FaultInformation> initDefectAll();
 
 	/**
-	 * @Description: 缺陷信息主键查询
+	 *  缺陷信息主键查询
 	 *    缺陷详细
-	 * @param id
+	 * @param bean
+	 * @return
 	 */
 	FaultInformation selectDefectById(@Param("bean") DefectVO bean);
 
 	/**
-	 * @Description: 分页查询缺陷信息 
+	 * 分页查询缺陷信息 
 	 *    列表信息
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
+	 * @param page
 	 * @return
 	 */
 	List<DefectVO> selectDefectByPage(Page<DefectVO> page, @Param("bean") DefectVO bean);

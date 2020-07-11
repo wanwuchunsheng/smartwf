@@ -15,89 +15,102 @@ import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 public interface AlarmInboxService {
 
 	/**
-	 * @Description: 分页查询故障报警信息 
+	 * 分页查询故障报警信息 
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
+	 * @param page
 	 * @return
 	 */
 	Result<?> selectAlarmInforByPage( Page<FaultInformation> page,FaultInformationVO bean);
 	/**
-	 * @Description: 查询所有故障报警信息 
+	 * 查询所有故障报警信息 
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	Result<?> selectAlarmInforByAll(FaultInformationVO bean);
 	/**
-	 * @Description: 实时故障报警总数查询
+	 * 实时故障报警总数查询
 	 * @return
 	 */
 	Integer selectAlarmsCountByAll();
 	/**
-	 * @Description:故障报警修改
+	 * 故障报警修改
+	 * @param bean
 	 * @param id
 	 */
 	void updateAlarmInforById(FaultInformationVO bean);
 	/**
-	 * @Description: 主键查询
+	 * 主键查询
 	 * @param id
+	 * @param bean
+	 * @return
 	 */
 	Result<?> selectAlarmInforById(FaultInformationVO bean);
 	/**
-	 * @Description: 初始化未结束的故障
+	 * 初始化未结束的故障
 	 * @return
 	 */
 	void selectFaultInformationByAll();
 	/**
-   	 * @Description: 查询所有故障报警记录信息 
+   	 * 查询所有故障报警记录信息 
    	 *   故障操作记录
    	 * @param faultInfoId
    	 * @param tenantCode
+   	 * @param bean
    	 * @return
    	 */
 	Result<?> selectFaultRecordByAll(FaultOperationRecord bean);
 	/**
- 	 * @Description: 重点机位添加
+ 	 * 重点机位添加
  	 * @author wch
  	 * @date 2020-04-07
+ 	 * @param bean
  	 * @return
  	 */
 	void addKeyPosition(KeyPosition bean);
 	/**
- 	 * @Description: 重点机位删除
+ 	 * 重点机位删除
  	 *  通过重点机位表主键ID删除
  	 * @author wch
  	 * @date 2020-04-07
+ 	 * @param bean
  	 * @return
  	 */
 	void deleteKeyPosition(KeyPosition bean);
 	/**
- 	 * @Description: 重点机位统计数据-图表
+ 	 * 重点机位统计数据-图表
  	 *   重点风机的报警统计
  	 * @author wch
  	 * @date 2020-04-07
+ 	 * @param bean
  	 * @return
  	 */
 	Result<?> selectKeyPositionByCount(KeyPosition bean);
 	/**
- 	 * @Description: 重点机位统计数据-列表
+ 	 * 重点机位统计数据-列表
  	 *   重点风机的报警统计
  	 * @author wch
  	 * @date 2020-04-07
+ 	 * @param bean
  	 * @return
  	 */
 	Result<?> selectKeyPositionByList(KeyPosition bean);
 	/**
- 	 * @Description: 重点机位已添加机位数据查询接口
+ 	 * 重点机位已添加机位数据查询接口
  	 * @author wch
  	 * @date 2020-04-07
+ 	 * @param bean
  	 * @return
  	 */
 	Result<?> selectKeyPosition(KeyPosition bean);
 	/**
- 	 * @Description: 单个重点机位所有故障报警数据
+ 	 * 单个重点机位所有故障报警数据
  	 * @author wch
  	 * @date 2020-04-07
+ 	 * @param bean
  	 * @return
  	 */
 	Result<?> selectKeyPositionByDeviceCode(KeyPosition bean);

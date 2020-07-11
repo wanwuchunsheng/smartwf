@@ -30,40 +30,45 @@ public interface AlarmInboxDao extends BaseMapper<FaultInformation> {
 	
 	
 	/**
-	 * @Description: 故障部位，数量统计
+	 * 故障部位，数量统计
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
+	 * @param page
 	 * @return
 	 */
 	List<FaultInformationVO> selectAlarmInforByPage(Page<FaultInformation> page,@Param("bean") FaultInformationVO bean);
 	/**
-	 * @Description: 查询所有故障报警信息 
+	 * 查询所有故障报警信息 
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	List<FaultInformationVO> selectAlarmInforByAll(@Param("bean") FaultInformationVO bean);
 	/**
-	 * @Description: 查询所有未处理的故障报警数据
+	 * 查询所有未处理的故障报警数据
 	 * @return
 	 */
 	@MapKey("id")
 	Map<String, FaultInformation> selectFaultInformationByAll();
 	
 	/**
- 	 * @Description: 重点机位统计数据-图表
+ 	 * 重点机位统计数据-图表
  	 *   重点风机的报警统计
  	 * @author wch
  	 * @date 2020-04-07
+ 	 * @param bean
  	 * @return
  	 */
 	List<FaultInformationVO> selectKeyPositionByCount(@Param("bean") KeyPosition bean);
 	
 	/**
- 	 * @Description: 重点机位统计数据-列表
+ 	 *  重点机位统计数据-列表
  	 *   重点风机的报警统计
  	 * @author wch
  	 * @date 2020-04-07
+ 	 * @param bean
  	 * @return
  	 */
 	List<FaultInformationVO> selectKeyPositionByList(@Param("bean") KeyPosition bean);

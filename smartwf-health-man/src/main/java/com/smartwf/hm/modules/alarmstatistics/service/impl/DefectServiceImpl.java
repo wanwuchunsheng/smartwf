@@ -70,7 +70,7 @@ public class DefectServiceImpl implements DefectService {
 	 * 2.记录缺陷工单处理状态
 	 * @return
 	 */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void saveDefect(DefectVO bean) {
 		//添加工单
@@ -114,7 +114,7 @@ public class DefectServiceImpl implements DefectService {
 	 * @param alarmStatus  
      *
 	 */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void updateDefectById(DefectVO bean) {
 		this.defectDao.updateById(bean);

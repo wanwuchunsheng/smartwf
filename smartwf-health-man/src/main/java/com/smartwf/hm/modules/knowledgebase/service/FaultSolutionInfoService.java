@@ -9,31 +9,35 @@ import com.smartwf.hm.modules.knowledgebase.pojo.FaultSolutionInfo;
  * */
 public interface FaultSolutionInfoService {
 	/**
-	 * @Description: 故障解决方案批量录入
+	 *  故障解决方案批量录入
 	 * @author WCH
+	 * @param bean
 	 * @datetime 2020-5-14 11:27:13
 	 * @return
 	 */
 	void saveFaultSolutionInfo(FaultSolutionInfo bean);
 
 	/**
-     * @Description： 故障解决方案删除
+     *  故障解决方案删除
      * @param faultCode
+     * @param bean
      * @return
      */
 	void deleteFaultSolutionInfo(FaultSolutionInfo bean);
 
 	/**
-     * @Description： 故障代码库(主键)删除
+     * 故障代码库(主键)删除
      *   主键删除
+     * @param bean
      * @return
      */
 	void deleteFaultSolutionInfoById(FaultCodeBase bean);
 
 	/**
-     * @Description：故障解决方案(故障代码)查询
+     * 故障解决方案(故障代码)查询
      * @author WCH
-     * @datetime 2020-5-14 15:38:29
+     * @param bean
+     * @Datetime 2020-5-14 15:38:29
      * @return
      */
 	Result<?> selectFaultSolInfoByFaultCode(FaultSolutionInfo bean);

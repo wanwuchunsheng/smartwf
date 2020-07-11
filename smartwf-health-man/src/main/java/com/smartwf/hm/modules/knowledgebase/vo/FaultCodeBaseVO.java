@@ -10,8 +10,6 @@ import lombok.Data;
  * @author WCH
  * 
  * */
-
-@Data
 public class FaultCodeBaseVO extends FaultCodeBase{
 
 	/**
@@ -26,4 +24,24 @@ public class FaultCodeBaseVO extends FaultCodeBase{
 	 * 结束时间
 	 */
 	private Date etime;
+	
+	public Date getStime() {
+		return stime;
+	}
+	public void setStime(Date stime) {
+		this.stime = stime;
+	}
+	public Date getEtime() {
+		return etime;
+	}
+	public void setEtime(Date etime) {
+		this.etime = etime;
+	}
+	
+	@Override
+	public String toString() {
+		return "FaultCodeBaseVO [stime=" + stime + ", etime=" + etime + "]";
+	}
+	
+	
 }

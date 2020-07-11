@@ -95,12 +95,13 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	}
 	
 	/**
-	 * @Description: 故障报警修改
+	 * 故障报警修改
 	 *    0）获取当前登录人信息
 	 *    1）更新最后修改时间及相关状态
 	 *    2）向操作记录表插入操作记录
 	 *    3)刷新redis数据，保存未处理数据与mysql一致
 	 * @param id
+	 * @param bean
 	 * @param alarmStatus
 	 *    0未处理
 		  1已转工单
@@ -108,7 +109,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		  3已处理
 		  4已关闭
 	 */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void updateAlarmInforById(FaultInformationVO bean) {
 		//1)获取当前登录人信息

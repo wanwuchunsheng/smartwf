@@ -16,7 +16,6 @@ import lombok.Data;
  * @Description: 日志
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-@Data
 @TableName( "sys_log")
 public class Log extends LogDTO {
 
@@ -25,7 +24,14 @@ public class Log extends LogDTO {
      * id
      */
 	@TableId(type = IdType.AUTO)
-	
     private Integer id;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 }

@@ -15,16 +15,18 @@ import com.smartwf.hm.modules.knowledgebase.pojo.FaultSolutionInfo;
 public interface FaultSolutionInfoDao extends BaseMapper<FaultSolutionInfo> {
 
 	/**
-     * @Description： 故障解决方案删除
+     *  故障解决方案删除
      * @param faultCode
+     * @param bean
      * @return
      */
 	void deleteFaultSolutionInfo(@Param("bean") FaultSolutionInfo bean);
 
 	/**
-     * @Description：故障解决方案(故障代码)查询
+     * 故障解决方案(故障代码)查询
      * @author WCH
-     * @datetime 2020-5-14 15:38:29
+     * @param bean
+     * @Datetime 2020-5-14 15:38:29
      * @return
      */
 	List<FaultSolutionInfo> selectFaultSolInfoByFaultCode(@Param("bean") FaultSolutionInfo bean);

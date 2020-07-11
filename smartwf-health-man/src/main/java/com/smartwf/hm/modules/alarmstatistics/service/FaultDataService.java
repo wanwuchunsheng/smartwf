@@ -9,10 +9,11 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
  */
 public interface FaultDataService {
 	/**
-	 * @Description: 实时故障报警缺陷数据
+	 * 实时故障报警缺陷数据
 	 *     故障、报警、缺陷实时数据
 	 * @param startTime
 	 * @param endTime
+	 * @param bean
 	 * @return
 	 */
 	void saveFaultInformation(FaultInformation bean);

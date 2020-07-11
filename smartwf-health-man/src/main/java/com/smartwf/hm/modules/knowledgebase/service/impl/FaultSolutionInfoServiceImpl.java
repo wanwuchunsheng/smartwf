@@ -34,7 +34,7 @@ public class FaultSolutionInfoServiceImpl implements FaultSolutionInfoService{
 	 * @datetime 2020-5-14 11:27:13
 	 * @return
 	 */
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void saveFaultSolutionInfo(FaultSolutionInfo bean) {
 		//将json字符串强制装换成对象
