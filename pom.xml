@@ -38,10 +38,9 @@
         <commons.httpclient>3.1</commons.httpclient>
         <org.apache.rocketmq>4.3.0</org.apache.rocketmq>
         <mybatis-plus.version>3.1.2</mybatis-plus.version>
-        <!-- 
-          <org.springframework.cloud>Finchley.SR2</org.springframework.cloud>
-          <com.alibaba.fastjson>1.2.9</com.alibaba.fastjson>
-        -->
+        <jaxb.version>2.3.0</jaxb.version>
+        <javax.validation>2.0.1.Final</javax.validation>
+        <javax.activation>1.1.1</javax.activation>
     </properties>
 
     <dependencyManagement>
@@ -194,49 +193,36 @@
 	            <artifactId>dom4j</artifactId>
 	            <version>${dom.version}</version>
 	        </dependency>
-	        <!-- javax 
-			<dependency>
-			    <groupId>com.sun.activation</groupId>
-			    <artifactId>javax.activation</artifactId>
-			    <version>1.2.0</version>
-			</dependency>
-			<dependency>
-			    <groupId>javax.transaction</groupId>
-			    <artifactId>javax.transaction-api</artifactId>
-			    <version>1.2</version>
-			</dependency>
-			-->
+	        <!-- javax -->
 			<dependency>
 		         <groupId>javax.activation</groupId>
 		         <artifactId>activation</artifactId>
-		         <version>1.1.1</version>
+		         <version>${javax.activation}</version>
 			</dependency>
-			
-			<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
 			<dependency>
 			    <groupId>javax.validation</groupId>
 			    <artifactId>validation-api</artifactId>
-			    <version>2.0.1.Final</version>
+			    <version>${javax.validation}</version>
 			</dependency>
 			<dependency>
 			  <groupId>javax.xml.bind</groupId>
 			  <artifactId>jaxb-api</artifactId>
-			  <version>2.3.0</version>
+			  <version>${jaxb.version}</version>
 			</dependency>
 			<dependency>
 			  <groupId>com.sun.xml.bind</groupId>
 			  <artifactId>jaxb-core</artifactId>
-			  <version>2.3.0</version>
+			  <version>${jaxb.version}</version>
 			</dependency>
 			<dependency>
 			  <groupId>com.sun.xml.bind</groupId>
 			  <artifactId>jaxb-impl</artifactId>
-			  <version>2.3.0</version>
+			  <version>${jaxb.version}</version>
 			</dependency>
 			<dependency>  
 			    <groupId>org.glassfish.jaxb</groupId>  
 			    <artifactId>jaxb-runtime</artifactId>  
-			    <version>2.3.0</version>  
+			    <version>${jaxb.version}</version>  
 			</dependency>
         </dependencies>
     </dependencyManagement>
