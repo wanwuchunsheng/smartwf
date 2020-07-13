@@ -3,6 +3,9 @@ package com.smartwf.sm.modules.admin.controller;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -248,30 +251,43 @@ public class GlobalDataController {
      * @param smartwfToken
      * @return
      */
-    @PostMapping("selectUserInfoByToken")
+    @GetMapping("selectUserInfoByToken")
     @ApiOperation(value = "获取用户基础信息接口", notes = "获取用户基础信息")
-    @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "smartwfToken", value = "令牌token", dataType = "String", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "resType", value = "资源类型（1.全部信息  2.用户基础信息 3.用户基础信息+组织机构 4，用户基础信息+组织机构+职务 5.用户基础信息+组织机构+职务+角色）", dataType = "String"),
-    	@ApiImplicitParam(paramType = "query", name = "userCode", value = "wso2用户编码", dataType = "String")
-    })
-    public ResponseEntity<Result<?>> selectUserInfoByToken(User bean) {
+    public ResponseEntity<Result<?>> selectUserInfoByToken(HttpServletRequest request) {
         try {
-    		//4 通过userCode查询用户基础信息，存储redis
-    		User userStr=this.userInfoService.selectUserInfoByUserCode(bean);
-    		return ResponseEntity.ok(Result.data(userStr));
-    		/**
-        	//通过smartwfToken获取用户基础信息
-        	String userStr=this.redisService.get(bean.getSmartwfToken());
-        	//判断是否存在
-        	if(StringUtils.isNotBlank(userStr)) {
-            	return ResponseEntity.ok(Result.data(JsonUtil.jsonToPojo(userStr, User.class)));
+        	//1 通过参数验证是否redis是否存在
+        	String userStr =redisService.get(request.getHeader(Constants.SMARTWF_TOKEN));
+        	if(StringUtils.isNoneBlank(userStr)) {
+        		//2 转换成对象
+        		User user=JsonUtil.jsonToPojo(userStr, User.class);
+        		//3根据accessToken查询用户ID
+        		String str=Wso2ClientUtils.reqWso2UserInfo(wso2Config, user);
+        		if(StringUtils.isBlank(str)) {
+        			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，accessToken查询用户信息失败！"));
+        		}
+        		Map<String,Object> resmap=JsonUtil.jsonToMap(str);
+    			//打印返回结果
+    			for(Entry<String, Object> m:resmap.entrySet()) {
+            		log.info(m.getKey()+"    "+m.getValue());
+            	}
+    			//4验证是否成功
+    			if(!resmap.containsKey(Constants.USERID)) {
+    				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，WSO2 user_id为空！"));
+    			}
+    			user.setUserCode(String.valueOf(resmap.get("user_id")));
+				//5通过user_id查询用户基础信息	
+        		User userInfo=this.userInfoService.selectUserInfoByUserCode(user);
+        		if(null==userInfo) {
+        			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，user_id查询用户信息异常！"));
+        		}
+        		this.redisService.set(userInfo.getSmartwfToken(), JsonUtil.objectToJson(userInfo));
+        		//成功返回
+        		return ResponseEntity.ok(Result.data(Constants.EQU_SUCCESS,userInfo));
         	}
-        	*/
         } catch (Exception e) {
             log.error("获取用户基础信息失败！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("获取用户基础信息失败！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( "获取用户基础信息失败！"));
     }
    
 }
