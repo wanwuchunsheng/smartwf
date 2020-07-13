@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+
 /**
  * @author WCH
  * 
@@ -32,13 +33,14 @@ public class XmlUtils {
         return xmlObject;
     }
 
+
     /**
      * @对象转xml字符串
      * @param obj
      * @param load
      * @return
      * @throws JAXBException
-     */
+    */
     public static String objectToXmlStr(Object obj,Class<?> load){
         String result = "";
         try{
@@ -54,6 +56,6 @@ public class XmlUtils {
         }
         return result;
     }
-    
+     
    
 }

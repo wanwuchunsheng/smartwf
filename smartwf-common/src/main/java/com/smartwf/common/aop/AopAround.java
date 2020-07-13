@@ -18,7 +18,6 @@ import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.queue.LogQueue;
 import com.smartwf.common.utils.GsonUtils;
-import com.smartwf.common.utils.JsonUtil;
 
 /**
  * @author WCH

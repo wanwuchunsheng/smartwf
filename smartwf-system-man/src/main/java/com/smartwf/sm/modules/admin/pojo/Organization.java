@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.smartwf.common.annotation.ParamValidated.Add;
 import com.smartwf.common.pojo.BasePojo;
 
 import lombok.Data;

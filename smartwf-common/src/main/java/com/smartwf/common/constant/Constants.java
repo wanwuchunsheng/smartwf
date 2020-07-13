@@ -2,7 +2,6 @@ package com.smartwf.common.constant;
 
 /**
  * @author WCH
- * @Date: 2018/9/17 15:53
  * @Description: 常量
  */
 public class Constants {

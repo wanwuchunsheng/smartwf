@@ -1,10 +1,5 @@
 package com.smartwf.common.utils;
 
-import java.io.StringWriter;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 /**
  * @author WCH
  * 

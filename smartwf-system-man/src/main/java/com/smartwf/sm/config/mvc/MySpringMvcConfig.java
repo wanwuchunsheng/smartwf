@@ -17,7 +17,6 @@ import com.smartwf.sm.interceptor.LoginInterceptor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Date: 2018/11/2 10:13
  * springMVC配置
  * @author WCH
  */

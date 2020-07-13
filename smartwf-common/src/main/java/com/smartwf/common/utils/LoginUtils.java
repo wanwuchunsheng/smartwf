@@ -20,8 +20,6 @@ import com.smartwf.common.wso2.Wso2Config;
 import lombok.extern.slf4j.Slf4j;
 
 /**
-
- * @Date: 2018/11/5 15:09
  * @Description: 登录工具类
  *    服务端托管过期验证
  * @author WCH

@@ -1,6 +1,9 @@
 package com.smartwf.common.utils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -9,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
@@ -38,7 +39,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import com.smartwf.common.constant.Constants;
-import com.smartwf.common.pojo.Result;
 import com.smartwf.common.webservice.SslClient;
 import com.smartwf.common.wso2.Wso2Config;
 

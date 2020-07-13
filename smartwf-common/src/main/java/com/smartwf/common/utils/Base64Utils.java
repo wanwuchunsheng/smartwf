@@ -9,12 +9,11 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
+
 
 /**
  * @author WCH
- * @Date: 2019/3/14 16:10
  * @Description: base64工具类
  */
 public class Base64Utils {
@@ -30,9 +29,9 @@ public class Base64Utils {
             // 图像数据为空
             return null;
         }
-        BASE64Decoder decoder = new BASE64Decoder();
+        //BASE64Decoder decoder = new BASE64Decoder();
         // Base64解码
-        byte[] b = decoder.decodeBuffer(imgStr);
+        byte[] b = Base64.decodeBase64(imgStr);
         for (int i = 0; i < b.length; ++i) {
         	// 调整异常数据
             if (b[i] < 0) {
@@ -49,13 +48,14 @@ public class Base64Utils {
         out.flush();
         out.close();
         return new File(imgFilePath);
+        
     }
-
+ 
 
     /**
      * 图片转化成base64字符串
      * 
-     * */ 
+   * */ 
     public static String getImageStr(String imgFile) {// 将图片文件转化为字节数组字符串，并对其进行Base64编码处理
         InputStream in = null;
         byte[] data = null;
@@ -69,8 +69,9 @@ public class Base64Utils {
             e.printStackTrace();
         }
         // 对字节数组Base64编码
-        BASE64Encoder encoder = new BASE64Encoder();
+        //BASE64Encoder encoder = new BASE64Encoder();
         // 返回Base64编码过的字节数组字符串
-        return encoder.encode(data);
+        return Base64.encodeBase64String(data);
     }
+      
 }
