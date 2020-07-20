@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.web.method.HandlerMethod;
 
 import com.smartwf.common.annotation.RequiresPermissions;
@@ -92,9 +93,9 @@ public class Wso2ClientUtils {
         		sb.append(" <xsd:action>").append(value[0]).append("</xsd:action>");
         		sb.append(" </xsd:getBooleanDecision> </soapenv:Body> ");
         		sb.append(" </soapenv:Envelope> ");
-            	log.info("soap start："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+            	log.info("soap start："+DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
             	String res=HttpClientUtil.doPostApiEntitlement(String.valueOf(new StringBuffer().append(wso2Config.tokenServerUri).append("/services/EntitlementService?wsdl")), String.valueOf(sb),user.getTenantCode());
-            	log.info("soap end："+DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss:SSS"));
+            	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
             	log.info("res="+res);
             }
 		} catch (Exception e) {

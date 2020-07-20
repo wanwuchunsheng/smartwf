@@ -23,7 +23,10 @@ import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
 import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
 
 import lombok.extern.slf4j.Slf4j;
-
+/**
+ * @author WCH
+ * 
+ * */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @WebAppConfiguration

@@ -41,6 +41,7 @@
         <jaxb.version>2.3.0</jaxb.version>
         <javax.validation>2.0.1.Final</javax.validation>
         <javax.activation>1.1.1</javax.activation>
+        <hutool.version>5.2.4</hutool.version>
     </properties>
 
     <dependencyManagement>
@@ -139,12 +140,6 @@
                 <artifactId>poi-ooxml</artifactId>
                 <version>${org.apache.poi}</version>
             </dependency>
-            <!-- lang3 -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${org.apache.commons}</version>
-            </dependency>
             <!-- 邮件 -->
             <dependency>
                 <groupId>com.sun.mail</groupId>
@@ -193,6 +188,18 @@
 	            <artifactId>dom4j</artifactId>
 	            <version>${dom.version}</version>
 	        </dependency>
+	        <!-- hutool 工具类 -->
+	        <dependency>
+			    <groupId>cn.hutool</groupId>
+			    <artifactId>hutool-all</artifactId>
+			    <version>${hutool.version}</version>
+			</dependency>
+			<!-- lang3 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${org.apache.commons}</version>
+            </dependency>
 	        <!-- javax -->
 			<dependency>
 		         <groupId>javax.activation</groupId>

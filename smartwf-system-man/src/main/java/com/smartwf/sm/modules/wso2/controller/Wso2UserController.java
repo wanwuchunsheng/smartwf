@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.service.Wso2UserService;
@@ -106,6 +107,27 @@ public class Wso2UserController {
         		log.info("返回信息內容："+m.getKey()+"    "+m.getValue());
         	}
         	ResponseEntity.ok().body(Result.data(null, map, Constants.EQU_SUCCESS, "成功！"));
+        } catch (Exception e) {
+            log.error("wso2用户修改错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("wso2用户修改错误！"));
+    }
+    
+    /**
+     * @Description：模拟wso2用户修改
+     * @param code,session_state和state
+     * @return
+     */
+    @PutMapping("loginOut")
+    @ApiOperation(value = "wso2用户修改接口", notes = "wso2用户修改")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "smartwfToken", value = "令牌", dataType = "String", required = true)
+    })
+    public ResponseEntity<Result<?>> loginOut(HttpServletRequest request,User bean) {
+        try {
+			/*
+			 * wso2UserService.loginOut ResponseEntity.ok().body(Result.data(map));
+			 */
         } catch (Exception e) {
             log.error("wso2用户修改错误！{}", e.getMessage(), e);
         }

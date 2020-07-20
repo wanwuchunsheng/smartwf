@@ -1,25 +1,18 @@
 package com.smartwf.hm.modules.admin.controller;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.utils.Md5Utils;
-import com.smartwf.common.utils.Wso2ClientUtils;
-import com.smartwf.common.wso2.Wso2Config;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -41,13 +34,9 @@ public class GlobalDataController {
 	@Autowired
     private RedisService redisService;
 	
-	@Autowired
-    private Wso2Config wso2Config;
-	
-
 
     /**
-     * @Description：授权登录，获取用户基础信息
+     * @Description：认证登录
      * @param code,session_state和state
      * @return
      */

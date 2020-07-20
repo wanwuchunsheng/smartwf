@@ -54,14 +54,32 @@ public class TenantServiceImpl implements TenantService{
 	UserInfoService userInfoService;
 
 	/**
-	 * @Description:查询租户分页
+	 * 查询租户分页
+	 *    根据当前登录用户，判断
+	 *      1）平台管理员： 查询所有租户
+	 *      2）非平台管理员，返回当前登录用户自己的租户
+	 * @author WCH
 	 * @result:
 	 */
 	@Override
 	public Result<?> selectTenantByPage(Page<Tenant> page, TenantVO bean) {
+		User user=UserThreadLocal.getUser();
+		//判断是否平台管理员{2平台管理员 1管理员 0普通}
+		if( Constants.MGRTYPE_ADMIN.equals(user.getMgrType())) {
+			bean.setId(null);
+			bean.setTenantCode(null);
+		}else {
+			bean.setId(user.getTenantId());
+			bean.setTenantCode(user.getTenantCode());
+		}
+		//根据条件过滤
 		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
 		//降序
 		queryWrapper.orderByDesc("update_time"); 
+		//租户ID
+        if (null != bean.getId()) {
+        	queryWrapper.eq("id", bean.getId() );
+        }
         //租户编码
         if (!StringUtils.isEmpty(bean.getTenantCode())) {
         	queryWrapper.like("tenant_code", Constants.PER_CENT + bean.getTenantCode() + Constants.PER_CENT);

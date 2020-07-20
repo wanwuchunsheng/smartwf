@@ -11,7 +11,10 @@ import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 
 import lombok.extern.slf4j.Slf4j;
 
-
+/**
+ * wch
+ * 
+ * */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @WebAppConfiguration

@@ -51,6 +51,7 @@ public class TenantController {
     @GetMapping("selectTenantByPage")
     @ApiOperation(value = "分页查询接口", notes = "分页查询租户")
     @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "租户主键", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户代码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "tenantName", value = "租户名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),

@@ -73,9 +73,8 @@ public class LoginUtils {
         	}
         	//9.存储值
         	User user= new User();
-        	String day=DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss");
         	//过期时间=当前时间+过期时间
-        	user.setDateTime(Long.valueOf(tkmap.get("expires_in").toString()) + DateUtils.getDayTimeToLong(day));
+        	user.setDateTime(Long.valueOf(tkmap.get("expires_in").toString()) + (new Date()).getTime()/1000  );
         	user.setClientKey(String.valueOf(idtmap.get("clientKey")));
         	user.setClientSecret(String.valueOf(idtmap.get("clientSecret")));
         	user.setRefreshToken(String.valueOf(tkmap.get("refresh_token")));
@@ -101,7 +100,7 @@ public class LoginUtils {
 	        }
 	        //11.验证wso2登录信息是否过期
 	        User user=JsonUtil.jsonToPojo(mapStr, User.class);
-	        long nowtime=DateUtils.getDayTimeToLong(DateUtils.parseDateToStr(new Date(), "yyyy-MM-dd HH:mm:ss"));
+	        long nowtime=(new Date()).getTime()/1000 ;
 	        //12.提前60s*15=900过期{过期时间-当前时间},刷新令牌
 	        if( (user.getDateTime()-nowtime)< Constants.TOKEN_TIMEOUT ) {
 	        	//重置wso2令牌时间
@@ -118,8 +117,7 @@ public class LoginUtils {
 		    	user.setAccessToken(String.valueOf(refmap.get("access_token")));
 		    	user.setRefreshToken(String.valueOf(refmap.get("refresh_token")));
 		    	user.setIdToken(String.valueOf(refmap.get("id_token")));
-		    	String day=DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss");
-		    	user.setDateTime(Long.valueOf(refmap.get("expires_in").toString()) + DateUtils.getDayTimeToLong(day));
+		    	user.setDateTime(Long.valueOf(refmap.get("expires_in").toString()) + nowtime  );
 	        }
 	        //15.重置redis过期时间
 	        redisService.set(token,JsonUtil.objectToJson(user),wso2Config.tokenRefreshTime);

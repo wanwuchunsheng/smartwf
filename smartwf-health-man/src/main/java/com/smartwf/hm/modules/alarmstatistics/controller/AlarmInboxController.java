@@ -22,6 +22,8 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
+import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
+import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 import io.swagger.annotations.Api;
@@ -43,6 +45,9 @@ public class AlarmInboxController {
 	
 	@Autowired
 	private AlarmInboxService alarmInboxService;
+	
+	@Autowired
+	private DefectService defectService;
 
 	/**
 	 * @Description: 分页查询故障报警信息 
@@ -152,7 +157,7 @@ public class AlarmInboxController {
 	 * @param id
 	 */
     @GetMapping("selectAlarmInforById")
-    @ApiOperation(value = "故障报警主键查询接口", notes = "故障报警主键查询")
+    @ApiOperation(value = "故障报警主键查询（系统报警）接口", notes = "故障报警主键查询（系统报警）")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
@@ -165,6 +170,27 @@ public class AlarmInboxController {
             log.error("故障报警主键查询错误！{}", e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障报警主键查询错误！"));
+    }
+    
+    /**
+	 * @Description: 故障缺陷信息主键查询
+	 *    缺陷详细
+	 * @param id
+	 */
+    @GetMapping("selectDefectById")
+    @ApiOperation(value = "故障报警主键查询（人工上报）接口", notes = "故障报警主键查询（人工上报）")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
+    })
+    public ResponseEntity<Result<?>> selectDefectById(DefectVO bean) {
+        try {
+        	 Result<?> result = this.defectService.selectDefectById(bean);
+        	 return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("缺陷信息主键查询错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"缺陷信息主键查询错误！"));
     }
     
     /**
@@ -429,6 +455,35 @@ public class AlarmInboxController {
 	           log.error("单个重点机位所有故障报警数据查询错误！{}", e.getMessage(), e);
 	       }
 	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("单个重点机位所有故障报警数据查询错误！"));
+	    }
+	 
+	    
+	    /**
+		 * @Description: 故障处理意见
+		 *    添加
+		 * @author WCH
+		 * @dateTime 2020-7-20 17:55:35
+		 * @param bean
+		 * @return
+		 */
+	    @PostMapping("addFaultOperationRecord")
+	    @ApiOperation(value = "添加故障处理意见接口", notes = "故障处理意见")
+	    @ApiImplicitParams({
+	    	@ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true),
+		    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "故障主键（故障表主键）", dataType = "String", required = true),
+		    @ApiImplicitParam(paramType = "query", name = "closureType", value = "操作类型{1处理记录  2处理意见}", dataType = "int", required = true),
+		    @ApiImplicitParam(paramType = "query", name = "closureReason", value = "操作说明", dataType = "String", required = true),
+		    @ApiImplicitParam(paramType = "query", name = "closureStatus", value = "操作状态{5待审核 0未处理  6驳回 2处理中 3已处理 4已关闭 7回收站 8未解决}", dataType = "Integer"),
+		    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String" )
+		})
+	    public ResponseEntity<Result<?>> addFaultOperationRecord(  FaultOperationRecord bean) {
+	        try {
+	        	this.alarmInboxService.addFaultOperationRecord(bean);
+	        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"添加成功！"));
+	        } catch (Exception e) {
+	            log.error("添加故障处理意见错误！{}", e.getMessage(), e);
+	        }
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"添加故障处理意见错误！"));
 	    }
 	    
 }

@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Wso2LoginUtils {
     public static boolean checkLogin(HttpServletRequest request, HttpServletResponse response, Object handler, RedisService redisService,Wso2Config wso2Config) throws Exception{	
     	//1.判断是否登录
+    	log.info("请求类型："+request.getMethod());
         String token = request.getHeader(Constants.SMARTWF_TOKEN);
         if (StringUtils.isBlank(token)) {
         	/** 
@@ -81,7 +82,7 @@ public class Wso2LoginUtils {
         	user.setSmartwfToken(Md5Utils.md5(code));
         	user.setCode(code);
         	user.setSessionState(sessionState);
-        	log.info("code= "+Md5Utils.md5(code));
+        	log.info("token= "+Md5Utils.md5(code));
         	//过期时间
         	redisService.set(Md5Utils.md5(code),JsonUtil.objectToJson(user) ,wso2Config.tokenRefreshTime);
         }else {

@@ -8,14 +8,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.common.utils.DateUtils;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOverviewDao;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultOverviewService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -116,7 +117,8 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		Map<String,Object> fr=null;
 		String[][] master=null;
 		//1·获得两个日期间的所有日期集合
-		List<String> listDates=DateUtils.getDayListOfDate(DateUtils.parseDateToStr(bean.getStime(), "yyyy-MM-dd HH:mm:ss"),DateUtils.parseDateToStr(bean.getEtime(), "yyyy-MM-dd HH:mm:ss") );
+		//List<String> listDates=DateUtils.getDayListOfDate(DateUtils.parseDateToStr(bean.getStime(), "yyyy-MM-dd HH:mm:ss"),DateUtils.parseDateToStr(bean.getEtime(), "yyyy-MM-dd HH:mm:ss") );
+		List<DateTime> listDates= DateUtil.rangeToList(bean.getStime(),bean.getEtime(), DateField.DAY_OF_YEAR );
 		for(int t=0;t<Constants.ALARMLEVEL;t++) {
 			bean.setAlarmLevel(t);
 			//2.查询故障分布统计数据
@@ -125,8 +127,8 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 				master =new String[listDates.size()][2];
 				int i = 0;
 				//3.遍历日期集合
-				for(String str:listDates) {
-					master[i][0]=str;
+				for(DateTime str:listDates) {
+					master[i][0]=DateUtil.format(str, "yyyy-MM-dd HH:mm:ss");
 					//4.查询统计分布时间和日期集合对比
 					if(fault!=null && fault.size()>0) {
 						for(FaultInformationVO fivo:fault ) {
@@ -199,5 +201,6 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		}
 		return Result.data(list);
 	}
+	
 	
 }

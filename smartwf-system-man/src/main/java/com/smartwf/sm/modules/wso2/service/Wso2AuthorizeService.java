@@ -1,0 +1,20 @@
+package com.smartwf.sm.modules.wso2.service;
+
+/**
+ * 
+ * @author WCH
+ * 
+ * */
+public interface Wso2AuthorizeService {
+
+	/**
+	 * 说明：UI批量授权服务器
+	 * @author WCH
+	 * @DateTime 2020-7-20 17:36:27
+	 * @return
+	 * */
+	String batchUiAuthorization(String str);
+
+	
+
+}

@@ -52,13 +52,20 @@ public class Constants {
     public static final int ALARMLEVEL = 4; 
     
     /**
-     * 默认租户状态========================================================
+     * 默认租户状态
      */ 
     public static final Integer ISSEL = 1;
-    
-
     /**
-     * 状态码========================================================
+     * 角色等级
+     *   0-普通
+     *   1-管理员
+     *   2-平台管理员
+     * */
+    public static final Integer MGRTYPE_ADMIN=2;
+    
+    
+    /**
+     * 自定义状态码
      */
     public static final int INTERNAL_SERVER_ERROR = 500;
 
@@ -76,19 +83,15 @@ public class Constants {
     
     public static final int MULTIPLE_CHOICES = 300;
 
-    /**
-     * 状态码========================================================
-     */
+    
     /**
      * wso2 soap请求响应时间
      * */
     public static final int SOCKET_TIME_OUT = 90000;
+    
     public static final int CONNECT_TIME_OUT = 90000;
+    
     public static final int TOKEN_TIMEOUT = 900;
-    /**
-     * wso2 各租户默认密码
-     * */
-    public static final String WSO2_PASSWORD = "000000";
     
 
 }

@@ -127,10 +127,6 @@ public class UserInfoServiceImpl implements UserInfoService{
 		bean.setUpdateTime(bean.getCreateTime());
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
-		//md5加密
-		if(StringUtils.isNotBlank(bean.getPwd())) {
-			bean.setPwd(Md5Utils.convertMd5(bean.getPwd()));
-		}
 		//保存wso2用户
 		Map<String,Object> map=this.wso2UserService.addUser(bean);
 		//验证wso2插入是否成功，成功返回ID
@@ -138,6 +134,10 @@ public class UserInfoServiceImpl implements UserInfoService{
 			return Result.data(Constants.BAD_REQUEST,"失败，wso2用户保存失败！"+JsonUtil.objectToJson(map));
 		}
 		bean.setUserCode(String.valueOf(map.get("id")) );
+		//md5加密
+		if(StringUtils.isNotBlank(bean.getPwd())) {
+			bean.setPwd(Md5Utils.convertMd5(bean.getPwd()));
+		}
 		//保存用户资料
 		this.userInfoDao.insert(bean);
 		//批量添加与用户相关联表

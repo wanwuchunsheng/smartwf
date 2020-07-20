@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.smartwf.common.constant.Constants;
 
@@ -81,9 +82,8 @@ public class MathUtils {
      * @return key
      */
     public static String getKey() {
-        String timestamp = DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd HH:mm:ss");
+        String timestamp = DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss");
         String s = UUID.randomUUID().toString();
-        // delete "-"
         String uuid = s.replace("-", "");
         return timestamp + uuid;
     }

@@ -294,7 +294,7 @@ public class HttpClientUtil {
 		try {
 			httpPost.setHeader("Content-Type", "text/xml;charset=UTF-8");
 			httpPost.setHeader("SOAPAction", null);
-			httpPost.setHeader(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String((tenantCode+":"+Constants.WSO2_PASSWORD).getBytes())));
+			httpPost.setHeader(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String((tenantCode+":000000").getBytes())));
 			StringEntity data = new StringEntity(soapXml, Charset.forName("UTF-8"));
 			httpPost.setEntity(data);
 			CloseableHttpResponse response = closeableHttpClient.execute(httpPost);

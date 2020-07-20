@@ -83,6 +83,11 @@
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
         </dependency>
+        <!-- hutool -->
+        <dependency>
+		    <groupId>cn.hutool</groupId>
+		    <artifactId>hutool-all</artifactId>
+		</dependency>
         <!-- jdk 11 jar  -->
 		<dependency>
 		    <groupId>javax.validation</groupId>
@@ -105,4 +110,7 @@
 		    <artifactId>jaxb-runtime</artifactId>  
 		</dependency>
     </dependencies>
+    <build>
+        <finalName>smartwf-common</finalName>
+    </build>
 </project>
