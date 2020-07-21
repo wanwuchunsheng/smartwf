@@ -121,39 +121,46 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		FaultOperationRecord fr=new FaultOperationRecord();
 		//故障表主键
 		fr.setFaultInfoId(bean.getId());
-		//操作人
+		//操作人姓名
 		fr.setCreateUserName(user.getUserName()); 
+		//操作人ID
+		fr.setCreateUserId(String.valueOf(user.getId()));
 		//时间
 		fr.setCreateTime(bean.getUpdateTime()); 
 		//备注
 		fr.setRemark(bean.getRemark()); 
+		//租户编码
+		fr.setTenantCode(bean.getTenantCode());
 		//关闭原因
 		fr.setClosureReason(bean.getClosureReason()); 
 		//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
 		switch (bean.getAlarmStatus()) {
 			case 1:
 				//fr.setClosureReason("已转工单");
+				fr.setClosureStatus(1);
 				//删除redis对应数据
 				rmFaultInformationByRedis(bean.getId()); 
 				//向生产中心发送相关数据 1.id查询对象， 2封装对象调用生产中心api接口
 				break;
 			case 2:
 				//fr.setClosureReason("处理中");
+				fr.setClosureStatus(2);
 				//删除redis对应数据
 				rmFaultInformationByRedis(bean.getId()); 
 				//------向生产中心发送相关数据 1.id查询对象， 2封装对象调用生产中心api接口
-				
 				break;
 			case 3:
+				fr.setClosureStatus(3);
 				//fr.setClosureReason("已处理");
 				break;
 			case 4:
 				//fr.setClosureReason("已关闭");
-				fr.setClosureType(1);
+				fr.setClosureStatus(4);
 				break;
 			default:
 				break;
 		}
+		fr.setClosureType(1);
 		this.faultOperationRecordDao.insert(fr);
 	}
 	
@@ -306,6 +313,11 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 */
 	@Override
 	public void addFaultOperationRecord(FaultOperationRecord bean) {
+		User user=UserThreadLocal.getUser();
+		bean.setCreateTime(new Date());
+		bean.setCreateUserId(String.valueOf(user.getId()));
+		bean.setCreateUserName(user.getUserName());
+		
 		this.faultOperationRecordDao.insert(bean);
 	}
 	
