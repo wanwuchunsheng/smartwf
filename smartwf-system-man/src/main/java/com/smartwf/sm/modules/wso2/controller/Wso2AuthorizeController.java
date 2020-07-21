@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.wso2.service.Wso2AuthorizeService;
 
@@ -47,7 +48,7 @@ public class Wso2AuthorizeController {
     public ResponseEntity<Result<?>> batchUiAuthorization(HttpServletRequest request, String jsonStr) {
         try {
         	String resStr =this.wso2AuthorizeService.batchUiAuthorization(jsonStr);
-        	return ResponseEntity.ok().body(Result.data(resStr));
+        	return ResponseEntity.ok().body(Result.data(Constants.EQU_SUCCESS , resStr));
         } catch (Exception e) {
             log.error("Wso2（UI）批量授权错误！{}", e.getMessage(), e);
         }

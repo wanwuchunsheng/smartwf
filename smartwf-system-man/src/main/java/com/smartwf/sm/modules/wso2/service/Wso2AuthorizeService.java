@@ -10,7 +10,8 @@ public interface Wso2AuthorizeService {
 	/**
 	 * 说明：UI批量授权服务器
 	 * @author WCH
-	 * @DateTime 2020-7-20 17:36:27
+	 * @dateTime 2020-7-20 17:36:27
+	 * @param str
 	 * @return
 	 * */
 	String batchUiAuthorization(String str);
