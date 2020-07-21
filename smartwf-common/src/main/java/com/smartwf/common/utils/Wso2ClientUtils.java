@@ -77,27 +77,21 @@ public class Wso2ClientUtils {
      * @param 
      * @return boolean
      * */
-    public static Boolean entitlementApiReq(HttpServletRequest request,Wso2Config wso2Config,User user,Object handler) {
+    public static Boolean entitlementApiReq(HttpServletRequest request,Wso2Config wso2Config,User user) {
     	try {
-    		HandlerMethod handlerMethod = (HandlerMethod)handler;
-            RequiresPermissions annotation = handlerMethod.getMethodAnnotation(RequiresPermissions.class);
-            String[] value = annotation.value();
-            //验证本地api是否提供参数
-            if( null!=value && value.length>0 ) {
-            	//封装wso2参数规范
-        		StringBuffer sb=new StringBuffer();
-        		sb.append(" <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://org.apache.axis2/xsd\">");
-        		sb.append(" <soapenv:Header/> <soapenv:Body> <xsd:getBooleanDecision> ");
-        		sb.append(" <xsd:subject>").append(user.getLoginCode()).append("</xsd:subject>");
-        		sb.append(" <xsd:resource>").append(request.getRequestURI()).append("</xsd:resource>");
-        		sb.append(" <xsd:action>").append(value[0]).append("</xsd:action>");
-        		sb.append(" </xsd:getBooleanDecision> </soapenv:Body> ");
-        		sb.append(" </soapenv:Envelope> ");
-            	log.info("soap start："+DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            	String res=HttpClientUtil.doPostApiEntitlement(String.valueOf(new StringBuffer().append(wso2Config.tokenServerUri).append("/services/EntitlementService?wsdl")), String.valueOf(sb),user.getTenantCode());
-            	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            	log.info("res="+res);
-            }
+        	//封装wso2参数规范
+    		StringBuffer sb=new StringBuffer();
+    		sb.append(" <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://org.apache.axis2/xsd\">");
+    		sb.append(" <soapenv:Header/> <soapenv:Body> <xsd:getBooleanDecision> ");
+    		sb.append(" <xsd:subject>").append(user.getLoginCode()).append("</xsd:subject>");
+    		sb.append(" <xsd:resource>").append(request.getRequestURI()).append("</xsd:resource>");
+    		sb.append(" <xsd:action>").append(request.getMethod()).append("</xsd:action>");
+    		sb.append(" </xsd:getBooleanDecision> </soapenv:Body> ");
+    		sb.append(" </soapenv:Envelope> ");
+        	log.info("soap start："+DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        	String res=HttpClientUtil.doPostApiEntitlement(String.valueOf(new StringBuffer().append(wso2Config.tokenServerUri).append("/services/EntitlementService?wsdl")), String.valueOf(sb),user);
+        	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        	log.info("res="+res);
 		} catch (Exception e) {
 			log.info("api权限验证请求异常{}",e.getMessage(),e);
 		}

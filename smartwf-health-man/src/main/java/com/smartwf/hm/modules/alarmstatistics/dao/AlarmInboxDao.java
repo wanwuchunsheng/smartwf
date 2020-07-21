@@ -9,8 +9,10 @@ import org.springframework.stereotype.Repository;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
+import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
+import com.smartwf.hm.modules.alarmstatistics.vo.FaultOperationRecordVO;
 
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
@@ -72,6 +74,7 @@ public interface AlarmInboxDao extends BaseMapper<FaultInformation> {
  	 * @return
  	 */
 	List<FaultInformationVO> selectKeyPositionByList(@Param("bean") KeyPosition bean);
+	
 	
 
 }

@@ -169,5 +169,15 @@
             and a.tenant_id = #{bean.tenantId}
         </if>
     </select>
+    
+    <!-- 查询用户头像路劲 -->
+    <select id="selectUserInfoByCreateId"  resultType="com.smartwf.sm.modules.admin.pojo.UserInfo">
+	    select id,avatar from sys_user_info where id in 
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</select>
+    
+    
 	
 </mapper>

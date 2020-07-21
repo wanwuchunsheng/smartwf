@@ -2,6 +2,7 @@ package com.smartwf.hm.modules.alarmstatistics.controller;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -134,7 +135,7 @@ public class FaultDataController {
     	                // 获取图片的扩展名
     	                String extensionName = fileName.substring(fileName.indexOf("."));
     	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
-    	                String newFileName = String.valueOf(System.currentTimeMillis())  + extensionName;
+    	                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
     	                // 数据库保存的目录
     	                String datdDirectory = temp.concat(newFileName);
     	                // 文件路径

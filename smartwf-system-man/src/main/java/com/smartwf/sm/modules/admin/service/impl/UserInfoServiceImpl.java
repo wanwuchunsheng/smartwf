@@ -2,6 +2,7 @@ package com.smartwf.sm.modules.admin.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -425,5 +426,26 @@ public class UserInfoServiceImpl implements UserInfoService{
 		}
 		//保存
 		this.userInfoDao.insert(tv);
+	}
+
+	/**
+     * @Description: 查询用户头像路径
+     * @author WCH
+     * @param ids
+     * @return
+     */
+	@Override
+	public Result<?> selectUserInfoByCreateId(String ids) {
+		List<String> list=new ArrayList<>();
+		Map<Integer,String> map =new HashMap<>();
+		String[] str=ids.split(",");
+		for(String s: str ) {
+			list.add(s);
+		}
+		List<UserInfo> userInfoList=this.userInfoDao.selectUserInfoByCreateId(list);
+		for(UserInfo uf:userInfoList) {
+			map.put(uf.getId(), uf.getAvatar());
+		}
+		return Result.data(Constants.EQU_SUCCESS,map);
 	}
 }

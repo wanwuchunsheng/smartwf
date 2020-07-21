@@ -226,7 +226,7 @@
     </select>
     
    <!-- 分页查询故障报警信息 -->
-    <select id="selectKeyPositionByList" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+   <select id="selectKeyPositionByList" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
         select 
 		    b.id,
 			b.alarm_code,
@@ -257,5 +257,7 @@
         </if>
           order by b.start_time desc
     </select>
+    
+ 
    
 </mapper>

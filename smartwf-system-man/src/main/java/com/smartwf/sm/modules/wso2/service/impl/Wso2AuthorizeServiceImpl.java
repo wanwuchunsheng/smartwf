@@ -44,14 +44,12 @@ public class Wso2AuthorizeServiceImpl implements Wso2AuthorizeService {
 		headers.put("content-type", "application/json");
 		StringBuffer sb=new StringBuffer();
 		sb.append(user.getTenantCode()).append("@").append(user.getTenantDomain()).append(":").append(user.getTenantPw());
-		//sb.append(user.getTenantCode()).append(":").append(user.getTenantPw());
 		headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
         //拼接uri
         sb=new StringBuffer();
-        sb.append(wso2Config.userServerUri).append("/api/identity/entitlement/decision/pdp");
-        String data="{\"Request\":{\"http://wso2.org/identity/user\":[{\"Attribute\":[{\"AttributeId\":\"http://wso2.org/identity/user/username\",\"Value\":\"adminUser\",\"IncludeInResult\":true,\"DataType\":\"string\"}]},{\"Attribute\":[{\"AttributeId\":\"http://wso2.org/identity/user/username\",\"Value\":\"publicUser\",\"IncludeInResult\":true,\"DataType\":\"string\"}]}],\"Resource\":{\"Attribute\":[{\"AttributeId\":\"urn:oasis:names:tc:xacml:1.0:resource:resource-id\",\"Value\":\"index.jsp\",\"IncludeInResult\":true,\"DataType\":\"http://www.w3.org/2001/XMLSchema#string\"}]},\"Action\":[{\"Attribute\":[{\"AttributeId\":\"urn:oasis:names:tc:xacml:1.0:action:action-id\",\"Value\":\"view-welcome\",\"IncludeInResult\":true,\"DataType\":\"http://www.w3.org/2001/XMLSchema#string\"}]},{\"Attribute\":[{\"AttributeId\":\"urn:oasis:names:tc:xacml:1.0:action:action-id\",\"Value\":\"view-status\",\"IncludeInResult\":true,\"DataType\":\"http://www.w3.org/2001/XMLSchema#string\"}]},{\"Attribute\":[{\"AttributeId\":\"urn:oasis:names:tc:xacml:1.0:action:action-id\",\"Value\":\"view-summary\",\"IncludeInResult\":true,\"DataType\":\"http://www.w3.org/2001/XMLSchema#string\"}]},{\"Attribute\":[{\"AttributeId\":\"urn:oasis:names:tc:xacml:1.0:action:action-id\",\"Value\":\"modify-welcome\",\"IncludeInResult\":true,\"DataType\":\"http://www.w3.org/2001/XMLSchema#string\"}]}]}}";
+        sb.append(wso2Config.userServerUri).append("/t/").append(user.getTenantCode()).append("@").append(user.getTenantDomain()).append("/api/identity/entitlement/decision/pdp");
         //发送请求
-        String str=HttpClientUtil.post(String.valueOf(sb), data,headers);
+        String str=HttpClientUtil.post(String.valueOf(sb), jsonStr,headers);
         log.info("UI批量授权返回："+str);
 		return str;
 	}

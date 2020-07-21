@@ -476,7 +476,7 @@ public class AlarmInboxController {
 		    @ApiImplicitParam(paramType = "query", name = "closureStatus", value = "操作状态{5待审核 0未处理  6驳回 2处理中 3已处理 4已关闭 7回收站 8未解决}", dataType = "Integer"),
 		    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String" )
 		})
-	    public ResponseEntity<Result<?>> addFaultOperationRecord(  FaultOperationRecord bean) {
+	    public ResponseEntity<Result<?>> addFaultOperationRecord(FaultOperationRecord bean) {
 	        try {
 	        	this.alarmInboxService.addFaultOperationRecord(bean);
 	        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"添加成功！"));

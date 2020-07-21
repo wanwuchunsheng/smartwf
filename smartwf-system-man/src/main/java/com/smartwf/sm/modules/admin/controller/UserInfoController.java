@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
@@ -181,5 +182,25 @@ public class UserInfoController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除用户资料信息错误！"));
     }
 
+    /**
+     * @Description: 查询用户头像路径
+     * @author WCH
+     * @param ids
+     * @return
+     */
+    @GetMapping("selectUserInfoByCreateId")
+    @ApiOperation(value = "查询用户头像接口", notes = "查询用户头像")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "ids", value = "主键,号拼接", dataType = "String",required = true)
+    })
+    public ResponseEntity<Result<?>> selectUserInfoByCreateId(String ids) {
+        try {
+            Result<?> result = this.userService.selectUserInfoByCreateId(ids);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("查询用户头像错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR, "失败"));
+    }
 
 }

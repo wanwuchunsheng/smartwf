@@ -81,6 +81,14 @@ public interface UserInfoDao extends BaseMapper<UserInfo> {
      */
 	User selectUserInfoByUserCode(@Param("bean") User user);
 
+	/**
+     * @Description: 查询用户头像路径
+     * @author WCH
+     * @param ids
+     * @return
+     */
+	List<UserInfo> selectUserInfoByCreateId(@Param("list") List<String> list);
+
 
     
 }

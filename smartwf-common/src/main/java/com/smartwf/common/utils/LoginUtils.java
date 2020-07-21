@@ -125,11 +125,12 @@ public class LoginUtils {
 	        /**
 	         * 通过登录验证后，继续验证api接口权限
 	         * 
-	    	 if(!Wso2ClientUtils.entitlementApiReq(request,wso2Config,user, handler)){
+	         * * */
+	    	 if(!Wso2ClientUtils.entitlementApiReq(request,wso2Config,user)){
 	    		 log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
 	        	 throw new CommonException(Constants.FORBIDDEN, "api接口访问无权限！");
 	    	 };
-	    	 * */
+	    	 
         }
         return true;
     }

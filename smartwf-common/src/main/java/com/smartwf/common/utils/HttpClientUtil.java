@@ -39,6 +39,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.pojo.User;
 import com.smartwf.common.webservice.SslClient;
 import com.smartwf.common.wso2.Wso2Config;
 
@@ -282,7 +283,7 @@ public class HttpClientUtil {
 	 * @param soapAction
 	 * @return
 	 */
-	public static String doPostApiEntitlement(String postUrl, String soapXml,String tenantCode) {
+	public static String doPostApiEntitlement(String postUrl, String soapXml,User user) {
 		// 创建HttpClientBuilder
 		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 		// HttpClient
@@ -294,7 +295,9 @@ public class HttpClientUtil {
 		try {
 			httpPost.setHeader("Content-Type", "text/xml;charset=UTF-8");
 			httpPost.setHeader("SOAPAction", null);
-			httpPost.setHeader(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String((tenantCode+":000000").getBytes())));
+			StringBuffer sb=new StringBuffer();
+			sb.append(user.getTenantCode()).append("@").append(user.getTenantDomain()).append(":").append(user.getTenantPw());
+			httpPost.setHeader(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes())));
 			StringEntity data = new StringEntity(soapXml, Charset.forName("UTF-8"));
 			httpPost.setEntity(data);
 			CloseableHttpResponse response = closeableHttpClient.execute(httpPost);
@@ -305,10 +308,15 @@ public class HttpClientUtil {
 				log.info("response:" + retStr);
 				return retStr;
 			}
-			// 释放资源
-			closeableHttpClient.close();
 		} catch (Exception e) {
 			log.error("exception in doPostApiEntitlement", e);
+		}finally {
+			// 释放资源
+			try {
+				closeableHttpClient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
