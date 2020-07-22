@@ -28,7 +28,6 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
-import com.smartwf.hm.modules.alarmstatistics.vo.FaultOperationRecordVO;
 
 import lombok.extern.log4j.Log4j2;
 

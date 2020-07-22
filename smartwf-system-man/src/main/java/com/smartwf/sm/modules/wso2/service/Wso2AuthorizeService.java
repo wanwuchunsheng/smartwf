@@ -14,7 +14,7 @@ public interface Wso2AuthorizeService {
 	 * @param str
 	 * @return
 	 * */
-	String batchUiAuthorization(String str);
+	String batchUiAuthorization(Object str);
 
 	
 

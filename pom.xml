@@ -34,7 +34,6 @@
         <org.slf4j>1.7.25</org.slf4j>
         <lombok.version>1.18.4</lombok.version>
         <redis.clients>2.9.0</redis.clients>
-        <dom.version>1.6.1</dom.version>
         <commons.httpclient>3.1</commons.httpclient>
         <org.apache.rocketmq>4.3.0</org.apache.rocketmq>
         <mybatis-plus.version>3.1.2</mybatis-plus.version>
@@ -182,12 +181,6 @@
 			   <version>${lombok.version}</version>
 			   <scope>provided</scope>
 			</dependency>
-			<!-- dom4j  -->
-			<dependency>
-	            <groupId>dom4j</groupId>
-	            <artifactId>dom4j</artifactId>
-	            <version>${dom.version}</version>
-	        </dependency>
 	        <!-- hutool 工具类 -->
 	        <dependency>
 			    <groupId>cn.hutool</groupId>

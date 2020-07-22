@@ -64,7 +64,7 @@ public interface UserInfoService {
 	void saveWso2UserInfo(UserInfoVO tv,Tenant bean);
 
 	/**
-     * @Description: 查询用户头像路径
+     * 查询用户头像路径
      * @author WCH
      * @param ids
      * @return

@@ -22,6 +22,8 @@ public class Constants {
     
     public static final String IMAGE = "image";
     
+    public static final String ACTIVE = "active";
+    
     public static final String USERID = "user_id";
     
     public static final String CHAR = ",";

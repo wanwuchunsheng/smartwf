@@ -437,7 +437,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Override
 	public Result<?> selectUserInfoByCreateId(String ids) {
 		List<String> list=new ArrayList<>();
-		Map<Integer,String> map =new HashMap<>();
+		Map<Integer,String> map =new HashMap<>(16);
 		String[] str=ids.split(",");
 		for(String s: str ) {
 			list.add(s);

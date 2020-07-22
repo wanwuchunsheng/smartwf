@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.common.utils.GsonUtils;
 import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.wso2.Wso2Config;
@@ -36,7 +37,7 @@ public class Wso2AuthorizeServiceImpl implements Wso2AuthorizeService {
 	 * @return
 	 * */
 	@Override
-	public String batchUiAuthorization(String jsonStr) {
+	public String batchUiAuthorization(Object jsonStr) {
 		//获取登录人信息
 		User user = UserThreadLocal.getUser();
 		//封装http请求头
@@ -47,9 +48,9 @@ public class Wso2AuthorizeServiceImpl implements Wso2AuthorizeService {
 		headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
         //拼接uri
         sb=new StringBuffer();
-        sb.append(wso2Config.userServerUri).append("/t/").append(user.getTenantCode()).append("@").append(user.getTenantDomain()).append("/api/identity/entitlement/decision/pdp");
+        sb.append(wso2Config.userServerUri).append("/t/").append(user.getTenantDomain()).append("/api/identity/entitlement/decision/pdp");
         //发送请求
-        String str=HttpClientUtil.post(String.valueOf(sb), jsonStr,headers);
+        String str=HttpClientUtil.post(String.valueOf(sb),GsonUtils.objectToJson(jsonStr),headers);
         log.info("UI批量授权返回："+str);
 		return str;
 	}

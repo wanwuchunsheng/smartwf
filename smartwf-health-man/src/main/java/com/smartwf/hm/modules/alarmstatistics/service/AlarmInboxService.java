@@ -115,7 +115,7 @@ public interface AlarmInboxService {
  	 */
 	Result<?> selectKeyPositionByDeviceCode(KeyPosition bean);
 	/**
-	 * @Description: 故障处理意见
+	 *  故障处理意见
 	 *    添加
 	 * @author WCH
 	 * @dateTime 2020-7-20 17:55:35
