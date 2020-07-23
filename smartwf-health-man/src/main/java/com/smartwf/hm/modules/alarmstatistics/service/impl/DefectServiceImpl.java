@@ -45,6 +45,9 @@ public class DefectServiceImpl implements DefectService {
     private RedisService redisService;
 	
 	@Autowired
+	private DefectService defectService;
+	
+	@Autowired
     private FaultOperationRecordDao faultOperationRecordDao;
 	
 	@Autowired
@@ -153,7 +156,7 @@ public class DefectServiceImpl implements DefectService {
 				case 0:
 					foRecord.setClosureReason("缺陷录入信息审核通过");
 					//初始化，更新redis
-					this.initDefectAll();
+					this.defectService.initDefectAll();
 					break;
 				default:
 					break;

@@ -21,6 +21,7 @@ import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.hm.modules.alarmstatistics.dao.AlarmInboxDao;
+import com.smartwf.hm.modules.alarmstatistics.dao.DefectDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOperationRecordDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.KeyPositionDao;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
@@ -55,6 +56,12 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	
 	@Autowired
 	private KeyPositionDao keyPositionDao;
+	
+	@Autowired
+	private DefectDao defectDao;
+	
+	@Autowired
+	private AlarmInboxService alarmInboxService;
 	
 	
 	/**
@@ -136,31 +143,47 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
 		switch (bean.getAlarmStatus()) {
 			case 1:
-				//fr.setClosureReason("已转工单");
+				//转已转工单{状态已废弃}
 				fr.setClosureStatus(1);
 				//删除redis对应数据
 				rmFaultInformationByRedis(bean.getId()); 
-				//向生产中心发送相关数据 1.id查询对象， 2封装对象调用生产中心api接口
+				//------向生产中心发送相关数据 1.id查询对象， 2封装对象调用生产中心api接口
 				break;
 			case 2:
-				//fr.setClosureReason("处理中");
+				//处理中
 				fr.setClosureStatus(2);
 				//删除redis对应数据
 				rmFaultInformationByRedis(bean.getId()); 
 				//------向生产中心发送相关数据 1.id查询对象， 2封装对象调用生产中心api接口
 				break;
 			case 3:
+				//已处理
 				fr.setClosureStatus(3);
-				//fr.setClosureReason("已处理");
 				break;
 			case 4:
-				//fr.setClosureReason("已关闭");
+				//已关闭
 				fr.setClosureStatus(4);
+				break;
+			case 0:
+				//待处理
+				fr.setClosureStatus(0);
+				//更新故障报警redis初始化数据，保证redis待处理数据最新
+				this.alarmInboxService.selectFaultInformationByAll();
+				break;
+			case 6:
+				//驳回
+				fr.setClosureStatus(6);
+				break;
+			case 7:
+				//回收站
+				fr.setClosureStatus(7);
 				break;
 			default:
 				break;
 		}
-		fr.setClosureType(1);
+		//1处理记录   2处理意见
+		fr.setClosureType(1); 
+		//插入处理记录
 		this.faultOperationRecordDao.insert(fr);
 	}
 	
