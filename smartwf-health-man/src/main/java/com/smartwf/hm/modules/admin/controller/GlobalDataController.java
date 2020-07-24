@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.utils.Md5Utils;
 
+import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -51,7 +51,7 @@ public class GlobalDataController {
         	String userStr=redisService.get(Md5Utils.md5(bean.getCode()));
         	if(StringUtils.isNoneBlank(userStr)) {
         		//2 转换成对象
-        		User user=JsonUtil.jsonToPojo(userStr, User.class);
+        		User user= JSONUtil.toBean(userStr, User.class);
         		//成功返回
         		return ResponseEntity.ok(Result.data(user));
         	}

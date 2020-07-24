@@ -8,12 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.hm.modules.knowledgebase.dao.FaultSolutionInfoDao;
 import com.smartwf.hm.modules.knowledgebase.pojo.FaultCodeBase;
 import com.smartwf.hm.modules.knowledgebase.pojo.FaultSolutionInfo;
 import com.smartwf.hm.modules.knowledgebase.service.FaultSolutionInfoService;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 /**
  * @author WCH
@@ -38,7 +38,7 @@ public class FaultSolutionInfoServiceImpl implements FaultSolutionInfoService{
 	@Override
 	public void saveFaultSolutionInfo(FaultSolutionInfo bean) {
 		//将json字符串强制装换成对象
-		List<FaultSolutionInfo> fslist=JsonUtil.jsonToList(bean.getRemark(), FaultSolutionInfo.class);
+		List<FaultSolutionInfo> fslist=JSONUtil.toList(JSONUtil.parseArray(bean.getRemark()), FaultSolutionInfo.class);//------JsonUtil.jsonToList(bean.getRemark(), FaultSolutionInfo.class);
 		if(!fslist.isEmpty()) {
 			for(FaultSolutionInfo fb :fslist) {
 				fb.setTenantDomain(bean.getTenantDomain());

@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import com.alibaba.fastjson.JSON;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.aop.AopAround;
 import com.smartwf.common.constant.Constants;
@@ -31,11 +30,11 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.queue.LogQueue;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.MathUtils;
-import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.pojo.ExceptionLog;
 import com.smartwf.sm.modules.admin.service.ExceptionLogService;
 import com.smartwf.sm.modules.admin.service.LogService;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -124,7 +123,7 @@ public class LogAspect {
     		TraceLog traceLog = method.getAnnotation(TraceLog.class);
     		// 获取请求的类名
     		//请求参数
-    		excepLog.setLogRequParam( JSON.toJSONString(request.getParameterMap()) ); 
+    		excepLog.setLogRequParam( JSONUtil.toJsonStr(request.getParameterMap()) ); 
     		//模块说明
     		excepLog.setLogModul(traceLog.content());
     		//请求类型

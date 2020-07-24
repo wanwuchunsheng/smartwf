@@ -9,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.service.RedisService;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.hm.modules.alarmstatistics.dao.DefectDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOperationRecordDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FileUploadRecordDao;
@@ -26,6 +24,7 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FileUploadRecord;
 import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -63,7 +62,7 @@ public class DefectServiceImpl implements DefectService {
 	@Override
 	public void initDefectAll() {
 		Map<String,FaultInformation> list = this.defectDao.initDefectAll();
-		this.redisService.set("defectCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		this.redisService.set("defectCount",JSONUtil.toJsonStr(list));
 	}
 
 	
@@ -170,11 +169,11 @@ public class DefectServiceImpl implements DefectService {
 	 * 
 	 * */
 	public void rmDefectByRedis(String id) {
-		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("defectCount"));
+		Map<String, Object> maps=JSONUtil.parseObj(this.redisService.get("defectCount"));
 		if(maps!=null && maps.size()>0) {
 			maps.remove(id);
 			log.info("redis未处理故障总数：{}",maps.size());
-			this.redisService.set("faultCount",JSON.toJSONString(maps,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+			this.redisService.set("faultCount",JSONUtil.toJsonStr(maps));
 		}
 	}
 
@@ -208,7 +207,7 @@ public class DefectServiceImpl implements DefectService {
 	 */
 	@Override
 	public Integer selectDefectCountByAll() {
-		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("defectCount"));
+		Map<String, Object> maps=JSONUtil.parseObj(this.redisService.get("defectCount"));
 		if(maps!=null && maps.size()>0) {
 			return maps.size();
 		}
@@ -237,9 +236,6 @@ public class DefectServiceImpl implements DefectService {
 		List<FaultOperationRecord> list = this.faultOperationRecordDao.selectList(queryWrapper);
 		return Result.data(list);
 	}
-	
-	
-	
 	
 	
 }

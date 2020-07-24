@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smartwf.common.utils.HttpClientUtil;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.wso2.pojo.Wso2Tenant;
 import com.smartwf.sm.modules.wso2.service.Wso2TenantService;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -58,7 +58,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
     	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	if(StringUtils.isNoneBlank(res)) {
-    		return JsonUtil.multilayerXmlToMap(res);
+    		return JSONUtil.parseObj(res); //-------------JsonUtil.multilayerXmlToMap(res);
     	}
 		return null;
 	}
@@ -82,7 +82,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
     	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	if(StringUtils.isNoneBlank(res)) {
-    		return JsonUtil.multilayerXmlToMap(res);
+    		return JSONUtil.parseObj(res); //-----JsonUtil.multilayerXmlToMap(res);
     	}
 		return null;
 	}
@@ -106,7 +106,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
     	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	if(StringUtils.isNoneBlank(res)) {
-    		return JsonUtil.multilayerXmlToMap(res);
+    		return JSONUtil.parseObj(res);  //---------JsonUtil.multilayerXmlToMap(res);
     	}
 		return null;
 	}
@@ -153,7 +153,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
     	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	if(StringUtils.isNoneBlank(res)) {
-    		return JsonUtil.multilayerXmlToMap(res);
+    		return JSONUtil.parseObj(res);  //--------JsonUtil.multilayerXmlToMap(res);
     	}
 		return null;
 	}
@@ -183,7 +183,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
     	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss") );
     	if(StringUtils.isNoneBlank(res)) {
-    		return JsonUtil.multilayerXmlToMap(res);
+    		return JSONUtil.parseObj(res);//-----------JsonUtil.multilayerXmlToMap(res);
     	}
 		return null;
 	}

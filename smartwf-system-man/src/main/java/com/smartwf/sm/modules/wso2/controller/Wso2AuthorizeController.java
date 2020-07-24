@@ -1,7 +1,5 @@
 package com.smartwf.sm.modules.wso2.controller;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,20 +8,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.GsonUtils;
 import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
-import com.smartwf.sm.modules.wso2.pojo.Wso2Tenant;
 import com.smartwf.sm.modules.wso2.service.Wso2AuthorizeService;
 
+import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -61,7 +56,7 @@ public class Wso2AuthorizeController {
     public ResponseEntity<Result<?>> batchUiAuthorization(HttpServletRequest request,@RequestBody Object body) {
         try {
         	String resStr =this.wso2AuthorizeService.batchUiAuthorization(body);
-        	return ResponseEntity.ok().body(Result.data(Constants.EQU_SUCCESS , GsonUtils.jsonToPojo(resStr, Object.class) ));
+        	return ResponseEntity.ok().body(Result.data(Constants.EQU_SUCCESS ,  JSONUtil.toBean(resStr, Object.class)));
         } catch (Exception e) {
             log.error("Wso2（UI）批量授权错误！{}", e.getMessage(), e);
         }

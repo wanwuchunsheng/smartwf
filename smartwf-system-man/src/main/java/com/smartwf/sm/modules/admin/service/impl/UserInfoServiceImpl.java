@@ -18,7 +18,6 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.TreeResource;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.OrganizationDao;
@@ -40,6 +39,7 @@ import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.service.Wso2RoleService;
 import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j;
 /**
  * @Description: 用户资料业务层接口实现
@@ -132,7 +132,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		Map<String,Object> map=this.wso2UserService.addUser(bean);
 		//验证wso2插入是否成功，成功返回ID
 		if(map==null || !map.containsKey(Constants.ID)) {
-			return Result.data(Constants.BAD_REQUEST,"失败，wso2用户保存失败！"+JsonUtil.objectToJson(map));
+			return Result.data(Constants.BAD_REQUEST,"失败，wso2用户保存失败！"+JSONUtil.toJsonStr(map));
 		}
 		bean.setUserCode(String.valueOf(map.get("id")) );
 		//md5加密
@@ -415,9 +415,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 		//查询wso2 租户默认用户id
 		Map<String,Object> maplist=wso2UserService.selectUserByName(tv, bean);
 		if(maplist.containsKey(Constants.RESOURCES)) {
-			List<Map> list=JsonUtil.jsonToList(JsonUtil.objectToJson(maplist.get("Resources")), Map.class);
+			List<Map> list=JSONUtil.toList(JSONUtil.parseArray( maplist.get("Resources")), Map.class); //---- JsonUtil.jsonToList(JsonUtil.objectToJson(maplist.get("Resources")), Map.class);
 			if(list!=null && list.size()>0) {
-				Map<String,Object> map=JsonUtil.jsonToMap(JsonUtil.objectToJson(list.get(0)));
+				Map<String,Object> map=JSONUtil.parseObj( JSONUtil.toJsonStr(list.get(0))); //------- JsonUtil.jsonToMap(JsonUtil.objectToJson(list.get(0)));
 				if(map.containsKey(Constants.ID)) {
 					//给用户添加关联的wso2 userId
 					tv.setUserCode(String.valueOf(map.get("id")));

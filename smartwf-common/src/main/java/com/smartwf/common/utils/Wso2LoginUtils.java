@@ -16,6 +16,7 @@ import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.wso2.Wso2Config;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -61,14 +62,14 @@ public class Wso2LoginUtils {
         		throw new CommonException(Constants.UNAUTHORIZED, "登录失败！参数session_state异常！");
         	}
         	//7.授权后，通过code换取token
-        	Map<String,Object> idtmap=JsonUtil.jsonToMap(redisService.get(clientId));
-        	Map<String,Object> tkmap=JsonUtil.jsonToMap(Wso2ClientUtils.reqWso2Token(wso2Config,idtmap,code,redirectUri));
+        	Map<String,Object> idtmap=JSONUtil.parseObj(redisService.get(clientId));
+        	Map<String,Object> tkmap=JSONUtil.parseObj(Wso2ClientUtils.reqWso2Token(wso2Config,idtmap,code,redirectUri));
         	for(Entry<String, Object> m:tkmap.entrySet()) {
         		log.info("================"+m.getKey()+"    "+m.getValue());
         	}
         	//8.验证code换取token是否成功
         	if(!tkmap.containsKey(Constants.ACCESSTOKEN)) {
-        		log.warn("参数已过期：{}，用户请求uri：{}", JsonUtil.objectToJson(tkmap), request.getRequestURI());
+        		log.warn("参数已过期：{}，用户请求uri：{}", JSONUtil.toJsonStr(tkmap), request.getRequestURI());
         		throw new CommonException(Constants.UNAUTHORIZED, "参数已过期！");
         	}
         	//9.存储值
@@ -84,7 +85,7 @@ public class Wso2LoginUtils {
         	user.setSessionState(sessionState);
         	log.info("token= "+Md5Utils.md5(code));
         	//过期时间
-        	redisService.set(Md5Utils.md5(code),JsonUtil.objectToJson(user) ,wso2Config.tokenRefreshTime);
+        	redisService.set(Md5Utils.md5(code),JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
         }else {
 	        /** 
 	         * 已登录
@@ -97,10 +98,10 @@ public class Wso2LoginUtils {
 	        	throw new CommonException(Constants.UNAUTHORIZED, "请求失败！token过期，请重新登录！");
 	        }
 	        //11.验证accessToken是否失效{由wso2帮忙验证}
-	        User user=JsonUtil.jsonToPojo(mapStr, User.class);
+	        User user= JSONUtil.toBean(mapStr, User.class);
 	    	if(!Wso2ClientUtils.reqWso2CheckToken(wso2Config,user)) {
 	    		//12.重置wso2令牌时间
-		    	Map<String,Object> refmap=JsonUtil.jsonToMap(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
+		    	Map<String,Object> refmap=JSONUtil.parseObj(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
 		    	for(Entry<String, Object> m:refmap.entrySet()) {
 		    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
 		    	}
@@ -115,7 +116,7 @@ public class Wso2LoginUtils {
 		    	user.setIdToken(String.valueOf(refmap.get("id_token")));
 	    	};
 	    	//15.重置redis过期时间
-	        redisService.set(token,JsonUtil.objectToJson(user),wso2Config.tokenRefreshTime);
+	        redisService.set(token,JSONUtil.toJsonStr(user),wso2Config.tokenRefreshTime);
 	        UserThreadLocal.setUser(user);
 	        
 	        /**

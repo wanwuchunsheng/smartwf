@@ -27,8 +27,6 @@
         <net.javacrumbs.shedlock>0.18.2</net.javacrumbs.shedlock>
         <org.iherus>1.3.1</org.iherus>
         <org.apache.poi>4.0.0</org.apache.poi>
-        <org.json>20180130</org.json>
-        <org.gson>2.8.0</org.gson>
         <org.apache.commons>3.4</org.apache.commons>
         <com.sun.mail>1.5.6</com.sun.mail>
         <org.slf4j>1.7.25</org.slf4j>
@@ -79,25 +77,6 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${com.alibaba.druid}</version>
-            </dependency>
-            <!-- 阿里巴巴json 
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${com.alibaba.fastjson}</version>
-            </dependency>
-            -->
-            <!-- gson依赖 -->
-			<dependency>
-			     <groupId>com.google.code.gson</groupId>
-			     <artifactId>gson</artifactId>
-			     <version>${org.gson}</version>
-			</dependency>
-            <!-- json -->
-            <dependency>
-                <groupId>org.json</groupId>
-                <artifactId>json</artifactId>
-                <version>${org.json}</version>
             </dependency>
             <!-- swagger2-RESTful风格API -->
             <dependency>

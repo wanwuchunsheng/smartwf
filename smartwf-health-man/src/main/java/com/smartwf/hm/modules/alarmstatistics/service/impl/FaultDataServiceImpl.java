@@ -7,14 +7,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.service.RedisService;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultDataDao;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultDataService;
+
+import cn.hutool.json.JSONUtil;
 
 
 /**
@@ -49,13 +48,13 @@ public class FaultDataServiceImpl implements FaultDataService {
 		//1）保存mysql
 		this.faultDataDao.insert(bean);
 		//2）获取redis缓存数据,并更新缓存数据，保存
-		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("faultCount"));
+		Map<String, Object> maps=JSONUtil.parseObj(this.redisService.get("faultCount"));
 		if(maps==null) {
 			maps=new HashMap<>(4);
 		}
 		maps.put(bean.getId(), bean);
 		//3）将新数据保存redis
-		this.redisService.set("faultCount",JSON.toJSONString(maps,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		this.redisService.set("faultCount",JSONUtil.toJsonStr(maps));
 	}
 	
 }

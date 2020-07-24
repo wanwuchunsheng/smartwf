@@ -6,25 +6,19 @@ import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.druid.support.json.JSONUtils;
-import com.smartwf.common.constant.Constants;
-import com.smartwf.common.utils.GsonUtils;
 import com.smartwf.common.utils.HttpClientUtil;
-import com.smartwf.common.utils.JsonUtil;
-import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
-import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
-import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -68,8 +62,8 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 	        sb=new StringBuffer();
 	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Users");
 	        //发送请求
-	        String str=HttpClientUtil.post(String.valueOf(sb), JsonUtil.objectToJson(data),headers);
-	        Map<String,Object> map=JsonUtil.jsonToMap(str);
+	        String str=HttpClientUtil.post(String.valueOf(sb), JSONUtil.toJsonStr(data),headers);
+	        Map<String,Object> map=JSONUtil.parseObj(str);
 	        //返回
 			return map;
 		}
@@ -160,7 +154,7 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Users/").append(bean.getUserCode());
 	        //发送请求
 	        String str=HttpClientUtil.get(String.valueOf(sb), headers);
-	        Map<String,Object> map=JsonUtil.jsonToMap(str);
+	        Map<String,Object> map=JSONUtil.parseObj(str);
 	        //返回
 			return map;
 		} catch (Exception e) {
@@ -188,7 +182,7 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Users?userName=").append(bean.getLoginCode());
 	        //发送请求
 	        String str=HttpClientUtil.get(String.valueOf(sb), headers);
-	        Map<String,Object> map=GsonUtils.jsonToMap(str);
+	        Map<String,Object> map=JSONUtil.parseObj(str);
 	        //返回
 			return map;
 		} catch (Exception e) {

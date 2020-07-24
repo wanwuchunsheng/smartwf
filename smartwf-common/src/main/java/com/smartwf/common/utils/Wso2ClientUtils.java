@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.dom4j.Document;
@@ -18,6 +19,9 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.wso2.Wso2Config;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 /**
  * 
@@ -161,7 +165,7 @@ public class Wso2ClientUtils {
 	        String str=HttpClientUtil.expVerification(postUrl, wso2Config.userAuthorization);
 	        if(StringUtils.isNotBlank(str)) {
 	        	//转换map
-	        	Map<String,Object> map=JsonUtil.jsonToMap(str);
+				Map<String,Object> map=JSONUtil.parseObj(str);
 	            if(map.containsKey(Constants.ACTIVE )) {
 	            	return Boolean.valueOf(map.get("active").toString());
 	            }

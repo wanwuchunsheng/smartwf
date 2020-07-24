@@ -8,18 +8,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Wso2Group;
 import com.smartwf.common.pojo.Wso2User;
-import com.smartwf.common.utils.GsonUtils;
 import com.smartwf.common.utils.HttpClientUtil;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Role;
@@ -28,7 +23,7 @@ import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.service.Wso2RoleService;
 import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
-import ch.qos.logback.core.joran.spi.XMLUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -73,8 +68,8 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 	        sb=new StringBuffer();
 	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Groups");
 	        //发送请求
-	        String str=HttpClientUtil.post(String.valueOf(sb), JsonUtil.objectToJson(data),headers);
-	        Map<String,Object> map=JsonUtil.jsonToMap(str);
+	        String str=HttpClientUtil.post(String.valueOf(sb), JSONUtil.toJsonStr(data),headers);
+	        Map<String,Object> map=JSONUtil.parseObj(str);
 	        //返回
 			return map;
 		}
@@ -141,16 +136,16 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 			try {
 				//查询角色已绑定的用户
 				String res=HttpClientUtil.get(String.valueOf(sb), headers);
-				Map<String,Object> map=JsonUtil.jsonToMap(res);
+				Map<String,Object> map=JSONUtil.parseObj(res);
 				for( Entry<String, Object> m: map.entrySet()) {
 					log.info(m.getKey()+"   "+m.getValue());
 				}
 				if(null!=map && map.containsKey(Constants.MEMBERS)) {
 					data.put("members", map.get("members"));
 				}
-				String str=HttpClientUtil.put(String.valueOf(sb), JsonUtil.objectToJson(data),headers);
+				String str=HttpClientUtil.put(String.valueOf(sb), JSONUtil.toJsonStr(data),headers);
 				log.info("返回的数据："+str);
-				return JsonUtil.jsonToMap(str);
+				return JSONUtil.parseObj(str);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -189,13 +184,13 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 			try {
 				//查询角色已绑定的用户
 				String res=HttpClientUtil.get(String.valueOf(sb), headers);
-				Map<String, Object> map=GsonUtils.jsonToMap(res);
+				Map<String, Object> map=JSONUtil.parseObj(res);
 				List<Map<String,Object>> listmap=null;
 				Map<String,Object> lmap=null;
 				//3）判断当前角色是否已绑定用户
 				if(null!=map && map.containsKey(Constants.MEMBERS)) {
 					//已绑定
-					Wso2Group wgf=GsonUtils.jsonToPojo(res, Wso2Group.class);
+					Wso2Group wgf=JSONUtil.toBean(res, Wso2Group.class);
 					//获得已绑定所有用户
 					listmap=wgf.getMembers();
 					//封装新用户，在已绑定用户集合追加新用户
@@ -214,9 +209,9 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 					wg.setMembers(listmap);
 				}
 				//4）角色用户绑定保存
-				String str=HttpClientUtil.put(String.valueOf(sb), JsonUtil.objectToJson(wg),headers);
+				String str=HttpClientUtil.put(String.valueOf(sb), JSONUtil.toJsonStr(wg),headers);
 				log.info("返回的数据："+str);
-				return JsonUtil.jsonToMap(str);
+				return JSONUtil.parseObj(str);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -242,7 +237,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 			Map<String,Object> roleOrUser=this.wso2UserService.selectUserById(bean,resInfo);
 			log.info(roleOrUser.containsKey("groups"));
 			if(null!=roleOrUser && roleOrUser.containsKey(Constants.GROUPS)) {
-				Wso2User wg=GsonUtils.jsonToPojo(GsonUtils.objectToJson(roleOrUser), Wso2User.class);
+				Wso2User wg=JSONUtil.toBean( JSONUtil.toJsonStr(roleOrUser), Wso2User.class);//-----GsonUtils.jsonToPojo(GsonUtils.objectToJson(roleOrUser), Wso2User.class);
 				List<Map<String,Object>> list=wg.getGroups();
 				if( null !=list && list.size()>0 ) {
 					//2）判断已绑定角色是否存在
@@ -260,7 +255,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 					        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Groups/").append(String.valueOf(m.get("value")));
 							//6）查询角色已绑定的用户，过滤当前用户
 							String res=HttpClientUtil.get(String.valueOf(sb), headers);
-							Wso2Group wgs=GsonUtils.jsonToPojo(res, Wso2Group.class);
+							Wso2Group wgs=JSONUtil.toBean(res, Wso2Group.class);
 							List<Map<String,Object>> umap=wgs.getMembers();
 							List<Map<String,Object>> nmap=new ArrayList<>();
 							if(null !=wgs && null!=umap && umap.size()>0) {
@@ -276,11 +271,11 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 						        Wso2Group wgdata=new Wso2Group();
 						        wgdata.setDisplayName(String.valueOf(m.get("display")));
 								wgdata.setMembers(nmap);
-								dt=JsonUtil.objectToJson(wgdata);
+								dt=JSONUtil.toJsonStr(wgdata);
 							}else {
 						        Map<String,Object> data=new HashMap<>(16);
 						        data.put("displayName", String.valueOf(m.get("display")));
-						        dt=JsonUtil.objectToJson(data);
+						        dt=JSONUtil.toJsonStr(data);
 							}
 							//8）发送请求
 							try {

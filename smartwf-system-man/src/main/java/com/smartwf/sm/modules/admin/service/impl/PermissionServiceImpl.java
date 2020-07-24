@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.sm.modules.admin.dao.PermissionDao;
 import com.smartwf.sm.modules.admin.dao.ResourceDao;
 import com.smartwf.sm.modules.admin.dao.UserActionDao;
@@ -24,6 +23,7 @@ import com.smartwf.sm.modules.admin.vo.PermissionVO;
 import com.smartwf.sm.modules.admin.vo.ResourceVO;
 import com.smartwf.sm.modules.admin.vo.UserActionVO;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j;
 /**
  * @Description: 权限业务层接口实现
@@ -115,7 +115,7 @@ public class PermissionServiceImpl implements PermissionService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//将json字符串装换成实体对象
-		List<Permission> list=JsonUtil.jsonToList(bean.getIds(),Permission.class);
+		List<Permission> list=JSONUtil.toList(JSONUtil.parseArray(bean.getIds()), Permission.class); //------- JsonUtil.jsonToList(bean.getIds(),Permission.class);
 		if(list!=null && list.size()>0) {
 			for(Permission per:list) {
 				//批量插入

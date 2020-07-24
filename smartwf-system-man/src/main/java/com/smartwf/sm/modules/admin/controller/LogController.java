@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Log;
 import com.smartwf.sm.modules.admin.service.LogService;
 
+import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -55,7 +55,7 @@ public class LogController {
     public ResponseEntity<Result> selectLogByPage(Page<Log> page) {
         try {
             Result result = this.logService.selectLogByPage(page);
-            log.info("返回结果{}",JSONArray.toJSONString(result));
+            log.info("返回结果{}",JSONUtil.toJsonStr(result));
             if (result != null) {
                 return ResponseEntity.ok(result);
             }

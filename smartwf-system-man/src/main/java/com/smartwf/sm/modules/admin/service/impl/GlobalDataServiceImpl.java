@@ -8,15 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.service.RedisService;
-import com.smartwf.common.utils.JsonUtil;
-import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
@@ -33,6 +27,8 @@ import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
 import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 /**
  * @Description: 全局数据业务层接口实现
@@ -70,7 +66,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
      */
 	@Override
 	public Result<?> tenantAll() {
-		List<Tenant> list=JsonUtil.jsonToList(redisService.get("initTenant"), Tenant.class);
+		List<Tenant> list=JSONUtil.toList(JSONUtil.parseArray(redisService.get("initTenant")), Tenant.class);//-----JsonUtil.jsonToList(redisService.get("initTenant"), Tenant.class);
 		if(list!=null && list.size()>0) {
 			return Result.data(list);
 		}
@@ -87,10 +83,13 @@ public class GlobalDataServiceImpl implements GlobalDataService{
     	//1）判断数据类型是否为空
     	if(null !=bean.getOrgType()) {
     		//2）获取所有租户下的组织架构数据
-			Map<Integer, List<OrganizationVO>> map = (Map<Integer, List<OrganizationVO>>) JSONObject.parseObject(redisService.get("initOrganization"), new TypeReference<Map<Integer, List<OrganizationVO>>>(){} );
-			if(map!=null && map.size()>0) {
-				List<OrganizationVO> orglist=map.get(bean.getTenantId());
-        		//3）判断当前租户下是否有组织架构数据
+			//获取数据字典全局数据
+			Map<String, Object> map = JSONUtil.parseObj(redisService.get("initOrganization"));
+			//判断是否为空
+			if(map!=null && map.size()> 0 ) {
+				//通过编码，获取对象集合
+				List<OrganizationVO> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get( Convert.toStr(bean.getTenantId()))), OrganizationVO.class) ;	
+				//3）判断当前租户下是否有组织架构数据
         		if(orglist!=null && orglist.size()>0 ) {
         			//4）判断返回的数据类型
             		if(Constants.ONE==bean.getOrgType()) {
@@ -117,9 +116,12 @@ public class GlobalDataServiceImpl implements GlobalDataService{
      */
 	@Override
 	public Result<?> postAll(Post bean) {
-		Map<Integer, List<Post>> map = (Map<Integer, List<Post>>) JSONObject.parseObject(redisService.get("initPost"), new TypeReference<Map<Integer, List<Post>>>() {} );
+		//获取数据字典全局数据
+		Map<String, Object> map = JSONUtil.parseObj(redisService.get("initPost"));
+		//判断是否为空
 		if(map!=null && map.size()> 0 ) {
-			List<Post> orglist=map.get(bean.getTenantId());
+			//通过编码，获取对象集合
+			List<Post> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get( Convert.toStr(bean.getTenantId()))), Post.class) ;
     		if(orglist!=null && orglist.size()>0 ) {
                 Integer tenantId=bean.getTenantId();
                 Integer orgId=bean.getOrganizationId();
@@ -154,9 +156,12 @@ public class GlobalDataServiceImpl implements GlobalDataService{
      */
 	@Override
 	public Result<?> roleAll(Role bean) {
-    	Map<Integer, List<Role>> map = (Map<Integer, List<Role>>) JSONObject.parseObject(redisService.get("initRole"), new TypeReference<Map<Integer, List<Role>>>() {} );
+		//获取数据字典全局数据
+		Map<String, Object> map = JSONUtil.parseObj(redisService.get("initRole"));
+		//判断是否为空
 		if(map!=null && map.size()> 0 ) {
-			List<Role> orglist=map.get(bean.getTenantId());
+			//通过编码，获取对象集合
+			List<Role> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get( Convert.toStr(bean.getTenantId()))), Role.class) ;
     		if(orglist!=null && orglist.size()>0 ) {
                 Integer tenantId=bean.getTenantId();
                 List<Role> postlist=new ArrayList<>();
@@ -181,10 +186,13 @@ public class GlobalDataServiceImpl implements GlobalDataService{
      */
 	@Override
 	public Result<?> dictAll(Dictionary bean) {
-		Map<Integer, List<Dictionary>> map = (Map<Integer, List<Dictionary>>) JSONObject.parseObject(redisService.get("initDictionary"), new TypeReference<Map<Integer, List<Dictionary>>>() {} );
+		//获取数据字典全局数据
+		Map<String, Object> map = JSONUtil.parseObj(redisService.get("initDictionary"));
+		//判断是否为空
 		if(map!=null && map.size()> 0 ) {
-			List<Dictionary> orglist=map.get(bean.getTenantId());
-    		if(orglist!=null && orglist.size()>0 ) {
+			//通过编码，获取对象集合
+			List<Dictionary> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get( Convert.toStr(bean.getTenantId()))), Dictionary.class) ;
+			if(orglist!=null && orglist.size()>0 ) {
                 Integer tenantId=bean.getTenantId();
                 String dictCode=bean.getDictCode();
                 List<Dictionary> postlist=new ArrayList<>();
@@ -218,11 +226,11 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	    			switch (val) {
 		    			case "0":
 		    				//组织机构,职务,角色,数据字典
-		    				this.redisService.set("initTenant", JSON.toJSONString(tenantList));
-		                	this.redisService.set("initOrganization",JSON.toJSONString(this.organizationService.initOrganizationDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
-		                	this.redisService.set("initPost", JSON.toJSONString(this.postService.initPostDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
-		                	this.redisService.set("initRole", JSON.toJSONString(this.roleService.initRoleDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
-		                	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.initDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		    				this.redisService.set("initTenant", JSONUtil.toJsonStr(tenantList));
+		                	this.redisService.set("initOrganization",JSONUtil.toJsonStr(this.organizationService.initOrganizationDatas(tenantList)));
+		                	this.redisService.set("initPost", JSONUtil.toJsonStr(this.postService.initPostDatas(tenantList)));
+		                	this.redisService.set("initRole", JSONUtil.toJsonStr(this.roleService.initRoleDatas(tenantList)));
+		                	this.redisService.set("initDictionary", JSONUtil.toJsonStr(this.dictionaryService.initDictionaryDatas(tenantList)));
 		                	log.info("租户数据{}",redisService.get("initTenant"));
 		                	log.info("组织机构数据{}",redisService.get("initOrganization"));
 		                	log.info("职务基础数据{}",redisService.get("initPost"));
@@ -231,27 +239,27 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		                	break;
 						case "1":
 							//租户
-							this.redisService.set("initTenant", JSON.toJSONString(tenantList));
+							this.redisService.set("initTenant", JSONUtil.toJsonStr(tenantList));
 							log.info("租户数据{}",redisService.get("initTenant"));
 							break;
 						case "2":
 							//组织机构
-							this.redisService.set("initOrganization",JSON.toJSONString(this.organizationService.initOrganizationDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+							this.redisService.set("initOrganization",JSONUtil.toJsonStr(this.organizationService.initOrganizationDatas(tenantList)));
 							log.info("组织机构数据{}",redisService.get("initOrganization"));
 							break;	
 						case "3":
 							//职务
-							this.redisService.set("initPost", JSON.toJSONString(this.postService.initPostDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+							this.redisService.set("initPost", JSONUtil.toJsonStr(this.postService.initPostDatas(tenantList)));
                             log.info("职务基础数据{}",redisService.get("initPost"));
 							break;
 						case "4":
 							//数据字典
-		                	this.redisService.set("initDictionary", JSON.toJSONString(this.dictionaryService.initDictionaryDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		                	this.redisService.set("initDictionary", JSONUtil.toJsonStr(this.dictionaryService.initDictionaryDatas(tenantList)));
                             log.info("角色基础数据{}",redisService.get("initRole"));
 		                	break;
 						case "5":
 							//角色
-							this.redisService.set("initRole", JSON.toJSONString(this.roleService.initRoleDatas(tenantList),SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+							this.redisService.set("initRole", JSONUtil.toJsonStr(this.roleService.initRoleDatas(tenantList)));
 							log.info("数据字典数据{}",redisService.get("initDictionary"));
 							break;
 						default:
@@ -264,8 +272,8 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		List<IdentityConfig> idtconfig=this.identityConfigService.initIdentityConfig();
 		if(idtconfig!=null && idtconfig.size()>0) {
 			for(IdentityConfig idt: idtconfig) {
-        		this.redisService.set(idt.getClientKey(), JsonUtil.objectToJson(idt));
-        		log.info("wso2配置信息{}",idt.getClientKey(), JsonUtil.objectToJson(idt));
+        		this.redisService.set(idt.getClientKey(), JSONUtil.toJsonStr(idt));
+        		log.info("wso2配置信息{}",idt.getClientKey(), JSONUtil.toJsonStr(idt));
 			}
 		}
 	}

@@ -9,12 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.GsonUtils;
 import com.smartwf.common.utils.HttpClientUtil;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.wso2.service.Wso2AuthorizeService;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -50,7 +49,7 @@ public class Wso2AuthorizeServiceImpl implements Wso2AuthorizeService {
         sb=new StringBuffer();
         sb.append(wso2Config.userServerUri).append("/t/").append(user.getTenantDomain()).append("/api/identity/entitlement/decision/pdp");
         //发送请求
-        String str=HttpClientUtil.post(String.valueOf(sb),GsonUtils.objectToJson(jsonStr),headers);
+        String str=HttpClientUtil.post(String.valueOf(sb),JSONUtil.toJsonStr(jsonStr),headers);
         log.info("UI批量授权返回："+str);
 		return str;
 	}

@@ -10,8 +10,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
@@ -19,7 +17,6 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.hm.modules.alarmstatistics.dao.AlarmInboxDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.DefectDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOperationRecordDao;
@@ -31,6 +28,7 @@ import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.service.PmsSendDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -98,7 +96,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 */
 	@Override
 	public Integer selectAlarmsCountByAll() {
-		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("faultCount"));
+		Map<String, Object> maps=JSONUtil.parseObj(this.redisService.get("faultCount"));
 		if(maps!=null && maps.size()>0) {
 			return maps.size();
 		}
@@ -211,7 +209,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	@Override
 	public void selectFaultInformationByAll() {
 		Map<String,FaultInformation> list = this.alarmInboxDao.selectFaultInformationByAll();
-		this.redisService.set("faultCount",JSON.toJSONString(list,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+		this.redisService.set("faultCount",JSONUtil.toJsonStr(list));
 	}
 
 	/**
@@ -237,12 +235,12 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 * 
 	 * */
 	public void rmFaultInformationByRedis(String id) {
-		Map<String, Object> maps=JsonUtil.jsonToMap(this.redisService.get("faultCount"));
+		Map<String, Object> maps=JSONUtil.parseObj(this.redisService.get("faultCount"));
 		if(maps!=null && maps.size()>0) {
 			maps.remove(id);
 			log.info("redis未处理故障总数：{}",maps.size());
 			//将新数据保存redis
-			this.redisService.set("faultCount",JSON.toJSONString(maps,SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty));
+			this.redisService.set("faultCount",JSONUtil.toJsonStr(maps));
 		}
 	}
 

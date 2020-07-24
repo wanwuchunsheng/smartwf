@@ -12,12 +12,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.hm.modules.knowledgebase.dao.FaultCodeBaseDao;
 import com.smartwf.hm.modules.knowledgebase.pojo.FaultCodeBase;
 import com.smartwf.hm.modules.knowledgebase.service.FaultCodeBaseService;
 import com.smartwf.hm.modules.knowledgebase.vo.FaultCodeBaseVO;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 /**
  * @author WCH
@@ -41,7 +41,7 @@ public class FaultCodeBaseServiceImpl implements FaultCodeBaseService{
 	@Override
 	public void saveFaultCodeBase(FaultCodeBase bean) {
 		//将json字符串强制装换成对象
-		List<FaultCodeBase> fcblist=JsonUtil.jsonToList(bean.getRemark(), FaultCodeBase.class);
+		List<FaultCodeBase> fcblist=JSONUtil.toList(JSONUtil.parseArray(bean.getRemark()), FaultCodeBase.class);//-----JsonUtil.jsonToList(bean.getRemark(), FaultCodeBase.class);
 		if(!fcblist.isEmpty()) {
 			for(FaultCodeBase fb :fcblist) {
 				fb.setTenantDomain(bean.getTenantDomain());

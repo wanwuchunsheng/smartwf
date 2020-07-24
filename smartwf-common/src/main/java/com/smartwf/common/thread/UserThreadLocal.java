@@ -1,9 +1,8 @@
 package com.smartwf.common.thread;
 
 import com.smartwf.common.pojo.User;
-import com.smartwf.common.utils.GsonUtils;
-import com.smartwf.common.utils.Md5Utils;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -55,7 +54,7 @@ public class UserThreadLocal {
   		user.setTenantId(1);
   		return user;
   		**/
-      log.info(GsonUtils.objectToJson(userThreadLocal.get()));
+      log.info( JSONUtil.toJsonStr(userThreadLocal.get()));
       return userThreadLocal.get();
      
       

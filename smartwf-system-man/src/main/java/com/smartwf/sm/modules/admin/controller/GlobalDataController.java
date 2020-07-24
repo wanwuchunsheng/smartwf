@@ -3,7 +3,6 @@ package com.smartwf.sm.modules.admin.controller;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +17,6 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
-import com.smartwf.common.utils.JsonUtil;
 import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
@@ -31,6 +28,7 @@ import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
+import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -214,13 +212,13 @@ public class GlobalDataController {
         	String userStr=redisService.get(Md5Utils.md5(bean.getCode()));
         	if(StringUtils.isNoneBlank(userStr)) {
         		//2 转换成对象
-        		User user=JsonUtil.jsonToPojo(userStr, User.class);
+        		User user=JSONUtil.toBean(userStr, User.class);
         		//3根据accessToken查询用户ID
         		String str=Wso2ClientUtils.reqWso2UserInfo(wso2Config, user);
         		if(StringUtils.isBlank(str)) {
         			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，accessToken查询用户信息失败！"));
         		}
-        		Map<String,Object> resmap=JsonUtil.jsonToMap(str);
+        		Map<String,Object> resmap=JSONUtil.parseObj(str);
     			//打印返回结果
     			for(Entry<String, Object> m:resmap.entrySet()) {
             		log.info(m.getKey()+"    "+m.getValue());
@@ -235,7 +233,7 @@ public class GlobalDataController {
         		if(null==userInfo) {
         			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，user_id查询用户信息异常！"));
         		}
-        		this.redisService.set(userInfo.getSmartwfToken(), JsonUtil.objectToJson(userInfo));
+        		this.redisService.set(userInfo.getSmartwfToken(), JSONUtil.toJsonStr(userInfo));
         		//成功返回
         		return ResponseEntity.ok(Result.data(userInfo));
         	}
@@ -259,13 +257,13 @@ public class GlobalDataController {
         	String userStr =redisService.get(request.getHeader(Constants.SMARTWF_TOKEN));
         	if(StringUtils.isNoneBlank(userStr)) {
         		//2 转换成对象
-        		User user=JsonUtil.jsonToPojo(userStr, User.class);
+        		User user=JSONUtil.toBean(userStr, User.class);
         		//3根据accessToken查询用户ID
         		String str=Wso2ClientUtils.reqWso2UserInfo(wso2Config, user);
         		if(StringUtils.isBlank(str)) {
         			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，accessToken查询用户信息失败！"));
         		}
-        		Map<String,Object> resmap=JsonUtil.jsonToMap(str);
+        		Map<String,Object> resmap=JSONUtil.parseObj(str);
     			//打印返回结果
     			for(Entry<String, Object> m:resmap.entrySet()) {
             		log.info(m.getKey()+"    "+m.getValue());
@@ -280,7 +278,7 @@ public class GlobalDataController {
         		if(null==userInfo) {
         			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，user_id查询用户信息异常！"));
         		}
-        		this.redisService.set(userInfo.getSmartwfToken(), JsonUtil.objectToJson(userInfo));
+        		this.redisService.set(userInfo.getSmartwfToken(), JSONUtil.toJsonStr(userInfo));
         		//成功返回
         		return ResponseEntity.ok(Result.data(Constants.EQU_SUCCESS,userInfo));
         	}
