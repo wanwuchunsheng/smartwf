@@ -40,6 +40,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.User;
+import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.webservice.SslClient;
 import com.smartwf.common.wso2.Wso2Config;
 
@@ -236,14 +237,15 @@ public class HttpClientUtil {
     
     
 	/**
-	 * 使用SOAP 
+	 * 使用SOAP {修正}
 	 *   请求wso2发送消息
 	 * @param postUrl
 	 * @param soapXml
 	 * @param soapAction
 	 * @return
 	 */
-	public static String doPostSoap(String postUrl, String soapXml,String soapAction,Wso2Config wso2Config) {
+	public static String doPostSoap(String postUrl, String soapXml,String soapAction) {
+		User user=UserThreadLocal.getUser();
 		// 创建HttpClientBuilder
 		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 		// HttpClient
@@ -255,7 +257,9 @@ public class HttpClientUtil {
 		try {
 			httpPost.setHeader("Content-Type", "text/xml;charset=UTF-8");
 			httpPost.setHeader("SOAPAction", soapAction);
-			httpPost.setHeader(new BasicHeader("Authorization",wso2Config.userAuthorization));
+			StringBuffer sb=new StringBuffer();
+			sb.append(user.getTenantCode()).append("@").append(user.getTenantDomain()).append(":").append(user.getTenantPw());
+			httpPost.setHeader(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes())));
 			StringEntity data = new StringEntity(soapXml, Charset.forName("UTF-8"));
 			httpPost.setEntity(data);
 			CloseableHttpResponse response = closeableHttpClient.execute(httpPost);
@@ -263,13 +267,18 @@ public class HttpClientUtil {
 			if (httpEntity != null) {
 				// 打印响应内容
 				String retStr = EntityUtils.toString(httpEntity, "UTF-8");
-				log.info("response:" + retStr);
+				log.info("doPostSoap callback："+retStr);
 				return retStr;
 			}
-			// 释放资源
-			closeableHttpClient.close();
 		} catch (Exception e) {
-			log.error("exception in doPostSoap1_1", e);
+			log.error("exception in doPostSoap", e);
+		}finally {
+			// 释放资源
+			try {
+				closeableHttpClient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

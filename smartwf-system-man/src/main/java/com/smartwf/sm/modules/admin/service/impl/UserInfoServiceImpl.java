@@ -415,9 +415,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 		//查询wso2 租户默认用户id
 		Map<String,Object> maplist=wso2UserService.selectUserByName(tv, bean);
 		if(maplist.containsKey(Constants.RESOURCES)) {
-			List<Map> list=JSONUtil.toList(JSONUtil.parseArray( maplist.get("Resources")), Map.class); //---- JsonUtil.jsonToList(JsonUtil.objectToJson(maplist.get("Resources")), Map.class);
+			List<Map> list=JSONUtil.toList(JSONUtil.parseArray( maplist.get("Resources")), Map.class); 
 			if(list!=null && list.size()>0) {
-				Map<String,Object> map=JSONUtil.parseObj( JSONUtil.toJsonStr(list.get(0))); //------- JsonUtil.jsonToMap(JsonUtil.objectToJson(list.get(0)));
+				Map<String,Object> map=JSONUtil.parseObj( JSONUtil.toJsonStr(list.get(0))); 
 				if(map.containsKey(Constants.ID)) {
 					//给用户添加关联的wso2 userId
 					tv.setUserCode(String.valueOf(map.get("id")));

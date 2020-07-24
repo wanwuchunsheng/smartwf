@@ -13,6 +13,7 @@ import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.wso2.pojo.Wso2Tenant;
 import com.smartwf.sm.modules.wso2.service.Wso2TenantService;
 
+import cn.hutool.core.util.XmlUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -55,10 +56,10 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" </soapenv:Envelope>");
     	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
+    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	if(StringUtils.isNoneBlank(res)) {
-    		return JSONUtil.parseObj(res); //-------------JsonUtil.multilayerXmlToMap(res);
+    		return XmlUtil.xmlToMap(res); 
     	}
 		return null;
 	}
@@ -79,10 +80,10 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" </soapenv:Envelope> ");
     	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
+    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	if(StringUtils.isNoneBlank(res)) {
-    		return JSONUtil.parseObj(res); //-----JsonUtil.multilayerXmlToMap(res);
+    		return XmlUtil.xmlToMap(res); 
     	}
 		return null;
 	}
@@ -103,10 +104,10 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" </soapenv:Envelope> ");
     	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
+    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	if(StringUtils.isNoneBlank(res)) {
-    		return JSONUtil.parseObj(res);  //---------JsonUtil.multilayerXmlToMap(res);
+    		return XmlUtil.xmlToMap(res); 
     	}
 		return null;
 	}
@@ -150,10 +151,10 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" </soapenv:Envelope>");
     	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+  DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
+    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	if(StringUtils.isNoneBlank(res)) {
-    		return JSONUtil.parseObj(res);  //--------JsonUtil.multilayerXmlToMap(res);
+    		return XmlUtil.xmlToMap(res); 
     	}
 		return null;
 	}
@@ -180,10 +181,10 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" </soapenv:Envelope>");
     	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null,wso2Config);
+    	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss") );
     	if(StringUtils.isNoneBlank(res)) {
-    		return JSONUtil.parseObj(res);//-----------JsonUtil.multilayerXmlToMap(res);
+    		return XmlUtil.xmlToMap(res); 
     	}
 		return null;
 	}

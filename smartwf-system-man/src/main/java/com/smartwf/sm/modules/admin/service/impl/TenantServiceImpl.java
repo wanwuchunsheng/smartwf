@@ -206,7 +206,7 @@ public class TenantServiceImpl implements TenantService{
 		if(null !=bean.getEnable()) {
 			Wso2Tenant wt= new Wso2Tenant();
 			Tenant tinfo=this.tenantDao.selectById(bean);
-			wt.setTenantDomain(String.valueOf(new StringBuffer().append(tinfo.getTenantCode()).append(".com")));
+			wt.setTenantDomain(tinfo.getTenantDomain());
 	        if(Constants.ONE==bean.getEnable()) {
 	        	wt.setActive(false);
 	        }else {
