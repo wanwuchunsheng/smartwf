@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -46,7 +47,7 @@ public class Wso2ClientUtils {
         //code换取token
         headers.put("code",String.valueOf(reftoken));
         headers.put("redirect_uri",redirectUri);
-        String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/oauth2/token").toString();
+        String url=new StringBuffer().append(wso2Config.userServerUri).append("/oauth2/token").toString();
     	return HttpClientUtil.doPost(url , headers,"utf-8");
     }
     
@@ -64,7 +65,7 @@ public class Wso2ClientUtils {
         //token刷新
         headers.put("refresh_token", user.getRefreshToken()); 
         headers.put("redirect_uri",user.getRedirectUri());
-        String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/oauth2/token").toString();
+        String url=new StringBuffer().append(wso2Config.userServerUri).append("/oauth2/token").toString();
     	return HttpClientUtil.doPost(url, headers,"utf-8");
     }
     
@@ -76,7 +77,7 @@ public class Wso2ClientUtils {
     public static String reqWso2UserInfo(Wso2Config wso2Config,User user) {
     	Map<String,String> headers=new HashMap<String,String>(16);
         headers.put("Authorization",new StringBuffer().append("Bearer ").append(user.getAccessToken()).toString());
-        String url=new StringBuffer().append(wso2Config.tokenServerUri).append("/oauth2/userinfo").toString();
+        String url=new StringBuffer().append(wso2Config.userServerUri).append("/oauth2/userinfo").toString();
     	return HttpClientUtil.get(url,headers);
     }
     
@@ -101,7 +102,7 @@ public class Wso2ClientUtils {
     		sb.append(" </xsd:getBooleanDecision> </soapenv:Body> ");
     		sb.append(" </soapenv:Envelope> ");
         	log.info("soap start："+DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        	String res=HttpClientUtil.doPostApiEntitlement(String.valueOf(new StringBuffer().append(wso2Config.tokenServerUri).append("/services/EntitlementService?wsdl")), String.valueOf(sb),user);
+        	String res=HttpClientUtil.doPostApiEntitlement(String.valueOf(new StringBuffer().append(wso2Config.userServerUri).append("/services/EntitlementService?wsdl")), String.valueOf(sb),user);
         	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
         	log.info("res="+res);
         	//解析xml字符串
@@ -134,7 +135,7 @@ public class Wso2ClientUtils {
     		sb.append(" </xsd:getBooleanDecision> </soapenv:Body> ");
     		sb.append(" </soapenv:Envelope> ");
         	log.info("soap start："+DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        	String res=HttpClientUtil.doPostApiEntitlement(String.valueOf(new StringBuffer().append(wso2Config.tokenServerUri).append("/services/EntitlementService?wsdl")), String.valueOf(sb),user);
+        	String res=HttpClientUtil.doPostApiEntitlement(String.valueOf(new StringBuffer().append(wso2Config.userServerUri).append("/services/EntitlementService?wsdl")), String.valueOf(sb),user);
         	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
         	log.info("res="+res);
         	//解析xml字符串
@@ -160,9 +161,9 @@ public class Wso2ClientUtils {
 	public static boolean reqWso2CheckToken(Wso2Config wso2Config, User user) {
 		try {
 			//拼接url
-	        String postUrl= new StringBuffer().append(wso2Config.userServerUri).append("/oauth2/introspect?token=").append(user.getAccessToken()).toString();
+	        String postUrl= new StringBuffer().append(wso2Config.userServerUri).append("/t/").append(user.getTenantDomain()).append("/oauth2/introspect?token=").append(user.getAccessToken()).toString();
 	        //发送请求
-	        String str=HttpClientUtil.expVerification(postUrl, wso2Config.userAuthorization);
+	        String str=HttpClientUtil.expVerification(postUrl, "Basic " + Base64.encodeBase64String(new StringBuffer().append(user.getTenantCode()).append("@").append(user.getTenantDomain()).append(":").append(user.getTenantPw()).toString().getBytes()));
 	        if(StringUtils.isNotBlank(str)) {
 	        	//转换map
 				Map<String,Object> map=JSONUtil.parseObj(str);

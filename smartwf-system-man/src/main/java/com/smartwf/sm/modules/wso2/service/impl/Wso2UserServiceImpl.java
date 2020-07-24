@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.druid.support.json.JSONUtils;
+import com.smartwf.common.pojo.User;
+import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
@@ -108,9 +110,10 @@ public class Wso2UserServiceImpl implements Wso2UserService {
      */
 	@Override
 	public Map<String, Object> updateByUserCode(UserInfoVO bean) {
+		User user= UserThreadLocal.getUser();
 		//封装http请求头
 		Map<String,String> handlers=new HashMap<>(16);
-		handlers.put("authorization", wso2Config.userAuthorization);
+		handlers.put("authorization", "Basic " + Base64.encodeBase64String(new StringBuffer().append(user.getTenantCode()).append("@").append(user.getTenantDomain()).append(":").append(user.getTenantPw()).toString().getBytes()));
 		handlers.put("content-type", "application/scim+json" );
 		handlers.put("accept", "application/scim+json" );
 		//封装数据
@@ -124,7 +127,7 @@ public class Wso2UserServiceImpl implements Wso2UserService {
 		//判断修改参数是否为空
 		if(data.size()>0) {
 			try {
-				String res= HttpClientUtil.put(new StringBuffer().append(this.wso2Config.userServerUri).append("/scim2/Users/").append(bean.getUserCode()).toString(), JSONUtils.toJSONString(data), handlers);
+				String res= HttpClientUtil.put(new StringBuffer().append(this.wso2Config.userServerUri).append("/t/").append(user.getTenantDomain()).append("/scim2/Users/").append(bean.getUserCode()).toString(), JSONUtils.toJSONString(data), handlers);
 			    log.info("res="+res);
 			} catch (IOException e) {
 				e.printStackTrace();

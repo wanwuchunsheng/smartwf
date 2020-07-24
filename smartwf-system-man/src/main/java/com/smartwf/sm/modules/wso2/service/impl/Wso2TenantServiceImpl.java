@@ -54,7 +54,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		}
 		sb.append(" </ser:tenantInfoBean> </ser:addTenant> </soapenv:Body> ");
 		sb.append(" </soapenv:Envelope>");
-    	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
+    	StringBuffer path=new StringBuffer().append(wso2Config.userServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -78,7 +78,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" <ser:tenantDomain>").append(bean.getTenantDomain()).append("</ser:tenantDomain>");
 		sb.append("  </ser:getTenant> </soapenv:Body> ");
 		sb.append(" </soapenv:Envelope> ");
-    	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
+    	StringBuffer path=new StringBuffer().append(wso2Config.userServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -102,7 +102,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		sb.append(" <ser:tenantDomain>").append(bean.getTenantDomain()).append("</ser:tenantDomain>");
 		sb.append(" </ser:deleteTenant> </soapenv:Body> ");
 		sb.append(" </soapenv:Envelope> ");
-    	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
+    	StringBuffer path=new StringBuffer().append(wso2Config.userServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -149,7 +149,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		}
 		sb.append(" </ser:tenantInfoBean> </ser:updateTenant> </soapenv:Body> ");
 		sb.append(" </soapenv:Envelope>");
-    	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
+    	StringBuffer path=new StringBuffer().append(wso2Config.userServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+  DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -179,7 +179,7 @@ public class Wso2TenantServiceImpl implements Wso2TenantService {
 		}
 		sb.append("  </soapenv:Body> ");
 		sb.append(" </soapenv:Envelope>");
-    	StringBuffer path=new StringBuffer().append(wso2Config.tokenServerUri).append("/services/TenantMgtAdminService?wsdl");
+    	StringBuffer path=new StringBuffer().append(wso2Config.userServerUri).append("/services/TenantMgtAdminService?wsdl");
     	log.info("soap start："+DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	String res=HttpClientUtil.doPostSoap(String.valueOf(path), String.valueOf(sb),null);
     	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss") );
