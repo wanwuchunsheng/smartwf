@@ -16,6 +16,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -54,9 +55,14 @@ public class LogAspect {
     
     @Autowired
     private ExceptionLogService exceptionLogService;
+   
     
-    @Autowired
-    private Wso2Config wso2Config;
+    /**
+	 * 
+	 * 
+	 * */
+	@Value("${spring.application.name}")
+	public String smartwfSystemMan;
 
 
     /**
@@ -122,7 +128,7 @@ public class LogAspect {
     		//模块说明
     		excepLog.setLogModul(traceLog.content());
     		//请求类型
-    		excepLog.setLogType(wso2Config.smartwfSystemMan);
+    		excepLog.setLogType(smartwfSystemMan);
     		//异常信息 		
     		excepLog.setLogDesc(stackTraceToString(e.getClass().getName() , e.getMessage() , e.getStackTrace() )); 
     		//请求方法名

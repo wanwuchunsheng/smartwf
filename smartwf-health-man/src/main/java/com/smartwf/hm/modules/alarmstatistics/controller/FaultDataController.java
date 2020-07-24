@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,7 @@ import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
+import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -161,6 +163,32 @@ public class FaultDataController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"保存实时故障报警信息错误！"));
     }
+    
+    
+    /**
+	 * @Description: 转工单状态修改
+	 *    重点关注
+	 * @param id
+	 */
+    @PutMapping("updateAlarmInByParam")
+    @ApiOperation(value = "转工单状态修改接口", notes = "转工单状态修改")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "状态(5待审核 6驳回 0未处理 1已转工单 2处理中 3已处理 4已关闭 7回收站 8未解决)", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "orderNumber", value = "工单号", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
+    })
+    public ResponseEntity<Result<?>> updateAlarmInByParam(FaultInformationVO bean) {
+        try {
+        	 log.info(bean.getTenantCode()+"   "+bean.getAssetNumber()+"    "+bean.getAlarmStatus()+"    "+bean.getOrderNumber()+"   "+ bean.getRemark());
+        	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"修改成功"));
+        } catch (Exception e) {
+            log.error("转工单状态修改错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("转工单状态修改错误！"));
+    }
+    
     
     /**
 	 * @Description: 初始化故障数据

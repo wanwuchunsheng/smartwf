@@ -28,6 +28,7 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
+import com.smartwf.hm.modules.alarmstatistics.service.PmsSendDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 import lombok.extern.log4j.Log4j2;
@@ -62,6 +63,9 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	
 	@Autowired
 	private AlarmInboxService alarmInboxService;
+	
+	@Autowired
+	private PmsSendDataService pmsSendDataService;
 	
 	
 	/**
@@ -143,7 +147,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
 		switch (bean.getAlarmStatus()) {
 			case 1:
-				//转已转工单{状态已废弃}
+				//已转工单{状态已废弃}
 				fr.setClosureStatus(1);
 				//删除redis对应数据
 				rmFaultInformationByRedis(bean.getId()); 
@@ -154,7 +158,8 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 				fr.setClosureStatus(2);
 				//删除redis对应数据
 				rmFaultInformationByRedis(bean.getId()); 
-				//------向生产中心发送相关数据 1.id查询对象， 2封装对象调用生产中心api接口
+				//向生产中心发送工单数据  1.id查询对象， 2封装对象调用生产中心api接口
+				this.pmsSendDataService.FaultWordOrder(bean);
 				break;
 			case 3:
 				//已处理

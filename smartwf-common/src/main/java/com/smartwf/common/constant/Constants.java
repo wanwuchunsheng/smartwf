@@ -41,6 +41,10 @@ public class Constants {
     public static final String ERRORCODE = "error";
     
     public static final String UNKNOWN = "unknown";
+    
+    public static final int ORDERTYPE = 6;
+    
+    public static final int ORDERSOURCES = 3;
 
     public static final int ONE = 1;
 

@@ -30,11 +30,6 @@ public class Wso2Config {
 	@Value("${spring.wso2.token.token-refresh-time}")
 	public Integer tokenRefreshTime;
 	
-	/**
-	 * 
-	 * 
-	 * */
-	@Value("${spring.application.name}")
-	public String smartwfSystemMan;
+	
 	
 }
