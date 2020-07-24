@@ -58,7 +58,7 @@ public interface AlarmInboxService {
    	 * 查询所有故障报警记录信息 
    	 *   故障操作记录
    	 * @param faultInfoId
-   	 * @param tenantCode
+   	 * @param tenantDomain
    	 * @param bean
    	 * @return
    	 */

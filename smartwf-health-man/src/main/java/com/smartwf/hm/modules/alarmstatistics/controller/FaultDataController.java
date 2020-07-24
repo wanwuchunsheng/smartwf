@@ -67,7 +67,7 @@ public class FaultDataController {
     @PostMapping("saveFaultInformation")
     @ApiOperation(value = "故障报警数据录入接口", notes = "故障报警数据录入")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String",required = true),
@@ -101,7 +101,7 @@ public class FaultDataController {
     @PostMapping(value = "saveDefect", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     @ApiOperation(value = " 缺陷工单录入接口", notes = " 缺陷工单录入")
     @ApiImplicitParams({
-	    	@ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String",required = true),
@@ -181,7 +181,7 @@ public class FaultDataController {
     })
     public ResponseEntity<Result<?>> updateAlarmInByParam(FaultInformationVO bean) {
         try {
-        	 log.info(bean.getTenantCode()+"   "+bean.getAssetNumber()+"    "+bean.getAlarmStatus()+"    "+bean.getOrderNumber()+"   "+ bean.getRemark());
+        	 log.info(bean.getTenantDomain()+"   "+bean.getAssetNumber()+"    "+bean.getAlarmStatus()+"    "+bean.getOrderNumber()+"   "+ bean.getRemark());
         	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"修改成功"));
         } catch (Exception e) {
             log.error("转工单状态修改错误！{}", e.getMessage(), e);

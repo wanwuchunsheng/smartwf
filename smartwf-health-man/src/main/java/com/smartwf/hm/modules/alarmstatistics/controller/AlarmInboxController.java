@@ -59,7 +59,7 @@ public class AlarmInboxController {
     @PostMapping("selectAlarmInforByPage")
     @ApiOperation(value = "故障报警分页查询接口", notes = "故障报警分页查询")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String"),
@@ -94,7 +94,7 @@ public class AlarmInboxController {
     @PostMapping("selectAlarmInforByAll")
     @ApiOperation(value = "查询所有故障报警接口", notes = "查询所有故障报警")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String"),
@@ -126,7 +126,7 @@ public class AlarmInboxController {
     @ApiOperation(value = "故障报警修改接口", notes = "故障报警修改")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
-    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String"),
@@ -160,7 +160,7 @@ public class AlarmInboxController {
     @ApiOperation(value = "故障报警主键查询（系统报警）接口", notes = "故障报警主键查询（系统报警）")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
-    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String")
     })
     public ResponseEntity<Result<?>> selectAlarmInforById(FaultInformationVO bean) {
         try {
@@ -181,7 +181,7 @@ public class AlarmInboxController {
     @ApiOperation(value = "故障报警主键查询（人工上报）接口", notes = "故障报警主键查询（人工上报）")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
-    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String")
     })
     public ResponseEntity<Result<?>> selectDefectById(DefectVO bean) {
         try {
@@ -213,13 +213,13 @@ public class AlarmInboxController {
    	 * @Description: 查询所有故障报警记录信息 
    	 *   故障操作记录
    	 * @param faultInfoId
-   	 * @param tenantCode
+   	 * @param tenantDomain
    	 * @return
    	 */
       @PostMapping("selectFaultRecordByAll")
       @ApiOperation(value = "查询所有故障操作记录接口", notes = "查询所有故障操作记录")
       @ApiImplicitParams({
-       	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+  	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
        	    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "故障报警表（主键）", dataType = "String", required = true )
       })
       public ResponseEntity<Result<?>> selectFaultRecordByAll(FaultOperationRecord bean) {
@@ -245,7 +245,7 @@ public class AlarmInboxController {
 	    @PostMapping("selectKeyPositionByAll")
 	    @ApiOperation(value = "重点机位批量查询接口", notes = "查询所有机位数据")
 	    @ApiImplicitParams({
-	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String")
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByAll(FaultOperationRecord bean) {
 	       try {
@@ -329,7 +329,7 @@ public class AlarmInboxController {
 	    @PostMapping("selectKeyPosition")
 	    @ApiOperation(value = "重点机位已添加机位数据查询接口", notes = "重点机位已添加机位数据查询")
 	    @ApiImplicitParams({
-	     	   @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String")
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String")
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPosition(KeyPosition bean) {
 	       try {
@@ -351,7 +351,7 @@ public class AlarmInboxController {
 	    @PostMapping("addKeyPosition")
 	    @ApiOperation(value = "重点机位添加接口", notes = "重点机位添加")
 	    @ApiImplicitParams({
-	     	  @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true ),
+    	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
 	     	  @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码 ", dataType = "String", required = true ),
 	     	  @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码 ", dataType = "String", required = true ),
 	     	  @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称 ", dataType = "String", required = true ),
@@ -378,7 +378,7 @@ public class AlarmInboxController {
 	    @DeleteMapping("deleteKeyPosition")
 	    @ApiOperation(value = "重点机位删除接口", notes = "重点机位删除")
 	    @ApiImplicitParams({
-	    	  @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true ),
+    	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true ),
 	     	  @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编号", dataType = "String", required = true)
 	    })
 	    public ResponseEntity<Result<?>> deleteKeyPosition(KeyPosition bean) {
@@ -401,7 +401,7 @@ public class AlarmInboxController {
 	    @PostMapping("selectKeyPositionByCount")
 	    @ApiOperation(value = "重点机位统计图表数据查询接口", notes = "重点机位统计图表数据查询")
 	    @ApiImplicitParams({
-	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true)
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true)
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByCount(KeyPosition bean) {
 	       try {
@@ -423,7 +423,7 @@ public class AlarmInboxController {
 	    @PostMapping("selectKeyPositionByList")
 	    @ApiOperation(value = "重点机位统计列表数据查询接口", notes = "重点机位统计列表数据查询")
 	    @ApiImplicitParams({
-	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true)
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true)
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByList(KeyPosition bean) {
 	       try {
@@ -444,7 +444,7 @@ public class AlarmInboxController {
 	    @PostMapping("selectKeyPositionByDeviceCode")
 	    @ApiOperation(value = "重点机位(单个/全部)故障报警数据查询接口", notes = "单个重点机位所有故障报警数据查询")
 	    @ApiImplicitParams({
-	     	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true),
+    	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String" , required = true),
 	     	    @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码", dataType = "String")
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByDeviceCode(KeyPosition bean) {
@@ -469,7 +469,7 @@ public class AlarmInboxController {
 	    @PostMapping("addFaultOperationRecord")
 	    @ApiOperation(value = "添加故障处理意见接口", notes = "故障处理意见")
 	    @ApiImplicitParams({
-	    	@ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true ),
 		    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "故障主键（故障表主键）", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "closureType", value = "操作类型{1处理记录  2处理意见}", dataType = "int", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "closureReason", value = "操作说明", dataType = "String", required = true),

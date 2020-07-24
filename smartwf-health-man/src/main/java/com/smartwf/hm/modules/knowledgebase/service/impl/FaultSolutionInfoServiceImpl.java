@@ -41,7 +41,7 @@ public class FaultSolutionInfoServiceImpl implements FaultSolutionInfoService{
 		List<FaultSolutionInfo> fslist=JsonUtil.jsonToList(bean.getRemark(), FaultSolutionInfo.class);
 		if(!fslist.isEmpty()) {
 			for(FaultSolutionInfo fb :fslist) {
-				fb.setTenantCode(bean.getTenantCode());
+				fb.setTenantDomain(bean.getTenantDomain());
 				//0默认  1审核通过
 				fb.setStatus(Constants.ONE); 
 				this.faultSolutionInfoDao.insert(fb);

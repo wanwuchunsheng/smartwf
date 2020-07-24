@@ -76,7 +76,7 @@ public class FaultSolutionInfo implements Serializable {
 	 */
 	private String createUserName;
 	/**
-	 * 租户表code
+	 * 租户域
 	 */
-	private String tenantCode;
+	private String tenantDomain;
 }

@@ -47,13 +47,13 @@ public class FaultCodeBaseController {
     @PostMapping("saveFaultCodeBase")
     @ApiOperation(value = "故障代码批量录入接口", notes = "故障代码批量录入")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String",required = true),
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "故障代码数据（JOSN字符串）", dataType = "String",required = true)
     })
     public ResponseEntity<Result<?>> saveFaultCodeBase(FaultCodeBase bean) {
         try {
         	//验证参数
-        	if(StringUtils.isBlank(bean.getTenantCode()) || StringUtils.isBlank(bean.getRemark())) {
+        	if(StringUtils.isBlank(bean.getTenantDomain()) || StringUtils.isBlank(bean.getRemark())) {
         		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"参数为空！"));
         	}
         	//保存
@@ -73,7 +73,7 @@ public class FaultCodeBaseController {
     @DeleteMapping("deleteFaultCodeBase")
     @ApiOperation(value = "故障代码库删除接口", notes = "故障代码库删除")
     @ApiImplicitParams({
-    	  @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	  @ApiImplicitParam(paramType = "query", name = "pmsAmId", value = "资产型号id", dataType = "String",required = true),
     	  @ApiImplicitParam(paramType = "query", name = "pmsAiId", value = "风机部件id", dataType = "String")
     })
@@ -96,7 +96,7 @@ public class FaultCodeBaseController {
     @DeleteMapping("deleteFaultCodeBaseById")
     @ApiOperation(value = "故障代码库（主键）删除接口", notes = "故障代码库（主键）删除")
     @ApiImplicitParams({
-    	  @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	  @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true)
     })
     @TraceLog(content = "故障代码库（主键）删除", paramIndexs = {0})
@@ -118,7 +118,7 @@ public class FaultCodeBaseController {
     @GetMapping("selectFaultCodeBaseById")
     @ApiOperation(value = "故障代码库（主键）查询接口", notes = "故障代码库（主键）查询")
     @ApiImplicitParams({
-    	  @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	  @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true)
     })
     public ResponseEntity<Result<?>> selectFaultCodeBaseById(FaultCodeBase bean) {
@@ -141,7 +141,7 @@ public class FaultCodeBaseController {
     @GetMapping("selectFaultCodeBaseByPage")
     @ApiOperation(value = "故障代码库分页查询接口", notes = "故障代码库分页查询")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "model", value = "风电机组型号", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "protocolNo", value = "协议号", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "iecPath", value = "iec路径", dataType = "String"),

@@ -31,7 +31,7 @@
 			update_time,
 			update_user_id,
 			update_user_name,
-			tenant_code
+			tenant_domain
 		 from fault_information where alarm_status=0 and incident_type=2 order by start_time desc
     </select>
     
@@ -65,7 +65,7 @@
 			a.update_time,
 			a.update_user_id,
 			a.update_user_name,
-			a.tenant_code,
+			a.tenant_domain,
 			b.filePath
 		from fault_information a left join  
 		(
@@ -104,15 +104,15 @@
 			a.update_time,
 			a.update_user_id,
 			a.update_user_name,
-			a.tenant_code,
+			a.tenant_domain,
 			b.filePath
 		from fault_information a left join  
 		(
 		 select pid,group_concat(file_path separator ',') as filePath from fault_file_record group by pid 
 		) b on a.id=b.pid
 		where a.incident_type=2
-        <if test="bean.tenantCode != null ">
-            and a.tenant_code=#{bean.tenantCode}
+        <if test="bean.tenantDomain != null ">
+            and a.tenant_domain=#{bean.tenantDomain}
         </if>
         <if test="bean.alarmCode != null ">
             and a.alarm_code=#{bean.alarmCode}

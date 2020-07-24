@@ -44,7 +44,7 @@ public class FaultCodeBaseServiceImpl implements FaultCodeBaseService{
 		List<FaultCodeBase> fcblist=JsonUtil.jsonToList(bean.getRemark(), FaultCodeBase.class);
 		if(!fcblist.isEmpty()) {
 			for(FaultCodeBase fb :fcblist) {
-				fb.setTenantCode(bean.getTenantCode());
+				fb.setTenantDomain(bean.getTenantDomain());
 				//0默认  1审核通过
 				fb.setStatus(Constants.ONE); 
 				this.faultCodeBaseDao.insert(fb);
@@ -118,8 +118,8 @@ public class FaultCodeBaseServiceImpl implements FaultCodeBaseService{
 		//降序
 		queryWrapper.orderByDesc("create_time"); 
   		//租户
-  		if (StringUtils.isNotBlank(bean.getTenantCode()) ) { 
-  			queryWrapper.eq("tenant_code", bean.getTenantCode()); 
+  		if (StringUtils.isNotBlank(bean.getTenantDomain()) ) { 
+  			queryWrapper.eq("tenant_domain", bean.getTenantDomain()); 
   		}
         //风电机组型号
         if (StringUtils.isNotBlank(bean.getModel())) {

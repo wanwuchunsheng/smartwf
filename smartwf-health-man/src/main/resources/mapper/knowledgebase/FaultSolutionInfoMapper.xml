@@ -7,8 +7,8 @@
 	    delete 
 	       from fault_solution_info  
 	    where fault_code=#{bean.faultCode}
-	    <if test="bean.tenantCode != null ">
-          and tenant_code=#{bean.tenantCode}
+	    <if test="bean.tenantDomain != null ">
+          and tenant_domain=#{bean.tenantDomain}
         </if>
    </delete>
    
@@ -29,11 +29,11 @@
 			create_time,
 			create_user_id,
 			create_user_name,
-			tenant_code
+			tenant_domain
 		from fault_solution_info
 		where fault_code=#{bean.faultCode}
-        <if test="bean.tenantCode != null ">
-          and tenant_code=#{bean.tenantCode}
+        <if test="bean.tenantDomain != null ">
+          and tenant_domain=#{bean.tenantDomain}
         </if>
         order by type,sort asc 
    </select>

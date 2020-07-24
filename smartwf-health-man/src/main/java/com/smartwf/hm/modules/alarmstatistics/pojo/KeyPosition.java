@@ -37,10 +37,10 @@ public class KeyPosition implements Serializable{
 	 * 资产编码
 	 */
 	private String assetNumber;
-    /**
-	 * 租户代码
+	/**
+	 * 租户域
 	 */
-	private String tenantCode;
+	private String tenantDomain;
 	/**
 	 * 备注
 	 */

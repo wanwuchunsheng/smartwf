@@ -42,7 +42,7 @@ public class FaultOverviewController {
     @PostMapping("selectFaultTypeByDate")
     @ApiOperation(value = "故障类型统计接口", notes = "故障类型统计查询")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "stime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true ),
             @ApiImplicitParam(paramType = "query", name = "etime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true )
     })
@@ -69,7 +69,7 @@ public class FaultOverviewController {
     @PostMapping("selectFaultStatusByDate")
     @ApiOperation(value = "故障处理状态&部件故障分析接口", notes = "故障处理状态&部件故障分析查询")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "stime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true ),
             @ApiImplicitParam(paramType = "query", name = "etime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true )
     })
@@ -96,7 +96,7 @@ public class FaultOverviewController {
     @PostMapping("selectFaultLevelByDate")
     @ApiOperation(value = "故障等级分布统计接口", notes = "故障等级分布统计查询")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户（编码）", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "stime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true ),
             @ApiImplicitParam(paramType = "query", name = "etime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true )
     })

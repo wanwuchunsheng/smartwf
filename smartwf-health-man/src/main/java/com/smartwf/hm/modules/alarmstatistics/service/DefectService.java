@@ -62,7 +62,7 @@ public interface DefectService {
 	/**
    	 * 查询所有缺陷记录信息 
    	 * @param faultInfoId
-   	 * @param tenantCode
+   	 * @param tenantDomain
    	 * @param bean
    	 * @return
    	 */

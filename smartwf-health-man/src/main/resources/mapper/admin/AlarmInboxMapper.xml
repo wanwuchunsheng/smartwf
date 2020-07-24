@@ -23,11 +23,11 @@
 			a.operating_status,
 			a.create_time,
 			a.update_time,
-			a.tenant_code
+			a.tenant_domain
         from fault_information a
         where a.incident_type=1
-        <if test="bean.tenantCode != null ">
-          and a.tenant_code = #{bean.tenantCode}
+        <if test="bean.tenantDomain != null ">
+          and a.tenant_domain = #{bean.tenantDomain}
         </if>
         <if test="bean.alarmSource != null ">
           and a.alarm_source like '%${bean.alarmSource}%'
@@ -81,14 +81,14 @@
 			a.operating_status,
 			a.create_time,
 			a.update_time,
-			a.tenant_code
+			a.tenant_domain
         from fault_information a
         where a.incident_type=1
         <if test="bean.id != null ">
           and a.id = #{bean.id}
         </if>
-        <if test="bean.tenantCode != null ">
-          and a.tenant_code = #{bean.tenantCode}
+        <if test="bean.tenantDomain != null ">
+          and a.tenant_domain = #{bean.tenantDomain}
         </if>
         <if test="bean.alarmSource != null ">
           and a.alarm_source like '%${bean.alarmSource}%'
@@ -150,7 +150,7 @@
 			update_time,
 			update_user_id,
 			update_user_name,
-			tenant_code
+			tenant_domain
 		 from fault_information where alarm_status=0 and incident_type=1 order by start_time desc
     </select>
     
@@ -175,26 +175,26 @@
 				,d5.start_time 
 			from 
 			(select device_code,count(*) as alarm_status from fault_information where  incident_type=1
-				<if test="bean.tenantCode != null ">
-		          and tenant_code = #{bean.tenantCode}
+				<if test="bean.tenantDomain != null ">
+		          and tenant_domain = #{bean.tenantDomain}
 		        </if>
 				and alarm_status=0  group by device_code,device_name
 			) d1,
 			(select device_code,device_name,count(*) as fault_type_day from fault_information  where  incident_type=1
-				<if test="bean.tenantCode != null ">
-		          and tenant_code = #{bean.tenantCode}
+				<if test="bean.tenantDomain != null ">
+		          and tenant_domain = #{bean.tenantDomain}
 		        </if>
 		        and to_days(start_time) = to_days(now()) group by device_code,device_name
 			) d2,
 			(select device_code,device_name,count(*) as fault_type_mouth from fault_information  where incident_type=1
-				<if test="bean.tenantCode != null ">
-		          and tenant_code = #{bean.tenantCode}
+				<if test="bean.tenantDomain != null ">
+		          and tenant_domain = #{bean.tenantDomain}
 		        </if>
 		        and DATE_FORMAT( start_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) group by device_code,device_name
 			) d3,
 			(select device_code,device_name,count(*) as fault_type_all from fault_information  where incident_type=1
-				<if test="bean.tenantCode != null ">
-		          and tenant_code = #{bean.tenantCode}
+				<if test="bean.tenantDomain != null ">
+		          and tenant_domain = #{bean.tenantDomain}
 		        </if>
 		        group by device_code,device_name
 			) d4,
@@ -207,8 +207,8 @@
 				END 'start_time'
 				from (
 					select device_code,device_name,TIMESTAMPDIFF(MINUTE,max(start_time),now() ) as start_time from fault_information where incident_type=1 
-					<if test="bean.tenantCode != null ">
-			          and tenant_code = #{bean.tenantCode}
+					<if test="bean.tenantDomain != null ">
+			          and tenant_domain = #{bean.tenantDomain}
 			        </if>
 			        group by device_code,device_name    
 				) a 
@@ -219,8 +219,8 @@
 			and d4.device_code = d5.device_code 
 		) f2 on f1.device_code=f2.device_code
         where 1=1
-        <if test="bean.tenantCode != null ">
-		    and f1.tenant_code = #{bean.tenantCode}
+        <if test="bean.tenantDomain != null ">
+		    and f1.tenant_domain = #{bean.tenantDomain}
 		</if>
         order by f1.device_code
     </select>
@@ -246,11 +246,11 @@
 			b.operating_status,
 			b.create_time,
 			b.update_time,
-			b.tenant_code 
+			b.tenant_domain 
 		from key_position a left join fault_information b on a.asset_number=b.asset_number
         where  b.incident_type=1
-        <if test="bean.tenantCode != null ">
-          and b.tenant_code = #{bean.tenantCode}
+        <if test="bean.tenantDomain != null ">
+          and b.tenant_domain = #{bean.tenantDomain}
         </if>
         <if test="bean.deviceCode != null ">
           and a.device_code = #{bean.deviceCode}

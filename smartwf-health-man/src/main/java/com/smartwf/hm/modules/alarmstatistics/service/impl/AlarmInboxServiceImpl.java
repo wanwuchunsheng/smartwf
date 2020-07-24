@@ -140,8 +140,8 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		fr.setCreateTime(bean.getUpdateTime()); 
 		//备注
 		fr.setRemark(bean.getRemark()); 
-		//租户编码
-		fr.setTenantCode(bean.getTenantCode());
+		//租户域
+		fr.setTenantDomain(bean.getTenantDomain());
 		//关闭原因
 		fr.setClosureReason(bean.getClosureReason()); 
 		//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
@@ -218,7 +218,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
    	 * @Description: 查询所有故障报警记录信息 
    	 *   故障操作记录
    	 * @param faultInfoId
-   	 * @param tenantCode
+   	 * @param tenantDomain
    	 * @return
    	 */
 	@Override
@@ -277,7 +277,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		//1)封装参数
 		QueryWrapper<KeyPosition> queryWrapper = new QueryWrapper<>();
   		queryWrapper.eq("device_code", bean.getDeviceCode()); 
-  		queryWrapper.eq("tenant_code", bean.getTenantCode()); 
+  		queryWrapper.eq("tenant_domain", bean.getTenantDomain()); 
 		//2）设备编码删除
 		this.keyPositionDao.delete(queryWrapper);
 	}

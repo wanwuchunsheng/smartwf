@@ -2,9 +2,12 @@ package com.smartwf.hm.modules.alarmstatistics.pojo;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.smartwf.common.annotation.ParamValidated.Add;
 import com.smartwf.common.pojo.BasePojo;
 
 import lombok.Data;
@@ -25,10 +28,21 @@ public class Tenant extends BasePojo implements Serializable{
 	@TableId(type = IdType.AUTO)
 	private Integer id;
    
-    /**
+	/**
+	 * 租户域
+	 */
+	private String tenantDomain;
+	
+	/**
 	 * 租户代码
 	 */
-	private String tenantCode;
+	//private String tenantCode;
+	
+	/**
+	 * wso2默认租户管理员密码
+	 */
+	private String tenantPw;
+	
 	/**
 	 * 租户名称
 	 */
@@ -50,5 +64,10 @@ public class Tenant extends BasePojo implements Serializable{
 	 * 备注
 	 */
 	private String remark;
+	
+
+	   
+    
+	
 	
 }

@@ -11,8 +11,8 @@
 			from fault_information 
 			where incident_type=1 and fault_type=0
 			and start_time between #{bean.stime} and #{bean.etime}
-			<if test="bean.tenantCode != null ">
-                and tenant_code = #{bean.tenantCode}
+			<if test="bean.tenantDomain != null ">
+                and tenant_domain = #{bean.tenantDomain}
             </if>
 		) a
 		group by a.fname order by a.fname asc
@@ -26,8 +26,8 @@
 			from fault_information 
 			where incident_type=1 and fault_type=1
 			and start_time between #{bean.stime} and #{bean.etime}
-			<if test="bean.tenantCode != null ">
-                and tenant_code = #{bean.tenantCode}
+			<if test="bean.tenantDomain != null ">
+                and tenant_domain = #{bean.tenantDomain}
             </if>
 		) a
 		group by a.fname order by a.fname asc
@@ -41,8 +41,8 @@
 			from fault_information 
 			where incident_type=2 and fault_type=2
 			and start_time between #{bean.stime} and #{bean.etime}
-			<if test="bean.tenantCode != null ">
-                and tenant_code = #{bean.tenantCode}
+			<if test="bean.tenantDomain != null ">
+                and tenant_domain = #{bean.tenantDomain}
             </if>
 		) a
 		group by a.fname order by a.fname asc
@@ -60,8 +60,8 @@
 			<if test="bean.alarmLevel != null ">
                 and alarm_level = #{bean.alarmLevel}
             </if>
-			<if test="bean.tenantCode != null ">
-                and tenant_code = #{bean.tenantCode}
+			<if test="bean.tenantDomain != null ">
+                and tenant_domain = #{bean.tenantDomain}
             </if>
 		) a  group by a.fname,a.alarm_level order by a.fname asc
     </select>
@@ -75,8 +75,8 @@
 			from fault_information 
 			where incident_type=1
 			and start_time between #{bean.stime} and #{bean.etime}
-			<if test="bean.tenantCode != null ">
-                and tenant_code = #{bean.tenantCode}
+			<if test="bean.tenantDomain != null ">
+                and tenant_domain = #{bean.tenantDomain}
             </if>
 		) a  group by a.alarm_status order by a.alarm_status asc
     </select>
@@ -90,8 +90,8 @@
 			from fault_information 
 			where incident_type=1
 			and start_time between #{bean.stime} and #{bean.etime}
-			<if test="bean.tenantCode != null ">
-                and tenant_code = #{bean.tenantCode}
+			<if test="bean.tenantDomain != null ">
+                and tenant_domain = #{bean.tenantDomain}
             </if>
 		) a  group by a.alarm_location order by a.alarm_location asc
     </select>

@@ -72,8 +72,8 @@ public class FaultOperationRecord implements Serializable {
 	private String createUserId;
 	
 	/**
-	 * 租户编码
+	 * 租户域
 	 */
-	private String tenantCode;
+	private String tenantDomain;
 	
 }

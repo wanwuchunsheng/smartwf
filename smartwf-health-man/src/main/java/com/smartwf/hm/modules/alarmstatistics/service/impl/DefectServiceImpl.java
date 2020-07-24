@@ -91,7 +91,7 @@ public class DefectServiceImpl implements DefectService {
 		//1处理记录  2处理意见
 		fr.setClosureType(1);
 		fr.setCreateTime(new Date());
-		fr.setTenantCode(bean.getTenantCode());
+		fr.setTenantDomain(bean.getTenantDomain());
 		this.faultOperationRecordDao.insert(fr);
 		//添加附件
 		if(StringUtils.isNotBlank(bean.getFilePath()) ) {
@@ -102,7 +102,7 @@ public class DefectServiceImpl implements DefectService {
 					fuRecord= new FileUploadRecord();
 					fuRecord.setPid(bean.getId());
 					fuRecord.setFilePath(s);
-					fuRecord.setTenantCode(bean.getTenantCode());
+					fuRecord.setTenantDomain(bean.getTenantDomain());
 					fuRecord.setCreateTime(new Date());
 					this.fileUploadRecordDao.insert(fuRecord);
 				}
@@ -218,7 +218,7 @@ public class DefectServiceImpl implements DefectService {
 	/**
    	 * @Description: 查询所有缺陷记录信息 
    	 * @param faultInfoId
-   	 * @param tenantCode
+   	 * @param tenantDomain
    	 * @return
    	 */
 	@Override
@@ -231,8 +231,8 @@ public class DefectServiceImpl implements DefectService {
 			queryWrapper.eq("fault_info_id", bean.getFaultInfoId());
 		}
 		//租户code
-		if(StringUtils.isNotBlank(bean.getTenantCode())) {
-			queryWrapper.eq("tenant_code", bean.getTenantCode());
+		if(StringUtils.isNotBlank(bean.getTenantDomain())) {
+			queryWrapper.eq("tenant_domain", bean.getTenantDomain());
 		}
 		List<FaultOperationRecord> list = this.faultOperationRecordDao.selectList(queryWrapper);
 		return Result.data(list);
