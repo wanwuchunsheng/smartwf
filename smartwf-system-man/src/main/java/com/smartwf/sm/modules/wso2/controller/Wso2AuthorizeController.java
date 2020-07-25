@@ -53,10 +53,10 @@ public class Wso2AuthorizeController {
     @PostMapping("batchUiAuthorization")
     @ApiOperation(value = "Wso2（UI）批量授权接口", notes = "Wso2（UI）批量授权")
     @ApiParam(name="body",value="传入json格式",required=true)
-    public ResponseEntity<Result<?>> batchUiAuthorization(HttpServletRequest request,@RequestBody Object body) {
+    public ResponseEntity<Result<?>> batchUiAuthorization(HttpServletRequest request, @RequestBody Object body) {
         try {
         	String resStr =this.wso2AuthorizeService.batchUiAuthorization(body);
-        	return ResponseEntity.ok().body(Result.data(Constants.EQU_SUCCESS ,  JSONUtil.toBean(resStr, Object.class)));
+        	return ResponseEntity.ok().body(Result.data(Constants.EQU_SUCCESS ,  JSONUtil.parseArray(resStr)));
         } catch (Exception e) {
             log.error("Wso2（UI）批量授权错误！{}", e.getMessage(), e);
         }
@@ -66,7 +66,7 @@ public class Wso2AuthorizeController {
     
     /**
      * @Description：API鉴权
-     * @param code,session_state和state
+     * @param subject,subject和action
      * @return
      */
     @PostMapping("apiAuthorization")
@@ -76,7 +76,7 @@ public class Wso2AuthorizeController {
     	@ApiImplicitParam(paramType = "query", name = "resource",  value = "资源名称", dataType = "String",required = true),
     	@ApiImplicitParam(paramType = "query", name = "action",  value = "操作", dataType = "String",required = true)
     })
-    public ResponseEntity<Result<?>> apiAuthorization(HttpServletRequest request, String subject,String resource,String action) {
+    public ResponseEntity<Result<?>> apiAuthorization(HttpServletRequest request, String subject, String resource, String action) {
         try {
         	User user=UserThreadLocal.getUser();
         	Boolean flag=Wso2ClientUtils.entitlementApiReqTest(request,wso2Config,user,subject,resource,action);

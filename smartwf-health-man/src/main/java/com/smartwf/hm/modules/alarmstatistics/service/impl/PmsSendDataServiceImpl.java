@@ -72,10 +72,7 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		String url=new StringBuffer().append(pmsServiceUri).append("/workOrder/add").toString();
 		String res=HttpRequest.post(url).header(Constants.SMARTWF_TOKEN,  user.getSmartwfToken()).form(mapform).timeout(20000).execute().body();
 		log.info("故障转工单返回："+res);
-		if(StringUtils.isBlank(res)) {
-			//为空表示异常
-			
-		}
+		
 	}
 	
 	

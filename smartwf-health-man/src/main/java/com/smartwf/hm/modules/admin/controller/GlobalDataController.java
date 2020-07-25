@@ -5,13 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.Md5Utils;
+import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
+import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
@@ -34,6 +38,8 @@ public class GlobalDataController {
 	@Autowired
     private RedisService redisService;
 	
+	@Autowired
+    private AlarmInboxService alarmInboxService;
 
     /**
      * @Description：认证登录
@@ -61,6 +67,34 @@ public class GlobalDataController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("登录异常，请重新登录！"));
     }
     
+    /**
+   	 *  故障、缺陷{转工单}
+   	 *      生产中心状态修改
+   	 *      1）修改工单状态
+   	 *      2）记录表插入修改记录
+   	 * @author WCH
+   	 * @param bean
+   	 * @return
+   	 */
+    @PutMapping("updateAlarmInByParam")
+    @ApiOperation(value = "转工单状态修改接口", notes = "转工单状态修改")
+    @ApiImplicitParams({
+   	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+   	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String", required = true),
+   	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "状态(5待审核 6驳回 0未处理 1已转工单 2处理中 3已处理 4已关闭 7回收站 8未解决)", dataType = "int", required = true),
+   	    @ApiImplicitParam(paramType = "query", name = "orderNumber", value = "工单号", dataType = "String", required = true),
+   	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
+    })
+    public ResponseEntity<Result<?>> updateAlarmInByParam(FaultInformationVO bean) {
+        try {
+           this.alarmInboxService.updateAlarmInByParam(bean);
+       	   return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
+        } catch (Exception e) {
+            log.error("转工单状态修改错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("转工单状态修改错误！"));
+    }
     
+      
    
 }

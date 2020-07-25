@@ -19,6 +19,7 @@ import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.hm.modules.alarmstatistics.dao.AlarmInboxDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.DefectDao;
+import com.smartwf.hm.modules.alarmstatistics.dao.FaultDataDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOperationRecordDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.KeyPositionDao;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
@@ -52,6 +53,9 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	
 	@Autowired
 	private FaultOperationRecordDao faultOperationRecordDao;
+	
+	@Autowired
+	private FaultDataDao faultDataDao;
 	
 	@Autowired
 	private KeyPositionDao keyPositionDao;
@@ -126,68 +130,73 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		//2)更新修改状态
 		bean.setUpdateTime(new Date());
 		this.alarmInboxDao.updateById(bean);
-		//3）插入修改记录
-		FaultOperationRecord fr=new FaultOperationRecord();
-		//故障表主键
-		fr.setFaultInfoId(bean.getId());
-		//操作人姓名
-		fr.setCreateUserName(user.getUserName()); 
-		//操作人ID
-		fr.setCreateUserId(String.valueOf(user.getId()));
-		//时间
-		fr.setCreateTime(bean.getUpdateTime()); 
-		//备注
-		fr.setRemark(bean.getRemark()); 
-		//租户域
-		fr.setTenantDomain(bean.getTenantDomain());
-		//关闭原因
-		fr.setClosureReason(bean.getClosureReason()); 
-		//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
-		switch (bean.getAlarmStatus()) {
-			case 1:
-				//已转工单{状态已废弃}
-				fr.setClosureStatus(1);
-				//删除redis对应数据
-				rmFaultInformationByRedis(bean.getId()); 
-				//------向生产中心发送相关数据 1.id查询对象， 2封装对象调用生产中心api接口
-				break;
-			case 2:
-				//处理中
-				fr.setClosureStatus(2);
-				//删除redis对应数据
-				rmFaultInformationByRedis(bean.getId()); 
-				//向生产中心发送工单数据  1.id查询对象， 2封装对象调用生产中心api接口
-				this.pmsSendDataService.FaultWordOrder(bean);
-				break;
-			case 3:
-				//已处理
-				fr.setClosureStatus(3);
-				break;
-			case 4:
-				//已关闭
-				fr.setClosureStatus(4);
-				break;
-			case 0:
-				//待处理
-				fr.setClosureStatus(0);
-				//更新故障报警redis初始化数据，保证redis待处理数据最新
-				this.alarmInboxService.selectFaultInformationByAll();
-				break;
-			case 6:
-				//驳回
-				fr.setClosureStatus(6);
-				break;
-			case 7:
-				//回收站
-				fr.setClosureStatus(7);
-				break;
-			default:
-				break;
+		//过滤重点关注修改，避免重复提交
+		if(null != bean.getAlarmStatus() && null==bean.getOperatingStatus()) {
+			//3）插入修改记录
+			FaultOperationRecord fr=new FaultOperationRecord();
+			//故障表主键
+			fr.setFaultInfoId(bean.getId());
+			//操作人姓名
+			fr.setCreateUserName(user.getUserName()); 
+			//操作人ID
+			fr.setCreateUserId(String.valueOf(user.getId()));
+			//时间
+			fr.setCreateTime(bean.getUpdateTime()); 
+			//备注
+			fr.setRemark(bean.getRemark()); 
+			//租户域
+			fr.setTenantDomain(bean.getTenantDomain());
+			//关闭原因
+			fr.setClosureReason(bean.getClosureReason()); 
+			//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
+			switch (bean.getAlarmStatus()) {
+				case 1:
+					//已转工单{状态已废弃}
+					fr.setClosureStatus(1);
+					//删除redis对应数据
+					this.rmFaultInformationByRedis(bean.getId()); 
+					this.pmsSendDataService.FaultWordOrder(bean);
+					break;
+				case 2:
+					//处理中
+					fr.setClosureStatus(2);
+					//删除redis对应数据
+					this.rmFaultInformationByRedis(bean.getId()); 
+					//向生产中心发送工单数据  1.id查询对象， 2封装对象调用生产中心api接口
+					this.pmsSendDataService.FaultWordOrder(bean);
+					break;
+				case 3:
+					//已处理
+					fr.setClosureStatus(3);
+					break;
+				case 4:
+					//已关闭
+					fr.setClosureStatus(4);
+					//删除redis对应数据
+					this.rmFaultInformationByRedis(bean.getId()); 
+					break;
+				case 0:
+					//待处理
+					fr.setClosureStatus(0);
+					//更新故障报警redis初始化数据，保证redis待处理数据最新
+					this.alarmInboxService.selectFaultInformationByAll();
+					break;
+				case 6:
+					//驳回
+					fr.setClosureStatus(6);
+					break;
+				case 7:
+					//回收站
+					fr.setClosureStatus(7);
+					break;
+				default:
+					break;
+			}
+			//1处理记录   2处理意见
+			fr.setClosureType(1); 
+			//插入处理记录
+			this.faultOperationRecordDao.insert(fr);
 		}
-		//1处理记录   2处理意见
-		fr.setClosureType(1); 
-		//插入处理记录
-		this.faultOperationRecordDao.insert(fr);
 	}
 	
 	/**
@@ -343,8 +352,86 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		bean.setCreateTime(new Date());
 		bean.setCreateUserId(String.valueOf(user.getId()));
 		bean.setCreateUserName(user.getUserName());
-		
 		this.faultOperationRecordDao.insert(bean);
+	}
+
+	/**
+   	 *  故障、缺陷{转工单}
+   	 *      生产中心状态修改
+   	 *      1）修改工单状态
+   	 *      2）记录表插入修改记录
+   	 * @author WCH
+   	 * @param bean
+   	 */
+	@Override
+	public void updateAlarmInByParam(FaultInformationVO bean) {
+		User user=UserThreadLocal.getUser();
+		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
+		//租户域
+  		queryWrapper.eq("tenant_domain", bean.getTenantDomain()); 
+  		//资产编码
+  		queryWrapper.eq("asset_number", bean.getAssetNumber()); 
+  		//查询对象
+  		FaultInformation ft=this.faultDataDao.selectOne(queryWrapper);
+  		if( null != ft ) {
+  		    //状态
+  	  		ft.setAlarmStatus(bean.getAlarmStatus()); 
+  	  		//工单号
+  	  	    ft.setOrderNumber(bean.getOrderNumber());
+  	  	    this.faultDataDao.updateById(ft);
+  	  	    //3）插入修改记录
+			FaultOperationRecord fr=new FaultOperationRecord();
+			//故障表主键
+			fr.setFaultInfoId(ft.getId());
+			//操作人姓名
+			fr.setCreateUserName(user.getUserName()); 
+			//操作人ID
+			fr.setCreateUserId(String.valueOf(user.getId()));
+			//时间
+			fr.setCreateTime(new Date()); 
+			//租户域
+			fr.setTenantDomain(ft.getTenantDomain());
+			//关闭原因
+			fr.setClosureReason("转工单后关闭"); 
+			//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
+			switch (bean.getAlarmStatus()) {
+				case 1:
+					//已转工单{状态已废弃}
+					fr.setClosureStatus(1);
+					break;
+				case 2:
+					//处理中
+					fr.setClosureStatus(2);
+					break;
+				case 3:
+					//已处理
+					fr.setClosureStatus(3);
+					break;
+				case 4:
+					//已关闭
+					fr.setClosureStatus(4);
+					break;
+				case 0:
+					//待处理
+					fr.setClosureStatus(0);
+					break;
+				case 6:
+					//驳回
+					fr.setClosureStatus(6);
+					break;
+				case 7:
+					//回收站
+					fr.setClosureStatus(7);
+					break;
+				default:
+					break;
+			}
+			//1处理记录   2处理意见
+			fr.setClosureType(Constants.ONE); 
+			//插入处理记录
+			this.faultOperationRecordDao.insert(fr);
+  		}
+  	    
 	}
 	
 }

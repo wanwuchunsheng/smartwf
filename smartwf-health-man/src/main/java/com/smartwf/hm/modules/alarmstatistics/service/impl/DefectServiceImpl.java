@@ -121,39 +121,44 @@ public class DefectServiceImpl implements DefectService {
 	public void updateDefectById(DefectVO bean) {
 		this.defectDao.updateById(bean);
 		//添加修改记录
-		if(null !=bean.getAlarmStatus()) {
+		if(null !=bean.getAlarmStatus() && null==bean.getOperatingStatus()) {
 			FaultOperationRecord foRecord=new FaultOperationRecord();
 			foRecord.setFaultInfoId(bean.getId());
 			foRecord.setClosureStatus(bean.getAlarmStatus());
 			//1处理记录  2处理意见
-			foRecord.setClosureType(1);
+			foRecord.setClosureType(Constants.ONE);
 			foRecord.setRemark(bean.getRemark());
+			//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
 			switch (bean.getAlarmStatus()) {
 				case 6:
-					foRecord.setClosureReason("缺陷录入信息被驳回");
+					foRecord.setClosureReason("驳回");
 					break;
 				case 1:
-					foRecord.setClosureReason("缺陷已转工单");
+					foRecord.setClosureReason("已转工单");
 					//删除redis未处理数据
 					this.rmDefectByRedis(bean.getId());
 					break;
 				case 2:
-					foRecord.setClosureReason("缺陷工单处理中");
+					foRecord.setClosureReason("处理中");
+					//删除redis未处理数据
+					this.rmDefectByRedis(bean.getId());
 					break;
 				case 3:
-					foRecord.setClosureReason("缺陷工单已处理");
+					foRecord.setClosureReason("已处理");
 					break;
 				case 4:
-					foRecord.setClosureReason("缺陷工单已关闭");
+					foRecord.setClosureReason("已关闭");
+					//删除redis未处理数据
+					this.rmDefectByRedis(bean.getId());
 					break;
 				case 7:
-					foRecord.setClosureReason("缺陷工单进入回收站");
+					foRecord.setClosureReason("回收站");
 					break;
 				case 8:
-					foRecord.setClosureReason("缺陷工单未解决");
+					foRecord.setClosureReason("未解决");
 					break;
 				case 0:
-					foRecord.setClosureReason("缺陷录入信息审核通过");
+					foRecord.setClosureReason("审核通过");
 					//初始化，更新redis
 					this.defectService.initDefectAll();
 					break;

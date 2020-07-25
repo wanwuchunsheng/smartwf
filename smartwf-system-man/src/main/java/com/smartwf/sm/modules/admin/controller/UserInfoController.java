@@ -1,5 +1,7 @@
 package com.smartwf.sm.modules.admin.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
+import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
@@ -201,6 +204,30 @@ public class UserInfoController {
             log.error("查询用户头像错误！{}", e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR, "失败"));
+    }
+    
+    /**
+   	 *  排班用户查询
+   	 *    角色ID，租户域
+   	 *    根据角色ID，查询属于该角色的所有排班用户
+   	 * @author WCH
+   	 * @param bean
+   	 * @return
+   	 */
+    @PostMapping("selectUserInfoByRoleId")
+    @ApiOperation(value = "排班用户查询接口", notes = "排班用户查询")
+    @ApiImplicitParams({
+   	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户ID", dataType = "int", required = true),
+   	    @ApiImplicitParam(paramType = "query", name = "roleId", value = "角色ID", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> selectUserInfoByRoleId(UserRole bean) {
+        try {
+           Result<?> uinfoList= this.userService.selectUserInfoByRoleId(bean);
+       	   return ResponseEntity.status(HttpStatus.OK).body(uinfoList);
+        } catch (Exception e) {
+            log.error("排班用户查询错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("排班用户查询错误！"));
     }
 
 }

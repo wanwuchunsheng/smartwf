@@ -1,11 +1,14 @@
 package com.smartwf.sm.modules.admin.service;
 
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
+import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 /**
@@ -70,4 +73,14 @@ public interface UserInfoService {
      * @return
      */
 	Result<?> selectUserInfoByCreateId(String ids);
+
+	/**
+   	 *  排班用户查询
+   	 *    角色ID，租户域
+   	 *    根据角色ID，查询属于该角色的所有排班用户
+   	 * @author WCH
+   	 * @param bean
+   	 * @return
+   	 */
+	Result<?> selectUserInfoByRoleId(UserRole bean);
 }

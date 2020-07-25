@@ -119,9 +119,17 @@ public interface AlarmInboxService {
 	 *    添加
 	 * @author WCH
 	 * @dateTime 2020-7-20 17:55:35
-	 * @param bean
 	 */
 	void addFaultOperationRecord(FaultOperationRecord bean);
+	/**
+   	 *  故障、缺陷{转工单}
+   	 *      生产中心状态修改
+   	 *      1）修改工单状态
+   	 *      2）记录表插入修改记录
+   	 * @author WCH
+   	 * @param bean
+   	 */
+	void updateAlarmInByParam(FaultInformationVO bean);
 	
 	
 
