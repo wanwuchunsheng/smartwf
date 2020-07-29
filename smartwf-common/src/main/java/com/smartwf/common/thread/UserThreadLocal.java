@@ -39,11 +39,18 @@ public class UserThreadLocal {
     	/**
         //初始化用户，等有登录功能再注释掉
   		User user=new User();
-  		user.setUserCode("T52EXF");
-  		user.setUserName("张三");
-  		user.setLoginCode("zhangsan");
-  		user.setTenantCode("SMARTWF");
-  		user.setPwd(MD5Utils.convertMd5("123456"));
+  		user.setCode("7172ac6b-e847-3cf5-8f31-ec06cb889fa1");
+  		user.setClientKey("nqenKoLbjFswa_PQY3CcQacsiqka");
+  		user.setClientSecret("qMS_RXTSfS5NU8JkLuX0NG4opHAa");
+  		user.setRedirectUri("http://localhost:8500");
+  		user.setId(1);
+  		user.setUserCode("07c91050-270f-4e5a-889b-258a1dd6ae9e");
+  	
+  		user.setUserName("平台管理员");
+  		user.setLoginCode("admin");
+  		user.setTenantCode("admin");
+  		user.setPwd("admin");
+  		user.setTenantDomain("carbon.super");
   		user.setEmail("zhangsan@163.com");
   		user.setMobile("13858684039");
   		user.setSex(1);
@@ -53,7 +60,7 @@ public class UserThreadLocal {
   		user.setMgrType(1);
   		user.setTenantId(1);
   		return user;
-  		**/
+  		*/
       log.info( JSONUtil.toJsonStr(userThreadLocal.get()));
       return userThreadLocal.get();
      

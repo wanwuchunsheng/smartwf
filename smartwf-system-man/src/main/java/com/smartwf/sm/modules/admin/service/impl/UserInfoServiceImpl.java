@@ -358,6 +358,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			userInfo.setClientSecret(user.getClientSecret());
 			userInfo.setRedirectUri(user.getRedirectUri());
 			userInfo.setDateTime(user.getDateTime());
+			userInfo.setFlag(user.getFlag());
 			//职务
 			userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
 			//角色

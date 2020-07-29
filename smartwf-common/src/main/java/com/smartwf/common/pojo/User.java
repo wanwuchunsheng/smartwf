@@ -61,6 +61,11 @@ public class User implements Serializable{
      * 过期时间
      * */
     private Long dateTime;
+    /**
+     * 是否验证accessToken
+     * 
+     * */
+    private Boolean flag;
     
 	/**
      * id
@@ -144,10 +149,6 @@ public class User implements Serializable{
 	 */
 	private String tenantPw;
 	
-	/**
-	 * 审批状态 0-审批通过 1-审批中 2-待审批
-	 */
-	private String status;
 	/**
 	 * 管理员类型 0非管理员 1系统管理员 
 	 */

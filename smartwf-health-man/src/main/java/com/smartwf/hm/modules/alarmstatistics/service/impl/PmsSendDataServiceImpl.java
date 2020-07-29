@@ -45,13 +45,13 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 	 *
 	 */
 	@Override
-	public void FaultWordOrder(FaultInformationVO bean) {
+	public void faultWordOrder(FaultInformationVO bean) {
 		//获取登录用户信息
 		User user=UserThreadLocal.getUser();
 		//查询数据
 		FaultInformation fim=this.alarmInboxDao.selectById(bean);
 		//封装参数
-		Map<String,Object> map = new HashMap<>();
+		Map<String,Object> map = new HashMap<>(16);
 		//资产编码
 		map.put("faultAssetId", fim.getAssetNumber());
 		//工单状态 0查看 1待审核 2进行中  3待验收 4完成 5搁置 6拒绝 7草稿 8回收站
@@ -63,10 +63,10 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		//租户
 		map.put("tenantDomain", user.getTenantDomain());
 		//封装头部
-		Map<String,String> headers = new HashMap<>();
+		Map<String,String> headers = new HashMap<>(16);
 		headers.put("smartwfToken", user.getSmartwfToken());
 		//封装参数
-		Map<String,Object> mapform = new HashMap<>();
+		Map<String,Object> mapform = new HashMap<>(16);
 		mapform.put("model",  JSONUtil.toJsonStr(map));
 		log.info(JSONUtil.toJsonStr(map));
 		String url=new StringBuffer().append(pmsServiceUri).append("/workOrder/add").toString();

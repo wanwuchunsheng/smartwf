@@ -119,6 +119,7 @@ public interface AlarmInboxService {
 	 *    添加
 	 * @author WCH
 	 * @dateTime 2020-7-20 17:55:35
+	 * @param bean
 	 */
 	void addFaultOperationRecord(FaultOperationRecord bean);
 	/**

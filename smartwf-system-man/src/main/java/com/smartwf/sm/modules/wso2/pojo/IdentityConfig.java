@@ -37,14 +37,19 @@ public class IdentityConfig implements Serializable{/**
 	 * wso2子系统注册配置
 	 */
 	private String clientSecret;
-	/**
-	 * wso2租户名称
-	 */
-	private String tenantCode;
+
 	/**
 	 * 备注
 	 */
 	private String remark;
+	
+	/**
+	 * 是否需要验证accessToken
+	 * true 是
+	 * flase 否
+	 */
+	private boolean flag;
+	
 	/**
 	 * 是否有效
             0有效  
@@ -52,29 +57,6 @@ public class IdentityConfig implements Serializable{/**
             
 	 */
 	private Integer enable;
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
-	/**
-	 * 创建人id
-	 */
-	private Integer createUserId;
-	/**
-	 * 创建人姓名
-	 */
-	private String createUserName;
-	/**
-	 * 修改时间
-	 */
-	private Date updateTime;
-	/**
-	 * 修改人id
-	 */
-	private Integer updateUserId;
-	/**
-	 * 修改人姓名
-	 */
-	private String updateUserName;
+	
 
 }

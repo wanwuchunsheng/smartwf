@@ -91,11 +91,8 @@ spring:
   wso2:
     user:
       user-server-uri: https://identity.windmagics.com
-      #user-server-uri: https://10.104.111.193:9443
-      user-authorization: Basic YWRtaW46YWRtaW4=
     token:
-      token-server-uri: https://identity.windmagics.com
-      token-refresh-time: 1200
+      token-refresh-time: 6000
         
 # 日志
 logging:

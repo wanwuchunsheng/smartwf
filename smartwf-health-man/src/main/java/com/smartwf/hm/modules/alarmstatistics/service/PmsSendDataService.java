@@ -14,9 +14,10 @@ public interface PmsSendDataService {
 	 * 故障报警信息转工单
 	 * @author WCH
 	 * @Date: 2020-7-23 09:29:25
+	 * @param bean
 	 *
 	 */
-	void FaultWordOrder(FaultInformationVO bean);
+	void faultWordOrder(FaultInformationVO bean);
 	
 
 }

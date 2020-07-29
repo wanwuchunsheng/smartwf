@@ -155,7 +155,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 					fr.setClosureStatus(1);
 					//删除redis对应数据
 					this.rmFaultInformationByRedis(bean.getId()); 
-					this.pmsSendDataService.FaultWordOrder(bean);
+					this.pmsSendDataService.faultWordOrder(bean);
 					break;
 				case 2:
 					//处理中
@@ -163,7 +163,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 					//删除redis对应数据
 					this.rmFaultInformationByRedis(bean.getId()); 
 					//向生产中心发送工单数据  1.id查询对象， 2封装对象调用生产中心api接口
-					this.pmsSendDataService.FaultWordOrder(bean);
+					this.pmsSendDataService.faultWordOrder(bean);
 					break;
 				case 3:
 					//已处理

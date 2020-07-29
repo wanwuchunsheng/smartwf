@@ -56,7 +56,7 @@ public class Wso2AuthorizeController {
     public ResponseEntity<Result<?>> batchUiAuthorization(HttpServletRequest request, @RequestBody Object body) {
         try {
         	String resStr =this.wso2AuthorizeService.batchUiAuthorization(body);
-        	return ResponseEntity.ok().body(Result.data(Constants.EQU_SUCCESS ,  JSONUtil.parseArray(resStr)));
+        	return ResponseEntity.ok().body(Result.data(Constants.EQU_SUCCESS ,  JSONUtil.parseObj(resStr)));
         } catch (Exception e) {
             log.error("Wso2（UI）批量授权错误！{}", e.getMessage(), e);
         }

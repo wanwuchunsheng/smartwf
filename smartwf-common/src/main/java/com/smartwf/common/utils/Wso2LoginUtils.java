@@ -16,6 +16,9 @@ import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.wso2.Wso2Config;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Wso2LoginUtils {
     public static boolean checkLogin(HttpServletRequest request, HttpServletResponse response, Object handler, RedisService redisService,Wso2Config wso2Config) throws Exception{	
     	//1.判断是否登录
-    	log.info("请求类型："+request.getMethod());
+    	log.info("请求类型："+request.getMethod()+"===="+request.getRequestURI());
         String token = request.getHeader(Constants.SMARTWF_TOKEN);
         if (StringUtils.isBlank(token)) {
         	/** 
@@ -74,11 +77,13 @@ public class Wso2LoginUtils {
         	}
         	//9.存储值
         	User user= new User();
+        	user.setDateTime(DateUtil.currentSeconds()+Convert.toLong(tkmap.get("expires_in")));
         	user.setClientKey(String.valueOf(idtmap.get("clientKey")));
         	user.setClientSecret(String.valueOf(idtmap.get("clientSecret")));
         	user.setRefreshToken(String.valueOf(tkmap.get("refresh_token")));
         	user.setAccessToken(String.valueOf(tkmap.get("access_token")));
         	user.setIdToken(String.valueOf(tkmap.get("id_token")));
+        	user.setFlag( Convert.toBool(idtmap.get("flag")));
         	user.setRedirectUri(redirectUri);
         	user.setSmartwfToken(Md5Utils.md5(code));
         	user.setCode(code);
@@ -97,24 +102,28 @@ public class Wso2LoginUtils {
 	        	log.warn("请求失败！token过期：{}，用户请求uri：{}", token, request.getRequestURI());
 	        	throw new CommonException(Constants.UNAUTHORIZED, "请求失败！token过期，请重新登录！");
 	        }
-	        //11.验证accessToken是否失效{由wso2帮忙验证}
 	        User user= JSONUtil.toBean(mapStr, User.class);
-	    	if(!Wso2ClientUtils.reqWso2CheckToken(wso2Config,user)) {
-	    		//12.重置wso2令牌时间
-		    	Map<String,Object> refmap=JSONUtil.parseObj(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
-		    	for(Entry<String, Object> m:refmap.entrySet()) {
-		    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
-		    	}
-		    	//13.验证刷新
-		    	if(refmap.containsKey(Constants.ERRORCODE)) {
-		    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
-		        	throw new CommonException(Constants.UNAUTHORIZED, "accesstoken刷新失败！请重新登录！");
-		    	}
-	    		//14.刷新成功，更新之前保存的wso2相关信息
-		    	user.setAccessToken(String.valueOf(refmap.get("access_token")));
-		    	user.setRefreshToken(String.valueOf(refmap.get("refresh_token")));
-		    	user.setIdToken(String.valueOf(refmap.get("id_token")));
-	    	};
+	        //11是否托管accessToken
+	        if(user.getFlag()) {
+	        	//更新过期时间
+	        	long nowDateTimes=DateUtil.currentSeconds();
+		        if( (user.getDateTime()-nowDateTimes)< Constants.TOKEN_TIMEOUT ) {
+		        	//12.重置wso2令牌时间
+			    	Map<String,Object> refmap=JSONUtil.parseObj(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
+			    	for(Entry<String, Object> m:refmap.entrySet()) {
+			    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
+			    	}
+			    	//13.验证刷新
+			    	if(refmap.containsKey(Constants.ERRORCODE)) {
+			    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
+			        	throw new CommonException(Constants.UNAUTHORIZED, "accesstoken刷新失败！请重新登录！");
+			    	}
+		    		//14.刷新成功，更新之前保存的wso2相关信息
+			    	user.setAccessToken(String.valueOf(refmap.get("access_token")));
+			    	user.setRefreshToken(String.valueOf(refmap.get("refresh_token")));
+			    	user.setIdToken(String.valueOf(refmap.get("id_token")));
+		        }
+	        }
 	    	//15.重置redis过期时间
 	        redisService.set(token,JSONUtil.toJsonStr(user),wso2Config.tokenRefreshTime);
 	        UserThreadLocal.setUser(user);
@@ -122,7 +131,6 @@ public class Wso2LoginUtils {
 	        /**
 	         * 通过登录验证后，继续验证api接口权限
 	         * 
-	        
 	    	 if(!Wso2ClientUtils.entitlementApiReq(request,wso2Config,user)){
 	    		 log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
 	        	 throw new CommonException(Constants.FORBIDDEN, "api接口访问无权限！");
