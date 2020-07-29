@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.exception.CommonException;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.HttpClientUtil;
@@ -17,6 +18,7 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.service.PmsSendDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.http.HttpConnection;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
@@ -53,7 +55,7 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		//封装参数
 		Map<String,Object> map = new HashMap<>(16);
 		//资产编码
-		map.put("faultAssetId", fim.getAssetNumber());
+		map.put("faultId", fim.getId());
 		//工单状态 0查看 1待审核 2进行中  3待验收 4完成 5搁置 6拒绝 7草稿 8回收站
 		map.put("orderStatus", String.valueOf(Constants.ONE));
 		//工单类型 6
@@ -72,7 +74,13 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		String url=new StringBuffer().append(pmsServiceUri).append("/workOrder/add").toString();
 		String res=HttpRequest.post(url).header(Constants.SMARTWF_TOKEN,  user.getSmartwfToken()).form(mapform).timeout(20000).execute().body();
 		log.info("故障转工单返回："+res);
-		
+		if(StringUtils.isNotBlank(res)) {
+			Map<String,Object> resmap=JSONUtil.parseObj(res);
+			if(Constants.EQU_SUCCESS !=Convert.toInt(resmap.get("code"))) {
+				log.error("故障报警信息转工单异常：{}");
+        		throw new CommonException(Constants.INTERNAL_SERVER_ERROR, "转工单异常{生产中心接口返回异常}！");
+			}
+		}
 	}
 	
 	

@@ -138,7 +138,6 @@ public class FaultInformation extends BasePojo implements Serializable{
 	 */
 	private String remark;
 	
-	
 	/**
 	 * 租户域
 	 */

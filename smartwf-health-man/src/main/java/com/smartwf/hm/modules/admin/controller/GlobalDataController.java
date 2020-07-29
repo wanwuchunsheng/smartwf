@@ -79,8 +79,8 @@ public class GlobalDataController {
     @PutMapping("updateAlarmInByParam")
     @ApiOperation(value = "转工单状态修改接口", notes = "转工单状态修改")
     @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "faultId", value = "故障主键", dataType = "String", required = true),
    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
-   	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String", required = true),
    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "状态(5待审核 6驳回 0未处理 1已转工单 2处理中 3已处理 4已关闭 7回收站 8未解决)", dataType = "int", required = true),
    	    @ApiImplicitParam(paramType = "query", name = "orderNumber", value = "工单号", dataType = "String", required = true),
    	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")

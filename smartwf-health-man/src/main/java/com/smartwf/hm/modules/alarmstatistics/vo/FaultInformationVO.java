@@ -70,6 +70,13 @@ public class FaultInformationVO extends FaultInformation implements Serializable
 	 * 
 	 * */
 	private Integer faultTypeAll;
+	
+	/**
+	 * 故障主键
+	 * 
+	 * */
+	private Integer faultId;
+	
 	/**
 	 * 最近时间
 	 * 
@@ -77,9 +84,5 @@ public class FaultInformationVO extends FaultInformation implements Serializable
 	private String recentTime;
 	
 	
-	/**
-	 * 租户域
-	 */
-	private String tenantDomain;
 	
 }

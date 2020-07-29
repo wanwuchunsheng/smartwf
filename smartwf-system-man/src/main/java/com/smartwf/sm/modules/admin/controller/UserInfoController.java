@@ -217,7 +217,7 @@ public class UserInfoController {
     @PostMapping("selectUserInfoByRoleId")
     @ApiOperation(value = "排班用户查询接口", notes = "排班用户查询")
     @ApiImplicitParams({
-   	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户ID", dataType = "int", required = true),
+   	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户", dataType = "int", required = true),
    	    @ApiImplicitParam(paramType = "query", name = "roleId", value = "角色ID", dataType = "int", required = true)
     })
     public ResponseEntity<Result<?>> selectUserInfoByRoleId(UserRole bean) {
