@@ -271,8 +271,8 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	public void deleteKeyPosition(KeyPosition bean) {
 		//1)封装参数
 		QueryWrapper<KeyPosition> queryWrapper = new QueryWrapper<>();
-  		queryWrapper.eq("asset_number", bean.getDeviceCode()); 
-  		queryWrapper.eq("tenant_domain", bean.getTenantDomain()); 
+  		queryWrapper.eq("asset_number", bean.getAssetNumber()); 
+  		queryWrapper.eq("tenant_domain", bean.getTenantDomain());
 		//2）设备编码删除
 		this.keyPositionDao.delete(queryWrapper);
 	}

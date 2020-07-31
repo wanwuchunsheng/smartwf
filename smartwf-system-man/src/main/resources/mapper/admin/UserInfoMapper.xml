@@ -177,42 +177,8 @@
 	        #{item}
 	    </foreach>
 	</select>
-    
-    
-	<!-- 查询排班用户 -->
-    <select id="selectUserInfoByRoleId" resultType="com.smartwf.sm.modules.admin.pojo.UserRole">
-         select 
-			a.id,
-			a.user_code,
-			a.login_code,
-			a.user_name,
-			a.email,
-			a.mobile,
-			a.phone,
-			a.sex,
-			a.avatar,
-			a.sign,
-			a.wx_openid,
-			a.qq_openid,
-			a.address,
-			a.remark,
-			a.tenant_id,
-			a.status,
-			a.mgr_type,
-			a.enable,
-			a.create_time,
-			a.create_user_id,
-			a.create_user_name,
-			a.update_time,
-			a.update_user_id,
-			a.update_user_name
-		 from sys_user_info a , sys_user_role b 
-		where a.enable=0 and a.id = b.user_id 
-		and a.tenant_id = b.tenant_id 
-		and b.role_id= ${bean.roleId}
-    </select>
-    
-    
+
+	
     <!-- 根据租户和角色名称 分组查询 -->
     <select id="selectUserInfoByShift" resultType="com.smartwf.sm.modules.admin.pojo.UserInfo" >
          select 
@@ -235,6 +201,30 @@
 		from sys_user_info a, sys_role b, sys_user_role c 
 		where a.id=c.user_id and b.id= c.role_id and a.tenant_id=c.tenant_id and b.tenant_id = c.tenant_id
 		and b.eng_name=#{bean.engName} and b.tenant_id=#{bean.tenantId}
+    </select>
+    
+    <!-- 查询所有排班用户 -->
+    <select id="selectUserInfoByRoleParam"  resultType="com.smartwf.sm.modules.admin.pojo.UserInfo" >
+         select 
+			a.id,
+			a.login_code,
+			a.user_name,
+			a.email,
+			a.mobile,
+			a.phone,
+			a.sex,
+			a.avatar,
+			a.sign,
+			a.wx_openid,
+			a.qq_openid,
+			a.address,
+			a.remark,
+			a.tenant_id,
+			a.status,
+			a.mgr_type
+		from sys_user_info a, sys_role b, sys_user_role c 
+		where a.id=c.user_id and b.id= c.role_id and a.tenant_id=c.tenant_id and b.tenant_id = c.tenant_id
+		and b.eng_name=#{shiftGroup} and b.tenant_id= (select id from sys_tenant where enable=0 and tenant_domain=#{tenantDomain} ) 
     </select>
     
     

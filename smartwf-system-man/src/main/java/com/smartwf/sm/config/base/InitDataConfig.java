@@ -87,7 +87,7 @@ public class InitDataConfig implements CommandLineRunner{
     			}
     		}
     		//初始化排班人员信息
-    		this.userService.selectUserInfoByShift();
+    		//this.userService.selectUserInfoByShift();
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}

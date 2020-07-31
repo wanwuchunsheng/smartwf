@@ -74,19 +74,20 @@ public interface UserInfoService {
      */
 	Result<?> selectUserInfoByCreateId(String ids);
 
-	/**
-   	 *  排班用户查询
-   	 *    角色ID，租户域
-   	 *    根据角色ID，查询属于该角色的所有排班用户
-   	 * @author WCH
-   	 * @param bean
-   	 * @return
-   	 */
-	Result<?> selectUserInfoByRoleId(UserRole bean);
+	
 	/**
    	 *  排班人员信息
    	 *    根据租户和角色名称 分组查询
    	 * @author WCH
    	 */
 	void selectUserInfoByShift();
+
+	/**
+   	 *  排班用户查询
+   	 *   查询所有
+   	 * @author WCH
+   	 * @param bean
+   	 * @return
+   	 */
+	Result<?> selectUserInfoByRoleParam(String tenantDomain);
 }

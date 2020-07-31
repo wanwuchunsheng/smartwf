@@ -460,15 +460,14 @@ public class UserInfoServiceImpl implements UserInfoService{
 
 	/**
    	 *  排班用户查询
-   	 *    角色ID，租户域
-   	 *    根据角色ID，查询属于该角色的所有排班用户
+   	 *   查询所有
    	 * @author WCH
    	 * @param bean
    	 * @return
    	 */
 	@Override
-	public Result<?> selectUserInfoByRoleId(UserRole bean) {
-		List<UserInfo> userInfoList=this.userInfoDao.selectUserInfoByRoleId(bean);
+	public Result<?> selectUserInfoByRoleParam(String tenantDomain){
+		List<UserInfo> userInfoList=this.userInfoDao.selectUserInfoByRoleParam(tenantDomain,Constants.SHIFT_GROUP);
 		return Result.data(Constants.EQU_SUCCESS,userInfoList);
 	}
 

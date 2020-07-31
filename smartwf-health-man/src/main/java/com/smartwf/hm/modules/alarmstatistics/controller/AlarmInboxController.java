@@ -322,7 +322,7 @@ public class AlarmInboxController {
 	    
 	    /**
 	 	 * @Description: 重点机位删除{提供生产中心调用}
-	 	 *  通过重点机位表主键ID删除
+	 	 *  通过重点机位表租户域下的资产编码
 	 	 * @author wch
 	 	 * @date 2020-04-07
 	 	 * @return

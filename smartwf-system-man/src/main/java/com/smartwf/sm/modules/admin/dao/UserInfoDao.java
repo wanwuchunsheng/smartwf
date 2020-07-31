@@ -91,15 +91,7 @@ public interface UserInfoDao extends BaseMapper<UserInfo> {
      * @return
      */
 	List<UserInfo> selectUserInfoByCreateId(@Param("list") List<String> list);
-	/**
-   	 *  排班用户查询
-   	 *    角色ID，租户域
-   	 *    根据角色ID，查询属于该角色的所有排班用户
-   	 * @author WCH
-   	 * @param bean
-   	 * @return
-   	 */
-	List<UserInfo> selectUserInfoByRoleId(@Param("bean") UserRole bean);
+	
 	/**
    	 *  排班人员信息
    	 *    根据租户和角色名称 分组查询
@@ -107,6 +99,14 @@ public interface UserInfoDao extends BaseMapper<UserInfo> {
    	 * @return 
    	 */
 	List<UserInfo> selectUserInfoByShift(@Param("bean") Role bean);
+	/**
+   	 *  排班用户查询
+   	 *   查询所有
+   	 * @author WCH
+   	 * @param bean
+   	 * @return
+   	 */
+	List<UserInfo> selectUserInfoByRoleParam(@Param("tenantDomain") String tenantDomain,@Param("shiftGroup") String shiftGroup);
 
 
     

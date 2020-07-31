@@ -19,7 +19,11 @@ public class Test {
 	
 	public static void main(String[] args) {
 		
+		//String str=
 		
+		
+		
+		/**
 		String str="{\"9a1158154dfa42caddbd0694a4e9bdc8\":[{\"pwdQuestionAnswer2\":null,\"pwdQuestionAnswer3\":null,\"createUserId\":null,\"loginCode\":\"jack\",\"sign\":null,\"qqOpenid\":null,\"remark\":null,\"mgrType\":0,\"pwdQuestion\":null,\"createUserName\":null,\"userCode\":null,\"enable\":null,\"id\":175,\"email\":null,\"pwdQuestion2\":null,\"address\":null,\"updateUserId\":null,\"wxOpenid\":null,\"sex\":0,\"updateUserName\":null,\"mobile\":null,\"updateTime\":null,\"avatar\":null,\"userName\":\"jack\",\"pwdQuestionAnswer\":null,\"phone\":null,\"createTime\":null,\"tenantId\":52,\"pwd\":null,\"status\":null,\"pwdQuestion3\":null}],\"c4ca4238a0b923820dcc509a6f75849b\":[]}";
 		
 		Map<String,Object> map= JSONUtil.parseObj(str);
@@ -30,7 +34,7 @@ public class Test {
 				System.out.println(m.getKey()+"    "+m.getValue());
 			}
 		}
-		
+		*/
 		/**
 		String str="<?xml version='1.0' encoding='UTF-8'?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"><soapenv:Body><soapenv:Fault><faultcode>soapenv:Server</faultcode><faultstring>Domain is not available to register</faultstring><detail><ns:TenantMgtAdminServiceException xmlns:ns=\"http://services.mgt.tenant.carbon.wso2.org\"><ns:TenantMgtAdminServiceException><axis2ns24:Message xmlns:axis2ns24=\"http://services.mgt.tenant.carbon.wso2.org\">Domain is not available to register</axis2ns24:Message></ns:TenantMgtAdminServiceException></ns:TenantMgtAdminServiceException></detail></soapenv:Fault></soapenv:Body></soapenv:Envelope>";
 	    Map<String,Object> map= XmlUtil.xmlToMap(str);

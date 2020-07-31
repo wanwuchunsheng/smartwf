@@ -6,7 +6,7 @@
     <select id="selectByDeviceCode" resultType="com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition">
         select 
         	id 
-        from key_position where device_code =#{bean.deviceCode}
+        from key_position where asset_number =#{bean.assetNumber}
          <if test="bean.tenantDomain != null ">
           and tenant_domain = #{bean.tenantDomain}
         </if>

@@ -21,6 +21,7 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
+import com.smartwf.sm.modules.admin.vo.RoleVO;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 import io.swagger.annotations.Api;
@@ -208,22 +209,20 @@ public class UserInfoController {
     
     /**
    	 *  排班用户查询
-   	 *    角色ID，租户域
-   	 *    根据角色ID，查询属于该角色的所有排班用户
+   	 *   查询所有
    	 * @author WCH
    	 * @param bean
    	 * @return
    	 */
-    @PostMapping("selectUserInfoByRoleId")
+    @PostMapping("selectUserInfoByRoleParam")
     @ApiOperation(value = "排班用户查询接口", notes = "排班用户查询")
     @ApiImplicitParams({
-   	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户", dataType = "int", required = true),
-   	    @ApiImplicitParam(paramType = "query", name = "roleId", value = "角色ID", dataType = "int", required = true)
+   	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true)
     })
-    public ResponseEntity<Result<?>> selectUserInfoByRoleId(UserRole bean) {
+    public ResponseEntity<Result<?>> selectUserInfoByRoleParam(String tenantDomain) {
         try {
-           Result<?> uinfoList= this.userService.selectUserInfoByRoleId(bean);
-       	   return ResponseEntity.status(HttpStatus.OK).body(uinfoList);
+           Result<?> userInfoList= this.userService.selectUserInfoByRoleParam(tenantDomain);
+       	   return ResponseEntity.status(HttpStatus.OK).body(userInfoList);
         } catch (Exception e) {
             log.error("排班用户查询错误！{}", e.getMessage(), e);
         }

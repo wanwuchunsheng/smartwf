@@ -84,9 +84,13 @@ public class DefectServiceImpl implements DefectService {
 		//添加工单处理记录
 		FaultOperationRecord fr=new FaultOperationRecord();
 		fr.setFaultInfoId(bean.getId());
-		//待审核
+		//待处理
 		fr.setClosureStatus(Constants.ZERO);
-		fr.setClosureReason("缺陷工单录入");
+		if(Constants.ONE==bean.getIncidentType()) {
+			fr.setClosureReason("故障工单录入");
+		}else {
+			fr.setClosureReason("缺陷工单录入");
+		}
 		//1处理记录  2处理意见
 		fr.setClosureType(1);
 		fr.setCreateTime(new Date());

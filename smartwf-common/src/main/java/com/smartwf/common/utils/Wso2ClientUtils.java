@@ -96,7 +96,7 @@ public class Wso2ClientUtils {
     		StringBuffer sb=new StringBuffer();
     		sb.append(" <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://org.apache.axis2/xsd\">");
     		sb.append(" <soapenv:Header/> <soapenv:Body> <xsd:getBooleanDecision> ");
-    		sb.append(" <xsd:subject>").append(user.getLoginCode()).append("</xsd:subject>");
+    		sb.append(" <xsd:subject>").append(user.getLoginCode()).append("@").append(user.getTenantDomain()).append("</xsd:subject>");
     		sb.append(" <xsd:resource>").append(request.getRequestURI()).append("</xsd:resource>");
     		sb.append(" <xsd:action>").append(request.getMethod()).append("</xsd:action>");
     		sb.append(" </xsd:getBooleanDecision> </soapenv:Body> ");
