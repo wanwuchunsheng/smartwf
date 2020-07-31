@@ -72,7 +72,7 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		mapform.put("model",  JSONUtil.toJsonStr(map));
 		log.info(JSONUtil.toJsonStr(map));
 		String url=new StringBuffer().append(pmsServiceUri).append("/workOrder/add").toString();
-		String res=HttpRequest.post(url).header(Constants.SMARTWF_TOKEN,  user.getSmartwfToken()).form(mapform).timeout(20000).execute().body();
+		String res=HttpRequest.post(url).header(Constants.SMARTWF_TOKEN,  user.getSmartwfToken()).form(mapform).timeout(60000).execute().body();
 		log.info("故障转工单返回："+res);
 		if(StringUtils.isNotBlank(res)) {
 			Map<String,Object> resmap=JSONUtil.parseObj(res);

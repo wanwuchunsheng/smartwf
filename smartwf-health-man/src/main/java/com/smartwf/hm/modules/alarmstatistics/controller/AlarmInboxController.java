@@ -263,55 +263,7 @@ public class AlarmInboxController {
 	    	   map.put("kks_full_code","equ001");
 	    	   map.put("uuid","94105248410062198");
 	    	   list.add(map);
-	    	   
-	    	   map=new HashMap<String, String>(3);
-	    	   map.put("DEVICE_NAME", "3号风机");
-	    	   map.put("kks_full_code","equ003");
-	    	   map.put("uuid","94105248410062193");
-	    	   list.add(map);
-	    	   
-	    	   map=new HashMap<String, String>(3);
-	    	   map.put("DEVICE_NAME", "4号风机");
-	    	   map.put("kks_full_code","equ004");
-	    	   map.put("uuid","94105248410062194");
-	    	   list.add(map);
-	    	   
-	    	   map=new HashMap<String, String>(3);
-	    	   map.put("DEVICE_NAME", "5号风机");
-	    	   map.put("kks_full_code","equ005");
-	    	   map.put("uuid","94105248410062155");
-	    	   list.add(map);
-	    	   
-	    	   map=new HashMap<String, String>(3);
-	    	   map.put("DEVICE_NAME", "6号风机");
-	    	   map.put("kks_full_code","equ006");
-	    	   map.put("uuid","94105248410062156");
-	    	   list.add(map);
-	    	   
-	    	   map=new HashMap<String, String>(3);
-	    	   map.put("DEVICE_NAME", "9号风机");
-	    	   map.put("kks_full_code","equ009");
-	    	   map.put("uuid","94105248410062199");
-	    	   list.add(map);
-	    	   
-	    	   map=new HashMap<String, String>(3);
-	    	   map.put("DEVICE_NAME", "11号风机");
-	    	   map.put("kks_full_code","equ011");
-	    	   map.put("uuid","941052484100621111");
-	    	   list.add(map);
-	    	   
-	    	   map=new HashMap<String, String>(3);
-	    	   map.put("DEVICE_NAME", "13号风机");
-	    	   map.put("kks_full_code","equ013");
-	    	   map.put("uuid","941052484100621113");
-	    	   list.add(map);
-	    	   
-	    	   map=new HashMap<String, String>(3);
-	    	   map.put("DEVICE_NAME", "37号风机");
-	    	   map.put("kks_full_code","equ037");
-	    	   map.put("uuid","941052484100621137");
-	    	   list.add(map);
-	    	   
+	    	  
 	       	 Result<?> result = Result.data(list);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
 	       } catch (Exception e) {
@@ -379,7 +331,7 @@ public class AlarmInboxController {
 	    @ApiOperation(value = "重点机位删除接口", notes = "重点机位删除")
 	    @ApiImplicitParams({
     	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true ),
-	     	  @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编号", dataType = "String", required = true)
+	     	  @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String", required = true)
 	    })
 	    public ResponseEntity<Result<?>> deleteKeyPosition(KeyPosition bean) {
 	       try {

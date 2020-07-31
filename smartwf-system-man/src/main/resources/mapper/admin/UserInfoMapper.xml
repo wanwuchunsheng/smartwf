@@ -211,4 +211,31 @@
 		and a.tenant_id = b.tenant_id 
 		and b.role_id= ${bean.roleId}
     </select>
+    
+    
+    <!-- 根据租户和角色名称 分组查询 -->
+    <select id="selectUserInfoByShift" resultType="com.smartwf.sm.modules.admin.pojo.UserInfo" >
+         select 
+			a.id,
+			a.login_code,
+			a.user_name,
+			a.email,
+			a.mobile,
+			a.phone,
+			a.sex,
+			a.avatar,
+			a.sign,
+			a.wx_openid,
+			a.qq_openid,
+			a.address,
+			a.remark,
+			a.tenant_id,
+			a.status,
+			a.mgr_type
+		from sys_user_info a, sys_role b, sys_user_role c 
+		where a.id=c.user_id and b.id= c.role_id and a.tenant_id=c.tenant_id and b.tenant_id = c.tenant_id
+		and b.eng_name=#{bean.engName} and b.tenant_id=#{bean.tenantId}
+    </select>
+    
+    
 </mapper>

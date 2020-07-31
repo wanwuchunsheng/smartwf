@@ -83,4 +83,10 @@ public interface UserInfoService {
    	 * @return
    	 */
 	Result<?> selectUserInfoByRoleId(UserRole bean);
+	/**
+   	 *  排班人员信息
+   	 *    根据租户和角色名称 分组查询
+   	 * @author WCH
+   	 */
+	void selectUserInfoByShift();
 }

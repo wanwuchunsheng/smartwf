@@ -86,8 +86,8 @@ public class InitDataConfig implements CommandLineRunner{
             		log.info("wso2配置信息{}",idt.getClientKey(), JSONUtil.toJsonStr(idt));
     			}
     		}
-    		//初始化排班用户
-    		//this.userService.selectUserInfoByShift();
+    		//初始化排班人员信息
+    		this.userService.selectUserInfoByShift();
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}

@@ -146,8 +146,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			fr.setRemark(bean.getRemark()); 
 			//租户域
 			fr.setTenantDomain(bean.getTenantDomain());
-			//关闭原因
-			fr.setClosureReason(bean.getClosureReason()); 
+			
 			//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
 			switch (bean.getAlarmStatus()) {
 				case 1:
@@ -160,6 +159,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 				case 2:
 					//处理中
 					fr.setClosureStatus(2);
+					fr.setClosureReason("已转工单，在处理中");
 					//删除redis对应数据
 					this.rmFaultInformationByRedis(bean.getId()); 
 					//向生产中心发送工单数据  1.id查询对象， 2封装对象调用生产中心api接口
@@ -172,22 +172,10 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 				case 4:
 					//已关闭
 					fr.setClosureStatus(4);
+					//关闭原因
+					fr.setClosureReason(bean.getClosureReason()); 
 					//删除redis对应数据
 					this.rmFaultInformationByRedis(bean.getId()); 
-					break;
-				case 0:
-					//待处理
-					fr.setClosureStatus(0);
-					//更新故障报警redis初始化数据，保证redis待处理数据最新
-					this.alarmInboxService.selectFaultInformationByAll();
-					break;
-				case 6:
-					//驳回
-					fr.setClosureStatus(6);
-					break;
-				case 7:
-					//回收站
-					fr.setClosureStatus(7);
 					break;
 				default:
 					break;
@@ -283,7 +271,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	public void deleteKeyPosition(KeyPosition bean) {
 		//1)封装参数
 		QueryWrapper<KeyPosition> queryWrapper = new QueryWrapper<>();
-  		queryWrapper.eq("device_code", bean.getDeviceCode()); 
+  		queryWrapper.eq("asset_number", bean.getDeviceCode()); 
   		queryWrapper.eq("tenant_domain", bean.getTenantDomain()); 
 		//2）设备编码删除
 		this.keyPositionDao.delete(queryWrapper);

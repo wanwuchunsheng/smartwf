@@ -79,13 +79,13 @@ public class DefectServiceImpl implements DefectService {
 		bean.setCreateTime(new Date());
 		bean.setUpdateTime(bean.getCreateTime());
 		//5待审核 6驳回 0未处理 1已转工单 2处理中 3已处理 4已关闭 7回收站 8未解决
-		bean.setAlarmStatus(5);
+		bean.setAlarmStatus(Constants.ZERO);
 		this.defectDao.insert(bean);
 		//添加工单处理记录
 		FaultOperationRecord fr=new FaultOperationRecord();
 		fr.setFaultInfoId(bean.getId());
 		//待审核
-		fr.setClosureStatus(5);
+		fr.setClosureStatus(Constants.ZERO);
 		fr.setClosureReason("缺陷工单录入");
 		//1处理记录  2处理意见
 		fr.setClosureType(1);

@@ -17,6 +17,7 @@ import com.smartwf.common.exception.CommonException;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.TreeResource;
 import com.smartwf.common.pojo.User;
+import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.utils.StrUtils;
@@ -24,6 +25,7 @@ import com.smartwf.sm.modules.admin.dao.OrganizationDao;
 import com.smartwf.sm.modules.admin.dao.PostDao;
 import com.smartwf.sm.modules.admin.dao.ResourceDao;
 import com.smartwf.sm.modules.admin.dao.RoleDao;
+import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.dao.UserInfoDao;
 import com.smartwf.sm.modules.admin.dao.UserOrganizationDao;
 import com.smartwf.sm.modules.admin.dao.UserPostDao;
@@ -39,6 +41,10 @@ import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.service.Wso2RoleService;
 import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.SmUtil;
+import cn.hutool.crypto.digest.MD5;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j;
 /**
@@ -80,6 +86,8 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Autowired
 	private Wso2RoleService wso2RoleService;
 	
+	@Autowired
+	private RedisService redisService;
 	
 	/**
 	 * @Description:查询用户资料分页
@@ -462,5 +470,25 @@ public class UserInfoServiceImpl implements UserInfoService{
 	public Result<?> selectUserInfoByRoleId(UserRole bean) {
 		List<UserInfo> userInfoList=this.userInfoDao.selectUserInfoByRoleId(bean);
 		return Result.data(Constants.EQU_SUCCESS,userInfoList);
+	}
+
+	/**
+   	 *  排班人员信息
+   	 *    根据租户和角色名称 分组查询
+   	 * @author WCH
+   	 */
+	@Override
+	public void selectUserInfoByShift() {
+		//查询租户ID，角色ID
+		List<Role> roleList= this.roleDao.selectTenantByGroup(Constants.SHIFT_GROUP);
+		if( roleList!=null && roleList.size()>0 ) {
+			for( Role t:roleList) {
+				//通过租户ID，角色英文名称 查询 用户
+				List<UserInfo> userInfoList= this.userInfoDao.selectUserInfoByShift(t);
+				//推送消息队列
+				this.redisService.set(SecureUtil.md5(Convert.toStr(t.getTenantId())), JSONUtil.toJsonStr(userInfoList));
+			}
+		}
+		
 	}
 }

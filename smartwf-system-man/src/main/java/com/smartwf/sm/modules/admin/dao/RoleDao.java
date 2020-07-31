@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.common.pojo.TreeRole;
 import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Role;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.vo.RoleVO;
 
 /**
@@ -52,6 +53,13 @@ public interface RoleDao extends BaseMapper<Role> {
 	 * */
 	List<Role> selectRoleByIds(@Param("list") List<String> list);
 
+	/**
+	 * 查询角色
+	 * @return
+	 * @author WCH
+	 * @param bean
+	 * */
+	List<Role> selectTenantByGroup(@Param("shiftGroup") String shiftGroup);
 
     
 }

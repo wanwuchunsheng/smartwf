@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.User;
+import com.smartwf.sm.modules.admin.pojo.Role;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
@@ -98,6 +100,13 @@ public interface UserInfoDao extends BaseMapper<UserInfo> {
    	 * @return
    	 */
 	List<UserInfo> selectUserInfoByRoleId(@Param("bean") UserRole bean);
+	/**
+   	 *  排班人员信息
+   	 *    根据租户和角色名称 分组查询
+   	 * @author WCH
+   	 * @return 
+   	 */
+	List<UserInfo> selectUserInfoByShift(@Param("bean") Role bean);
 
 
     

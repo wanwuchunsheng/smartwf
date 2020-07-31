@@ -17,6 +17,7 @@ import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.service.TenantService;
+import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
 import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
 
@@ -53,9 +54,13 @@ public class SmartwfSystemTest {
 	@Autowired
     private IdentityConfigService identityConfigService;
 	
+	@Autowired
+	private UserInfoService userService;
+	
 	@Test
 	public void initBaseData() {
 		try {
+			/*
     		//租户初始化数据
     		List<Tenant> tenantList=this.tenantService.initTenantDatas();
     		if(tenantList!=null && tenantList.size()>0) {
@@ -83,6 +88,9 @@ public class SmartwfSystemTest {
             		log.info("wso2配置信息{}",idt.getClientKey(), JSONUtil.toJsonStr(idt));
     			}
     		}
+    		*/
+    		//初始化排班人员信息
+    		this.userService.selectUserInfoByShift();
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}

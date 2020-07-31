@@ -75,7 +75,7 @@ public class FaultInformationVO extends FaultInformation implements Serializable
 	 * 故障主键
 	 * 
 	 * */
-	private Integer faultId;
+	private String faultId;
 	
 	/**
 	 * 最近时间

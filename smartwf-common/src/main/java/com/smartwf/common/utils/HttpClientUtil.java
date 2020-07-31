@@ -42,7 +42,6 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.webservice.SslClient;
-import com.smartwf.common.wso2.Wso2Config;
 
 import lombok.extern.log4j.Log4j2;
 /**
