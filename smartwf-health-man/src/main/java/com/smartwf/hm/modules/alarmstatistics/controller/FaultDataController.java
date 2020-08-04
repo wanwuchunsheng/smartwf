@@ -73,14 +73,14 @@ public class FaultDataController {
     	    @ApiImplicitParam(paramType = "query", name = "alarmLocation", value = "报警部位", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "事变等级(0危急 1严重 2一般 3未知)", dataType = "int",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "报警来源(0故障 1报警 2人工缺陷)", dataType = "int",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "manufacturers", value = "厂家", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码", dataType = "String",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "故障起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ,required = true),
-            @ApiImplicitParam(paramType = "query", name = "endTime", value = "故障截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" )
+            @ApiImplicitParam(paramType = "query", name = "endTime", value = "故障截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
+	        @ApiImplicitParam(paramType = "query", name = "manufacturers", value = "厂家", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String")
     })
     public ResponseEntity<Result<?>> saveFaultInformation(FaultInformation bean) {
         try {
@@ -109,8 +109,8 @@ public class FaultDataController {
 		    @ApiImplicitParam(paramType = "query", name = "incidentType", value = "事变类型(1故障类型 2缺陷类型)", dataType = "int",required = true),
 		    @ApiImplicitParam(paramType = "query", name = "faultType", value = "报警来源(0故障 1报警 2人工缺陷)", dataType = "int",required = true),
 		    @ApiImplicitParam(paramType = "query", name = "manufacturers", value = "厂家", dataType = "String"),
-		    @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码", dataType = "String"),
-		    @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称", dataType = "String"),
+		    @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码", dataType = "String",required = true),
+		    @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称", dataType = "String",required = true),
 		    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String",required = true),
 		    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
@@ -167,7 +167,7 @@ public class FaultDataController {
     /**
 	 * @Description: 初始化故障数据
 	 * @return
-	 */
+	*/
     @PostMapping("initFaultInformation")
     @ApiOperation(value = "初始化故障数据接口", notes = "初始化故障数据")
     public ResponseEntity<Result<?>> initFaultInformation() {
@@ -179,7 +179,7 @@ public class FaultDataController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"初始化故障数据信息错误！"));
     }
-    
+     
     /**
 	 * @Description: 初始化缺陷数据
 	 * @return
@@ -195,5 +195,5 @@ public class FaultDataController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"初始化缺陷数据信息错误！"));
     }
-
+    
 }

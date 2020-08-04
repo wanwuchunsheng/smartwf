@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ import com.smartwf.hm.modules.alarmstatistics.dao.FaultDataDao;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultDataService;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONUtil;
 
 
@@ -41,20 +44,19 @@ public class FaultDataServiceImpl implements FaultDataService {
 	public void saveFaultInformation(FaultInformation bean) {
 		bean.setCreateTime(new Date());
 		bean.setUpdateTime(bean.getCreateTime());
-		//0-未处理
+		//未处理
 		bean.setAlarmStatus(Constants.ZERO);
 		//1故障类型 2缺陷类型
 		bean.setIncidentType(Constants.ONE);
 		//1）保存mysql
 		this.faultDataDao.insert(bean);
-		//2）获取redis缓存数据,并更新缓存数据，保存
-		Map<String, Object> maps=JSONUtil.parseObj(this.redisService.get("faultCount"));
-		if(maps==null) {
-			maps=new HashMap<>(4);
+		String tdDatas=this.redisService.get(DateUtil.today());
+	    //今日更新数
+		if(StringUtils.isNotBlank(tdDatas)) {
+			this.redisService.set(DateUtil.today(), Convert.toStr(Convert.toInt(tdDatas)+1));
+		}else {
+			this.redisService.set(DateUtil.today(), Convert.toStr(1), 86400);
 		}
-		maps.put(bean.getId(), bean);
-		//3）将新数据保存redis
-		this.redisService.set("faultCount",JSONUtil.toJsonStr(maps));
 	}
 	
 }

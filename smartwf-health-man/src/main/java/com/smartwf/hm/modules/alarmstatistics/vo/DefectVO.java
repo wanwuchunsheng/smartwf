@@ -5,12 +5,22 @@ import java.util.Date;
 
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *@Deprecated 实体类  
  *@author WCH
  * */
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true)
 public class DefectVO extends FaultInformation implements Serializable{
 
 	/**
@@ -33,30 +43,12 @@ public class DefectVO extends FaultInformation implements Serializable{
 	 */
 	private Date etime;
 	
+	/**
+	 * 关闭原因
+	 */
+	private String closureReason;
 	
-	public String getFilePath() {
-		return filePath;
-	}
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-	public Date getStime() {
-		return stime;
-	}
-	public void setStime(Date stime) {
-		this.stime = stime;
-	}
-	public Date getEtime() {
-		return etime;
-	}
-	public void setEtime(Date etime) {
-		this.etime = etime;
-	}
 	
-	@Override
-	public String toString() {
-		return "DefectVO [filePath=" + filePath + ", stime=" + stime + ", etime=" + etime + "]";
-	}
 	
 	
 }

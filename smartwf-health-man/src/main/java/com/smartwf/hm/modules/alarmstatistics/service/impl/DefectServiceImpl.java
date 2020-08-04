@@ -14,7 +14,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.hm.modules.alarmstatistics.dao.DefectDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOperationRecordDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FileUploadRecordDao;
@@ -22,6 +24,7 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FileUploadRecord;
 import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
+import com.smartwf.hm.modules.alarmstatistics.service.PmsSendDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
 
 import cn.hutool.json.JSONUtil;
@@ -51,6 +54,9 @@ public class DefectServiceImpl implements DefectService {
 	
 	@Autowired
     private FileUploadRecordDao fileUploadRecordDao;
+	
+	@Autowired
+	private PmsSendDataService pmsSendDataService;
 	
 	
 	/**
@@ -92,7 +98,7 @@ public class DefectServiceImpl implements DefectService {
 			fr.setClosureReason("缺陷工单录入");
 		}
 		//1处理记录  2处理意见
-		fr.setClosureType(1);
+		fr.setClosureType(Constants.ONE);
 		fr.setCreateTime(new Date());
 		fr.setTenantDomain(bean.getTenantDomain());
 		this.faultOperationRecordDao.insert(fr);
@@ -123,54 +129,67 @@ public class DefectServiceImpl implements DefectService {
 	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void updateDefectById(DefectVO bean) {
+		//1)获取当前登录人信息
+		User user=UserThreadLocal.getUser();
+		//2)更新修改状态
+		bean.setUpdateTime(new Date());
+		bean.setUpdateUserId(user.getId());
+		bean.setUpdateUserName(user.getUserName());
 		this.defectDao.updateById(bean);
-		//添加修改记录
-		if(null !=bean.getAlarmStatus() && null==bean.getOperatingStatus()) {
-			FaultOperationRecord foRecord=new FaultOperationRecord();
-			foRecord.setFaultInfoId(bean.getId());
-			foRecord.setClosureStatus(bean.getAlarmStatus());
-			//1处理记录  2处理意见
-			foRecord.setClosureType(Constants.ONE);
-			foRecord.setRemark(bean.getRemark());
-			//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
+		//过滤重点关注修改，避免重复提交
+		if(null != bean.getAlarmStatus() && null==bean.getOperatingStatus()) {
+			//3）插入修改记录
+			FaultOperationRecord fr=new FaultOperationRecord();
+			//故障表主键
+			fr.setFaultInfoId(bean.getId());
+			//操作人姓名
+			fr.setCreateUserName(user.getUserName()); 
+			//操作人ID
+			fr.setCreateUserId(String.valueOf(user.getId()));
+			//时间
+			fr.setCreateTime(bean.getUpdateTime()); 
+			//备注
+			fr.setRemark(bean.getRemark()); 
+			//租户域
+			fr.setTenantDomain(bean.getTenantDomain());
+			//0未处理  1已转工单  2处理中  3已处理  4已关闭
 			switch (bean.getAlarmStatus()) {
-				case 6:
-					foRecord.setClosureReason("驳回");
-					break;
 				case 1:
-					foRecord.setClosureReason("已转工单");
-					//删除redis未处理数据
-					this.rmDefectByRedis(bean.getId());
+					//已转工单{状态已废弃}
+					fr.setClosureStatus(1);
+					//删除redis对应数据
+					this.rmDefectByRedis(bean.getId()); 
+					//转工单
+					this.pmsSendDataService.faultWordOrder(bean);
 					break;
 				case 2:
-					foRecord.setClosureReason("处理中");
-					//删除redis未处理数据
-					this.rmDefectByRedis(bean.getId());
+					//处理中
+					fr.setClosureStatus(2);
+					fr.setClosureReason("已转工单，在处理中");
+					//删除redis对应数据
+					this.rmDefectByRedis(bean.getId()); 
+					//转工单
+					this.pmsSendDataService.faultWordOrder(bean);
 					break;
 				case 3:
-					foRecord.setClosureReason("已处理");
+					//已处理
+					fr.setClosureStatus(3);
 					break;
 				case 4:
-					foRecord.setClosureReason("已关闭");
-					//删除redis未处理数据
-					this.rmDefectByRedis(bean.getId());
-					break;
-				case 7:
-					foRecord.setClosureReason("回收站");
-					break;
-				case 8:
-					foRecord.setClosureReason("未解决");
-					break;
-				case 0:
-					foRecord.setClosureReason("审核通过");
-					//初始化，更新redis
-					this.defectService.initDefectAll();
+					//已关闭
+					fr.setClosureStatus(4);
+					//关闭原因
+					fr.setClosureReason(bean.getClosureReason()); 
+					//删除redis对应数据
+					this.rmDefectByRedis(bean.getId()); 
 					break;
 				default:
 					break;
 			}
-			foRecord.setCreateTime(new Date());
-			this.faultOperationRecordDao.insert(foRecord);
+			//1处理记录   2处理意见
+			fr.setClosureType(1); 
+			//插入处理记录
+			this.faultOperationRecordDao.insert(fr);
 		}
 	}
 	/**
@@ -182,7 +201,7 @@ public class DefectServiceImpl implements DefectService {
 		if(maps!=null && maps.size()>0) {
 			maps.remove(id);
 			log.info("redis未处理故障总数：{}",maps.size());
-			this.redisService.set("faultCount",JSONUtil.toJsonStr(maps));
+			this.redisService.set("defectCount",JSONUtil.toJsonStr(maps));
 		}
 	}
 

@@ -134,7 +134,7 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "报警级别(0危急 1严重 2一般 3未知)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "故障类型(0系统报警 1预警信息 2人工提交)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(5待审核 6驳回 0未处理 1已转工单 2处理中 3已处理 4已关闭 7回收站 8未解决)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1已转工单 2处理中 3已处理 4已关闭)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "closureReason", value = "关闭原因", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
@@ -194,20 +194,39 @@ public class AlarmInboxController {
     }
     
     /**
-	 * @Description: 实时故障报警总数查询
+	 * @Description: 实时故障报警未处理总数查询
 	 *    实时故障总和
 	 * @return
 	 */
     @GetMapping("selectAlarmsCountByAll")
-    @ApiOperation(value = "实时故障报警总数接口", notes = "实时故障报警总数查询")
-    public Integer selectAlarmsCountByAll() {
+    @ApiOperation(value = "实时故障报警未处理总数接口", notes = "实时故障报警未处理总数查询")
+    public ResponseEntity<Result<?>> selectAlarmsCountByAll() {
         try {
-        	return this.alarmInboxService.selectAlarmsCountByAll();
+        	Integer count=this.alarmInboxService.selectAlarmsCountByAll();
+    	   	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
         } catch (Exception e) {
             log.error("实时故障报警总数信息查询错误！{}", e.getMessage(), e);
         }
-		return Constants.ZERO;
+	   return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, Constants.ZERO));
     }
+    
+    /**
+	 * 今日新增总数查询接口
+	 * @author WCH
+	 * @return
+	 */
+    @GetMapping("selectAlarmsCountByToday")
+    @ApiOperation(value = "今日新增总数查询接口", notes = "今日新增总数查询")
+    public ResponseEntity<Result<?>> selectAlarmsCountByToday() {
+        try {
+        	Integer count=this.alarmInboxService.selectAlarmsCountByToday();
+    	   	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
+        } catch (Exception e) {
+            log.error("今日新增总数查询错误！{}", e.getMessage(), e);
+        }
+	   return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, Constants.ZERO));
+    }
+    
     
     /**
    	 * @Description: 查询所有故障报警记录信息 
@@ -327,7 +346,7 @@ public class AlarmInboxController {
 	 	 * @date 2020-04-07
 	 	 * @return
 	 	 */
-	    @DeleteMapping("deleteKeyPosition")
+	    @PostMapping("deleteKeyPosition")
 	    @ApiOperation(value = "重点机位删除接口", notes = "重点机位删除")
 	    @ApiImplicitParams({
     	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true ),

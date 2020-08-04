@@ -29,6 +29,8 @@ import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.service.PmsSendDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -129,6 +131,8 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		User user=UserThreadLocal.getUser();
 		//2)更新修改状态
 		bean.setUpdateTime(new Date());
+		bean.setUpdateUserId(user.getId());
+		bean.setUpdateUserName(user.getUserName());
 		this.alarmInboxDao.updateById(bean);
 		//过滤重点关注修改，避免重复提交
 		if(null != bean.getAlarmStatus() && null==bean.getOperatingStatus()) {
@@ -146,14 +150,14 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			fr.setRemark(bean.getRemark()); 
 			//租户域
 			fr.setTenantDomain(bean.getTenantDomain());
-			
-			//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
+			//0未处理  1已转工单  2处理中  3已处理  4已关闭
 			switch (bean.getAlarmStatus()) {
 				case 1:
 					//已转工单{状态已废弃}
 					fr.setClosureStatus(1);
 					//删除redis对应数据
 					this.rmFaultInformationByRedis(bean.getId()); 
+					//转工单
 					this.pmsSendDataService.faultWordOrder(bean);
 					break;
 				case 2:
@@ -162,7 +166,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 					fr.setClosureReason("已转工单，在处理中");
 					//删除redis对应数据
 					this.rmFaultInformationByRedis(bean.getId()); 
-					//向生产中心发送工单数据  1.id查询对象， 2封装对象调用生产中心api接口
+					//转工单
 					this.pmsSendDataService.faultWordOrder(bean);
 					break;
 				case 3:
@@ -426,6 +430,20 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			this.faultOperationRecordDao.insert(fr);
   		}
   	    
+	}
+
+	/**
+	 * 今日新增总数查询接口
+	 * @author WCH
+	 * @return
+	 */
+	@Override
+	public Integer selectAlarmsCountByToday() {
+		String count= this.redisService.get(DateUtil.today());
+		if(StringUtils.isNotBlank(count)) {
+			return Convert.toInt(count);
+		}
+		return Constants.ZERO;
 	}
 	
 }

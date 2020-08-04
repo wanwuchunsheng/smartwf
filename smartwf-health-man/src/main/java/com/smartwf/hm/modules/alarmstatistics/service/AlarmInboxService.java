@@ -132,6 +132,13 @@ public interface AlarmInboxService {
    	 */
 	void updateAlarmInByParam(FaultInformationVO bean);
 	
+	/**
+	 * 今日新增总数查询接口
+	 * @author WCH
+	 * @return
+	 */
+	Integer selectAlarmsCountByToday();
+	
 	
 
 

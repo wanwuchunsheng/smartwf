@@ -49,7 +49,7 @@ public class DefectController {
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "orderNumber", value = "缺陷工单号", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决)", dataType = "int",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态( 0未处理  1已转工单  2处理中  3已处理  4已关闭  )", dataType = "int",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "incidentType", value = "事变类型(1故障类型 2缺陷类型)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
@@ -130,18 +130,19 @@ public class DefectController {
     }
  
     /**
-	 * @Description: 实时缺陷总数查询
+	 * @Description: 缺陷未处理总数查询
 	 * @return
 	 */
     @GetMapping("selectDefectCountByAll")
-    @ApiOperation(value = "实时缺陷总数查询接口", notes = "实时缺陷总数查询")
-    public Integer selectDefectCountByAll() {
+    @ApiOperation(value = "缺陷未处理总数查询接口", notes = "缺陷未处理总数查询")
+    public ResponseEntity<Result<?>> selectDefectCountByAll() {
         try {
-        	return this.defectService.selectDefectCountByAll();
+        	Integer count=this.defectService.selectDefectCountByAll();
+        	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
         } catch (Exception e) {
-            log.error("实时缺陷总数查询错误！{}", e.getMessage(), e);
+            log.error("缺陷未处理总数查询错误！{}", e.getMessage(), e);
         }
-		return Constants.ZERO;
+        return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, Constants.ZERO));
     }
     
     /**
