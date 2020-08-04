@@ -31,6 +31,7 @@ import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.text.StrBuilder;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -101,12 +102,13 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 * @return
 	 */
 	@Override
-	public Integer selectAlarmsCountByAll() {
-		Map<String, Object> maps=JSONUtil.parseObj(this.redisService.get("faultCount"));
-		if(maps!=null && maps.size()>0) {
-			return maps.size();
-		}
-		return Constants.ZERO;
+	public Integer selectAlarmsCountByAll(String tenantDomain) {
+		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("tenant_domain", tenantDomain);
+		queryWrapper.eq("incident_type", Constants.ONE);
+		queryWrapper.eq("alarm_status", Constants.ZERO);
+		Integer count= this.alarmInboxDao.selectCount(queryWrapper);
+		return count;
 	}
 	
 	/**
@@ -131,8 +133,6 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		User user=UserThreadLocal.getUser();
 		//2)更新修改状态
 		bean.setUpdateTime(new Date());
-		bean.setUpdateUserId(user.getId());
-		bean.setUpdateUserName(user.getUserName());
 		this.alarmInboxDao.updateById(bean);
 		//过滤重点关注修改，避免重复提交
 		if(null != bean.getAlarmStatus() && null==bean.getOperatingStatus()) {
@@ -438,12 +438,14 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 * @return
 	 */
 	@Override
-	public Integer selectAlarmsCountByToday() {
-		String count= this.redisService.get(DateUtil.today());
-		if(StringUtils.isNotBlank(count)) {
-			return Convert.toInt(count);
-		}
-		return Constants.ZERO;
+	public Integer selectAlarmsCountByToday(String tenantDomain) {
+		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("tenant_domain", tenantDomain);
+		queryWrapper.ge("create_time", DateUtil.today());
+		//1故障  2缺陷
+		queryWrapper.eq("incident_type", Constants.ONE);
+		Integer count= this.alarmInboxDao.selectCount(queryWrapper);
+		return count;
 	}
 	
 }

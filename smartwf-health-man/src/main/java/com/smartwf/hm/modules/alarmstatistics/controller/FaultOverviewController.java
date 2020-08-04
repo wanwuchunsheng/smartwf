@@ -61,7 +61,7 @@ public class FaultOverviewController {
     
     /**
 	 * @Description: 故障处理状态&部件故障分析
-	 * @param alarmStatus 0未处理  1处理中  2已处理（工单） 3已关闭
+	 * @param alarmStatus 
 	 * @param startTime
 	 * @param endTime
 	 * @return

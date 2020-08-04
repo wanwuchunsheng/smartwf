@@ -84,7 +84,7 @@ public class DefectServiceImpl implements DefectService {
 		//添加工单
 		bean.setCreateTime(new Date());
 		bean.setUpdateTime(bean.getCreateTime());
-		//5待审核 6驳回 0未处理 1已转工单 2处理中 3已处理 4已关闭 7回收站 8未解决
+		//0未处理 1已转工单 2处理中 3已处理 4已关闭
 		bean.setAlarmStatus(Constants.ZERO);
 		this.defectDao.insert(bean);
 		//添加工单处理记录
@@ -133,8 +133,6 @@ public class DefectServiceImpl implements DefectService {
 		User user=UserThreadLocal.getUser();
 		//2)更新修改状态
 		bean.setUpdateTime(new Date());
-		bean.setUpdateUserId(user.getId());
-		bean.setUpdateUserName(user.getUserName());
 		this.defectDao.updateById(bean);
 		//过滤重点关注修改，避免重复提交
 		if(null != bean.getAlarmStatus() && null==bean.getOperatingStatus()) {
@@ -234,12 +232,15 @@ public class DefectServiceImpl implements DefectService {
 	 * @return
 	 */
 	@Override
-	public Integer selectDefectCountByAll() {
-		Map<String, Object> maps=JSONUtil.parseObj(this.redisService.get("defectCount"));
-		if(maps!=null && maps.size()>0) {
-			return maps.size();
-		}
-		return Constants.ZERO;
+	public Integer selectDefectCountByAll(String tenantDomain) {
+		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("tenant_domain", tenantDomain);
+		//1故障  2缺陷
+		queryWrapper.eq("incident_type", Constants.TWO);
+		//0未处理
+		queryWrapper.eq("alarm_status", Constants.ZERO);
+		Integer count= this.defectDao.selectCount(queryWrapper);
+		return count;
 	}
 
 	/**
