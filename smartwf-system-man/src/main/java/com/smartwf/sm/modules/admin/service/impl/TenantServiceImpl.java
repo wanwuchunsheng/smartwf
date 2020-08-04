@@ -23,7 +23,9 @@ import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.DictionaryDao;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
+import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
@@ -31,6 +33,7 @@ import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.pojo.Wso2Tenant;
 import com.smartwf.sm.modules.wso2.service.Wso2TenantService;
 
+import cn.hutool.core.math.MathUtil;
 import lombok.extern.log4j.Log4j;
 /**
  * @Description: 租户业务层接口实现
@@ -48,10 +51,13 @@ public class TenantServiceImpl implements TenantService{
 	private DictionaryDao dictionaryDao;
 	
 	@Autowired
-	Wso2TenantService wso2TenantService;
+	private Wso2TenantService wso2TenantService;
 	
 	@Autowired
-	UserInfoService userInfoService;
+	private UserInfoService userInfoService;
+	
+	@Autowired
+	private OrganizationService organizationService;
 
 	/**
 	 * 查询租户分页
@@ -158,6 +164,13 @@ public class TenantServiceImpl implements TenantService{
 		tv.setPwd(bean.getTenantPw());
 		//租户ID
 		tv.setTenantId(bean.getId()); 
+		//添加创建人信息
+		tv.setCreateTime(new Date());
+		tv.setCreateUserId(user.getId());
+		tv.setCreateUserName(user.getUserName());
+		tv.setUpdateTime(tv.getCreateTime());
+		tv.setUpdateUserId(user.getId());
+		tv.setUpdateUserName(user.getUserName());
 		this.userInfoService.saveWso2UserInfo(tv,bean);
 		//3）批量添加新租户数据字典（从默认租户拷贝的数据字典）
 		if( null !=dict) {
@@ -181,6 +194,17 @@ public class TenantServiceImpl implements TenantService{
 				}
 			}
 		}
+		//插入默认组织机构根节点
+		Organization org= new Organization();
+		org.setTenantId(bean.getId());
+		org.setUid(Constants.ZERO);
+		org.setPid(Constants.ZERO);
+		org.setLevel(Constants.ONE);
+		org.setOrgCode("T001");
+		org.setOrgName(bean.getTenantName());
+		org.setEnable(Constants.ZERO);
+	    //默认添加组织根节点
+		this.organizationService.saveOrganization(org);
 	}
 
 	/**
