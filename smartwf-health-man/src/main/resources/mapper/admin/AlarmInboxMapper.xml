@@ -153,8 +153,7 @@
 			tenant_domain
 		 from fault_information where alarm_status=0 and incident_type=1 order by start_time desc
     </select>
-    
-    
+        
     <!-- 重点机位统计 -->
     <select id="selectKeyPositionByCount" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
         select 
@@ -258,6 +257,6 @@
           order by b.start_time desc
     </select>
     
- 
    
+        
 </mapper>

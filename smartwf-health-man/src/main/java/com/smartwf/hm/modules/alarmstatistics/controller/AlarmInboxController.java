@@ -200,9 +200,12 @@ public class AlarmInboxController {
 	 */
     @GetMapping("selectAlarmsCountByAll")
     @ApiOperation(value = "实时故障报警未处理总数接口", notes = "实时故障报警未处理总数查询")
-    public ResponseEntity<Result<?>> selectAlarmsCountByAll() {
+    @ApiImplicitParams({
+	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true)
+	})
+    public ResponseEntity<Result<?>> selectAlarmsCountByAll(String tenantDomain) {
         try {
-        	Integer count=this.alarmInboxService.selectAlarmsCountByAll();
+        	Integer count=this.alarmInboxService.selectAlarmsCountByAll(tenantDomain);
     	   	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
         } catch (Exception e) {
             log.error("实时故障报警总数信息查询错误！{}", e.getMessage(), e);
@@ -217,9 +220,12 @@ public class AlarmInboxController {
 	 */
     @GetMapping("selectAlarmsCountByToday")
     @ApiOperation(value = "今日新增总数查询接口", notes = "今日新增总数查询")
-    public ResponseEntity<Result<?>> selectAlarmsCountByToday() {
+    @ApiImplicitParams({
+	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true)
+	})
+    public ResponseEntity<Result<?>> selectAlarmsCountByToday(String tenantDomain) {
         try {
-        	Integer count=this.alarmInboxService.selectAlarmsCountByToday();
+        	Integer count=this.alarmInboxService.selectAlarmsCountByToday(tenantDomain);
     	   	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
         } catch (Exception e) {
             log.error("今日新增总数查询错误！{}", e.getMessage(), e);

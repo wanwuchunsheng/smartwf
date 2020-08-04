@@ -73,5 +73,6 @@ public interface AlarmInboxDao extends BaseMapper<FaultInformation> {
 	List<FaultInformationVO> selectKeyPositionByList(@Param("bean") KeyPosition bean);
 	
 	
+	
 
 }

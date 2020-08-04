@@ -35,7 +35,7 @@ public interface AlarmInboxService {
 	 * 实时故障报警总数查询
 	 * @return
 	 */
-	Integer selectAlarmsCountByAll();
+	Integer selectAlarmsCountByAll(String tenantDomain);
 	/**
 	 * 故障报警修改
 	 * @param bean
@@ -137,7 +137,7 @@ public interface AlarmInboxService {
 	 * @author WCH
 	 * @return
 	 */
-	Integer selectAlarmsCountByToday();
+	Integer selectAlarmsCountByToday(String tenantDomain);
 	
 	
 

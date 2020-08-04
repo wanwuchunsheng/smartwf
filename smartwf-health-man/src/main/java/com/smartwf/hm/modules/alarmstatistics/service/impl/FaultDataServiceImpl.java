@@ -16,6 +16,7 @@ import com.smartwf.hm.modules.alarmstatistics.service.FaultDataService;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.text.StrBuilder;
 import cn.hutool.json.JSONUtil;
 
 
@@ -50,13 +51,17 @@ public class FaultDataServiceImpl implements FaultDataService {
 		bean.setIncidentType(Constants.ONE);
 		//1）保存mysql
 		this.faultDataDao.insert(bean);
-		String tdDatas=this.redisService.get(DateUtil.today());
+	    /**
+		//主键：当天时间+租户域
+		String key=StrBuilder.create().append(DateUtil.today()).append(bean.getTenantDomain()).toString();
+		String tdDatas=this.redisService.get(key);
 	    //今日更新数
 		if(StringUtils.isNotBlank(tdDatas)) {
-			this.redisService.set(DateUtil.today(), Convert.toStr(Convert.toInt(tdDatas)+1));
+			this.redisService.set( key, Convert.toStr(Convert.toInt(tdDatas)+1));
 		}else {
-			this.redisService.set(DateUtil.today(), Convert.toStr(1), 86400);
+			this.redisService.set( key, Convert.toStr(1), 86400);
 		}
+		*/
 	}
 	
 }

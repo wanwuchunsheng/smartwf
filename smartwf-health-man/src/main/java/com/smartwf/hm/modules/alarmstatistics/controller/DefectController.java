@@ -135,9 +135,12 @@ public class DefectController {
 	 */
     @GetMapping("selectDefectCountByAll")
     @ApiOperation(value = "缺陷未处理总数查询接口", notes = "缺陷未处理总数查询")
-    public ResponseEntity<Result<?>> selectDefectCountByAll() {
+    @ApiImplicitParams({
+	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true)
+	})
+    public ResponseEntity<Result<?>> selectDefectCountByAll(String tenantDomain) {
         try {
-        	Integer count=this.defectService.selectDefectCountByAll();
+        	Integer count=this.defectService.selectDefectCountByAll(tenantDomain);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
         } catch (Exception e) {
             log.error("缺陷未处理总数查询错误！{}", e.getMessage(), e);
