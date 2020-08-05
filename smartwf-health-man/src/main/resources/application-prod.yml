@@ -99,6 +99,10 @@ spring:
       user-server-uri: https://identity.windmagics.com
     token:
       token-refresh-time: 6000
+  #各子系统地址
+  system:
+    pms:
+      server-uri: http://192.168.1.151:8181/pms
 
 # 日志
 logging:

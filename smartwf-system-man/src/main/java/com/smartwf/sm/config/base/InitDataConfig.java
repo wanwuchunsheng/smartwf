@@ -78,7 +78,7 @@ public class InitDataConfig implements CommandLineRunner{
             	log.info("角色基础数据{}",redisService.get("initRole"));
             	log.info("数据字典数据{}",redisService.get("initDictionary"));
     		}
-    		//wos2配置初始化数据
+    		//初始化wos2配置数据
     		List<IdentityConfig> idtconfig=this.identityConfigService.initIdentityConfig();
     		if(idtconfig!=null && idtconfig.size()>0) {
     			for(IdentityConfig idt: idtconfig) {

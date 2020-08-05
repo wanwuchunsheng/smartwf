@@ -15,6 +15,7 @@ import com.smartwf.hm.modules.alarmstatistics.service.FaultOverviewService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import lombok.extern.log4j.Log4j2;
@@ -117,8 +118,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		Map<String,Object> fr=null;
 		String[][] master=null;
 		//1·获得两个日期间的所有日期集合
-		//List<String> listDates=DateUtils.getDayListOfDate(DateUtils.parseDateToStr(bean.getStime(), "yyyy-MM-dd HH:mm:ss"),DateUtils.parseDateToStr(bean.getEtime(), "yyyy-MM-dd HH:mm:ss") );
-		List<DateTime> listDates= DateUtil.rangeToList(bean.getStime(),bean.getEtime(), DateField.DAY_OF_YEAR );
+		List<DateTime> listDates= DateUtil.rangeToList( bean.getStime() ,bean.getEtime(), DateField.DAY_OF_YEAR );
 		for(int t=0;t<Constants.ALARMLEVEL;t++) {
 			bean.setAlarmLevel(t);
 			//2.查询故障分布统计数据
@@ -128,11 +128,12 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 				int i = 0;
 				//3.遍历日期集合
 				for(DateTime str:listDates) {
-					master[i][0]=DateUtil.format(str, "yyyy-MM-dd HH:mm:ss");
+					String fmtDate=DateUtil.format(str, "yyyy-MM-dd");
+					master[i][0]=fmtDate;
 					//4.查询统计分布时间和日期集合对比
 					if(fault!=null && fault.size()>0) {
 						for(FaultInformationVO fivo:fault ) {
-							if(str.equals(fivo.getFname())) {
+							if(fmtDate.equals(fivo.getFname())) {
 								//5.存在赋值跳出循环，不存在默认给0
 								master[i][1]=fivo.getFvalue();
 								break;
