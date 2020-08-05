@@ -384,7 +384,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			//租户域
 			fr.setTenantDomain(ft.getTenantDomain());
 			fr.setRemark(bean.getRemark());
-			//5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
+			//0未处理  1已转工单  2处理中  3已处理  4已关闭 
 			switch (bean.getAlarmStatus()) {
 				case 1:
 					//已转工单{状态已废弃}
@@ -405,21 +405,6 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 					//已关闭
 					fr.setClosureStatus(4);
 					fr.setClosureReason("关闭");
-					break;
-				case 0:
-					//待处理
-					fr.setClosureStatus(0);
-					fr.setClosureReason("待处理");
-					break;
-				case 6:
-					//驳回
-					fr.setClosureStatus(6);
-					fr.setClosureReason("驳回");
-					break;
-				case 7:
-					//回收站
-					fr.setClosureStatus(7);
-					fr.setClosureReason("回收站");
 					break;
 				default:
 					break;
