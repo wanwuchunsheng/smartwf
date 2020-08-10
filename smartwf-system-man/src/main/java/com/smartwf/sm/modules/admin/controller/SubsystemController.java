@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("subsystem")
 @Slf4j
-@Api(description ="子系统控制器")
+@Api(description ="子系统管理控制器")
 public class SubsystemController {
 	
 	@Autowired

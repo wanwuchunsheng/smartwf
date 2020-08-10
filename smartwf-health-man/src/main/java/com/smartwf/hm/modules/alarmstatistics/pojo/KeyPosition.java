@@ -34,6 +34,11 @@ public class KeyPosition implements Serializable{
 	 */
 	private String deviceName;
 	/**
+	 * 设备运行状态
+	 *  0-运行  1-停止
+	 */
+	private Integer status;
+	/**
 	 * 资产编码
 	 */
 	private String assetNumber;
@@ -49,6 +54,7 @@ public class KeyPosition implements Serializable{
 	 * 创建时间
 	 */
 	private Date createTime;
+	
 	/**
 	 * 创建人id
 	 */

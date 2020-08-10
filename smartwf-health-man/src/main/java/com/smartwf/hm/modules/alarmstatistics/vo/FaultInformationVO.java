@@ -38,6 +38,11 @@ public class FaultInformationVO extends FaultInformation implements Serializable
 	 */
 	private String remark;
 	/**
+	 * 设备运行状态
+	 *  0-运行  1-停止
+	 */
+	private Integer status;
+	/**
 	 * 关闭原因
 	 */
 	private String closureReason;

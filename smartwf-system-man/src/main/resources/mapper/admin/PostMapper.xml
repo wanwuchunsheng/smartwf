@@ -39,7 +39,7 @@
 			a.update_user_name
 		FROM
 			sys_post a left join sys_organization b on a.organization_id=b.id 
-		where a.enable=0 and b.enable=0 
+		where 1=1
 		<if test="bean.tenantId != null ">
             and a.tenant_id= #{bean.tenantId} 
         </if>

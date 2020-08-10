@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("uisetting")
 @Slf4j
-@Api(description ="前端配置控制器")
+@Api(description ="界面设置控制器")
 public class UiSettingController {
 	
 	@Autowired

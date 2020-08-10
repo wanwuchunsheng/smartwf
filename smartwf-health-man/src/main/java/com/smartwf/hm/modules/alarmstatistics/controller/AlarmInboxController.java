@@ -320,7 +320,6 @@ public class AlarmInboxController {
 	    
 	    /**
 	 	 * @Description: 重点机位添加{提供生产中心调用}
-	 	 *  批量添加，格式: 设备编号,设备名称,资产编码@设备编号,设备名称,资产编码
 	 	 * @author wch
 	 	 * @date 2020-04-07
 	 	 * @return
@@ -332,6 +331,7 @@ public class AlarmInboxController {
 	     	  @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码 ", dataType = "String", required = true ),
 	     	  @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码 ", dataType = "String", required = true ),
 	     	  @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称 ", dataType = "String", required = true ),
+	     	  @ApiImplicitParam(paramType = "query", name = "status", value = "运行状态（0运行 1停机） ", dataType = "int", required = true ),
 	     	  @ApiImplicitParam(paramType = "query", name = "createUserId", value = "创建人ID ", dataType = "String"),
 	     	  @ApiImplicitParam(paramType = "query", name = "createUserName", value = "创建人姓名 ", dataType = "String")
 	    })

@@ -23,8 +23,10 @@ import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.DictionaryDao;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
+import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
@@ -33,6 +35,7 @@ import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.pojo.Wso2Tenant;
 import com.smartwf.sm.modules.wso2.service.Wso2TenantService;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.math.MathUtil;
 import lombok.extern.log4j.Log4j;
 /**
@@ -58,6 +61,9 @@ public class TenantServiceImpl implements TenantService{
 	
 	@Autowired
 	private OrganizationService organizationService;
+	
+	@Autowired
+    private GlobalDataService globalDataService;
 
 	/**
 	 * 查询租户分页
@@ -205,6 +211,11 @@ public class TenantServiceImpl implements TenantService{
 		org.setEnable(Constants.ZERO);
 	    //默认添加组织根节点
 		this.organizationService.saveOrganization(org);
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 
 	/**
@@ -238,6 +249,11 @@ public class TenantServiceImpl implements TenantService{
 	        }
 	        this.wso2TenantService.deactivateTenant(wt);
 		}
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 
 	/**
@@ -310,6 +326,11 @@ public class TenantServiceImpl implements TenantService{
 				this.tenantDao.deleteDictionaryByTenantIds(list);
 			}
 		}
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 	
 	/**

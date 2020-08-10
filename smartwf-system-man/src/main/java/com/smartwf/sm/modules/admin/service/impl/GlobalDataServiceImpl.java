@@ -212,7 +212,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	
 	/**
      * @Description 刷新缓存
-     * @param flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色
+     * @param flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
      * @return
      */
 	@Override
@@ -236,6 +236,14 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		                	log.info("职务基础数据{}",redisService.get("initPost"));
 		                	log.info("角色基础数据{}",redisService.get("initRole"));
 		                	log.info("数据字典数据{}",redisService.get("initDictionary"));
+		                	//wos2配置初始化数据
+		            		List<IdentityConfig> idtconfig=this.identityConfigService.initIdentityConfig();
+		            		if(idtconfig!=null && idtconfig.size()>0) {
+		            			for(IdentityConfig idt: idtconfig) {
+		                    		this.redisService.set(idt.getClientKey(), JSONUtil.toJsonStr(idt));
+		                    		log.info("wso2配置信息{}",idt.getClientKey(), JSONUtil.toJsonStr(idt));
+		            			}
+		            		}
 		                	break;
 						case "1":
 							//租户
@@ -262,20 +270,23 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 							this.redisService.set("initRole", JSONUtil.toJsonStr(this.roleService.initRoleDatas(tenantList)));
 							log.info("数据字典数据{}",redisService.get("initDictionary"));
 							break;
+						case "6":
+							//wos2配置初始化数据
+							List<IdentityConfig> idtconfig2=this.identityConfigService.initIdentityConfig();
+							if(idtconfig2!=null && idtconfig2.size()>0) {
+								for(IdentityConfig idt: idtconfig2) {
+					        		this.redisService.set(idt.getClientKey(), JSONUtil.toJsonStr(idt));
+					        		log.info("wso2配置信息{}",idt.getClientKey(), JSONUtil.toJsonStr(idt));
+								}
+							}
+							break;
 						default:
 							break;
 					}
 	    		}
 	    	}
 	    }
-    	//wos2配置初始化数据
-		List<IdentityConfig> idtconfig=this.identityConfigService.initIdentityConfig();
-		if(idtconfig!=null && idtconfig.size()>0) {
-			for(IdentityConfig idt: idtconfig) {
-        		this.redisService.set(idt.getClientKey(), JSONUtil.toJsonStr(idt));
-        		log.info("wso2配置信息{}",idt.getClientKey(), JSONUtil.toJsonStr(idt));
-			}
-		}
+    	
 	}
 	
 

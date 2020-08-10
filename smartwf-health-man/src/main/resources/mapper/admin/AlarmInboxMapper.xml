@@ -159,6 +159,7 @@
          select 
 			f1.asset_number,
 			f1.device_name,
+			f1.status,
 			IFNULL(f2.alarm_status,0) as untreated,
 			IFNULL(f2.fault_type_day,0) as fault_type_day,
 			IFNULL(f2.fault_type_mouth,0) as fault_type_mouth,
@@ -167,7 +168,7 @@
 		from key_position f1 LEFT JOIN (
 			select 
 				d1.asset_number,
-	               d1.device_name,
+	            d1.device_name,
 				d1.alarm_status,
 				d2.fault_type_day,
 				d3.fault_type_mouth,

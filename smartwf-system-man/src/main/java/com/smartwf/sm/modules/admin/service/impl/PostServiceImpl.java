@@ -19,12 +19,15 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.PostDao;
+import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.vo.PostVO;
 
+import cn.hutool.core.convert.Convert;
 import lombok.extern.log4j.Log4j;
 /**
  * @Description: 职务业务层接口实现
@@ -37,6 +40,9 @@ public class PostServiceImpl implements PostService{
 	
 	@Autowired
 	private PostDao postDao;
+	
+	@Autowired
+    private GlobalDataService globalDataService;
 
 	/**
 	 * @Description:查询职务分页
@@ -75,6 +81,11 @@ public class PostServiceImpl implements PostService{
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
 		this.postDao.insert(bean);
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 
 	/**
@@ -90,6 +101,11 @@ public class PostServiceImpl implements PostService{
 		bean.setUpdateUserName(user.getUserName());
 		//修改
 		this.postDao.updateById(bean);
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 
 	/**
@@ -119,6 +135,11 @@ public class PostServiceImpl implements PostService{
 				this.postDao.deletePostByIds(list);
 			}
 		}
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 	
 	/**

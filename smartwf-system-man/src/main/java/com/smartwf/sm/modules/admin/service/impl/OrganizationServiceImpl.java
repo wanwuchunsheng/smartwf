@@ -18,14 +18,16 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.OrganizationDao;
+import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserPost;
+import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
+import cn.hutool.core.convert.Convert;
 import lombok.extern.log4j.Log4j;
 /**
  * @Description: 组织架构业务层接口实现
@@ -38,6 +40,9 @@ public class OrganizationServiceImpl implements OrganizationService{
 	
 	@Autowired
 	private OrganizationDao organizationDao;
+	
+	@Autowired
+    private GlobalDataService globalDataService;
 
 	/**
 	 * @Description:查询组织架构分页
@@ -143,6 +148,11 @@ public class OrganizationServiceImpl implements OrganizationService{
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
 		this.organizationDao.insert(bean);
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 
 	/**
@@ -158,6 +168,11 @@ public class OrganizationServiceImpl implements OrganizationService{
 		bean.setUpdateUserName(user.getUserName());
 		//修改
 		this.organizationDao.updateById(bean);
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 
 	/**
@@ -171,6 +186,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 		this.organizationDao.deleteById(bean.getId());
 		//删除用户组织结构
 		this.organizationDao.deleteUserOrgById(bean);
+		/**
 		//1 通过组织架构id查询用户职务数据
 		List<UserPost> uplist = this.organizationDao.queryUserPostByOrgId(bean);
 		//2 批量删除用户职务
@@ -183,6 +199,12 @@ public class OrganizationServiceImpl implements OrganizationService{
 		}
 		//3 删除职务
 		this.organizationDao.deletePostByOrgId(bean);
+		*/
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 	
 	/**

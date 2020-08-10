@@ -20,12 +20,15 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.RoleDao;
+import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.vo.RoleVO;
 import com.smartwf.sm.modules.wso2.service.Wso2RoleService;
 
+import cn.hutool.core.convert.Convert;
 import lombok.extern.log4j.Log4j;
 /**
  * @Description: 角色业务层接口实现
@@ -41,6 +44,9 @@ public class RoleServiceImpl implements RoleService{
 	
 	@Autowired
 	private Wso2RoleService wso2RoleService;
+	
+	@Autowired
+    private GlobalDataService globalDataService;
 
 	/**
 	 * @Description:查询角色分页
@@ -109,6 +115,13 @@ public class RoleServiceImpl implements RoleService{
 			bean.setUpdateUserName(bean.getCreateUserName());
 			//保存
 			this.roleDao.insert(bean);
+			
+			/**刷新缓存 */
+			//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+			GlobalData gd=new GlobalData();
+			gd.setFlushType(Convert.toStr(Constants.ZERO));
+			this.globalDataService.flushCache(gd);
+			
 			return Result.data(Constants.EQU_SUCCESS,"添加成功！");
 		}
 		return Result.data(Constants.BAD_REQUEST,"失败，wso2角色添加失败！");
@@ -133,6 +146,12 @@ public class RoleServiceImpl implements RoleService{
 				bean.setUpdateUserName(user.getUserName());
 				//修改
 				this.roleDao.updateById(bean);
+				/**刷新缓存 */
+				//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+				GlobalData gd=new GlobalData();
+				gd.setFlushType(Convert.toStr(Constants.ZERO));
+				this.globalDataService.flushCache(gd);
+				
 				return Result.data(Constants.EQU_SUCCESS,"修改成功！");
 			}
 		}
@@ -176,6 +195,11 @@ public class RoleServiceImpl implements RoleService{
 				this.roleDao.deleteRoleByIds(list);
 			}
 		}
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 
 	/**

@@ -247,7 +247,6 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 
 	/**
  	 * @Description: 重点机位添加
- 	 *  批量添加，格式: 设备编号,设备名称,资产编码@设备编号,设备名称,资产编码
  	 * @author wch
  	 * @date 2020-04-07
  	 * @return

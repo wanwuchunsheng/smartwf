@@ -20,11 +20,14 @@ import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
 import com.smartwf.sm.modules.admin.dao.DictionaryDao;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
+import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.DictionaryService;
+import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.vo.DictionaryVO;
 
+import cn.hutool.core.convert.Convert;
 import lombok.extern.log4j.Log4j;
 /**
  * @Description: 数据字典业务层接口实现
@@ -37,6 +40,9 @@ public class DictionaryServiceImpl implements DictionaryService{
 	
 	@Autowired
 	private DictionaryDao dictionaryDao;
+	
+	@Autowired
+    private GlobalDataService globalDataService;
 
 	/**
 	 * @Description:查询数据字典分页
@@ -88,6 +94,11 @@ public class DictionaryServiceImpl implements DictionaryService{
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
 		this.dictionaryDao.insert(bean);
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 
 	/**
@@ -103,6 +114,11 @@ public class DictionaryServiceImpl implements DictionaryService{
 		bean.setUpdateUserName(user.getUserName());
 		//修改
 		this.dictionaryDao.updateById(bean);
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 
 	/**
@@ -127,6 +143,11 @@ public class DictionaryServiceImpl implements DictionaryService{
 				this.dictionaryDao.deleteDictionaryByIds(list);
 			}
 		}
+		/**刷新缓存 */
+		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+		GlobalData gd=new GlobalData();
+		gd.setFlushType(Convert.toStr(Constants.ZERO));
+		this.globalDataService.flushCache(gd);
 	}
 	
 	/**
