@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.exception.CommonException;
 import com.smartwf.common.pojo.Wso2Group;
 import com.smartwf.common.pojo.Wso2User;
 import com.smartwf.common.utils.HttpClientUtil;
@@ -23,6 +24,7 @@ import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.service.Wso2RoleService;
 import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
+import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -51,9 +53,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 	@Override
 	public Map<String, Object> addRole(Role bean) {
 		//通过租户ID查询租户信息
-		Tenant tinfo=new Tenant();
-		tinfo.setId(bean.getTenantId());
-		Tenant resInfo=this.tenantDao.selectById(tinfo);
+		Tenant resInfo=this.tenantDao.selectById(bean.getTenantId());
 		if(null!=resInfo) {
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
@@ -83,9 +83,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 	@Override
 	public void deleteRole(Role rl) {
 		//通过租户ID查询租户信息
-		Tenant tinfo=new Tenant();
-		tinfo.setId(rl.getTenantId());
-		Tenant resInfo=this.tenantDao.selectById(tinfo);
+		Tenant resInfo=this.tenantDao.selectById(rl.getTenantId());
 		if(null!=resInfo) {
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
@@ -116,9 +114,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 	@Override
 	public Map<String, Object> updateRole(Role bean) {
 		//通过租户ID查询租户信息
-		Tenant tinfo=new Tenant();
-		tinfo.setId(bean.getTenantId());
-		Tenant resInfo=this.tenantDao.selectById(tinfo);
+		Tenant resInfo=this.tenantDao.selectById(bean.getTenantId());
 		if(null!=resInfo) {
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
@@ -164,57 +160,52 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 	@Override
 	public Map<String, Object> addRoleOrUser(Role ur, UserInfoVO bean) {
 		//1）通过租户ID查询租户信息
-		Tenant tinfo=new Tenant();
-		tinfo.setId(bean.getTenantId());
-		Tenant resInfo=this.tenantDao.selectById(tinfo);
+		Tenant resInfo=this.tenantDao.selectById(bean.getTenantId());
 		if(null!=resInfo) {
 			//2）角色查询带出已绑定用户
 			StringBuffer sb=new StringBuffer();
 			//封装http请求头
-			Map<String,String> headers=new HashMap<>(16);
-			headers.put("content-type", "application/json");
-			sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw());
-			headers.put("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes()));
+			//Map<String,String> headers=new HashMap<>(16);
+			//headers.put("content-type", "application/json");
+			String authorization="Basic " + Base64.encodeBase64String(sb.append(resInfo.getTenantCode()).append("@").append(resInfo.getTenantDomain()).append(":").append(resInfo.getTenantPw()).toString().getBytes());
 			//封装数据
 	        Wso2Group wg=new Wso2Group();
 	        wg.setDisplayName(ur.getEngName());
-			//拼接uri
+			//拼接url
 	        sb=new StringBuffer();
-	        sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Groups/").append(ur.getRoleCode());
-			try {
-				//查询角色已绑定的用户
-				String res=HttpClientUtil.get(String.valueOf(sb), headers);
-				Map<String, Object> map=JSONUtil.parseObj(res);
-				List<Map<String,Object>> listmap=null;
-				Map<String,Object> lmap=null;
-				//3）判断当前角色是否已绑定用户
-				if(null!=map && map.containsKey(Constants.MEMBERS)) {
-					//已绑定
-					Wso2Group wgf=JSONUtil.toBean(res, Wso2Group.class);
-					//获得已绑定所有用户
-					listmap=wgf.getMembers();
-					//封装新用户，在已绑定用户集合追加新用户
-					lmap=new HashMap<>(16);
-					lmap.put("display", bean.getLoginCode());
-					lmap.put("value", bean.getUserCode());
-					listmap.add(lmap);
-					wg.setMembers(listmap);
-				}else {
-					//未绑定
-					listmap=new ArrayList<>();
-					lmap=new HashMap<>(16);
-					lmap.put("display", bean.getLoginCode());
-					lmap.put("value", bean.getUserCode());
-					listmap.add(lmap);
-					wg.setMembers(listmap);
-				}
-				//4）角色用户绑定保存
-				String str=HttpClientUtil.put(String.valueOf(sb), JSONUtil.toJsonStr(wg),headers);
-				log.info("返回的数据："+str);
-				return JSONUtil.parseObj(str);
-			} catch (IOException e) {
-				e.printStackTrace();
+	        String url=sb.append(wso2Config.userServerUri).append("/t/").append(resInfo.getTenantDomain()).append("/scim2/Groups/").append(ur.getRoleCode()).toString();
+			
+			//查询角色已绑定的用户
+			String res=HttpRequest.get(url).header("Authorization",authorization).timeout(60000).execute().body();
+			Map<String, Object> map=JSONUtil.parseObj(res);
+			List<Map<String,Object>> listmap=null;
+			Map<String,Object> lmap=null;
+			//3）判断当前角色是否已绑定用户
+			if(null!=map && map.containsKey(Constants.MEMBERS)) {
+				//已绑定
+				Wso2Group wgf=JSONUtil.toBean(res, Wso2Group.class);
+				//获得已绑定所有用户
+				listmap=wgf.getMembers();
+				//封装新用户，在已绑定用户集合追加新用户
+				lmap=new HashMap<>(16);
+				lmap.put("display", bean.getLoginCode());
+				lmap.put("value", bean.getUserCode());
+				listmap.add(lmap);
+				wg.setMembers(listmap);
+			}else {
+				//未绑定
+				listmap=new ArrayList<>();
+				lmap=new HashMap<>(16);
+				lmap.put("display", bean.getLoginCode());
+				lmap.put("value", bean.getUserCode());
+				listmap.add(lmap);
+				wg.setMembers(listmap);
 			}
+			//4）角色用户绑定保存
+			String str=HttpRequest.put(url).header("Authorization",authorization).body(JSONUtil.toJsonStr(wg)).timeout(60000).execute().body();
+			log.info("返回的数据："+str);
+			return JSONUtil.parseObj(str);
+			
 		}
 		return null;
 	}
@@ -229,15 +220,13 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
      */
 	@Override
 	public Map<String, Object> updateRoleOrUser(List<Role> listRole, UserInfoVO bean) {
-		Tenant tinfo=new Tenant();
-		tinfo.setId(bean.getTenantId());
-		Tenant resInfo=this.tenantDao.selectById(tinfo);
+		Tenant resInfo=this.tenantDao.selectById(bean.getTenantId());
 		if(null!=resInfo) {
 			//1）通过当前用户，查询已绑定的角色
 			Map<String,Object> roleOrUser=this.wso2UserService.selectUserById(bean,resInfo);
 			log.info(roleOrUser.containsKey("groups"));
 			if(null!=roleOrUser && roleOrUser.containsKey(Constants.GROUPS)) {
-				Wso2User wg=JSONUtil.toBean( JSONUtil.toJsonStr(roleOrUser), Wso2User.class);//-----GsonUtils.jsonToPojo(GsonUtils.objectToJson(roleOrUser), Wso2User.class);
+				Wso2User wg=JSONUtil.toBean( JSONUtil.toJsonStr(roleOrUser), Wso2User.class);
 				List<Map<String,Object>> list=wg.getGroups();
 				if( null !=list && list.size()>0 ) {
 					//2）判断已绑定角色是否存在
@@ -290,7 +279,10 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 			}
 			//9）添加角色用户绑定
 			for(Role r:listRole) {
-				return this.addRoleOrUser(r,bean);
+				Map<String,Object> resmap=this.addRoleOrUser(r,bean);
+				if(null==resmap || !resmap.containsKey(Constants.ID)) {
+	        		throw new CommonException(Constants.INTERNAL_SERVER_ERROR, "Wso2用户角色绑定异常！");
+				}
 			}
 		}
 		return null;

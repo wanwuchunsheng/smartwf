@@ -99,7 +99,7 @@ public class Constants {
     
     public static final int CONNECT_TIME_OUT = 90000;
     
-    public static final int TOKEN_TIMEOUT = 900;
+    public static final int TOKEN_TIMEOUT = 500;
     
 
 }

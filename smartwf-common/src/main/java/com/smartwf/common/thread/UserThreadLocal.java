@@ -61,7 +61,7 @@ public class UserThreadLocal {
   		user.setTenantId(1);
   		return user;
   		*/
-      log.info( JSONUtil.toJsonStr(userThreadLocal.get()));
+      //log.info( JSONUtil.toJsonStr(userThreadLocal.get()));
       return userThreadLocal.get();
      
       

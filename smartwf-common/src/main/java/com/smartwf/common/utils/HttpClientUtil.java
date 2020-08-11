@@ -306,6 +306,7 @@ public class HttpClientUtil {
 			StringBuffer sb=new StringBuffer();
 			sb.append(user.getTenantCode()).append("@").append(user.getTenantDomain()).append(":").append(user.getTenantPw());
 			httpPost.setHeader(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes())));
+			//httpPost.setHeader(new BasicHeader("token","Bearer 49c6e95f-36f3-31cc-895d-f0d5d6069253"));
 			StringEntity data = new StringEntity(soapXml, Charset.forName("UTF-8"));
 			httpPost.setEntity(data);
 			CloseableHttpResponse response = closeableHttpClient.execute(httpPost);

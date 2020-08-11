@@ -87,46 +87,43 @@ public class Wso2LoginUtils {
         	user.setSmartwfToken(Md5Utils.md5(code));
         	user.setCode(code);
         	user.setSessionState(sessionState);
-        	log.info("token= "+Md5Utils.md5(code));
-        	//过期时间
+        	//10过期时间
         	redisService.set(Md5Utils.md5(code),JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
         }else {
 	        /** 
 	         * 已登录
 	         * 
 	         * */
-	        //10.验证token是否失效
+	        //11.验证token是否失效
 	        String mapStr = redisService.get(token);
 	        if (StringUtils.isBlank(mapStr)) {
 	        	log.warn("请求失败！token过期：{}，用户请求uri：{}", token, request.getRequestURI());
 	        	throw new CommonException(Constants.UNAUTHORIZED, "请求失败！token过期，请重新登录！");
 	        }
+	        //12.验证accessToken是否失效{可以由wso2帮忙验证，可以由过期时间验证，快过期前刷新下}
 	        User user= JSONUtil.toBean(mapStr, User.class);
-	        //11是否托管accessToken
-	        if(user.getFlag()) {
-	        	//更新过期时间
-	        	long nowDateTimes=DateUtil.currentSeconds();
-		        if( (user.getDateTime()-nowDateTimes)< Constants.TOKEN_TIMEOUT ) {
-		        	//12.重置wso2令牌时间
-			    	Map<String,Object> refmap=JSONUtil.parseObj(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
-			    	for(Entry<String, Object> m:refmap.entrySet()) {
-			    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
-			    	}
-			    	//13.验证刷新
-			    	if(refmap.containsKey(Constants.ERRORCODE)) {
-			    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
-			        	throw new CommonException(Constants.UNAUTHORIZED, "accesstoken刷新失败！请重新登录！");
-			    	}
-		    		//14.刷新成功，更新之前保存的wso2相关信息
-			    	user.setAccessToken(String.valueOf(refmap.get("access_token")));
-			    	user.setRefreshToken(String.valueOf(refmap.get("refresh_token")));
-			    	user.setIdToken(String.valueOf(refmap.get("id_token")));
-		        }
-	        }
-	    	//15.重置redis过期时间
+        	long nowDateTimes=DateUtil.currentSeconds();
+	        if( (user.getDateTime()-nowDateTimes)< Constants.TOKEN_TIMEOUT ) {
+	    	    //if(!Wso2ClientUtils.reqWso2CheckToken(wso2Config,user)) {}
+	    		//13.重置wso2令牌时间
+		    	Map<String,Object> refmap=JSONUtil.parseObj(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
+		    	for(Entry<String, Object> m:refmap.entrySet()) {
+		    		log.info("Token刷新返回结果："+m.getKey()+"    "+m.getValue());
+		    	}
+		    	//14.验证刷新
+		    	if(refmap.containsKey("error")) {
+		    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
+		        	throw new CommonException(Constants.FORBIDDEN, "accesstoken刷新失败！请重新登录！");
+		    	}
+	    		//15.刷新成功，更新之前保存的wso2相关信息
+		    	user.setAccessToken(String.valueOf(refmap.get("access_token")));
+		    	user.setRefreshToken(String.valueOf(refmap.get("refresh_token")));
+		    	user.setIdToken(String.valueOf(refmap.get("id_token")));
+		    	user.setDateTime(DateUtil.currentSeconds()+Convert.toLong(refmap.get("expires_in")));
+	    	};
+	    	//16.重置redis过期时间
 	        redisService.set(token,JSONUtil.toJsonStr(user),wso2Config.tokenRefreshTime);
 	        UserThreadLocal.setUser(user);
-	        
 	        /**
 	         * 通过登录验证后，继续验证api接口权限
 	         * 
@@ -135,7 +132,7 @@ public class Wso2LoginUtils {
 	    		 log.warn("accesstoken授权失败：{}，用户请求uri：{}", token, request.getRequestURI());
 	        	 throw new CommonException(Constants.FORBIDDEN, "api接口访问无权限！");
 	    	 };
-	    	 */
+	         */
         }
         return true;
     }

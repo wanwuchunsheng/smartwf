@@ -6,10 +6,13 @@ import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.druid.support.json.JSONUtils;
+import com.smartwf.common.constant.Constants;
+import com.smartwf.common.exception.CommonException;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.HttpClientUtil;
@@ -20,6 +23,8 @@ import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
+import cn.hutool.http.HttpConnection;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -110,28 +115,15 @@ public class Wso2UserServiceImpl implements Wso2UserService {
      */
 	@Override
 	public Map<String, Object> updateByUserCode(UserInfoVO bean) {
-		User user= UserThreadLocal.getUser();
-		//封装http请求头
-		Map<String,String> handlers=new HashMap<>(16);
-		handlers.put("authorization", "Basic " + Base64.encodeBase64String(new StringBuffer().append(user.getTenantCode()).append("@").append(user.getTenantDomain()).append(":").append(user.getTenantPw()).toString().getBytes()));
-		handlers.put("content-type", "application/scim+json" );
-		handlers.put("accept", "application/scim+json" );
-		//封装数据
-		Map<String,String> data=new HashMap<>(16);
-		if(StringUtils.isNoneBlank(bean.getLoginCode())) {
-			data.put("userName", bean.getLoginCode());
-		}
-		if(StringUtils.isNoneBlank(bean.getPwd())) {
-			data.put("password", bean.getPwd());
-		}
-		//判断修改参数是否为空
-		if(data.size()>0) {
-			try {
-				String res= HttpClientUtil.put(new StringBuffer().append(this.wso2Config.userServerUri).append("/t/").append(user.getTenantDomain()).append("/scim2/Users/").append(bean.getUserCode()).toString(), JSONUtils.toJSONString(data), handlers);
-			    log.info("res="+res);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		Tenant tinfo=this.tenantDao.selectById(bean.getTenantId());
+		String authorization="Basic " + Base64.encodeBase64String(new StringBuffer().append(tinfo.getTenantCode()).append("@").append(tinfo.getTenantDomain()).append(":").append(tinfo.getTenantPw()).toString().getBytes());
+		Map<String,Object> bodymap = new HashMap<>(16);
+		bodymap.put("userName", bean.getLoginCode());
+		String url=new StringBuffer().append(this.wso2Config.userServerUri).append("/t/").append(tinfo.getTenantDomain()).append("/scim2/Users/").append(bean.getUserCode()).toString();
+		String res=HttpRequest.put(url).header("Authorization",  authorization).body(JSONUtil.toJsonStr(bodymap)).timeout(60000).execute().body();
+		Map<String,Object> map=JSONUtil.parseObj(res);
+		if(!map.containsKey(Constants.ID)) {
+			throw new CommonException(Constants.INTERNAL_SERVER_ERROR, "修改wso2用户名称失败！");
 		}
 		return null;
 	}
