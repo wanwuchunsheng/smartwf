@@ -37,7 +37,7 @@
         <if test="bean.startTime != null">
             and create_time between #{bean.startTime} and #{bean.endTime}
         </if>
-        order by create_time desc
+        order by sort asc
     </select>
     
     <!-- 查询所有组织架构 -->
