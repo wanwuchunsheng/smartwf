@@ -214,6 +214,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void updateUserInfo(UserInfoVO bean) {
+		
 		//添加修改人信息
 		User user=UserThreadLocal.getUser();
 		bean.setUpdateTime(new Date());
@@ -222,11 +223,17 @@ public class UserInfoServiceImpl implements UserInfoService{
 		//系统管理中心用户ID主键查询loginCode
 		UserInfo uf=this.userInfoDao.selectById(bean);
 		bean.setTenantId(uf.getTenantId());
+		bean.setUserCode(uf.getUserCode());
 		//1)修改用户资料
 		this.userInfoDao.updateById(bean);
-		//修改wso2 {登录账号按照业务，不可修改}
-		//this.wso2UserService.updateByUserCode(bean);
-		//2）删除原始用户对应的关系表（清空）
+		//2)角色为空，解绑Wso2用户对应的角色关系
+		if(StringUtils.isBlank(bean.getRoleIds())){
+			//查询所有角色集合对象
+			List<Role> listRole=this.roleDao.selectRoleByUserId(bean);
+			//wso2角色和用户绑定
+			this.wso2RoleService.updateRoleOrUser(listRole,bean);
+		}
+		//3）删除原始用户对应的关系表（清空）
 		//删除用户组织架构表
 		this.userInfoDao.deleteUserOrgById(bean);
 		//删除用户职务表
@@ -262,7 +269,6 @@ public class UserInfoServiceImpl implements UserInfoService{
 				}
 			}
 		}
-		
 		//添加用户角色
 		if(StringUtils.isNotBlank(bean.getRoleIds())){
 			String roleIds=StrUtils.regex(bean.getRoleIds());
@@ -283,6 +289,13 @@ public class UserInfoServiceImpl implements UserInfoService{
 					List<Role> listRole=this.roleDao.selectRoleByIds(list);
 					//wso2角色和用户绑定
 					this.wso2RoleService.updateRoleOrUser(listRole,bean);
+					//重新绑定新用户角色
+					for(Role r:listRole) {
+						Map<String,Object> resmap=this.wso2RoleService.addRoleOrUser(r,bean);
+						if(null==resmap || !resmap.containsKey(Constants.ID)) {
+			        		throw new CommonException(Constants.INTERNAL_SERVER_ERROR, "Wso2用户角色绑定异常！");
+						}
+					}
 				}
 			}
 		}

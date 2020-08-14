@@ -78,4 +78,20 @@
     <select id="selectTenantByGroup" parameterType="java.lang.String" resultType="com.smartwf.sm.modules.admin.pojo.Role">
         select eng_name,tenant_id from sys_role where eng_name=#{shiftGroup} group by eng_name,tenant_id
     </select>
+    
+    
+    
+    <!-- 查询所有角色集合对象 -->
+    <select id="selectRoleByUserId" resultType="com.smartwf.sm.modules.admin.pojo.Role">
+	     select 
+			a.id,
+			a.role_code,
+			a.eng_name,
+			a.role_name,
+			a.tenant_id
+		 from sys_role a,sys_user_role b where a.id=b.role_id and b.user_id=#{bean.id}
+    </select>
+    
+    
+    
 </mapper>

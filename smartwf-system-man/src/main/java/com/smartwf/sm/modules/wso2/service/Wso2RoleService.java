@@ -48,4 +48,5 @@ public interface Wso2RoleService {
      */
 	Map<String, Object> updateRoleOrUser(List<Role> listRole, UserInfoVO bean);
 	
+	
 }

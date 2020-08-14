@@ -277,13 +277,7 @@ public class Wso2RoleServiceImpl implements Wso2RoleService {
 				  }
 			    }
 			}
-			//9）添加角色用户绑定
-			for(Role r:listRole) {
-				Map<String,Object> resmap=this.addRoleOrUser(r,bean);
-				if(null==resmap || !resmap.containsKey(Constants.ID)) {
-	        		throw new CommonException(Constants.INTERNAL_SERVER_ERROR, "Wso2用户角色绑定异常！");
-				}
-			}
+			
 		}
 		return null;
 	}

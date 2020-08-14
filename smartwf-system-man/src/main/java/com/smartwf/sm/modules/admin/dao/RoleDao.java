@@ -12,6 +12,7 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.vo.RoleVO;
+import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 /**
  * @Date: 2019-11-27 11:29:02
@@ -60,6 +61,13 @@ public interface RoleDao extends BaseMapper<Role> {
 	 * @param bean
 	 * */
 	List<Role> selectTenantByGroup(@Param("shiftGroup") String shiftGroup);
+	/**
+	 * 查询用户对应的所有角色
+	 * @return
+	 * @author WCH
+	 * @param bean
+	 * */
+	List<Role> selectRoleByUserId(@Param("bean") UserInfoVO bean);
 
     
 }
