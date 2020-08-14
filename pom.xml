@@ -38,6 +38,7 @@
         <javax.validation>2.0.1.Final</javax.validation>
         <javax.activation>1.1.1</javax.activation>
         <hutool.version>5.2.4</hutool.version>
+        <oauth2.client.version>1.0.0</oauth2.client.version>
     </properties>
 
     <dependencyManagement>
@@ -159,6 +160,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${org.apache.commons}</version>
+            </dependency>
+            <!-- oauth2 client -->
+            <dependency>
+                <groupId>org.apache.oltu.oauth2</groupId>
+                <artifactId>org.apache.oltu.oauth2.client</artifactId>
+                <version>${oauth2.client.version}</version>
             </dependency>
 	        <!-- javax -->
 			<dependency>
