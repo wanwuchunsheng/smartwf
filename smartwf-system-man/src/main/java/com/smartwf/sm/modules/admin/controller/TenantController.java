@@ -103,7 +103,7 @@ public class TenantController {
 	    	@ApiImplicitParam(paramType = "query", name = "tenantCode", value = "租户管理员账号", dataType = "String", required = true),
 	    	@ApiImplicitParam(paramType = "query", name = "tenantPw", value = "租户管理员密码", dataType = "String", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
-	        @ApiImplicitParam(paramType = "query", name = "sel", value = "默认租户（0-否 1-是）", dataType = "int", required = true),
+	        @ApiImplicitParam(paramType = "query", name = "sel", value = "默认租户（0-是 1-否）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "添加租户", paramIndexs = {0})

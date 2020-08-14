@@ -135,8 +135,8 @@ public class TenantServiceImpl implements TenantService{
 	public void saveTenant(Tenant bean) {
 		//1）查询默认租户
 		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
-		//默认租户：0-否  1-是
-		queryWrapper.eq("sel", 1);
+		//默认租户：1-否  0-是
+		queryWrapper.eq("sel", 0);
 		Tenant dict=this.tenantDao.selectOne(queryWrapper);
 		//2）添加新租户
 		User user=UserThreadLocal.getUser();
@@ -146,7 +146,7 @@ public class TenantServiceImpl implements TenantService{
 		bean.setUpdateTime(bean.getCreateTime());
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
-		if(bean.getSel().equals(Constants.ISSEL)) {
+		if(bean.getSel().equals(Constants.ZERO)) {
 			this.tenantDao.updateBySel();//置空默认租户
 		}
 		this.tenantDao.insert(bean);
@@ -231,7 +231,7 @@ public class TenantServiceImpl implements TenantService{
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		//默认租户 0-否 1-是
-		if( null!=bean.getSel() && bean.getSel().equals(Constants.ISSEL)) {
+		if( null!=bean.getSel() && bean.getSel().equals(Constants.ZERO)) {
 			//置空默认租户
 			this.tenantDao.updateBySel();
 		}

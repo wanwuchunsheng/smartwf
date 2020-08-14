@@ -14,7 +14,7 @@
     
     <!-- 将所有租户默认状态设置不选中 -->
     <update id="updateBySel">
-         update sys_tenant set sel=0
+         update sys_tenant set sel=1
     </update>
     
     <!-- 删除组织架构表-->

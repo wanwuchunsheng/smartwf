@@ -113,7 +113,7 @@ public class Wso2LoginUtils {
 		    	//14.验证刷新
 		    	if(refmap.containsKey("error")) {
 		    		log.warn("accesstoken刷新失败：{}，用户请求uri：{}", token, request.getRequestURI());
-		        	throw new CommonException(Constants.FORBIDDEN, "accesstoken刷新失败！请重新登录！");
+		        	throw new CommonException(Constants.UNAUTHORIZED, "accesstoken刷新失败！请重新登录！");
 		    	}
 	    		//15.刷新成功，更新之前保存的wso2相关信息
 		    	user.setAccessToken(String.valueOf(refmap.get("access_token")));
@@ -126,7 +126,7 @@ public class Wso2LoginUtils {
 	        UserThreadLocal.setUser(user);
 	        /**
 	         * 通过登录验证后，继续验证api接口权限
-	         * 
+	         *
 	         *
 	    	 if(!Wso2ClientUtils.entitlementApiReq(request,wso2Config,user)){
 	    		 log.warn("accesstoken授权失败：{}，用户请求uri：{}", token, request.getRequestURI());
