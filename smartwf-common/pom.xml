@@ -78,6 +78,11 @@
 		    <groupId>cn.hutool</groupId>
 		    <artifactId>hutool-all</artifactId>
 		</dependency>
+		<!-- oauth2 client -->
+	    <dependency>
+            <groupId>org.apache.oltu.oauth2</groupId>
+            <artifactId>org.apache.oltu.oauth2.client</artifactId>
+        </dependency>
         <!-- jdk 11 jar  -->
 		<dependency>
 		    <groupId>javax.validation</groupId>
