@@ -1,8 +1,14 @@
 package com.smartwf.common.utils;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.UUID;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,8 +38,8 @@ public class Wso2LoginUtils {
     public static boolean checkLogin(HttpServletRequest request, HttpServletResponse response, Object handler, RedisService redisService,Wso2Config wso2Config) throws Exception{	
     	//1.判断是否登录
     	log.info("请求类型："+request.getMethod()+"===="+request.getRequestURI());
-        String token = request.getHeader(Constants.SMARTWF_TOKEN);
-        if (StringUtils.isBlank(token)) {
+    	 final Optional<Cookie> appIdCookie = CommonUtils.getAppIdCookie(request);
+         if (appIdCookie.isPresent()) {
         	/** 
         	 * 未登录
         	 * 
@@ -87,13 +93,28 @@ public class Wso2LoginUtils {
         	user.setSmartwfToken(Md5Utils.md5(code));
         	user.setCode(code);
         	user.setSessionState(sessionState);
-        	//10过期时间
-        	redisService.set(Md5Utils.md5(code),JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
+        	//向浏览器写入cookie
+        	final String sessionId = UUID.randomUUID().toString();
+        	final Cookie cookie = new Cookie("AppID",  URLEncoder.encode(JSONUtil.toJsonStr(user), "utf-8"));
+            cookie.setMaxAge(-1);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            //10过期时间
+        	redisService.set(sessionId,JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
         }else {
 	        /** 
 	         * 已登录
 	         * 
 	         * */
+        	 System.out.println(URLDecoder.decode(appIdCookie.get().getValue(),"utf-8"));
+        	 User user=JSONUtil.toBean(URLDecoder.decode(appIdCookie.get().getValue(),"utf-8"),User.class) ;
+             log.info(JSONUtil.toJsonStr(user));
+           
+        	
+        	
+        	
+        	/*
+        	
 	        //11.验证token是否失效
 	        String mapStr = redisService.get(token);
 	        if (StringUtils.isBlank(mapStr)) {
@@ -102,9 +123,9 @@ public class Wso2LoginUtils {
 	        }
 	        //12.验证accessToken是否失效{可以由wso2帮忙验证，可以由过期时间验证，快过期前刷新下}
 	        User user= JSONUtil.toBean(mapStr, User.class);
-        	long nowDateTimes=DateUtil.currentSeconds();
-	        if( (user.getDateTime()-nowDateTimes)< Constants.TOKEN_TIMEOUT ) {
-	    	    //if(!Wso2ClientUtils.reqWso2CheckToken(wso2Config,user)) {}
+	    	if(!Wso2ClientUtils.reqWso2CheckToken(wso2Config,user)) {
+	    		//long nowDateTimes=DateUtil.currentSeconds();
+	    	    //if( (user.getDateTime()-nowDateTimes)< Constants.TOKEN_TIMEOUT ) {}
 	    		//13.重置wso2令牌时间
 		    	Map<String,Object> refmap=JSONUtil.parseObj(Wso2ClientUtils.reqWso2RefToken(wso2Config,user));
 		    	for(Entry<String, Object> m:refmap.entrySet()) {
@@ -124,6 +145,7 @@ public class Wso2LoginUtils {
 	    	//16.重置redis过期时间
 	        redisService.set(token,JSONUtil.toJsonStr(user),wso2Config.tokenRefreshTime);
 	        UserThreadLocal.setUser(user);
+	        */
 	        /**
 	         * 通过登录验证后，继续验证api接口权限
 	         *

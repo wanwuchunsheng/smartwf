@@ -1,8 +1,10 @@
 package com.smartwf.sm.modules.admin.controller;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Map.Entry;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +19,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.common.utils.CommonUtils;
 import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
@@ -206,37 +209,10 @@ public class GlobalDataController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "code", value = "wso2编码", dataType = "String", required = true)
     })
-    public ResponseEntity<Result<?>> oauth2client(User bean) {
+    public ResponseEntity<Result<?>> oauth2client(HttpServletRequest request, User bean) {
         try {
-        	//1 通过参数验证是否redis是否存在
-        	String userStr=redisService.get(Md5Utils.md5(bean.getCode()));
-        	if(StringUtils.isNoneBlank(userStr)) {
-        		//2 转换成对象
-        		User user=JSONUtil.toBean(userStr, User.class);
-        		//3根据accessToken查询用户ID
-        		String str=Wso2ClientUtils.reqWso2UserInfo(wso2Config, user);
-        		if(StringUtils.isBlank(str)) {
-        			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，accessToken查询用户信息失败！"));
-        		}
-        		Map<String,Object> resmap=JSONUtil.parseObj(str);
-    			//打印返回结果
-    			for(Entry<String, Object> m:resmap.entrySet()) {
-            		log.info(m.getKey()+"    "+m.getValue());
-            	}
-    			//4验证是否成功
-    			if(!resmap.containsKey(Constants.USERID)) {
-    				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，WSO2 user_id为空！"));
-    			}
-    			user.setUserCode(String.valueOf(resmap.get("user_id")));
-				//5通过user_id查询用户基础信息	
-        		User userInfo=this.userInfoService.selectUserInfoByUserCode(user);
-        		if(null==userInfo) {
-        			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，user_id查询用户信息异常！"));
-        		}
-        		this.redisService.set(userInfo.getSmartwfToken(), JSONUtil.toJsonStr(userInfo));
-        		//成功返回
-        		return ResponseEntity.ok(Result.data(userInfo));
-        	}
+    		//成功返回
+    		return ResponseEntity.ok(Result.data("wso2用户信息已存入cookie"));
         } catch (Exception e) {
             log.error("授权返回用户基础信息异常！{}", e.getMessage(), e);
         }
