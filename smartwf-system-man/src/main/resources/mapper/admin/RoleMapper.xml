@@ -38,7 +38,7 @@
 	</delete>
 	
     <!-- 根据用户ID查询所有用户角色 -->
-    <select id="selectRoleByUserId" resultType="com.smartwf.common.pojo.TreeRole">
+    <select id="selectTreeRoleByUserId" resultType="com.smartwf.common.pojo.TreeRole">
         select 
 			b.id,
 			b.role_code,

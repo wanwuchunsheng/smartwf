@@ -46,7 +46,7 @@ public class Swagger2Config {
         // 添加head参数
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
-        Parameter parameter = tokenPar.name(Constants.SMARTWF_TOKEN)
+        Parameter parameter = tokenPar.name(Constants.SESSION_ID)
                 .description("令牌")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
@@ -69,7 +69,7 @@ public class Swagger2Config {
      * @return
      */
     private ApiInfo apiInfo() {
-        Contact contact = new Contact("SMARTWF", "http://ai.tianliwindpower.com/loginClient", "v_wanchanghuang@163.com");
+        Contact contact = new Contact("SMARTWF", "http://ai.tianliwindpower.com/loginClient", "smartwf@163.com");
         return new ApiInfoBuilder()
                 .title("系统管理中心API接口文档")
                 .description("智慧风电场2.0")

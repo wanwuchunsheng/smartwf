@@ -15,10 +15,7 @@ public class User implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	/**
-	 * 授权临时票据 code 参数
-	 */
-	private String code;
+	
 	/**
 	 * wso2子系统注册 key
 	 * 
@@ -40,6 +37,12 @@ public class User implements Serializable{
 	 * 前端系统token
 	 */
     private String smartwfToken;
+    
+    /**
+	 * sessionId
+	 */
+    private String seesionId;
+    
     /**
 	 * wso2 accesstoken
 	 */
@@ -61,14 +64,10 @@ public class User implements Serializable{
      * 过期时间
      * */
     private Long dateTime;
-    /**
-     * 是否验证accessToken
-     * 
-     * */
-    private Boolean flag;
+    
     
 	/**
-     * id
+     * 用户id
      */
     private Integer id;
 

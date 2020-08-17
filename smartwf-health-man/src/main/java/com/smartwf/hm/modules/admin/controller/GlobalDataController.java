@@ -14,6 +14,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
@@ -49,19 +50,11 @@ public class GlobalDataController {
      */
     @GetMapping("oauth2client")
     @ApiOperation(value = "授权登录", notes = "授权登录，获取用户基础信息")
-    @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "code", value = "wso2编码", dataType = "String", required = true)
-    })
     public ResponseEntity<Result<?>> oauth2client(User bean) {
         try {
-        	//1 通过参数验证是否redis是否存在
-        	String userStr=redisService.get(Md5Utils.md5(bean.getCode()));
-        	if(StringUtils.isNoneBlank(userStr)) {
-        		//2 转换成对象
-        		User user= JSONUtil.toBean(userStr, User.class);
-        		//成功返回
-        		return ResponseEntity.ok(Result.data(user));
-        	}
+        	User user=UserThreadLocal.getUser();
+    		//成功返回
+    		return ResponseEntity.ok(Result.data(user));
         } catch (Exception e) {
             log.error("登录异常！{}", e.getMessage(), e);
         }

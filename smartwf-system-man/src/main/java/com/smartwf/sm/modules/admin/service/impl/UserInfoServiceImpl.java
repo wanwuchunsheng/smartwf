@@ -363,8 +363,8 @@ public class UserInfoServiceImpl implements UserInfoService{
 		//获取用户信息
 		User userInfo= this.userInfoDao.selectUserInfoByUserCode(user);
 		if(userInfo !=null) {
-			userInfo.setCode(user.getCode());
 			userInfo.setSmartwfToken(user.getSmartwfToken());
+			userInfo.setSeesionId(user.getSeesionId());
 			userInfo.setRefreshToken(user.getRefreshToken());
 			userInfo.setAccessToken(user.getAccessToken());
 			userInfo.setIdToken(user.getIdToken());
@@ -372,11 +372,10 @@ public class UserInfoServiceImpl implements UserInfoService{
 			userInfo.setClientSecret(user.getClientSecret());
 			userInfo.setRedirectUri(user.getRedirectUri());
 			userInfo.setDateTime(user.getDateTime());
-			userInfo.setFlag(user.getFlag());
 			//职务
 			userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
 			//角色
-			userInfo.setRoleList(this.roleDao.selectRoleByUserId(userInfo));
+			userInfo.setRoleList(this.roleDao.selectTreeRoleByUserId(userInfo));
 			/**
 			//获取组织架构
 			userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));

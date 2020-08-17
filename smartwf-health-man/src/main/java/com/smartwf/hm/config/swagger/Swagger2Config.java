@@ -46,7 +46,7 @@ public class Swagger2Config {
         // 添加head参数
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
-        Parameter parameter = tokenPar.name(Constants.SMARTWF_TOKEN)
+        Parameter parameter = tokenPar.name(Constants.SESSION_ID)
                 .description("令牌")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")

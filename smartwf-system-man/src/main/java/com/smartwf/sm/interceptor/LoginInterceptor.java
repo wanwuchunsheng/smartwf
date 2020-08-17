@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.LoginUtils;
 import com.smartwf.common.utils.Wso2LoginUtils;
 import com.smartwf.common.wso2.Wso2Config;
 

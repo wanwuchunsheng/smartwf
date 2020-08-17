@@ -18,6 +18,7 @@ import com.smartwf.common.wso2.Wso2Config;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,12 +33,12 @@ public class Wso2LoginUtils {
     public static boolean checkLogin(HttpServletRequest request, HttpServletResponse response, Object handler, RedisService redisService,Wso2Config wso2Config) throws Exception{	
     	//1.判断是否登录
     	log.info("请求类型："+request.getMethod()+"===="+request.getRequestURI());
-        String token = request.getHeader(Constants.SMARTWF_TOKEN);
+        String token = request.getHeader(Constants.SESSION_ID);
         if (StringUtils.isBlank(token)) {
         	/** 
         	 * 未登录
         	 * 
-        	 *  */
+        	 **/
         	//2.获取code验证是否授权
         	String code=request.getParameter("code");
         	if(StringUtils.isBlank(code)) {
@@ -76,19 +77,19 @@ public class Wso2LoginUtils {
         	}
         	//9.存储值
         	User user= new User();
+        	final String sessionId = UUID.randomUUID().toString();
         	user.setDateTime(DateUtil.currentSeconds()+Convert.toLong(tkmap.get("expires_in")));
         	user.setClientKey(String.valueOf(idtmap.get("clientKey")));
         	user.setClientSecret(String.valueOf(idtmap.get("clientSecret")));
         	user.setRefreshToken(String.valueOf(tkmap.get("refresh_token")));
         	user.setAccessToken(String.valueOf(tkmap.get("access_token")));
         	user.setIdToken(String.valueOf(tkmap.get("id_token")));
-        	user.setFlag( Convert.toBool(idtmap.get("flag")));
-        	user.setRedirectUri(redirectUri);
-        	user.setSmartwfToken(Md5Utils.md5(code));
-        	user.setCode(code);
+        	user.setSmartwfToken(sessionId);
+        	user.setSeesionId(sessionId);
         	user.setSessionState(sessionState);
         	//10过期时间
-        	redisService.set(Md5Utils.md5(code),JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
+        	redisService.set(sessionId,JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
+        	UserThreadLocal.setUser(user);
         }else {
 	        /** 
 	         * 已登录
