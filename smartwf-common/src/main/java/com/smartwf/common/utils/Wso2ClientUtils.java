@@ -13,8 +13,6 @@ import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.OAuthClientResponse;
-import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
-import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -85,10 +83,7 @@ public class Wso2ClientUtils {
     }
     
     /**
-     * wso2请求-api接口权限验证
-     *  sb.append(" <xsd:subject>").append("admin").append("</xsd:subject>");
-		sb.append(" <xsd:resource>").append("_system/local/repository/components/org.wso2.carbon.registry/mount/-_system-governance").append("</xsd:resource>");
-		sb.append(" <xsd:action>").append("read").append("</xsd:action>");
+     * wso2请求-api接口授权
      * @param user
      * @param wso2Config
      * @return boolean
@@ -120,37 +115,7 @@ public class Wso2ClientUtils {
     	return false;
     }
        
-    /**
-     * wso2请求-api接口权限验证
-     * @param 
-     * @return boolean
-     * */
-    public static Boolean entitlementApiReqTest(HttpServletRequest request,Wso2Config wso2Config,User user,String subject,String resource,String action) {
-    	try {
-        	//封装wso2参数规范
-    		StringBuffer sb=new StringBuffer();
-    		sb.append(" <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://org.apache.axis2/xsd\">");
-    		sb.append(" <soapenv:Header/> <soapenv:Body> <xsd:getBooleanDecision> ");
-    		sb.append(" <xsd:subject>").append(subject).append("</xsd:subject>");
-    		sb.append(" <xsd:resource>").append(resource).append("</xsd:resource>");
-    		sb.append(" <xsd:action>").append(action).append("</xsd:action>");
-    		sb.append(" </xsd:getBooleanDecision> </soapenv:Body> ");
-    		sb.append(" </soapenv:Envelope> ");
-        	log.info("soap start："+DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        	String res=HttpClientUtil.doPostApiEntitlement(String.valueOf(new StringBuffer().append(wso2Config.userServerUri).append("/services/EntitlementService?wsdl")), String.valueOf(sb),user);
-        	log.info("soap end："+ DateFormatUtils.formatUTC(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        	log.info("res="+res);
-        	//解析xml字符串
-        	Document doc= DocumentHelper.parseText(res);
-            Element roots=doc.getRootElement();
-            String flag = roots.element("Body").getStringValue();
-            //返回结果
-            return Boolean.valueOf(flag);
-		} catch (Exception e) {
-			log.error("api权限验证请求异常{}",e.getMessage(),e);
-		}
-    	return false;
-    }
+    
     
     /**
      * wso2请求-api接口Token验证
@@ -177,40 +142,32 @@ public class Wso2ClientUtils {
 	}
 	
 	/**
-     * 功能说明:返回前端用户基础信息，过滤铭感信息
-     * @param 
-     * @return obj
+     * 功能说明:oauth2客户端调用wso2
+     *    刷新accessToken
+     * @param wso2Config,user
+     * @return 
      * */
-	public static User resUserInfo( User user) {
-		user.setAccessToken(null);
-    	return user;
-	}
+    public static OAuthClientResponse refreshAccessToken(Wso2Config wso2Config,User user) {
+    	final OAuthClientRequest.TokenRequestBuilder oAuthTokenRequestBuilder = 
+				new OAuthClientRequest.TokenRequestBuilder(new StringBuffer().append(wso2Config.userServerUri).append("/oauth2/token").toString());
+    	try {
+			final OAuthClientRequest accessRequest = oAuthTokenRequestBuilder.setGrantType(GrantType.AUTHORIZATION_CODE)
+			        .setClientId(user.getClientKey())
+			        .setClientSecret(user.getClientSecret())
+			        .setGrantType(GrantType.REFRESH_TOKEN)
+			        .setRefreshToken(user.getRefreshToken())
+			        .setRedirectURI(user.getRedirectUri())
+			        .buildBodyMessage();
+			//create OAuth client that uses custom http client under the hood
+	        final OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
+	        final OAuthClientResponse oAuthResponse = oAuthClient.accessToken(accessRequest);
+	        return oAuthResponse;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return null;
+    }
 	
-	/**
-     * 功能说明:获得授权码
-     *    	response_type：表示授权类型，必选项，此处的值固定为"code"
-	        client_id：表示客户端的ID，必选项
-	        redirect_uri：表示重定向URI，可选项
-	        scope：表示申请的权限范围，可选项
-	        state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值
-     * @param 
-     * @return obj
-     * */
-	public static Object reqWso2AuthoriztionCode() {
-		
-		/**
-        OAuthClientRequest oauthResponse = OAuthClientRequest
-                                           .authorizationLocation(ConstantKey.OAUTH_CLIENT_AUTHORIZE)
-                                           .setResponseType(OAuth.OAUTH_CODE)
-                                           .setClientId(ConstantKey.OAUTH_CLIENT_ID)
-                                           .setRedirectURI(ConstantKey.OAUTH_CLIENT_CALLBACK)
-                                           .setScope(ConstantKey.OAUTH_CLIENT_SCOPE)
-                                           .buildQueryMessage();
-        return "redirect:"+oauthResponse.getLocationUri();
-        */
-       
-		return null;
-	}
 	
 	/**
      * 功能说明:oauth2客户端调用wso2
@@ -218,7 +175,7 @@ public class Wso2ClientUtils {
      * @param 
      * @return 
      * */
-	public static OAuthClientResponse reqWso2Token2(Wso2Config wso2Config,Map<String,Object> idtmap, String code,String redirectUri) {
+	public static OAuthClientResponse getOauthClientToAccessToken(Wso2Config wso2Config,Map<String,Object> idtmap, String code,String redirectUri) {
 		try {
 			final OAuthClientRequest.TokenRequestBuilder oAuthTokenRequestBuilder = 
 					new OAuthClientRequest.TokenRequestBuilder(new StringBuffer().append(wso2Config.userServerUri).append("/oauth2/token").toString());
@@ -231,44 +188,6 @@ public class Wso2ClientUtils {
 	        //create OAuth client that uses custom http client under the hood
 	        final OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
 	        final OAuthClientResponse oAuthResponse = oAuthClient.accessToken(accessRequest);
-	        final String accessToken = oAuthResponse.getParam("access_token");
-	        log.info(accessToken);
-	        
-	        
-	        
-	        /**
-	        oauthAuthzResponse = OAuthAuthzResponse.oauthCodeAuthzResponse(request);
-            String code = oauthAuthzResponse.getCode();
-            OAuthClientRequest oauthClientRequest = OAuthClientRequest
-                                                    .tokenLocation(ConstantKey.OAUTH_CLIENT_ACCESS_TOKEN)
-                                                    .setGrantType(GrantType.AUTHORIZATION_CODE)
-                                                    .setClientId(ConstantKey.OAUTH_CLIENT_ID)
-                                                    .setClientSecret(ConstantKey.OAUTH_CLIENT_SECRET)
-                                                    .setRedirectURI(ConstantKey.OAUTH_CLIENT_CALLBACK)
-                                                    .setCode(code)
-                                                    .buildQueryMessage();
-            OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
- 
-            //Facebook is not fully compatible with OAuth 2.0 draft 10, access token response is
-            //application/x-www-form-urlencoded, not json encoded so we use dedicated response class for that
-            //Custom response classes are an easy way to deal with oauth providers that introduce modifications to
-            //OAuth 2.0 specification
- 
-            //获取access token
-            OAuthJSONAccessTokenResponse oAuthResponse = oAuthClient.accessToken(oauthClientRequest, OAuth.HttpMethod.POST);
-            String accessToken = oAuthResponse.getAccessToken();
-            String refreshToken= oAuthResponse.getRefreshToken();
-            Long expiresIn = oAuthResponse.getExpiresIn();
-            //获得资源服务
-            OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(ConstantKey.OAUTH_CLIENT_GET_RESOURCE)
-                                                     .setAccessToken(accessToken).buildQueryMessage();
-            OAuthResourceResponse resourceResponse = oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.GET, OAuthResourceResponse.class);
-            String resBody = resourceResponse.getBody();
-            logger.info("accessToken: "+accessToken +" refreshToken: "+refreshToken +" expiresIn: "+expiresIn +" resBody: "+resBody);
-            model.addAttribute("accessToken",  "accessToken: "+accessToken + " resBody: "+resBody);
-	         * */
-	        
-	        
 	        return oAuthResponse;
 		} catch (Exception e) {
 			log.error("code换取accessToken异常！{}",e.getMessage(),e);

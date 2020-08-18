@@ -64,28 +64,7 @@ public class Wso2AuthorizeController {
     }
     
     
-    /**
-     * @Description：API鉴权
-     * @param subject,subject和action
-     * @return
-     */
-    @PostMapping("apiAuthorization")
-    @ApiOperation(value = "API鉴权测试类接口", notes = "API鉴权测试入口")
-    @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "subject", value = "用户名", dataType = "String" ,required = true),
-    	@ApiImplicitParam(paramType = "query", name = "resource",  value = "资源名称", dataType = "String",required = true),
-    	@ApiImplicitParam(paramType = "query", name = "action",  value = "操作", dataType = "String",required = true)
-    })
-    public ResponseEntity<Result<?>> apiAuthorization(HttpServletRequest request, String subject, String resource, String action) {
-        try {
-        	User user=UserThreadLocal.getUser();
-        	Boolean flag=Wso2ClientUtils.entitlementApiReqTest(request,wso2Config,user,subject,resource,action);
-        	return ResponseEntity.ok().body(Result.data(flag));
-        } catch (Exception e) {
-            log.error("API鉴权错误！{}", e.getMessage(), e);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("API鉴权错误！"));
-    }
+    
     
    
 }

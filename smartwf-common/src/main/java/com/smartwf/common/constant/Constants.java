@@ -7,6 +7,8 @@ package com.smartwf.common.constant;
 public class Constants {
 
     public static final String SESSION_ID = "smartwfToken";
+    
+    public static final String ACCESS_TOKEN = "accessToken";
 
     public static final String SUCCESS = "成功";
 
