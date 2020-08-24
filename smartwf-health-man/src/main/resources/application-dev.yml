@@ -98,7 +98,7 @@ spring:
     user:
       user-server-uri: https://identity.windmagics.com
     token:
-      token-refresh-time: 6000
+      token-refresh-time: 3600
   #各子系统地址
   system:
     pms:

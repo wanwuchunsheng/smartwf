@@ -60,7 +60,7 @@ spring:
   # redis
   redis:
     # Redis服务器地址
-    host: 192.168.1.151 #10.104.111.195
+    host: 192.168.1.154 #10.104.111.195
     # Redis服务器连接端口
     port: 6379
     # 密码
@@ -98,7 +98,7 @@ spring:
     user:
       user-server-uri: https://identity.windmagics.com
     token:
-      token-refresh-time: 6000
+      token-refresh-time: 3600
          
 # 日志
 logging:
