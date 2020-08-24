@@ -1,19 +1,27 @@
 package com.smartwf.common.redis;
 
-import lombok.extern.slf4j.Slf4j;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+
+import com.smartwf.common.constant.Constants;
+
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisURI;
+import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.sync.RedisCommands;
+import io.lettuce.core.api.sync.RedisStreamCommands;
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisShardInfo;
 import redis.clients.jedis.ShardedJedisPool;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -61,11 +69,11 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     @Value("${spring.redis.jedis.pool.num-tests-per-eviction-run}")
     private int numTestsPerEvictionRun;
-
+    
 
     /**
      * jedis分片连接池
-     *
+     *   db0
      * @return
      */
     @Bean
@@ -100,7 +108,8 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * jedis连接池
-     *
+     *   消息发布订阅库db6
+     *   
      * @return
      */
     @Bean
@@ -113,8 +122,24 @@ public class RedisConfig extends CachingConfigurerSupport {
         jedisPoolConfig.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
         jedisPoolConfig.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
         jedisPoolConfig.setNumTestsPerEvictionRun(numTestsPerEvictionRun);
-        JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password, index);
+        JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password, Constants.ORDERTYPE);
         return jedisPool;
     }
-
+    
+    /**
+     * redis stream
+     * 
+     * */
+    @Bean
+    public RedisCommands<String, String> redisStream() {
+    	RedisURI redisUri =RedisURI.Builder.redis(host, port)
+    			.withPassword(password)
+    			.withDatabase(Constants.ORDERTYPE)
+    			.build();
+    	RedisClient client = RedisClient.create(redisUri);
+    	StatefulRedisConnection<String, String> connection = client.connect();
+    	RedisCommands<String, String> streamCommands = connection.sync();
+    	return streamCommands;
+    }
+  
 }

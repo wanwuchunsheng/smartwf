@@ -363,8 +363,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		//获取用户信息
 		User userInfo= this.userInfoDao.selectUserInfoByUserCode(user);
 		if(userInfo !=null) {
-			userInfo.setSmartwfToken(user.getSmartwfToken());
-			userInfo.setSeesionId(user.getSeesionId());
+			userInfo.setSessionId(user.getSessionId());
 			userInfo.setRefreshToken(user.getRefreshToken());
 			userInfo.setAccessToken(user.getAccessToken());
 			userInfo.setIdToken(user.getIdToken());

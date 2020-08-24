@@ -67,13 +67,13 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		map.put("tenantDomain", user.getTenantDomain());
 		//封装头部
 		Map<String,String> headers = new HashMap<>(16);
-		headers.put("smartwfToken", user.getSmartwfToken());
+		headers.put("sessionId", user.getSessionId());
 		//封装参数
 		Map<String,Object> mapform = new HashMap<>(16);
 		mapform.put("model",  JSONUtil.toJsonStr(map));
 		log.info(JSONUtil.toJsonStr(map));
 		String url=new StringBuffer().append(pmsServiceUri).append("/workOrder/add").toString();
-		String res=HttpRequest.post(url).header(Constants.SESSION_ID,  user.getSmartwfToken()).form(mapform).timeout(60000).execute().body();
+		String res=HttpRequest.post(url).header(Constants.SESSION_ID,  user.getSessionId()).form(mapform).timeout(60000).execute().body();
 		log.info("故障转工单返回："+res);
 		if(StringUtils.isNotBlank(res)) {
 			Map<String,Object> resmap=JSONUtil.parseObj(res);
@@ -110,13 +110,13 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		map.put("tenantDomain", user.getTenantDomain());
 		//封装头部
 		Map<String,String> headers = new HashMap<>(16);
-		headers.put("smartwfToken", user.getSmartwfToken());
+		headers.put("sessionId", user.getSessionState());
 		//封装参数
 		Map<String,Object> mapform = new HashMap<>(16);
 		mapform.put("model",  JSONUtil.toJsonStr(map));
 		log.info(JSONUtil.toJsonStr(map));
 		String url=new StringBuffer().append(pmsServiceUri).append("/workOrder/add").toString();
-		String res=HttpRequest.post(url).header(Constants.SESSION_ID,  user.getSmartwfToken()).form(mapform).timeout(60000).execute().body();
+		String res=HttpRequest.post(url).header(Constants.SESSION_ID,  user.getSessionId()).form(mapform).timeout(60000).execute().body();
 		log.info("缺陷转工单返回："+res);
 		if(StringUtils.isNotBlank(res)) {
 			Map<String,Object> resmap=JSONUtil.parseObj(res);

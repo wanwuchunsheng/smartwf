@@ -1,11 +1,20 @@
 package com.smartwf.common.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import io.lettuce.core.api.sync.RedisCommands;
+import io.lettuce.core.api.sync.RedisStreamCommands;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
-
-import java.util.Set;
+import redis.clients.jedis.StreamEntryID;
+import redis.clients.jedis.params.SetParams;
 
 /**
  * @author WCH
@@ -20,7 +29,13 @@ public class RedisService {
      * */ 
     @Autowired
     private ShardedJedisPool pool;
-
+    
+    @Autowired
+    private JedisPool jedisPool;
+    
+    @Autowired
+	private RedisCommands<String, String> redisStream;
+    
 
     /**
      * 执行set命令，添加字符串格式数据
@@ -152,6 +167,107 @@ public class RedisService {
             }
         });
     }
+    
+    /**
+     * 订阅/消费
+     *
+     * @param timeout 0永久阻塞   1000秒后断开
+     * @param topic 主题 
+     * @return
+     */
+    public List<String> brpop(final int time, final String topic) {
+        return execute(new Function<List<String>>() {
+            @Override
+            public List<String> commond(ShardedJedis jedis) {
+                return jedis.brpop(time,topic);
+            }
+        });
+    }
+    
+    /**
+     * 发布/生产
+     *   
+     * @param topic 主题
+     * @param message 消息
+     * @return 
+     * @return
+     */
+    public Object lpush(final String topic, final String message) {
+        return execute(new Function<Object>() {
+            @Override
+            public Object commond(ShardedJedis jedis) {
+                return jedis.lpush(topic, message);
+            }
+        });
+    }
+    
+    
+    /**
+     * 发布/生产
+     *   创建消费组
+     * 参数说明:
+	 *	第一个参数:消息队列名称.
+	 *	第二个参数:分组名称
+	 *	第三个参数:消息起始ID.
+	 *	第四个参数:暂不知.
+     * @return
+     */
+    public String xgroupCreate(final String key,final String consumer,final StreamEntryID id,final boolean makeStream) {
+        return execute(new Function<String>() {
+            @Override
+            public String commond(ShardedJedis jedis) {
+                return jedis.xgroupCreate(key, consumer, id, makeStream);
+            }
+        });
+    }
+    
+    
+    /**
+     * 发布/生产   xadd模式
+     * 参数说明:
+	 *	第一个参数:消息队列名称.
+	 *	第二个参数:分组名称
+	 *	第三个参数:消息起始ID.
+	 *	第四个参数:暂不知.
+     * @return
+     */
+    public StreamEntryID xadd(final String key,final StreamEntryID id,final Map<String,String> map) {
+        return execute(new Function<StreamEntryID>() {
+            @Override
+            public StreamEntryID commond(ShardedJedis jedis) {
+                return jedis.xadd(key, id, map);
+            }
+        });
+    }
+
+    
+    
+    /**
+     * 获取jedis池数据源
+     * 
+     * */
+    public Jedis getJedisPool() {
+    	Jedis jedis = null;
+        try {
+            // 从池中获取连接
+        	jedis = jedisPool.getResource();
+            // 添加数据
+            return jedis;
+        }finally {
+            if (null != jedis) {
+            	jedis.close();
+            }
+        }
+    }
+    
+    
+    /**
+     * 获取RedisStream数据源
+     * 
+     * */
+    public RedisStreamCommands<String, String> getRedisStream() {
+    	return this.redisStream;
+    }
 
 
     /**
@@ -187,4 +303,5 @@ public class RedisService {
          *  */ 
         R commond(ShardedJedis jedis);
     }
+    
 }

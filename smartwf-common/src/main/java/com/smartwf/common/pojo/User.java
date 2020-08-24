@@ -32,16 +32,11 @@ public class User implements Serializable{
 	 * 
 	 * */
 	private String redirectUri;
-	
-    /**
-	 * 前端系统token
-	 */
-    private String smartwfToken;
     
     /**
 	 * sessionId
 	 */
-    private String seesionId;
+    private String sessionId;
     
     /**
 	 * wso2 accesstoken

@@ -29,7 +29,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- 添加jedis依赖 -->
+        <!-- 添加jedis依赖-->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>

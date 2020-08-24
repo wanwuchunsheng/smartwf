@@ -121,7 +121,7 @@ public class Wso2UserController {
     @PutMapping("loginOut")
     @ApiOperation(value = "wso2用户修改接口", notes = "wso2用户修改")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "smartwfToken", value = "令牌", dataType = "String", required = true)
+    	@ApiImplicitParam(paramType = "query", name = "sessionId", value = "令牌", dataType = "String", required = true)
     })
     public ResponseEntity<Result<?>> loginOut(HttpServletRequest request,User bean) {
         try {

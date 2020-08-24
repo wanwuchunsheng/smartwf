@@ -1,7 +1,6 @@
 package com.smartwf.common.utils;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,7 +49,6 @@ public class CommonUtils {
 	public static boolean getAccessTokenByCode(HttpServletRequest request , RedisService redisService,Wso2Config wso2Config) {
     	//获取code验证是否授权
     	String code=request.getParameter("code");
-    	log.info("code="+code);
     	if(StringUtils.isBlank(code)) {
     		log.warn("未登录！参数code为空异常{}，请求uri：{}", code, request.getRequestURI());
     		throw new CommonException(Constants.UNAUTHORIZED, "未登录！参数code异常！")  ;
@@ -67,6 +65,12 @@ public class CommonUtils {
     		log.warn("未登录！参数client_id异常{}，请求uri：{}", code, request.getRequestURI());
     		throw new CommonException(Constants.UNAUTHORIZED, "未登录！参数client_id异常！");
     	}
+    	//验证client_id是否有效
+    	String isres=redisService.get(clientId);
+    	if(StringUtils.isBlank(isres)) {
+    		log.warn("未登录！参数clientId异常，请求uri：{}", clientId, request.getRequestURI());
+    		throw new CommonException(Constants.UNAUTHORIZED, "未登录！参数clientId异常！");
+    	}
     	//获取 session_state{用于注销用户}
     	String sessionState=request.getParameter("session_state");
     	if(StringUtils.isBlank(sessionState)) {
@@ -74,7 +78,7 @@ public class CommonUtils {
     		throw new CommonException(Constants.UNAUTHORIZED, "未登录！参数session_state异常！");
     	}
     	//调用wso2换取access_token
-    	Map<String,Object> idtmap=JSONUtil.parseObj(redisService.get(clientId));
+    	Map<String,Object> idtmap=JSONUtil.parseObj(isres);
     	OAuthClientResponse oAuthResponse=Wso2ClientUtils.getOauthClientToAccessToken(wso2Config,idtmap,code,redirectUri);
     	//验证code换取access_token是否成功
     	if(oAuthResponse==null || StringUtils.isBlank(oAuthResponse.getParam(Constants.ACCESSTOKEN))) {
@@ -90,8 +94,7 @@ public class CommonUtils {
     	user.setRefreshToken(String.valueOf(oAuthResponse.getParam("refresh_token")));
     	user.setAccessToken(String.valueOf(oAuthResponse.getParam("access_token")));
     	user.setIdToken(String.valueOf(oAuthResponse.getParam("id_token")));
-    	user.setSmartwfToken(sessionId);
-    	user.setSeesionId(sessionId);
+    	user.setSessionId(sessionId);
     	user.setSessionState(sessionState);
     	//设置过期时间
     	UserThreadLocal.setUser(user);

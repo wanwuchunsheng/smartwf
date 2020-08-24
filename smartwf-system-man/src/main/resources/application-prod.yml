@@ -92,7 +92,7 @@ spring:
     user:
       user-server-uri: https://identity.windmagics.com
     token:
-      token-refresh-time: 6000
+      token-refresh-time: 3600
         
 # 日志
 logging:

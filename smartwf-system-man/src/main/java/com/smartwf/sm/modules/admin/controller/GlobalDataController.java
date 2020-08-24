@@ -228,7 +228,7 @@ public class GlobalDataController {
     		if(null==userInfo) {
     			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，通过wso2 user_id查询用户信息异常！"));
     		}
-    		this.redisService.set(userInfo.getSeesionId(), JSONUtil.toJsonStr(userInfo));
+    		this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo));
     		//成功返回
     		return ResponseEntity.ok(Result.data(userInfo));
         } catch (Exception e) {
@@ -240,7 +240,7 @@ public class GlobalDataController {
     
     /**
      * @Description：获取用户基础信息
-     * @param smartwfToken
+     * @param sessionId
      * @return
      */
     @GetMapping("selectUserInfoByToken")
@@ -268,7 +268,7 @@ public class GlobalDataController {
         		if(null==userInfo) {
         			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，user_id查询用户信息异常！"));
         		}
-        		this.redisService.set(userInfo.getSeesionId(), JSONUtil.toJsonStr(userInfo));
+        		this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo));
         		//成功返回
         		return ResponseEntity.ok(Result.data(Constants.EQU_SUCCESS,userInfo));
         	}

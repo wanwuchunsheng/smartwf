@@ -58,12 +58,11 @@ spring:
      logSlowSql: true
   # redis
   redis:
-    # Redis服务器地址
-    host: 192.168.1.151 #10.104.111.195
+    host: 127.0.0.1 #10.104.111.195
     # Redis服务器连接端口
     port: 6379
     # 密码
-    password: wind2@
+    password: 123456
     # 连接超时时间（毫秒）
     timeout: 10000
     jedis:
@@ -84,6 +83,7 @@ spring:
         time-between-eviction-runs-millis: 30000
         # 每次释放连接的最大数目
         num-tests-per-eviction-run: 1024
+  
   #file url
   resources:
     static-locations: file:${web.upload-path}  
@@ -91,11 +91,8 @@ spring:
   wso2:
     user:
       user-server-uri: https://identity.windmagics.com
-      #user-server-uri: https://192.168.1.132:9443
-      user-authorization: Basic YWRtaW46YWRtaW4=
     token:
-      token-server-uri: https://identity.windmagics.com
-      token-refresh-time: 300
+      token-refresh-time: 6000
 
 # 日志
 logging:
