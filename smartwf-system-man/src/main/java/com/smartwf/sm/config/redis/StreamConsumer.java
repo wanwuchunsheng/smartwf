@@ -34,9 +34,9 @@ public class StreamConsumer implements CommandLineRunner {
 	//主题，不同的子系统主题不要一样遵循{topic:子系统名称}
 	public final static String STREAMS_KEY = "topic:smartwf_sys_backend";
 	//组名称
-	public final static String GROUP_NAME="application_1";
+	public final static String GROUP_NAME="application";
 	//消费者
-	public final static String CONSUMER="consumer_1";
+	public final static String CONSUMER_NAME="consumer";
 	
 	/**
      * 初始化监听信息，渠道信息
@@ -62,7 +62,7 @@ public class StreamConsumer implements CommandLineRunner {
             while(true) {
             	// 阻塞读取分组{无消息等待，有消息向下执行}
                 @SuppressWarnings("unchecked")
-				List<StreamMessage<String, String>> messages = redisStream.xreadgroup(Consumer.from(GROUP_NAME, CONSUMER),XReadArgs.Builder.count(1).block(Duration.ofSeconds(0)),XReadArgs.StreamOffset.lastConsumed(STREAMS_KEY));
+				List<StreamMessage<String, String>> messages = redisStream.xreadgroup(Consumer.from(GROUP_NAME, CONSUMER_NAME),XReadArgs.Builder.count(1).block(Duration.ofSeconds(0)),XReadArgs.StreamOffset.lastConsumed(STREAMS_KEY));
                 //判断消息是否为空{进入相关业务流程}
                 if (!messages.isEmpty()) {
                     for (StreamMessage<String, String> message : messages) {
@@ -71,7 +71,7 @@ public class StreamConsumer implements CommandLineRunner {
             			Map<String,String> map=message.getBody();
             			//获取map键
             			String type=map.entrySet().iterator().next().getKey();
-            			//进入响应的业务处理
+            			//进入相应的业务处理
             			switch (type) {
     					case "1":
     						log.info("msg - {}", map.get(type));

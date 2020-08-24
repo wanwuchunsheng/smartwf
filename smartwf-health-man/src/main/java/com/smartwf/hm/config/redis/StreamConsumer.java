@@ -71,7 +71,7 @@ public class StreamConsumer implements CommandLineRunner {
             			Map<String,String> map=message.getBody();
             			//获取map键
             			String type=map.entrySet().iterator().next().getKey();
-            			//进入响应的业务处理,根据type做相关的业务处理
+            			//进入相应的业务处理,根据type做相关的业务处理
         	        	switch (type) {
         					case "1":
         						log.info("msg - {}", map.get(type));

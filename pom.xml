@@ -30,7 +30,7 @@
         <org.apache.commons>3.4</org.apache.commons>
         <com.sun.mail>1.5.6</com.sun.mail>
         <lombok.version>1.18.4</lombok.version>
-        <redis.clients>2.9.0</redis.clients>
+        <redis.clients>3.3.0</redis.clients>
         <commons.httpclient>3.1</commons.httpclient>
         <org.apache.rocketmq>4.3.0</org.apache.rocketmq>
         <mybatis-plus.version>3.1.2</mybatis-plus.version>
