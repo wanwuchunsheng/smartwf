@@ -58,11 +58,11 @@ spring:
      logSlowSql: true
   # redis
   redis:
-    host: 127.0.0.1 #10.104.111.195
+    host: 192.168.1.154 #10.104.111.195
     # Redis服务器连接端口
     port: 6379
     # 密码
-    password: 123456
+    password: wind2@
     # 连接超时时间（毫秒）
     timeout: 10000
     jedis:
@@ -92,7 +92,7 @@ spring:
     user:
       user-server-uri: https://identity.windmagics.com
     token:
-      token-refresh-time: 6000
+      token-refresh-time: 100
 
 # 日志
 logging:
