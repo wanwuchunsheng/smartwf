@@ -78,6 +78,7 @@ public class LoginServiceImpl implements LoginService{
 	                .setClientId(user.getClientKey())
 	                .setUsername(user.getLoginCode())
 	                .setPassword(user.getPwd())
+	                .setScope("openid")
 	                .setClientSecret(Convert.toStr(idtmap.get("clientSecret")))
 	                .buildBodyMessage();
 	        //create OAuth client that uses custom http client under the hood
