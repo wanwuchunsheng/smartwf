@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 2020-8-18 17:06:23
  */
 
-//@Component
+@Component
 @Slf4j
 public class StreamConsumer implements CommandLineRunner {
 

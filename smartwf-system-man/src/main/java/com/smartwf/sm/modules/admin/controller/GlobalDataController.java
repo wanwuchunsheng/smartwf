@@ -18,7 +18,6 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
