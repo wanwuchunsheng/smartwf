@@ -18,7 +18,9 @@ import com.smartwf.common.exception.CommonException;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
+import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.app.service.LoginService;
 
 import cn.hutool.core.convert.Convert;
@@ -37,12 +39,16 @@ public class LoginServiceImpl implements LoginService{
 	@Autowired
 	private RedisService redisService;
 	
+	@Autowired
+    private UserInfoService userInfoService;
+	
 	/**
      * @Description app登录认证
      * @return
      */
 	@Override
 	public Result<?> userLogin(HttpServletRequest request, User user) {
+		log.info("____________________"+user.getClientKey()+"    "+user.getLoginCode()+"      "+user.getPwd());
 		String isres=redisService.get(user.getClientKey());
     	if(StringUtils.isBlank(isres)) {
     		log.warn("失败！参数clientKey异常，请求uri：{}", user.getClientKey(), request.getRequestURI());
@@ -57,9 +63,27 @@ public class LoginServiceImpl implements LoginService{
     	user.setClientSecret(String.valueOf(idtmap.get("clientSecret")));
     	user.setRefreshToken(String.valueOf(oAuthResponse.getParam("refresh_token")));
     	user.setAccessToken(String.valueOf(oAuthResponse.getParam("access_token")));
+    	user.setIdToken(String.valueOf(oAuthResponse.getParam("id_token")));
     	user.setSessionId(sessionId);
-    	redisService.set(sessionId,JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
-		return Result.data(Constants.EQU_SUCCESS, user);
+    	//根据accessToken查询用户ID
+		String str=Wso2ClientUtils.reqWso2UserInfo(wso2Config, user);
+		if(StringUtils.isBlank(str)) {
+			throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，accessToken查询用户信息失败！");
+		}
+		Map<String,Object> resmap=JSONUtil.parseObj(str);
+		//验证是否成功
+		if(!resmap.containsKey(Constants.USERID)) {
+			throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，WSO2 user_id为空！");
+		}
+		user.setUserCode(String.valueOf(resmap.get("user_id")));
+		//通过user_id查询用户基础信息	
+		User userInfo=this.userInfoService.selectUserInfoByUserCode(user);
+		if(null==userInfo) {
+			throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，user_id查询用户信息异常！");
+		}
+		this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo),wso2Config.tokenRefreshTime);
+		//成功返回
+		return Result.data(Constants.EQU_SUCCESS,Wso2ClientUtils.resUserInfo(userInfo));
 	}
 
 
@@ -92,33 +116,5 @@ public class LoginServiceImpl implements LoginService{
 	}
 	
 	
-	/**
-	 * 功能说明:用户名密码换取wso2登录信息
-	 * 
-	 * @param idtmap
-	 * @param user
-	 * @return 
-	 * */
-	public OAuthClientResponse logout(Map<String,Object> idtmap,User user) {
-		try {
-			final OAuthClientRequest.TokenRequestBuilder oAuthTokenRequestBuilder = 
-					new OAuthClientRequest.TokenRequestBuilder(new StringBuffer().append(wso2Config.userServerUri).append("/oauth2/logout").toString());
-			
-			
-	        final OAuthClientRequest accessRequest = oAuthTokenRequestBuilder.setGrantType(GrantType.PASSWORD)
-	                .setClientId(user.getClientKey())
-	                .setUsername(user.getLoginCode())
-	                .setPassword(user.getPwd())
-	                .setClientSecret(Convert.toStr(idtmap.get("clientSecret")))
-	                .buildBodyMessage();
-	        //create OAuth client that uses custom http client under the hood
-	        final OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
-	        final OAuthClientResponse oAuthResponse = oAuthClient.accessToken(accessRequest);
-	        return oAuthResponse;
-		} catch (Exception e) {
-			log.error("密码模式换取wso2登录信息异常！{}",e.getMessage(),e);
-		}
-	   return null;
-	}
 
 }

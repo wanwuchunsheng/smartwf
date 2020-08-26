@@ -49,7 +49,6 @@ public class LoginController {
     })
     public ResponseEntity<Result<?>> userLogin(HttpServletRequest request, User user) {
         try {
-        	log.info(user.getLoginCode()+"    "+user.getPwd()+"    "+user.getClientKey()+"    uri="+request.getQueryString()+"    "+request.getRequestURI());
            //通过参数，换取wso2登录信息
            Result<?> result = this.loginService.userLogin(request,user);
            return ResponseEntity.status(HttpStatus.OK).body(result);

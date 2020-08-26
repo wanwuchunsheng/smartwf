@@ -23,6 +23,7 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.wso2.Wso2Config;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 /**
@@ -194,4 +195,39 @@ public class Wso2ClientUtils {
 		}
        return null;
 	}
+
+	
+	/**
+     * 功能说明:隐藏关键数据，避免暴露前端
+     * @param 
+     * @return 
+     * */
+	public static User resUserInfo(User user) {
+		user.setClientSecret(null);
+		user.setPwd(null);
+		user.setRefreshToken(null);
+		user.setTenantPw(null);
+		user.setSessionState(null);
+		return user;
+	}
+	
+	
+	/**
+     * 统一注销
+     * @param accesstoken 
+     * */
+    public static String userLogout(Wso2Config wso2Config,User user) {
+    	Map<String,Object> map=new HashMap<String,Object>(16);
+    	map.put("id_token_hint",user.getIdToken());
+    	map.put("post_logout_redirect_uri","http://192.168.3.30:9105");
+        String url=new StringBuffer().append(wso2Config.userServerUri).append("/oidc/logout").toString();
+        String res=HttpRequest.get(url).header("Authorization",new StringBuffer().append("Bearer ").append(user.getAccessToken()).toString()).form(map).timeout(60000).execute().body();
+		log.info("res="+res);
+    	return res;
+    }
+    
+    
+    
+    
+    
 }

@@ -227,9 +227,9 @@ public class GlobalDataController {
     		if(null==userInfo) {
     			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，通过wso2 user_id查询用户信息异常！"));
     		}
-    		this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo));
+    		this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo),wso2Config.tokenRefreshTime);
     		//成功返回
-    		return ResponseEntity.ok(Result.data(userInfo));
+    		return ResponseEntity.ok(Result.data(Wso2ClientUtils.resUserInfo(userInfo)));
         } catch (Exception e) {
             log.error("授权返回用户基础信息异常！{}", e.getMessage(), e);
         }
@@ -267,9 +267,9 @@ public class GlobalDataController {
         		if(null==userInfo) {
         			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，user_id查询用户信息异常！"));
         		}
-        		this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo));
+        		this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo),wso2Config.tokenRefreshTime);
         		//成功返回
-        		return ResponseEntity.ok(Result.data(Constants.EQU_SUCCESS,userInfo));
+        		return ResponseEntity.ok(Result.data(Constants.EQU_SUCCESS,Wso2ClientUtils.resUserInfo(userInfo)));
         	}
         } catch (Exception e) {
             log.error("获取用户基础信息失败！{}", e.getMessage(), e);
@@ -277,4 +277,32 @@ public class GlobalDataController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( "获取用户基础信息失败！"));
     }
    
+    
+    /**
+     * @Description 统一注销
+     * @return
+     */
+    @GetMapping("logout")
+    @ApiOperation(value = "注销接口", notes = "注销接口")
+    public ResponseEntity<Result<?>> userLogin(HttpServletRequest request) {
+        try {
+           //获取sessionId
+           String sessionId=request.getHeader(Constants.SESSION_ID);
+           //获取登录记录
+           String userStr =redisService.get(sessionId);
+           if(StringUtils.isNotBlank(userStr)){
+       			User user=JSONUtil.toBean(userStr, User.class);
+       			//清空redis
+       			this.redisService.del(sessionId);
+       			//注销wso accessToken
+       			//Wso2ClientUtils.userLogout(wso2Config, user);
+           }
+           return ResponseEntity.status(HttpStatus.OK).body(Result.msg("注销成功！"));
+        } catch (Exception e) {
+            log.error("注销失败！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("注销失败！"));
+    }
+    
+    
 }
