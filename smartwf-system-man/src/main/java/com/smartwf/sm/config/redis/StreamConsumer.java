@@ -93,7 +93,14 @@ public class StreamConsumer implements CommandLineRunner {
 			log.error("消息消费发生异常{}{}",e.getMessage(),e);
 			//异常关闭源
 			connection.close();
-			messageListener();
+			try {
+				Thread.sleep(10000);
+				messageListener();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 		}
     }
   
