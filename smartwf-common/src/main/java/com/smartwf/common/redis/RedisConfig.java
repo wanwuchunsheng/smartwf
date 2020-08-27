@@ -130,15 +130,22 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 
      * */
     @Bean
-    public RedisCommands<String, String> redisStream() {
+    public RedisClient client() {
     	RedisURI redisUri =RedisURI.Builder.redis(host, port)
     			.withPassword(password)
     			.withDatabase(Constants.ORDERTYPE)
     			.build();
     	RedisClient client = RedisClient.create(redisUri);
+    	/**
+    	 * 
     	StatefulRedisConnection<String, String> connection = client.connect();
     	RedisCommands<String, String> streamCommands = connection.sync();
-    	return streamCommands;
+    	 */
+    	return client;
     }
+    
+    
+    
+    
   
 }

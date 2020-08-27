@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import com.smartwf.common.service.RedisService;
 
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.sync.RedisCommands;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -19,8 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StreamProducer {
 	
 	@Autowired
-	private RedisService redisService;
-	
+	private RedisClient redisClient;
 	
 	/**
 	 * 说明：消息发布
@@ -31,8 +33,21 @@ public class StreamProducer {
 	 * 
 	 * */
     public void sendMsg(String topic, Map<String,String> map) {
-    	 String res= redisService.getRedisStream().xadd(topic, map);
-         log.info("频道发布消息{} - {} - 返回：{}", topic,map,res);
+    	StatefulRedisConnection<String, String> connection =null;
+    	RedisCommands<String, String> syncCommands = null;
+    	try {
+    		connection = redisClient.connect();
+        	syncCommands = connection.sync();
+        	String res = syncCommands.xadd(topic, map);
+            log.info("频道发布消息{} - {} - 返回：{}", topic,map,res);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(connection!=null) {
+				connection.close();
+				//redisClient.shutdown();
+			}
+		}
     }
 
 }

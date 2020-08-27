@@ -7,6 +7,8 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 import io.lettuce.core.api.sync.RedisStreamCommands;
 import redis.clients.jedis.Jedis;
@@ -32,9 +34,6 @@ public class RedisService {
     
     @Autowired
     private JedisPool jedisPool;
-    
-    @Autowired
-	private RedisCommands<String, String> redisStream;
     
 
     /**
@@ -239,8 +238,6 @@ public class RedisService {
             }
         });
     }
-
-    
     
     /**
      * 获取jedis池数据源
@@ -260,15 +257,6 @@ public class RedisService {
         }
     }
     
-    
-    /**
-     * 获取RedisStream数据源
-     * 
-     * */
-    public RedisStreamCommands<String, String> getRedisStream() {
-    	return this.redisStream;
-    }
-
 
     /**
      * 抽取公用部分代码
