@@ -65,7 +65,7 @@ spring:
     # 密码
     password: wind2@
     # 连接超时时间（毫秒）
-    timeout: 10000
+    timeout: 30000
     jedis:
       pool:
         # db

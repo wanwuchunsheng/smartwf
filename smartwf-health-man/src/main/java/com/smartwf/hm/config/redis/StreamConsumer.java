@@ -64,7 +64,7 @@ public class StreamConsumer implements CommandLineRunner {
             while(true) {
             	// 阻塞读取分组{无消息等待，有消息向下执行}
                 @SuppressWarnings("unchecked")
-				List<StreamMessage<String, String>> messages = redisStream.xreadgroup(Consumer.from(GROUP_NAME, CONSUMER_NAME),XReadArgs.Builder.count(1).block(Duration.ofSeconds(0)),XReadArgs.StreamOffset.lastConsumed(STREAMS_KEY));
+				List<StreamMessage<String, String>> messages = redisStream.xreadgroup(Consumer.from(GROUP_NAME, CONSUMER_NAME),XReadArgs.Builder.count(1).block(Duration.ofSeconds(20)),XReadArgs.StreamOffset.lastConsumed(STREAMS_KEY));
                 //判断消息是否为空{进入相关业务流程}
                 if (!messages.isEmpty()) {
                     for (StreamMessage<String, String> message : messages) {
