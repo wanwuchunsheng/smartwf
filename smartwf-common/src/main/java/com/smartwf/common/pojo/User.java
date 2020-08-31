@@ -11,10 +11,12 @@ import lombok.Data;
  */
 @Data
 public class User implements Serializable{
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
+	
+	
+	/**================  wso2相关信息  =================================================*/
+	
 	
 	/**
 	 * wso2子系统注册 key
@@ -60,6 +62,8 @@ public class User implements Serializable{
      * */
     private Long dateTime;
     
+    
+    /**================  用户相关信息  ================================================*/
     
 	/**
      * 用户id
@@ -122,6 +126,12 @@ public class User implements Serializable{
 	 * 备注
 	 */
 	private String remark;
+	
+	
+	
+	
+	/**================  租户相关信息  ================================================*/
+	
 	/**
 	 * 租户id
 	 */
@@ -147,6 +157,24 @@ public class User implements Serializable{
 	 * 管理员类型 0非管理员 1系统管理员 
 	 */
 	private Integer mgrType;
+	
+	
+	
+	/**================  其他相关信息  ================================================*/
+	
+	/**
+	 * 租户域
+	 *   并非登录用户租户域，是通过下拉选项的租户对应的域，可变更
+	 */
+	private String atTennentDomain;
+	
+	/**
+	 * 风场
+	 *   通过下拉选择的风场{也是组织机构ID}
+	 *   
+	 */
+	private Integer atwindFarm;
+	
 	/**
 	 * 职务
 	 */
