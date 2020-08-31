@@ -14,6 +14,8 @@
 			org_name as label,
 			org_type,
 			remark,
+			wfmark,
+			wind_farm,
 			tenant_id,
 			enable,
 			level
