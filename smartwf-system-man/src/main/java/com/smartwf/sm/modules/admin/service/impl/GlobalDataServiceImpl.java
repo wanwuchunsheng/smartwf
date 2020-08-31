@@ -88,11 +88,11 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 			//判断是否为空
 			if(map!=null && map.size()> 0 ) {
 				//通过编码，获取对象集合
-				List<OrganizationVO> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get( Convert.toStr(bean.getTenantId()))), OrganizationVO.class) ;	
+				List<OrganizationVO> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get(Convert.toStr(bean.getTenantId()))), OrganizationVO.class) ;	
 				//3）判断当前租户下是否有组织架构数据
         		if(orglist!=null && orglist.size()>0 ) {
         			//4）判断返回的数据类型
-            		if(Constants.ONE==bean.getOrgType()) {
+            		if(bean.getOrgType().equals(Convert.toStr( Constants.ONE))) {
             			//5）转换成树形
             			List<OrganizationVO> orglist2=buildByRecursive(orglist);
             			if(orglist2!=null && orglist2.size()>0 ) {

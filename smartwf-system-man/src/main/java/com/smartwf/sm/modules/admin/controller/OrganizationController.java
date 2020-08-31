@@ -108,7 +108,7 @@ public class OrganizationController {
 		    @ApiImplicitParam(paramType = "query", name = "wfmark", value = "风场标记（0-是  1-否）", dataType = "Integer"),
 		    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
 	        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
-		    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型", dataType = "Integer"),
+		    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "添加组织架构", paramIndexs = {0})
@@ -131,7 +131,7 @@ public class OrganizationController {
         @ApiImplicitParam(paramType = "query", name = "level", value = "层次级别", dataType = "Integer"),
     	@ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构编码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型", dataType = "Integer"),
+	    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "wfmark", value = "风场标记（0-是  1-否）", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),

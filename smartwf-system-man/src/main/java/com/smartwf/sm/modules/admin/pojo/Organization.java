@@ -56,7 +56,7 @@ public class Organization extends BasePojo implements Serializable{
 	/**
 	 * 机构类型
 	 */
-	private Integer orgType;
+	private String orgType;
 	/**
 	 * 风场
 	 */
