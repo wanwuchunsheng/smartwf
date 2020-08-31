@@ -99,7 +99,8 @@ public class SubsystemController {
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
 	    	@ApiImplicitParam(paramType = "query", name = "resCode", value = "子系统编码", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "resName", value = "子系统名称", dataType = "String", required = true),
-		    @ApiImplicitParam(paramType = "query", name = "resHref", value = "路由地址", dataType = "String", required = true),
+		    @ApiImplicitParam(paramType = "query", name = "resHref", value = "资源地址", dataType = "String", required = true),
+		    @ApiImplicitParam(paramType = "query", name = "routeHref", value = "路由地址", dataType = "String", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-默认启用 1-禁用）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
@@ -123,7 +124,8 @@ public class SubsystemController {
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "resCode", value = "子系统编码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "resName", value = "子系统名称", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "resHref", value = "路由地址", dataType = "String"),
+	    @ApiImplicitParam(paramType = "query", name = "resHref", value = "资源地址", dataType = "String"),
+	    @ApiImplicitParam(paramType = "query", name = "routeHref", value = "路由地址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-默认启用 1-禁用）", dataType = "int"),
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })

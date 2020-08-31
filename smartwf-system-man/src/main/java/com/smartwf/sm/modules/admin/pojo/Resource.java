@@ -59,6 +59,10 @@ public class Resource extends BasePojo implements Serializable{
 	 */
 	private String resHref;
 	/**
+	 * 路由链接
+	 */
+	private String routeHref;
+	/**
 	 * 权重标识
 	 */
 	private String permission;
