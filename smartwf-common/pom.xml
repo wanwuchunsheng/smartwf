@@ -106,6 +106,6 @@
 		</dependency>
     </dependencies>
     <build>
-        <finalName>smartwf-common</finalName>
+        <finalName>WindMagicSecurity</finalName>
     </build>
 </project>
