@@ -2,6 +2,7 @@ package com.smartwf.sm.modules.admin.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,11 +218,12 @@ public class UserInfoController {
     @PostMapping("selectUserInfoByRoleParam")
     @ApiOperation(value = "排班用户查询接口", notes = "排班用户查询")
     @ApiImplicitParams({
-   	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true)
+   	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+   	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectUserInfoByRoleParam(String tenantDomain) {
+    public ResponseEntity<Result<?>> selectUserInfoByRoleParam( String tenantDomain,Integer windFarm) {
         try {
-           Result<?> userInfoList= this.userService.selectUserInfoByRoleParam(tenantDomain);
+           Result<?> userInfoList= this.userService.selectUserInfoByRoleParam(tenantDomain,windFarm);
        	   return ResponseEntity.status(HttpStatus.OK).body(userInfoList);
         } catch (Exception e) {
             log.error("排班用户查询错误！{}", e.getMessage(), e);
