@@ -122,7 +122,7 @@ public class RouteController {
     	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "dailyElectPg", value = "日发电量", dataType = "Double", required = true),
     	@ApiImplicitParam(paramType = "query", name = "realTimePg", value = "实时容量", dataType = "Double", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "InstalledCapacity", value = "装机容量", dataType = "Double", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "installedCapacity", value = "装机容量", dataType = "Double", required = true),
     	@ApiImplicitParam(paramType = "query", name = "createTime", value = "开始时间", dataType = "Date")
     })
     public ResponseEntity<Result<?>> addPortalPowerGen(PortalPowerGeneration bean) {
@@ -151,7 +151,7 @@ public class RouteController {
     	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
     	@ApiImplicitParam(paramType = "query", name = "dailyElectPg", value = "日发电量", dataType = "Double"),
     	@ApiImplicitParam(paramType = "query", name = "realTimePg", value = "实时容量", dataType = "Double"),
-    	@ApiImplicitParam(paramType = "query", name = "InstalledCapacity", value = "装机容量", dataType = "Double"),
+    	@ApiImplicitParam(paramType = "query", name = "installedCapacity", value = "装机容量", dataType = "Double"),
     	@ApiImplicitParam(paramType = "query", name = "createTime", value = "开始时间", dataType = "Date")
     })
     public ResponseEntity<Result<?>> updatePortalPowerGen(PortalPowerGeneration bean) {
