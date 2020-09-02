@@ -52,6 +52,12 @@ public class Result<T> implements Serializable {
         this.data = data;
         this.code = code;
     }
+    
+    public Result(Integer code,Long total,T data) {
+        this.data = data;
+        this.code = code;
+        this.count=total;
+    }
 
 
     public Result(T data) {
@@ -134,6 +140,15 @@ public class Result<T> implements Serializable {
      */
     public static<T> Result<T> data(Integer code, T data) {
         return new Result(code, data);
+    }
+    
+    /**
+     * 返回查询总数量跟自定义数据
+     * @param data
+     * @return
+     */
+    public static<T> Result<T> data(Integer code,Long total, T data) {
+        return new Result(code, total ,data);
     }
     
     

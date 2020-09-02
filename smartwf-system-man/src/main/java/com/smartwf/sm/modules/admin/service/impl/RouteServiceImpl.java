@@ -16,6 +16,7 @@ import com.smartwf.sm.modules.admin.dao.RouteDao;
 import com.smartwf.sm.modules.admin.pojo.PortalPowerGeneration;
 import com.smartwf.sm.modules.admin.pojo.Route;
 import com.smartwf.sm.modules.admin.service.RouteService;
+import com.smartwf.sm.modules.admin.vo.PortalPowerGenerationVO;
 
 import lombok.extern.log4j.Log4j;
 /**
@@ -64,7 +65,7 @@ public class RouteServiceImpl implements RouteService{
      * 
      */
 	@Override
-	public Result<?> selectPortalPowerGenByAll(Page<PortalPowerGeneration> page, PortalPowerGeneration bean) {
+	public Result<?> selectPortalPowerGenByAll(Page<PortalPowerGeneration> page, PortalPowerGenerationVO bean) {
 		QueryWrapper<PortalPowerGeneration> queryWrapper = new QueryWrapper<>();
 		//降序
 		queryWrapper.orderByDesc("create_time");
@@ -85,7 +86,52 @@ public class RouteServiceImpl implements RouteService{
         	queryWrapper.between("create_time", bean.getStartTime(), bean.getEndTime());
         }
 		IPage<PortalPowerGeneration> list=this.portalPowerGenDao.selectPage(page, queryWrapper);
-		return Result.data(list.getTotal(), list.getRecords());
+		return Result.data(Constants.EQU_SUCCESS, list.getTotal(), list.getRecords());
+	}
+
+	/**
+     * 门户发电量统计数据 -添加
+     * @author WCH
+     * @param bean
+     * @return
+     * 
+     */
+	@Override
+	public Result<?> addPortalPowerGen(PortalPowerGeneration bean) {
+		this.portalPowerGenDao.insert(bean);
+		return Result.data(Constants.EQU_SUCCESS,"添加成功");
+	}
+
+	/**
+     * 门户发电量统计数据 -修改
+     * @author WCH
+     * @param bean
+     * @return
+     * 
+     */
+	@Override
+	public Result<?> updatePortalPowerGen(PortalPowerGeneration bean) {
+		this.portalPowerGenDao.updateById(bean);
+		return Result.data(Constants.EQU_SUCCESS,"修改成功");
+	}
+
+	/**
+     * 门户发电量统计数据 -发电量统计
+     * @author WCH
+     * @param bean
+     * @return
+     * 
+     */
+	@Override
+	public Result<?> selectPortalPowerGenByParam(PortalPowerGenerationVO bean) {
+		//查询日发电量，装机量，实时量
+		PortalPowerGenerationVO ppg=this.portalPowerGenDao.selectPortalPowerGenByParam(bean);
+		//发电总量
+		PortalPowerGenerationVO ppgTotal=portalPowerGenDao.selectPortalPowerGenByTotal(bean);
+		//赋值发电总量到ppg对象
+		ppg.setTotalElectPg(ppgTotal.getTotalElectPg());
+		//返回
+		return Result.data(Constants.EQU_SUCCESS,ppg);
 	}
 
 	

@@ -3,6 +3,7 @@ package com.smartwf.sm.modules.admin.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -31,7 +32,7 @@ public class PortalPowerGeneration implements Serializable {
 	/**
 	 * 主键
 	 */
-	@TableId
+	@TableId(type = IdType.AUTO)
 	private Integer id;
 	/**
 	 * 租户id
@@ -49,6 +50,7 @@ public class PortalPowerGeneration implements Serializable {
 	 * 日发电量
 	 */
 	private Double dailyElectPg;
+	
 	/**
 	 * 实时容量
 	 */
@@ -62,14 +64,6 @@ public class PortalPowerGeneration implements Serializable {
 	 */
 	private Date createTime;
 	
-	/**
-	 * 开始时间
-	 */
-	private Date startTime;
-	/**
-	 * 结束时间
-	 */
-	private Date endTime;
 	
 	
 	

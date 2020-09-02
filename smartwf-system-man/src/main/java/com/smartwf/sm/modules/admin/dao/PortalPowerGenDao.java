@@ -1,10 +1,12 @@
 package com.smartwf.sm.modules.admin.dao;
 
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.smartwf.sm.modules.admin.pojo.PortalPowerGeneration;
+import com.smartwf.sm.modules.admin.vo.PortalPowerGenerationVO;
 
 
 /**
@@ -18,6 +20,17 @@ import com.smartwf.sm.modules.admin.pojo.PortalPowerGeneration;
  */
 @Repository
 public interface PortalPowerGenDao extends BaseMapper<PortalPowerGeneration> {
+
+	/**
+     * 门户发电量统计数据 -发电量统计
+     * @author WCH
+     * @param bean
+     * @return
+     * 
+     */
+	PortalPowerGenerationVO selectPortalPowerGenByParam(@Param("bean") PortalPowerGenerationVO bean);
+
+	PortalPowerGenerationVO selectPortalPowerGenByTotal(@Param("bean") PortalPowerGenerationVO bean);
 
 
 }
