@@ -69,7 +69,7 @@ public class RouteController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-    	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
+    	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
     	@ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
         @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", dataType = "Date"),
     	@ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
@@ -119,7 +119,7 @@ public class RouteController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String", required = true),
     	@ApiImplicitParam(paramType = "query", name = "dailyElectPg", value = "日发电量", dataType = "Double", required = true),
     	@ApiImplicitParam(paramType = "query", name = "realTimePg", value = "实时容量", dataType = "Double", required = true),
     	@ApiImplicitParam(paramType = "query", name = "installedCapacity", value = "装机容量", dataType = "Double", required = true),
@@ -148,7 +148,7 @@ public class RouteController {
     	@ApiImplicitParam(paramType = "query", name = "id", value = "（主键）", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "Integer"),
     	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-    	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
+    	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
     	@ApiImplicitParam(paramType = "query", name = "dailyElectPg", value = "日发电量", dataType = "Double"),
     	@ApiImplicitParam(paramType = "query", name = "realTimePg", value = "实时容量", dataType = "Double"),
     	@ApiImplicitParam(paramType = "query", name = "installedCapacity", value = "装机容量", dataType = "Double"),
@@ -175,7 +175,7 @@ public class RouteController {
     @ApiOperation(value = "发电量统计查询接口", notes = "发电量统计查询")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "String", value = "风场", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "createTime", value = "日期时间（yyyy-MM-dd）", dataType = "Date")
     })
     public ResponseEntity<Result<?>> selectPortalPowerGenByParam(PortalPowerGenerationVO bean) {

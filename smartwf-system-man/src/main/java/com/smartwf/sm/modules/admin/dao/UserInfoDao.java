@@ -106,7 +106,7 @@ public interface UserInfoDao extends BaseMapper<UserInfo> {
    	 * @param bean
    	 * @return
    	 */
-	List<UserInfo> selectUserInfoByRoleParam(@Param("tenantDomain") String tenantDomain,@Param("windFarm") Integer windFarm,@Param("shiftGroup") String shiftGroup);
+	List<UserInfo> selectUserInfoByRoleParam(@Param("tenantDomain") String tenantDomain,@Param("windFarm") String windFarm,@Param("shiftGroup") String shiftGroup);
 
 
     

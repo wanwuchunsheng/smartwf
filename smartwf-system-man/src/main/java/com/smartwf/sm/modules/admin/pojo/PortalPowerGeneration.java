@@ -45,7 +45,7 @@ public class PortalPowerGeneration implements Serializable {
 	/**
 	 * 风场
 	 */
-	private Integer windFarm;
+	private String windFarm;
 	/**
 	 * 日发电量
 	 */

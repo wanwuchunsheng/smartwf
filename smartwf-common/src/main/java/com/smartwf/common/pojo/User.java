@@ -173,7 +173,7 @@ public class User implements Serializable{
 	 *   通过下拉选择的风场{也是组织机构ID}
 	 *   
 	 */
-	private Integer atwindFarm;
+	private String atwindFarm;
 	
 	/**
 	 * 职务

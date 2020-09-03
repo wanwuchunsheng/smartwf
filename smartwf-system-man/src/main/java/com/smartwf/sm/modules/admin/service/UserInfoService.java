@@ -89,5 +89,5 @@ public interface UserInfoService {
    	 * @param bean
    	 * @return
    	 */
-	Result<?> selectUserInfoByRoleParam(String tenantDomain,Integer windFarm);
+	Result<?> selectUserInfoByRoleParam(String tenantDomain,String windFarm);
 }

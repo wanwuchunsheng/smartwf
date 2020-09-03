@@ -473,7 +473,7 @@ public class UserInfoServiceImpl implements UserInfoService{
    	 * @return
    	 */
 	@Override
-	public Result<?> selectUserInfoByRoleParam(String tenantDomain,Integer windFarm){
+	public Result<?> selectUserInfoByRoleParam(String tenantDomain,String windFarm){
 		List<UserInfo> userInfoList=this.userInfoDao.selectUserInfoByRoleParam(tenantDomain,windFarm,Constants.SHIFT_GROUP);
 		return Result.data(Constants.EQU_SUCCESS,userInfoList);
 	}

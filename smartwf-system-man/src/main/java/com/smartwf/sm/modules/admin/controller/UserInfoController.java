@@ -219,9 +219,9 @@ public class UserInfoController {
     @ApiOperation(value = "排班用户查询接口", notes = "排班用户查询")
     @ApiImplicitParams({
    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
-   	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer")
+   	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String")
     })
-    public ResponseEntity<Result<?>> selectUserInfoByRoleParam( String tenantDomain,Integer windFarm) {
+    public ResponseEntity<Result<?>> selectUserInfoByRoleParam( String tenantDomain,String windFarm) {
         try {
            Result<?> userInfoList= this.userService.selectUserInfoByRoleParam(tenantDomain,windFarm);
        	   return ResponseEntity.status(HttpStatus.OK).body(userInfoList);

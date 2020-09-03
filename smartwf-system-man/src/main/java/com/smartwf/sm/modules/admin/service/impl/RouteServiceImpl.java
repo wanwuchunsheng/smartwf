@@ -74,11 +74,11 @@ public class RouteServiceImpl implements RouteService{
   			queryWrapper.eq("tenant_id", bean.getTenantId()); 
   		}
         //租户域
-        if (!StringUtils.isEmpty(bean.getTenantDomain())) {
+        if (StringUtils.isNotEmpty(bean.getTenantDomain())) {
         	queryWrapper.eq("tenant_domain", bean.getTenantDomain()); 
         }
         //风场
-  		if (null!=bean.getWindFarm()) { 
+  		if (StringUtils.isNotEmpty(bean.getWindFarm())) { 
   			queryWrapper.eq("wind_farm", bean.getWindFarm()); 
   		}
         //时间

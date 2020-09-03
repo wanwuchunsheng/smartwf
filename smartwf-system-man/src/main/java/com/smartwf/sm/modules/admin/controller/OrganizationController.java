@@ -53,7 +53,7 @@ public class OrganizationController {
     @ApiOperation(value = "树形查询所有数据接口", notes = "查询组织架构所有数据")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "orgCode", value = "组织架构代码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型（0-分公司  1-风场   2-一般组织）", dataType = "Integer"),
@@ -107,7 +107,7 @@ public class OrganizationController {
 		    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型（0-分公司  1-风场   2-一般组织）", dataType = "int",required = true),
 		    @ApiImplicitParam(paramType = "query", name = "wfmark", value = "标记{逗号拼接}", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "int", required = true),
-		    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
+		    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
 	        @ApiImplicitParam(paramType = "query", name = "sort", value = "排序", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
@@ -133,7 +133,7 @@ public class OrganizationController {
 	    @ApiImplicitParam(paramType = "query", name = "orgName", value = "组织架构名称", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "orgType", value = "组织架构类型（0-分公司  1-风场   2-一般组织）", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "wfmark", value = "标记{逗号拼接}", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
