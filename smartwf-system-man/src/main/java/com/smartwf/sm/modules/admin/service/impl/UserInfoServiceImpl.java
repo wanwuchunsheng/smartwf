@@ -478,6 +478,8 @@ public class UserInfoServiceImpl implements UserInfoService{
 		return Result.data(Constants.EQU_SUCCESS,userInfoList);
 	}
 
+	
+	
 	/**
    	 *  排班人员信息
    	 *    根据租户和角色名称 分组查询

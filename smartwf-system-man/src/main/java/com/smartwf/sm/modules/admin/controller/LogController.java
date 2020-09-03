@@ -55,10 +55,7 @@ public class LogController {
     public ResponseEntity<Result> selectLogByPage(Page<Log> page) {
         try {
             Result result = this.logService.selectLogByPage(page);
-            log.info("返回结果{}",JSONUtil.toJsonStr(result));
-            if (result != null) {
-                return ResponseEntity.ok(result);
-            }
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             log.error("分页查询日志信息错误！{}", e.getMessage(), e);
         }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.dto.LogDTO;
@@ -47,9 +48,11 @@ public class LogServiceImpl implements LogService {
      * @return
      */
     @Override
-    public Result selectLogByPage(Page<Log> page) {
-    	IPage<Log> logs = this.logDao.selectPage(page, null);
-        return Result.data(logs.getTotal(), logs.getRecords());
+    public Result<?> selectLogByPage(Page<Log> page) {
+    	QueryWrapper<Log> queryWrapper =new QueryWrapper<>();
+    	queryWrapper.orderByDesc("oprationTime");
+    	List<Log> logs = this.logDao.selectList(queryWrapper);
+        return Result.data(logs.size(), logs);
     }
 
 
