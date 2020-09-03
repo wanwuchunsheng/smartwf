@@ -284,20 +284,29 @@ public class GlobalDataController {
      */
     @GetMapping("logout")
     @ApiOperation(value = "注销接口", notes = "注销接口")
-    public ResponseEntity<Result<?>> userLogin(HttpServletRequest request) {
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "sessionIds", value = "批量注销（sessionId逗号拼接）", dataType = "String")
+    })
+    public ResponseEntity<Result<?>> userLogin(HttpServletRequest request,String sessionIds) {
         try {
-           //获取sessionId
-           String sessionId=request.getHeader(Constants.SESSION_ID);
-           //获取登录记录
-           String userStr =redisService.get(sessionId);
-           if(StringUtils.isNotBlank(userStr)){
+        	//批量注销
+        	if(StringUtils.isNotBlank(sessionIds)) {
+        		String[] keys=sessionIds.split(",");
+        		for(String key: keys) {
+           			this.redisService.del(key);
+        		}
+        	}
+        	//单体注销
+            String sessionId=request.getHeader(Constants.SESSION_ID);
+            String userStr =redisService.get(sessionId);
+            if(StringUtils.isNotBlank(userStr)){
        			User user=JSONUtil.toBean(userStr, User.class);
        			//清空redis
        			this.redisService.del(sessionId);
-       			//注销wso accessToken
+       			//注销wso accessToken	
        			//Wso2ClientUtils.userLogout(wso2Config, user);
-           }
-           return ResponseEntity.status(HttpStatus.OK).body(Result.msg("注销成功！"));
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("注销成功！"));
         } catch (Exception e) {
             log.error("注销失败！{}", e.getMessage(), e);
         }

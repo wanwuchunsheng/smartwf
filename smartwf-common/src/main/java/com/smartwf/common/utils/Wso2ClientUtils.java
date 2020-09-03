@@ -219,8 +219,9 @@ public class Wso2ClientUtils {
      * */
     public static String userLogout(Wso2Config wso2Config,User user) {
     	Map<String,Object> map=new HashMap<String,Object>(16);
+    	map.put("post_logout_redirect_uri","http://localhost:8080");
+    	map.put("session_state",user.getSessionState());
     	map.put("id_token_hint",user.getIdToken());
-    	map.put("post_logout_redirect_uri","http://192.168.3.30:9105");
         String url=new StringBuffer().append(wso2Config.userServerUri).append("/oidc/logout").toString();
         String res=HttpRequest.get(url).header("Authorization",new StringBuffer().append("Bearer ").append(user.getAccessToken()).toString()).form(map).timeout(60000).execute().body();
 		log.info("res="+res);
