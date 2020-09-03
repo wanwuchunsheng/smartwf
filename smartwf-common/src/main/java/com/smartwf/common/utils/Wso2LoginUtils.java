@@ -53,8 +53,6 @@ public class Wso2LoginUtils {
         	throw new CommonException(Constants.FORBIDDEN, "api接口访问无权限！");
     	};
     	*/
-        // BodyReaderHttpServletRequestWrapper myJsonRequestWrapper = new BodyReaderHttpServletRequestWrapper(request);
-        // myJsonRequestWrapper.setAttribute("userInfo", user);
         request.setAttribute("userInfo",Wso2ClientUtils.resUserInfo(user));
         return true;
     }

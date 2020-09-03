@@ -103,5 +103,7 @@ public class Constants {
     
     public static final int TOKEN_TIMEOUT = 500;
     
+    public static final int APP_TIMEOUT = 43200;
+    
 
 }

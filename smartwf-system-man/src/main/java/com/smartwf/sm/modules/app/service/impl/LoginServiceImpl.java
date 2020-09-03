@@ -81,7 +81,12 @@ public class LoginServiceImpl implements LoginService{
 		if(null==userInfo) {
 			throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，user_id查询用户信息异常！");
 		}
-		this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo),wso2Config.tokenRefreshTime);
+		//区分子系统和app端过期时间
+		if(StringUtils.isNotBlank(userInfo.getSessionState())) {
+			this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo),wso2Config.tokenRefreshTime);
+		}else {
+			this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo),Constants.APP_TIMEOUT);
+		}
 		//成功返回
 		return Result.data(Constants.EQU_SUCCESS,Wso2ClientUtils.resUserInfo(userInfo));
 	}

@@ -136,7 +136,12 @@ public class CommonUtils {
     	};
     	//3重置redis过期时间
     	UserThreadLocal.setUser(user);
-        redisService.set(sessionId,JSONUtil.toJsonStr(user),wso2Config.tokenRefreshTime);
+    	//区分子系统和app端过期时间
+    	if(StringUtils.isNotBlank(user.getSessionState())) {
+    		redisService.set(sessionId,JSONUtil.toJsonStr(user),wso2Config.tokenRefreshTime);
+		}else {
+			redisService.set(sessionId,JSONUtil.toJsonStr(user),Constants.APP_TIMEOUT);
+		}
         return user;
 	}
 
