@@ -77,6 +77,11 @@
             <groupId>net.javacrumbs.shedlock</groupId>
             <artifactId>shedlock-provider-redis-jedis</artifactId>
         </dependency>
+        <!-- FTPClient需要用到 -->
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+		</dependency>
         <!-- 二维码 -->
         <dependency>
             <groupId>org.iherus</groupId>

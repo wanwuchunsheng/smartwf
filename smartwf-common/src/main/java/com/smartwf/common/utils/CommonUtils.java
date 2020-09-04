@@ -81,8 +81,8 @@ public class CommonUtils {
     	Map<String,Object> idtmap=JSONUtil.parseObj(isres);
     	OAuthClientResponse oAuthResponse=Wso2ClientUtils.getOauthClientToAccessToken(wso2Config,idtmap,code,redirectUri);
     	//验证code换取access_token是否成功
-    	if(oAuthResponse==null || StringUtils.isBlank(oAuthResponse.getParam(Constants.ACCESSTOKEN))) {
-    		log.warn("未登录！code换取accessToken失败{}，请求uri：{}", JSONUtil.toJsonStr(oAuthResponse), request.getRequestURI());
+    	if(null==oAuthResponse || StringUtils.isBlank(oAuthResponse.getParam(Constants.ACCESSTOKEN))) {
+    		log.warn("未登录！code换取accessToken失败，请求uri：{}",  request.getRequestURI());
     		throw new CommonException(Constants.UNAUTHORIZED, "未登录！code换取accessToken异常！");
     	}
     	//封装对象，存储值

@@ -19,12 +19,15 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.hm.config.ftp.FtpConfig;
+import com.smartwf.hm.config.ftp.FtpUtil;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
+
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -51,6 +54,9 @@ public class FaultDataController {
 	
 	@Autowired
 	private DefectService defectService;
+	
+	@Autowired
+	private FtpConfig ftpConfig;
 	
 	/**
 	 * 获取上传地址
@@ -130,7 +136,7 @@ public class FaultDataController {
             	//保存图片
             	for(MultipartFile fl: files) {
         	        if (fl.getContentType().contains("image")) {
-    	                String temp = "images" + File.separator ;
+    	                String temp = "image" + File.separator ;
     	                // 获取图片的文件名
     	                String fileName = fl.getOriginalFilename();
     	                // 获取图片的扩展名
@@ -145,9 +151,15 @@ public class FaultDataController {
     	                if (!dest.getParentFile().exists()) {
     	                    dest.getParentFile().mkdirs();
     	                }
-    	                // 上传到指定目录
+    	                // 上传到临时指定目录
     	                fl.transferTo(dest);
-    	                sb.append(datdDirectory).append(",");
+    	                //上传文件到远程ftp服务器
+    	                boolean result =FtpUtil.ftpUpload(newFileName, ftpConfig.getUrl(),ftpConfig.getPort(),ftpConfig.getUsername(), ftpConfig.getPassword(), dest.toString(), ftpConfig.getRemotePath()+"/image/");
+    	                if (result) {
+    	        			sb.append(datdDirectory).append(",");
+    	        		}
+    	        		//删除本地文件
+    	        		dest.delete();
         	        }
             	}
             }

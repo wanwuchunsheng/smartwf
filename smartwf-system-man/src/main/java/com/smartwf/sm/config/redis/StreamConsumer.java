@@ -97,7 +97,6 @@ public class StreamConsumer implements CommandLineRunner {
 				Thread.sleep(10000);
 				messageListener();
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			

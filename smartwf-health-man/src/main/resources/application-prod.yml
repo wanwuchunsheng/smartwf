@@ -103,7 +103,16 @@ spring:
   system:
     pms:
       server-uri: http://192.168.1.151:8181/pms
-
+# 配置ftp服务器信息
+ftp: 
+  # ftp服务器的IP地址
+  url: 192.168.1.151
+  # 默认端口是21
+  port: 21
+  username: wm
+  password: 1
+  # ftp服务器存放文件的路径
+  remotePath: /
 # 日志
 logging:
   level:

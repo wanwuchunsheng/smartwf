@@ -84,7 +84,6 @@ spring:
         time-between-eviction-runs-millis: 30000
         # 每次释放连接的最大数目
         num-tests-per-eviction-run: 1024
-  
   #file url
   resources:
     static-locations: file:${web.upload-path}  
@@ -94,7 +93,18 @@ spring:
       user-server-uri: https://identity.windmagics.com
     token:
       token-refresh-time: 3600
-
+      
+# 配置ftp服务器信息
+ftp: 
+  # ftp服务器的IP地址
+  url: 192.168.1.151
+  # 默认端口是21
+  port: 21
+  username: wm
+  password: 1
+  # ftp服务器存放文件的路径
+  remotePath: /
+  
 # 日志
 logging:
   level:
