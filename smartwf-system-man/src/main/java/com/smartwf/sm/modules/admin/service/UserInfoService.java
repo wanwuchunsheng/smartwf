@@ -90,4 +90,13 @@ public interface UserInfoService {
    	 * @return
    	 */
 	Result<?> selectUserInfoByRoleParam(String tenantDomain,String windFarm);
+
+	/**
+   	 *  排班用户(主键)查询
+   	 *   查询所有
+   	 * @author WCH
+   	 * @param bean
+   	 * @return
+   	 */
+	Result<?> selectUserInfoByRoleByUserId(String tenantDomain, String windFarm, String ids);
 }

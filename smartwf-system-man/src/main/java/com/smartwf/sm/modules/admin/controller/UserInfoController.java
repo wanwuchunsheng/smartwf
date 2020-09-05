@@ -209,7 +209,7 @@ public class UserInfoController {
     }
     
     /**
-   	 *  排班用户查询
+   	 *  排班用户(全部)查询
    	 *   查询所有
    	 * @author WCH
    	 * @param bean
@@ -229,6 +229,30 @@ public class UserInfoController {
             log.error("排班用户查询错误！{}", e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("排班用户查询错误！"));
+    }
+    
+    /**
+   	 *  排班用户(主键)查询
+   	 *    单查询、批量查询
+   	 * @author WCH
+   	 * @param bean
+   	 * @return
+   	 */
+    @PostMapping("selectUserInfoByRoleByUserId")
+    @ApiOperation(value = "排班用户(主键单/批量)查询接口", notes = "排班用户(主键单/批量)查询")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "ids", value = "用户主键{多个用户逗号拼接}", dataType = "String", required = true),
+   	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+   	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String")
+    })
+    public ResponseEntity<Result<?>> selectUserInfoByRoleByUserId( String tenantDomain,String windFarm,String ids) {
+        try {
+           Result<?> userInfoList= this.userService.selectUserInfoByRoleByUserId(tenantDomain,windFarm,ids);
+       	   return ResponseEntity.status(HttpStatus.OK).body(userInfoList);
+        } catch (Exception e) {
+            log.error("排班用户主键查询错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("排班用户主键查询错误！"));
     }
 
 }

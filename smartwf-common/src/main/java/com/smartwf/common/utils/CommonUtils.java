@@ -99,6 +99,7 @@ public class CommonUtils {
     	//设置过期时间
     	UserThreadLocal.setUser(user);
     	redisService.set(sessionId,JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
+    	request.setAttribute("userInfo",Wso2ClientUtils.resUserInfo(user));
     	return true;
 	}
 	

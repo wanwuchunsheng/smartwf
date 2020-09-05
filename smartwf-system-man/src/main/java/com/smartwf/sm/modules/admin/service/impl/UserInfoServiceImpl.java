@@ -499,4 +499,17 @@ public class UserInfoServiceImpl implements UserInfoService{
 		}
 		
 	}
+
+	/**
+   	 *  排班用户(主键)查询
+   	 *   查询所有
+   	 * @author WCH
+   	 * @param bean
+   	 * @return
+   	 */
+	@Override
+	public Result<?> selectUserInfoByRoleByUserId(String tenantDomain, String windFarm, String ids) {
+		List<UserInfo> userInfoList=this.userInfoDao.selectUserInfoByRoleByUserId(tenantDomain,windFarm,Constants.SHIFT_GROUP,ids);
+		return Result.data(Constants.EQU_SUCCESS,userInfoList);
+	}
 }

@@ -2,11 +2,18 @@ package com.smartwf.sm.modules.admin.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +21,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.handler.UserProfile;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.pojo.User;
+import com.smartwf.sm.config.ftp.FtpConfig;
+import com.smartwf.sm.config.ftp.FtpUtil;
+import com.smartwf.sm.config.redis.StreamProducer;
 
+import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,6 +49,12 @@ public class FileUploadController {
 	
 	@Value("${web.upload-path}")
 	private String localFilePath;
+	
+	@Autowired
+	private FtpConfig ftpConfig;
+	
+	@Autowired
+	private StreamProducer streamProducer;
 	
 	
 	/**
@@ -66,6 +85,10 @@ public class FileUploadController {
 	                }
 	                // 上传到指定目录
 	                file.transferTo(dest);
+	                boolean result =FtpUtil.ftpUpload(newFileName, ftpConfig.getUrl(),ftpConfig.getPort(),ftpConfig.getUsername(), ftpConfig.getPassword(), dest.toString(), ftpConfig.getRemotePath()+"/image/");
+	        		if (result) {
+	        			 return ResponseEntity.ok(Result.msg(Constants.EQU_SUCCESS, "上传成功！"));
+	        		} 
 	                return ResponseEntity.status(HttpStatus.OK).body(Result.msg(datdDirectory));
 	            }catch (Exception e){
 	            	log.error("文件上传异常！{}", e.getMessage(), e);
@@ -73,6 +96,26 @@ public class FileUploadController {
 	            }
 	        }
 	    }
+	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("失败！请检查上传的文件"));
+	}
+	
+	/**
+	 * 功能说明：
+	 * @author WCH
+	 * @dateTime 2020-9-3 17:58:47
+	 * */
+    @GetMapping("ftpUpload")
+    @ApiOperation(value = "ftp图片上传接口", notes = "ftp图片上传")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "localDir", value = "本地图片路径", dataType = "String")
+    })
+	public ResponseEntity<Result<?>> ftpUpload(String localDir ) {
+		String fileName = UUID.randomUUID().toString();
+		fileName=fileName+localDir.substring(localDir.lastIndexOf("."));
+		boolean result =FtpUtil.ftpUpload(fileName, ftpConfig.getUrl(),ftpConfig.getPort(),ftpConfig.getUsername(), ftpConfig.getPassword(), localDir, ftpConfig.getRemotePath()+"/image/");
+		if (result) {
+			 return ResponseEntity.ok(Result.msg(Constants.EQU_SUCCESS, "上传成功！"));
+		} 
 	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("失败！请检查上传的文件"));
 	}
 	
@@ -88,7 +131,8 @@ public class FileUploadController {
     	    @ApiImplicitParam(paramType = "query", name = "filePath", value = "删除路径", dataType = "String",required = true)
     })
     @TraceLog(content = "删除文件", paramIndexs = {0})
-	public void delFile(String filePath) {
+	public void delFile(HttpServletRequest request, String filePath) {
+    	/**
     	StringBuffer sb=new StringBuffer();
     	File delFile=null;
 		try {
@@ -98,6 +142,11 @@ public class FileUploadController {
 		} catch (Exception e) {
 			log.error("删除文件异常！{}", e.getMessage(), e);
 		}
+		*/
+    	User user=UserProfile.getUser(request);
+    	Map<String,String> map= new HashMap<>();
+    	map.put("farmMember", JSONUtil.toJsonStr(user));
+    	streamProducer.sendMsg("topic:pms2", map);
 	}
 	
 	/**
@@ -116,6 +165,8 @@ public class FileUploadController {
 	    out.flush();
 	    out.close();
 	}
+
+	
 
 	
 }
