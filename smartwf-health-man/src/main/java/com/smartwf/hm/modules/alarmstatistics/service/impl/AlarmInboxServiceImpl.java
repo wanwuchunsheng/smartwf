@@ -1,6 +1,8 @@
 package com.smartwf.hm.modules.alarmstatistics.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -102,11 +104,21 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 * @return
 	 */
 	@Override
-	public Integer selectAlarmsCountByAll(String tenantDomain) {
+	public Integer selectAlarmsCountByAll(String tenantDomain,String windFarm) {
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("tenant_domain", tenantDomain);
 		queryWrapper.eq("incident_type", Constants.ONE);
 		queryWrapper.eq("alarm_status", Constants.ZERO);
+		queryWrapper.eq("alarm_status", Constants.ZERO);
+		//支持批量拼接
+		if(StringUtils.isNotBlank(windFarm)) {
+			List<String> list=new ArrayList<>();
+			String[] str=windFarm.split(",");
+			for(String s:str) {
+				list.add(s);
+			}
+			queryWrapper.in("wind_farm", list);
+		}
 		Integer count= this.alarmInboxDao.selectCount(queryWrapper);
 		return count;
 	}
@@ -253,12 +265,9 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
  	 */
 	@Override
 	public void addKeyPosition(KeyPosition bean) {
-		//1)将字符串转换成字符串数组对象
 		bean.setCreateTime(new Date());
-		//2）保存前判断是否存在
 		KeyPosition kp=this.keyPositionDao.selectByDeviceCode(bean);
 		if(kp==null) {
-			//3）保存
 			this.keyPositionDao.insert(bean);
 		}
 	}
@@ -276,6 +285,15 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		QueryWrapper<KeyPosition> queryWrapper = new QueryWrapper<>();
   		queryWrapper.eq("asset_number", bean.getAssetNumber()); 
   		queryWrapper.eq("tenant_domain", bean.getTenantDomain());
+  	    //支持批量拼接
+		if(StringUtils.isNotBlank(bean.getWindFarm())) {
+			List<String> list=new ArrayList<>();
+			String[] str=bean.getWindFarm().split(",");
+			for(String s:str) {
+				list.add(s);
+			}
+			queryWrapper.in("wind_farm", list);
+		}
 		//2）设备编码删除
 		this.keyPositionDao.delete(queryWrapper);
 	}
@@ -422,12 +440,21 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 * @return
 	 */
 	@Override
-	public Integer selectAlarmsCountByToday(String tenantDomain) {
+	public Integer selectAlarmsCountByToday(String tenantDomain,String windFarm) {
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("tenant_domain", tenantDomain);
 		queryWrapper.ge("create_time", DateUtil.today());
 		//1故障  2缺陷
 		queryWrapper.eq("incident_type", Constants.ONE);
+		//支持批量拼接
+		if(StringUtils.isNotBlank(windFarm)) {
+			List<String> list=new ArrayList<>();
+			String[] str=windFarm.split(",");
+			for(String s:str) {
+				list.add(s);
+			}
+			queryWrapper.in("wind_farm", list);
+		}
 		Integer count= this.alarmInboxDao.selectCount(queryWrapper);
 		return count;
 	}

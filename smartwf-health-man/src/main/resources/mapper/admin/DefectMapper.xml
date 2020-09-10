@@ -114,6 +114,9 @@
         <if test="bean.tenantDomain != null ">
             and a.tenant_domain=#{bean.tenantDomain}
         </if>
+        <if test="bean.windFarm != null ">
+            and a.wind_farm in (${bean.windFarm}) 
+        </if>
         <if test="bean.alarmCode != null ">
             and a.alarm_code=#{bean.alarmCode}
         </if>

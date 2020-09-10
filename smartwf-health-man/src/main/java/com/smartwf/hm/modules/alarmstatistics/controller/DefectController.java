@@ -136,11 +136,12 @@ public class DefectController {
     @GetMapping("selectDefectCountByAll")
     @ApiOperation(value = "缺陷未处理总数查询接口", notes = "缺陷未处理总数查询")
     @ApiImplicitParams({
-	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true)
+	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
 	})
-    public ResponseEntity<Result<?>> selectDefectCountByAll(String tenantDomain) {
+    public ResponseEntity<Result<?>> selectDefectCountByAll(String tenantDomain,String windFarm) {
         try {
-        	Integer count=this.defectService.selectDefectCountByAll(tenantDomain);
+        	Integer count=this.defectService.selectDefectCountByAll(tenantDomain, windFarm);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
         } catch (Exception e) {
             log.error("缺陷未处理总数查询错误！{}", e.getMessage(), e);

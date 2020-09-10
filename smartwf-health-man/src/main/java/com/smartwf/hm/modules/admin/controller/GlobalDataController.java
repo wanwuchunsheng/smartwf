@@ -1,5 +1,7 @@
 package com.smartwf.hm.modules.admin.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.handler.UserProfile;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
@@ -50,9 +53,9 @@ public class GlobalDataController {
      */
     @GetMapping("oauth2client")
     @ApiOperation(value = "授权登录", notes = "授权登录，获取用户基础信息")
-    public ResponseEntity<Result<?>> oauth2client(User bean) {
+    public ResponseEntity<Result<?>> oauth2client(HttpServletRequest request, User bean) {
         try {
-        	User user=UserThreadLocal.getUser();
+        	User user=UserProfile.getUser(request);
     		//成功返回
     		return ResponseEntity.ok(Result.data(user));
         } catch (Exception e) {

@@ -58,7 +58,7 @@ public interface DefectService {
 	 * 实时缺陷总数查询
 	 * @return
 	 */
-	Integer selectDefectCountByAll(String tenantDomain);
+	Integer selectDefectCountByAll(String tenantDomain, String windFarm);
 	/**
    	 * 查询所有缺陷记录信息 
    	 * @param faultInfoId

@@ -46,16 +46,11 @@ public class FaultSolutionInfoController {
     @PostMapping("saveFaultSolutionInfo")
     @ApiOperation(value = "故障解决方案批量录入接口", notes = "故障解决方案批量录入")
     @ApiImplicitParams({
-	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "faultCode", value = "故障代码", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "故障解决方案（JOSN字符串）", dataType = "String",required = true)
     })
     public ResponseEntity<Result<?>> saveFaultSolutionInfo(FaultSolutionInfo bean) {
         try {
-        	//验证参数
-        	if(StringUtils.isBlank(bean.getTenantDomain()) || StringUtils.isBlank(bean.getRemark())) {
-        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"参数为空！"));
-        	}
-        	//保存
         	this.faultSolutionInfoService.saveFaultSolutionInfo(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
         } catch (Exception e) {
@@ -72,14 +67,13 @@ public class FaultSolutionInfoController {
     @DeleteMapping("deleteFaultSolutionInfo")
     @ApiOperation(value = "故障解决方案删除接口", notes = "故障解决方案删除")
     @ApiImplicitParams({
-	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "faultCode", value = "故障代码", dataType = "String",required = true)
     })
     @TraceLog(content = "故障解决方案删除", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteFaultSolutionInfo(FaultSolutionInfo bean) {
     	try {
     		 this.faultSolutionInfoService.deleteFaultSolutionInfo(bean);
-    	        return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"删除成功"));
+    	     return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"删除成功"));
 		} catch (Exception e) {
 			log.error("故障解决方案删除错误！{}", e.getMessage(), e);
 		}
@@ -94,7 +88,6 @@ public class FaultSolutionInfoController {
     @DeleteMapping("deleteFaultSolutionInfoById")
     @ApiOperation(value = "故障解决方案（主键）删除接口", notes = "故障解决方案（主键）删除")
     @ApiImplicitParams({
-	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	  @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true)
     })
     @TraceLog(content = "故障解决方案（主键）删除", paramIndexs = {0})
@@ -117,7 +110,6 @@ public class FaultSolutionInfoController {
     @GetMapping("selectFaultSolInfoByFaultCode")
     @ApiOperation(value = "故障解决方案（故障代码）查询接口", notes = "故障解决方案（故障代码）查询")
     @ApiImplicitParams({
-	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	  @ApiImplicitParam(paramType = "query", name = "faultCode", value = "故障代码", dataType = "String",required = true)
     })
     public ResponseEntity<Result<?>> selectFaultSolInfoByFaultCode(FaultSolutionInfo bean) {

@@ -7,8 +7,11 @@
         select 
         	id 
         from key_position where asset_number =#{bean.assetNumber}
-         <if test="bean.tenantDomain != null ">
+        <if test="bean.tenantDomain != null ">
           and tenant_domain = #{bean.tenantDomain}
+        </if>
+        <if test="bean.windFarm != null ">
+          and wind_farm in ( ${bean.windFarm} )
         </if>
     </select>
     
@@ -27,6 +30,9 @@
         from key_position where 1=1
         <if test="bean.tenantDomain != null ">
           and tenant_domain = #{bean.tenantDomain}
+        </if>
+        <if test="bean.windFarm != null ">
+          and wind_farm in ( ${bean.windFarm} )
         </if>
     </select>
    

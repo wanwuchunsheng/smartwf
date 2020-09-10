@@ -3,6 +3,7 @@ package com.smartwf.hm.modules.knowledgebase.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -22,7 +23,7 @@ public class FaultSolutionInfo implements Serializable {
 	/**
 	 * 主键
 	 */
-	@TableId
+	@TableId(type = IdType.UUID)
 	private String id;
 	/**
 	 * 故障代码表id

@@ -58,7 +58,90 @@ public class GlobalDataController {
 	@Autowired
     private Wso2Config wso2Config;
 	
-	 /**
+	 
+   
+    /**
+     * @Description 根据用户等级，返回租户列表
+     * @param MgrType {2平台管理员 1管理员 0普通}
+     * @return
+     */
+    @GetMapping("tenantByMgrType")
+    @ApiOperation(value = "用户等级查询租户列表接口", notes = "用户等级查询租户列表信息")
+    public ResponseEntity<Result<?>> tenantByMgrType() {
+        try {
+           //获取用户信息
+           User user=UserThreadLocal.getUser();
+           //返回租户列表
+           Result<?> result=this.globalDataService.selectTenantByPage(user);
+	       return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("根据用户等级，返回租户列表错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("根据用户等级，返回租户列表错误！"));
+    }
+    
+    
+    /**
+     * @Description 通过租户查询   - 区公司列表
+     * @return
+     */
+    @GetMapping("distCompanyAll")
+    @ApiOperation(value = "租户查询区公司接口", notes = "租户查询区公司信息")
+    @ApiImplicitParams({
+	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> distCompanyAll(Integer tenantId) {
+        try {
+           Result<?> result= this.globalDataService.distCompanyAll(tenantId);
+           return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("租户查询区公司错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("租户查询区公司错误！"));
+    }
+    
+    
+    /**
+     * @Description 通过租户查询   - 所有风场
+     * @return
+     */
+    @GetMapping("windFarmByTenantId")
+    @ApiOperation(value = "租户查询风场接口", notes = "租户查询风场信息")
+    @ApiImplicitParams({
+	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> windFarmByTenantId(Integer tenantId) {
+        try {
+           Result<?> result= this.globalDataService.windFarmByTenantId(tenantId);
+           return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("获取区公司数据错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("获取区公司数据错误！"));
+    }
+    
+    
+    /**
+     * @Description 通过租户/区公司查询  - 风场集合
+     * @return
+     */
+    @GetMapping("windFarmByDistCompanyId")
+    @ApiOperation(value = "租户/区公司查询风场接口", notes = "租户/区公司查询风场信息")
+    @ApiImplicitParams({
+	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+	    @ApiImplicitParam(paramType = "query", name = "orgId", value = "区公司（主键）", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> windFarmByDistCompanyId(Integer tenantId,Integer orgType,Integer orgId) {
+        try {
+           Result<?> result= this.globalDataService.windFarmAll(tenantId,orgId);
+      	   return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("租户/区公司查询风场错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("租户/区公司查询风场错误！"));
+    }
+    
+    /**
      * @Description 租户列表
      * @return
      */
@@ -76,6 +159,7 @@ public class GlobalDataController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("获取租户基础数据错误！"));
     }
+    
     
     /**
      * @Description 组织架构列表

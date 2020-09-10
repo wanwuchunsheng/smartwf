@@ -47,6 +47,10 @@ public class KeyPosition implements Serializable{
 	 */
 	private String tenantDomain;
 	/**
+	 * 风场
+	 */
+	private String windFarm;
+	/**
 	 * 备注
 	 */
 	private String remark;

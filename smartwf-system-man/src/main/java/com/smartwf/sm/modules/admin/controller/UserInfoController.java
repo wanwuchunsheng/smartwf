@@ -129,11 +129,11 @@ public class UserInfoController {
     }
     
     /**
-     * @Description： 修改用户资料
+     * @Description： 修改用户资料 - wso2级联修改
      * @return
      */
     @PutMapping("updateUserInfo")
-    @ApiOperation(value = "修改接口", notes = "修改用户资料资料")
+    @ApiOperation(value = "用户修改（级联wso2）接口", notes = "修改用户资料资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "organizationIds", value = "组织架构（主键），逗号拼接", dataType = "String"),
@@ -163,6 +163,42 @@ public class UserInfoController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("修改用户资料信息错误！"));
     }
+    
+    
+    /**
+     * @Description： 修改用户资料  - 个人中心
+     * @return
+     */
+    @PutMapping("updateBaseUserInfo")
+    @ApiOperation(value = "用户（基础）信息修改接口", notes = "修改用户资料资料")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录账号", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "pwd", value = "密码", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "mobile", value = "手机号", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "phone", value = "电话", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
+ 	    @ApiImplicitParam(paramType = "query", name = "sex", value = "性别（0-女 1-男）", dataType = "Integer"),
+ 	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "等级（0-普通 1-管理员 2-超级管理员）", dataType = "Integer"),
+ 	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
+ 	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "Integer"),
+ 	    @ApiImplicitParam(paramType = "query", name = "address", value = "联系地址", dataType = "String"),
+ 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
+    })
+    @TraceLog(content = "修改用户资料", paramIndexs = {0})
+    public ResponseEntity<Result<?>> updateBaseUserInfo(UserInfo bean) {
+        try {
+            this.userService.updateBaseUserInfo(bean);
+            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
+        } catch (Exception e) {
+            log.error("修改用户资料信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("修改用户资料信息错误！"));
+    }
+    
+    
     
     /**
      * @Description： 删除用户资料
@@ -216,14 +252,14 @@ public class UserInfoController {
    	 * @return
    	 */
     @PostMapping("selectUserInfoByRoleParam")
-    @ApiOperation(value = "排班用户查询接口", notes = "排班用户查询")
+    @ApiOperation(value = "排班用户（分页）查询接口", notes = "排班用户查询")
     @ApiImplicitParams({
    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String")
     })
-    public ResponseEntity<Result<?>> selectUserInfoByRoleParam( String tenantDomain,String windFarm) {
+    public ResponseEntity<Result<?>> selectUserInfoByRoleParam(Page<UserInfo> page, String tenantDomain,String windFarm) {
         try {
-           Result<?> userInfoList= this.userService.selectUserInfoByRoleParam(tenantDomain,windFarm);
+           Result<?> userInfoList= this.userService.selectUserInfoByRoleParam(page,tenantDomain,windFarm);
        	   return ResponseEntity.status(HttpStatus.OK).body(userInfoList);
         } catch (Exception e) {
             log.error("排班用户查询错误！{}", e.getMessage(), e);

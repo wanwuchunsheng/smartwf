@@ -1,5 +1,6 @@
 package com.smartwf.hm.modules.alarmstatistics.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -232,13 +233,22 @@ public class DefectServiceImpl implements DefectService {
 	 * @return
 	 */
 	@Override
-	public Integer selectDefectCountByAll(String tenantDomain) {
+	public Integer selectDefectCountByAll(String tenantDomain , String windFarm) {
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("tenant_domain", tenantDomain);
 		//1故障  2缺陷
 		queryWrapper.eq("incident_type", Constants.TWO);
 		//0未处理
 		queryWrapper.eq("alarm_status", Constants.ZERO);
+		//支持批量拼接
+		if(StringUtils.isNotBlank(windFarm)) {
+			List<String> list=new ArrayList<>();
+			String[] str=windFarm.split(",");
+			for(String s:str) {
+				list.add(s);
+			}
+			queryWrapper.in("wind_farm", list);
+		}
 		Integer count= this.defectDao.selectCount(queryWrapper);
 		return count;
 	}

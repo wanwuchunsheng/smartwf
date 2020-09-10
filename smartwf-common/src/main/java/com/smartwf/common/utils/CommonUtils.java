@@ -96,10 +96,11 @@ public class CommonUtils {
     	user.setIdToken(String.valueOf(oAuthResponse.getParam("id_token")));
     	user.setSessionId(sessionId);
     	user.setSessionState(sessionState);
-    	//设置过期时间
+    	//请求存储数据
     	UserThreadLocal.setUser(user);
-    	redisService.set(sessionId,JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
     	request.setAttribute("userInfo",Wso2ClientUtils.resUserInfo(user));
+    	//设置过期时间
+    	redisService.set(sessionId,JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
     	return true;
 	}
 	
@@ -119,9 +120,9 @@ public class CommonUtils {
         }
         //2验证accessToken是否失效{可以由wso2帮忙验证，可以由过期时间验证，快过期前刷新下}
         User user= JSONUtil.toBean(mapStr, User.class);
-    	long nowDateTimes=DateUtil.currentSeconds();
-        if( (user.getDateTime()-nowDateTimes)< Constants.TOKEN_TIMEOUT ) {
-    	    //if(!Wso2ClientUtils.reqWso2CheckToken(wso2Config,user)) {}
+    	//long nowDateTimes=DateUtil.currentSeconds();
+        //if( (user.getDateTime()-nowDateTimes)< Constants.TOKEN_TIMEOUT ) {}
+    	if(!Wso2ClientUtils.reqWso2CheckToken(wso2Config,user)) {
     		//重置wso2令牌时间
         	OAuthClientResponse oAuthResponse =Wso2ClientUtils.refreshAccessToken(wso2Config, user);
         	//验证刷新

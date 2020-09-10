@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.admin.service;
 
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Post;
@@ -54,6 +55,30 @@ public interface GlobalDataService {
 	 * 
 	 * */
 	void flushCache(GlobalData bean);
+	
+	/**
+     * @param tenantId 
+	 * @Description 区公司列表
+     * @return
+     */
+	Result<?> distCompanyAll(Integer tenantId);
+	/**
+     * @Description 通过租户查询风场集合
+     * @return
+     */
+	Result<?> windFarmAll(Integer tenantId,Integer orgId);
+	/**
+     * @Description 通过租户查询   - 所有风场
+     * @return
+     */
+	Result<?> windFarmByTenantId(Integer tenantId);
+	
+	/**
+     * @Description 根据用户等级，返回租户列表
+     * @param MgrType {2平台管理员 1管理员 0普通}
+     * @return
+     */
+	Result<?> selectTenantByPage(User user);
 
 	
 }

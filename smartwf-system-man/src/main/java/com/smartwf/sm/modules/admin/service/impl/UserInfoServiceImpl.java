@@ -473,9 +473,9 @@ public class UserInfoServiceImpl implements UserInfoService{
    	 * @return
    	 */
 	@Override
-	public Result<?> selectUserInfoByRoleParam(String tenantDomain,String windFarm){
-		List<UserInfo> userInfoList=this.userInfoDao.selectUserInfoByRoleParam(tenantDomain,windFarm,Constants.SHIFT_GROUP);
-		return Result.data(Constants.EQU_SUCCESS,userInfoList);
+	public Result<?> selectUserInfoByRoleParam(Page<UserInfo> page,String tenantDomain,String windFarm){
+		List<UserInfo> userInfoList=this.userInfoDao.selectUserInfoByRoleParam(tenantDomain,windFarm,Constants.SHIFT_GROUP,page);
+		return Result.data(Constants.EQU_SUCCESS,page.getTotal(), userInfoList);
 	}
 
 	
@@ -511,5 +511,14 @@ public class UserInfoServiceImpl implements UserInfoService{
 	public Result<?> selectUserInfoByRoleByUserId(String tenantDomain, String windFarm, String ids) {
 		List<UserInfo> userInfoList=this.userInfoDao.selectUserInfoByRoleByUserId(tenantDomain,windFarm,Constants.SHIFT_GROUP,ids);
 		return Result.data(Constants.EQU_SUCCESS,userInfoList);
+	}
+
+	/**
+     * @Description： 修改用户资料  - 个人中心
+     * @return
+     */
+	@Override
+	public void updateBaseUserInfo(UserInfo bean) {
+		this.userInfoDao.updateById(bean);
 	}
 }

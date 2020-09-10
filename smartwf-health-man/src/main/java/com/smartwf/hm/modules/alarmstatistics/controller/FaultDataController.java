@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -73,6 +75,7 @@ public class FaultDataController {
     @ApiOperation(value = "故障报警数据录入接口", notes = "故障报警数据录入")
     @ApiImplicitParams({
 	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String",required = true),
@@ -85,8 +88,7 @@ public class FaultDataController {
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "故障起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ,required = true),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "故障截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
-	        @ApiImplicitParam(paramType = "query", name = "manufacturers", value = "厂家", dataType = "String"),
-	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String")
+	        @ApiImplicitParam(paramType = "query", name = "manufacturers", value = "厂家", dataType = "String")
     })
     public ResponseEntity<Result<?>> saveFaultInformation(FaultInformation bean) {
         try {
@@ -106,7 +108,8 @@ public class FaultDataController {
     @PostMapping(value = "saveDefect", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     @ApiOperation(value = " 缺陷工单录入接口", notes = " 缺陷工单录入")
     @ApiImplicitParams({
-	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true),
 		    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String",required = true),

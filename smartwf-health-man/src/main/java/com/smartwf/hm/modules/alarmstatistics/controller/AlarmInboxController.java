@@ -60,6 +60,7 @@ public class AlarmInboxController {
     @ApiOperation(value = "故障报警分页查询接口", notes = "故障报警分页查询")
     @ApiImplicitParams({
 	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String"),
@@ -94,7 +95,8 @@ public class AlarmInboxController {
     @PostMapping("selectAlarmInforByAll")
     @ApiOperation(value = "查询所有故障报警接口", notes = "查询所有故障报警")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String"),
@@ -119,7 +121,7 @@ public class AlarmInboxController {
     
     /**
 	 * @Description: 故障报警修改
-	 *    重点关注
+	 * @param WCH   
 	 * @param id
 	 */
     @PutMapping("updateAlarmInforById")
@@ -201,11 +203,12 @@ public class AlarmInboxController {
     @GetMapping("selectAlarmsCountByAll")
     @ApiOperation(value = "实时故障报警未处理总数接口", notes = "实时故障报警未处理总数查询")
     @ApiImplicitParams({
-	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true)
+	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
 	})
-    public ResponseEntity<Result<?>> selectAlarmsCountByAll(String tenantDomain) {
+    public ResponseEntity<Result<?>> selectAlarmsCountByAll(String tenantDomain,String windFarm) {
         try {
-        	Integer count=this.alarmInboxService.selectAlarmsCountByAll(tenantDomain);
+        	Integer count=this.alarmInboxService.selectAlarmsCountByAll(tenantDomain,windFarm);
     	   	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
         } catch (Exception e) {
             log.error("实时故障报警总数信息查询错误！{}", e.getMessage(), e);
@@ -221,11 +224,12 @@ public class AlarmInboxController {
     @GetMapping("selectAlarmsCountByToday")
     @ApiOperation(value = "今日新增总数查询接口", notes = "今日新增总数查询")
     @ApiImplicitParams({
-	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true)
+	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
 	})
-    public ResponseEntity<Result<?>> selectAlarmsCountByToday(String tenantDomain) {
+    public ResponseEntity<Result<?>> selectAlarmsCountByToday(String tenantDomain,String windFarm) {
         try {
-        	Integer count=this.alarmInboxService.selectAlarmsCountByToday(tenantDomain);
+        	Integer count=this.alarmInboxService.selectAlarmsCountByToday(tenantDomain,windFarm);
     	   	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
         } catch (Exception e) {
             log.error("今日新增总数查询错误！{}", e.getMessage(), e);
@@ -235,7 +239,7 @@ public class AlarmInboxController {
     
     
     /**
-   	 * @Description: 查询所有故障报警记录信息 
+   	 * @Description: 查询所有故障操作记录信息 
    	 *   故障操作记录
    	 * @param faultInfoId
    	 * @param tenantDomain
@@ -306,7 +310,8 @@ public class AlarmInboxController {
 	    @PostMapping("selectKeyPosition")
 	    @ApiOperation(value = "重点机位已添加机位数据查询接口", notes = "重点机位已添加机位数据查询")
 	    @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String")
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPosition(KeyPosition bean) {
 	       try {
@@ -328,6 +333,7 @@ public class AlarmInboxController {
 	    @ApiOperation(value = "重点机位添加接口", notes = "重点机位添加")
 	    @ApiImplicitParams({
     	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+    	      @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String",required = true),
 	     	  @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码 ", dataType = "String", required = true ),
 	     	  @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码 ", dataType = "String", required = true ),
 	     	  @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称 ", dataType = "String", required = true ),
@@ -356,6 +362,7 @@ public class AlarmInboxController {
 	    @ApiOperation(value = "重点机位删除接口", notes = "重点机位删除")
 	    @ApiImplicitParams({
     	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true ),
+    	      @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String",required = true),
 	     	  @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String", required = true)
 	    })
 	    public ResponseEntity<Result<?>> deleteKeyPosition(KeyPosition bean) {
@@ -378,7 +385,8 @@ public class AlarmInboxController {
 	    @PostMapping("selectKeyPositionByCount")
 	    @ApiOperation(value = "重点机位统计图表数据查询接口", notes = "重点机位统计图表数据查询")
 	    @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true)
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByCount(KeyPosition bean) {
 	       try {
@@ -400,7 +408,8 @@ public class AlarmInboxController {
 	    @PostMapping("selectKeyPositionByList")
 	    @ApiOperation(value = "重点机位统计列表数据查询接口", notes = "重点机位统计列表数据查询")
 	    @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true)
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByList(KeyPosition bean) {
 	       try {
@@ -422,6 +431,7 @@ public class AlarmInboxController {
 	    @ApiOperation(value = "重点机位(单个/全部)故障报警数据查询接口", notes = "单个重点机位所有故障报警数据查询")
 	    @ApiImplicitParams({
     	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String" , required = true),
+    	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
 	     	    @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码", dataType = "String"),
 	     	    @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称", dataType = "String")
 	    })

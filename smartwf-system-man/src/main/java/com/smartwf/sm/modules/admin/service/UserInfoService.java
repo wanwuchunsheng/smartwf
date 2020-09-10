@@ -89,7 +89,7 @@ public interface UserInfoService {
    	 * @param bean
    	 * @return
    	 */
-	Result<?> selectUserInfoByRoleParam(String tenantDomain,String windFarm);
+	Result<?> selectUserInfoByRoleParam(Page<UserInfo> page,String tenantDomain,String windFarm);
 
 	/**
    	 *  排班用户(主键)查询
@@ -99,4 +99,10 @@ public interface UserInfoService {
    	 * @return
    	 */
 	Result<?> selectUserInfoByRoleByUserId(String tenantDomain, String windFarm, String ids);
+
+	/**
+     * @Description： 修改用户资料  - 个人中心
+     * @return
+     */
+	void updateBaseUserInfo(UserInfo bean);
 }

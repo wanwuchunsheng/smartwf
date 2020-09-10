@@ -14,6 +14,9 @@
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
+            <if test="bean.windFarm != null ">
+	            and wind_farm in (${bean.windFarm}) 
+	        </if>
 		) a
 		group by a.fname order by a.fname asc
     </select>
@@ -29,6 +32,9 @@
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
+            <if test="bean.windFarm != null ">
+	            and wind_farm in (${bean.windFarm}) 
+	        </if>
 		) a
 		group by a.fname order by a.fname asc
     </select>
@@ -44,6 +50,9 @@
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
+            <if test="bean.windFarm != null ">
+	            and wind_farm in (${bean.windFarm}) 
+	        </if>
 		) a
 		group by a.fname order by a.fname asc
     </select>
@@ -63,6 +72,9 @@
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
+            <if test="bean.windFarm != null ">
+	            and wind_farm in (${bean.windFarm}) 
+	        </if>
 		) a  group by a.fname,a.alarm_level order by a.fname asc
     </select>
     
@@ -78,6 +90,9 @@
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
+            <if test="bean.windFarm != null ">
+	            and wind_farm in (${bean.windFarm}) 
+	        </if>
 		) a  group by a.alarm_status order by a.alarm_status asc
     </select>
     
@@ -93,6 +108,9 @@
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
+            <if test="bean.windFarm != null ">
+	          and wind_farm in (${bean.windFarm}) 
+	        </if>
 		) a  group by a.alarm_location order by a.alarm_location asc
     </select>
     

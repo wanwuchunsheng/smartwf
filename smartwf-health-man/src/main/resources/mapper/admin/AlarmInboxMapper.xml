@@ -29,6 +29,9 @@
         <if test="bean.tenantDomain != null ">
           and a.tenant_domain = #{bean.tenantDomain}
         </if>
+        <if test="bean.windFarm != null ">
+          and a.wind_farm in (${bean.windFarm}) 
+        </if>
         <if test="bean.alarmSource != null ">
           and a.alarm_source like '%${bean.alarmSource}%'
         </if>
@@ -89,6 +92,9 @@
         </if>
         <if test="bean.tenantDomain != null ">
           and a.tenant_domain = #{bean.tenantDomain}
+        </if>
+        <if test="bean.windFarm != null ">
+          and a.wind_farm in (${bean.windFarm}) 
         </if>
         <if test="bean.alarmSource != null ">
           and a.alarm_source like '%${bean.alarmSource}%'
@@ -156,71 +162,107 @@
         
     <!-- 重点机位统计 -->
     <select id="selectKeyPositionByCount" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
-         select 
-			f1.asset_number,
-			f1.device_name,
-			f1.status,
-			IFNULL(f2.alarm_status,0) as untreated,
-			IFNULL(f2.fault_type_day,0) as fault_type_day,
-			IFNULL(f2.fault_type_mouth,0) as fault_type_mouth,
-			IFNULL(f2.fault_type_all,0) as fault_type_all,
-			IFNULL(f2.start_time,0) as recent_time
-		from key_position f1 LEFT JOIN (
-			select 
-				d1.asset_number,
-	            d1.device_name,
-				d1.alarm_status,
-				d2.fault_type_day,
-				d3.fault_type_mouth,
-				d4.fault_type_all,
-				d5.start_time 
-		 from (
-               select asset_number,device_name,count(*) as fault_type_all from fault_information  where incident_type=1
-				   <if test="bean.tenantDomain != null ">
+			SELECT
+				f1.asset_number,
+				f1.device_name,
+				f1.STATUS,
+			  IFNULL(d4.fault_type_all, 0) AS fault_type_all,
+			  IFNULL(d2.fault_type_day, 0) AS fault_type_day,
+			  IFNULL(d3.fault_type_mouth, 0) AS fault_type_mouth,
+			  IFNULL(d5.start_time, 0) AS recent_time,
+			  IFNULL(d1.untreated, 0) AS untreated
+			FROM
+				key_position f1
+			LEFT JOIN (
+			  -- 累计报警
+						SELECT asset_number, device_name, count(*) AS fault_type_all
+						FROM
+							fault_information WHERE incident_type = 1
+						<if test="bean.tenantDomain != null ">
+				          and tenant_domain = #{bean.tenantDomain}
+				        </if>
+				        <if test="bean.windFarm != null ">
+				          and wind_farm in ( ${bean.windFarm} )
+				        </if>
+						GROUP BY asset_number, device_name
+			) d4 on f1.asset_number=d4.asset_number and f1.device_name=d4.device_name
+			left join (
+			 -- 今日报警
+			  SELECT 	asset_number, device_name, 	count(*) AS fault_type_day
+					FROM 	fault_information WHERE incident_type = 1 
+					<if test="bean.tenantDomain != null ">
+			          and tenant_domain = #{bean.tenantDomain}
+			        </if>
+			        <if test="bean.windFarm != null ">
+			          and wind_farm in ( ${bean.windFarm} )
+			        </if>
+					AND to_days(start_time) = to_days(now())
+					GROUP BY asset_number, device_name
+			
+			) d2 on f1.asset_number=d2.asset_number and f1.device_name=d2.device_name
+			left join (
+			-- 本月
+					SELECT
+						asset_number, device_name, count(*) AS fault_type_mouth
+					FROM
+						fault_information
+					WHERE incident_type = 1
+					<if test="bean.tenantDomain != null ">
+			          and tenant_domain = #{bean.tenantDomain}
+			        </if>
+			        <if test="bean.windFarm != null ">
+			          and wind_farm in ( ${bean.windFarm} )
+			        </if>
+					AND DATE_FORMAT(start_time, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+					GROUP BY asset_number, device_name
+			
+			) d3 on f1.asset_number=d3.asset_number and f1.device_name=d3.device_name
+			left join (
+			-- 最近时间
+					SELECT
+						a.asset_number, 
+			      a.device_name,
+						CASE 
+							WHEN a.start_time &gt;= 0 and  a.start_time &lt; 60 THEN concat(start_time ,'分钟')
+							WHEN a.start_time &gt;= 60 and  a.start_time &lt; 1440 THEN  concat( TRUNCATE(start_time/60,0),' 小时')
+							WHEN a.start_time &gt;= 1440 and  a.start_time &lt; 43200 THEN  concat( TRUNCATE(start_time/1440,0),' 天')
+						ELSE '大于一个月' END 'start_time'
+					FROM 	(	
+			         SELECT 	
+			           asset_number, device_name, TIMESTAMPDIFF( MINUTE, 	max(start_time), now() ) AS start_time
+					 FROM fault_information 
+			         WHERE incident_type = 1 
+			         <if test="bean.tenantDomain != null ">
+			          and tenant_domain = #{bean.tenantDomain}
+			         </if>
+			         <if test="bean.windFarm != null ">
+			          and wind_farm in ( ${bean.windFarm} )
+			         </if>
+					 GROUP BY asset_number, device_name
+					 ) a
+			) d5  on f1.asset_number=d5.asset_number and f1.device_name=d5.device_name
+			left join (
+			-- 未处理
+					SELECT asset_number, device_name, count(*) AS untreated
+					FROM fault_information 
+			    WHERE incident_type = 1 
+			     <if test="bean.tenantDomain != null ">
 		          and tenant_domain = #{bean.tenantDomain}
-		        </if>
-		       group by asset_number,device_name
-		 ) d4 LEFT JOIN (
-               select asset_number,device_name,count(*) as fault_type_mouth from fault_information  where incident_type=1
-		       <if test="bean.tenantDomain != null ">
-		          and tenant_domain = #{bean.tenantDomain}
-		        </if>
-		       and DATE_FORMAT( start_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) group by asset_number,device_name
-		) d3 on d3.device_name=d4.device_name  LEFT JOIN(
-                select a.asset_number,a.device_name,
-				CASE
-						WHEN a.start_time &gt;= 0 and  a.start_time &lt; 60 THEN concat(start_time ,'分钟')
-						WHEN a.start_time &gt;= 60 and  a.start_time &lt; 1440 THEN  concat( TRUNCATE(start_time/60,0),' 小时')
-						WHEN a.start_time &gt;= 1440 and  a.start_time &lt; 43200 THEN  concat( TRUNCATE(start_time/1440,0),' 天')
-				ELSE '大于一个月'
-				END 'start_time'
-				from (
-					select asset_number,device_name,TIMESTAMPDIFF(MINUTE,max(start_time),now() ) as start_time from fault_information where incident_type=1 
-					    <if test="bean.tenantDomain != null ">
-		            and tenant_domain = #{bean.tenantDomain}
-		          </if>
-			        group by asset_number,device_name    
-				) a 
-		) d5 on d3.device_name=d5.device_name  LEFT JOIN (
-	            select asset_number,device_name,count(*) as alarm_status from fault_information where  incident_type=1
-				<if test="bean.tenantDomain != null ">
-					and tenant_domain = #{bean.tenantDomain}
-				</if>
-				and alarm_status=0  group by asset_number,device_name
-		) d1 on d1.device_name=d5.device_name  LEFT JOIN (
-           select asset_number,device_name,count(*) as fault_type_day from fault_information  where  incident_type=1
-				<if test="bean.tenantDomain != null ">
-					and tenant_domain = #{bean.tenantDomain}
-				</if>
-				and to_days(start_time) = to_days(now()) group by asset_number,device_name
-		        ) d2 on d2.device_name=d1.device_name 
-		) f2 on f1.device_name=f2.device_name
-        where 1=1
-	    <if test="bean.tenantDomain != null ">
-	      and f1.tenant_domain = #{bean.tenantDomain}
-	    </if>
-        order by f1.asset_number
-
+		         </if>
+		         <if test="bean.windFarm != null ">
+		          and wind_farm in ( ${bean.windFarm} )
+		         </if>
+			     AND alarm_status = 0
+					GROUP BY asset_number, device_name
+			) d1 on f1.asset_number=d1.asset_number  and f1.device_name=d1.device_name
+			where 1=1
+			<if test="bean.tenantDomain != null ">
+	          and f1.tenant_domain = #{bean.tenantDomain}
+	         </if>
+	         <if test="bean.windFarm != null ">
+	          and f1.wind_farm in ( ${bean.windFarm} )
+	         </if>
+             order by f1.asset_number
     </select>
     
    <!-- 分页查询故障报警信息 -->
@@ -249,6 +291,9 @@
         where  b.incident_type=1
         <if test="bean.tenantDomain != null ">
           and b.tenant_domain = #{bean.tenantDomain}
+        </if>
+        <if test="bean.windFarm != null ">
+          and b.wind_farm in (${bean.windFarm}) 
         </if>
         <if test="bean.deviceCode != null ">
           and a.device_code = #{bean.deviceCode}

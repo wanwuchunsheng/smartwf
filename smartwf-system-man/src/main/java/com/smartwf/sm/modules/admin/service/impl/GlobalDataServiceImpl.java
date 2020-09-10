@@ -8,10 +8,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.StrUtils;
+import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Post;
@@ -24,6 +29,7 @@ import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
+import com.smartwf.sm.modules.admin.vo.TenantVO;
 import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
 import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
 
@@ -59,6 +65,31 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	
 	@Autowired
 	private IdentityConfigService identityConfigService;
+	
+	@Autowired
+	private TenantDao tenantDao;
+	
+
+	/**
+     * @Description 根据用户等级，返回租户列表
+     * @param MgrType {2平台管理员 1管理员 0普通}
+     * @return
+     */
+	@Override
+	public Result<?> selectTenantByPage(User user) {
+		//根据条件过滤
+		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
+		//降序
+		queryWrapper.orderByDesc("update_time"); 
+		//过滤启用租户
+		queryWrapper.eq("enable", Constants.ZERO);
+		//判断是否平台管理员{2平台管理员 1管理员 0普通}
+		if(!Constants.MGRTYPE_ADMIN.equals(user.getMgrType())) {
+			queryWrapper.eq("id", user.getTenantId());
+		}
+		List<Tenant> list=this.tenantDao.selectList(queryWrapper);
+		return Result.data(Constants.EQU_SUCCESS, list);
+	}
 
 	 /**
      * @Description 租户列表
@@ -66,12 +97,100 @@ public class GlobalDataServiceImpl implements GlobalDataService{
      */
 	@Override
 	public Result<?> tenantAll() {
-		List<Tenant> list=JSONUtil.toList(JSONUtil.parseArray(redisService.get("initTenant")), Tenant.class);//-----JsonUtil.jsonToList(redisService.get("initTenant"), Tenant.class);
+		List<Tenant> list=JSONUtil.toList(JSONUtil.parseArray(redisService.get("initTenant")), Tenant.class);
 		if(list!=null && list.size()>0) {
 			return Result.data(list);
 		}
 		return null;
 	}
+	
+	/**
+     * @Description 区公司列表
+     * @return
+     */
+	@Override
+	public Result<?> distCompanyAll(Integer tenantId) {
+		//获取所有租户下的组织架构数据
+		Map<String, Object> map = JSONUtil.parseObj(redisService.get("initOrganization"));
+		//判断是否为空
+		if(map!=null && map.size()> 0 ) {
+			//通过编码，获取对象集合
+			List<OrganizationVO> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get(Convert.toStr(tenantId))), OrganizationVO.class) ;	
+			//判断当前租户下是否有组织架构数据
+    		if(orglist!=null && orglist.size()>0 ) {
+    			List<OrganizationVO> reslist=new ArrayList<>();
+    			//orgType 0分公司  1风场  2一般组织{通过租户找出分区公司}
+    			for(OrganizationVO ov: orglist) {
+    				if(ov.getOrgType()!=null && ov.getOrgType()==Constants.ZERO) {
+    					reslist.add(ov);
+    				}
+    			}
+    			//返回列表数据
+        		return Result.data(reslist);
+    		}
+		}
+    	return null;
+	}
+	
+	/**
+     * @Description 通过租户查询   - 所有风场
+     * @return
+     */
+	@Override
+	public Result<?> windFarmByTenantId(Integer tenantId) {
+		//获取所有租户下的组织架构数据
+		Map<String, Object> map = JSONUtil.parseObj(redisService.get("initOrganization"));
+		//判断是否为空
+		if(map!=null && map.size()> 0 ) {
+			//通过编码，获取对象集合
+			List<OrganizationVO> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get(Convert.toStr(tenantId))), OrganizationVO.class) ;	
+			//判断当前租户下是否有组织架构数据
+    		if(orglist!=null && orglist.size()>0 ) {
+    			List<OrganizationVO> reslist=new ArrayList<>();
+    			//orgType 0分公司  1风场  2一般组织{通过租户找出分区公司}
+    			for(OrganizationVO ov: orglist) {
+    				if(ov.getOrgType()!=null && ov.getOrgType()==Constants.ONE) {
+    					reslist.add(ov);
+    				}
+    			}
+    			//返回列表数据
+        		return Result.data(reslist);
+    		}
+		}
+    	return null;
+	}
+	
+	
+	/**
+	 * @Description 通过租户，查询：风场集合
+	 * @param tenantId 租户主键
+	 * @param orgId 区
+	 * @return
+	 */
+	@Override
+	public Result<?> windFarmAll(Integer tenantId,Integer orgId) {
+		//获取所有租户下的组织架构数据
+		Map<String, Object> map = JSONUtil.parseObj(redisService.get("initOrganization"));
+		//判断是否为空
+		if(map!=null && map.size()> 0 ) {
+			//通过租户ID，获取对象集合
+			List<OrganizationVO> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get(Convert.toStr(tenantId))), OrganizationVO.class) ;	
+			//判断当前租户下是否有组织架构数据
+    		if(orglist!=null && orglist.size()>0 ) {
+    			List<OrganizationVO> reslist=new ArrayList<>();
+    			//orgType 0分公司  1风场  2一般组织{通过租户找出分区公司}
+    			for(OrganizationVO ov: orglist) {
+    				if(ov.getOrgType()!=null && ov.getOrgType()==Constants.ONE && ov.getUid()==orgId) {
+    					reslist.add(ov);
+    				}
+    			}
+    			//返回列表数据
+        		return Result.data(orglist);
+    		}
+		}
+    	return null;
+	}
+	
 
 	/**
      * @Description 组织架构列表
@@ -83,7 +202,6 @@ public class GlobalDataServiceImpl implements GlobalDataService{
     	//1）判断数据类型是否为空
     	if(null !=bean.getOrgType()) {
     		//2）获取所有租户下的组织架构数据
-			//获取数据字典全局数据
 			Map<String, Object> map = JSONUtil.parseObj(redisService.get("initOrganization"));
 			//判断是否为空
 			if(map!=null && map.size()> 0 ) {
@@ -321,6 +439,10 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		}
 		return treeNode;
 	}
+
+	
+	
+	
 
 
 }

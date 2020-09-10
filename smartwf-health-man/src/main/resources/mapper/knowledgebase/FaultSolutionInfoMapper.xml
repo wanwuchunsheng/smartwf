@@ -6,10 +6,8 @@
    <delete id="deleteFaultSolutionInfo" parameterType = "com.smartwf.hm.modules.knowledgebase.pojo.FaultSolutionInfo">
 	    delete 
 	       from fault_solution_info  
-	    where fault_code=#{bean.faultCode}
-	    <if test="bean.tenantDomain != null ">
-          and tenant_domain=#{bean.tenantDomain}
-        </if>
+	    where fault_code=#{bean.faultCode}  and type=#{bean.type}
+        
    </delete>
    
    
