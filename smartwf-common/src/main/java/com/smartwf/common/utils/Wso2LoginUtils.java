@@ -53,6 +53,7 @@ public class Wso2LoginUtils {
         	throw new CommonException(Constants.FORBIDDEN, "api接口访问无权限！");
     	};
     	*/
+        //修改请求参数
         request.setAttribute("userInfo",Wso2ClientUtils.resUserInfo(user));
         return true;
     }

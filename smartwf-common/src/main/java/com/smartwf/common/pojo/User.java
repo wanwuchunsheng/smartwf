@@ -180,7 +180,7 @@ public class User implements Serializable{
 	 *   通过下拉选择的风场{也是组织机构ID}
 	 *   
 	 */
-	private String atwindFarm;
+	private String atWindFarm;
 	
 	/**
 	 * 职务

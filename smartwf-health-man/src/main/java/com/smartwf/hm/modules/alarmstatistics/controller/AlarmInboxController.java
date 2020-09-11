@@ -333,7 +333,7 @@ public class AlarmInboxController {
 	    @ApiOperation(value = "重点机位添加接口", notes = "重点机位添加")
 	    @ApiImplicitParams({
     	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-    	      @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String",required = true),
+    	      @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true),
 	     	  @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码 ", dataType = "String", required = true ),
 	     	  @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码 ", dataType = "String", required = true ),
 	     	  @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称 ", dataType = "String", required = true ),
@@ -362,7 +362,7 @@ public class AlarmInboxController {
 	    @ApiOperation(value = "重点机位删除接口", notes = "重点机位删除")
 	    @ApiImplicitParams({
     	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true ),
-    	      @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String",required = true),
+    	      @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true),
 	     	  @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String", required = true)
 	    })
 	    public ResponseEntity<Result<?>> deleteKeyPosition(KeyPosition bean) {

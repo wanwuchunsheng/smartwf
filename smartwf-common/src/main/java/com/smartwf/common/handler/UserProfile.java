@@ -2,8 +2,11 @@ package com.smartwf.common.handler;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.User;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 public class UserProfile {
 	
 	
@@ -15,8 +18,22 @@ public class UserProfile {
 	 * 
 	 * */
 	public static User getUser(HttpServletRequest request) {
-		User userInfo=(User) request.getAttribute("userInfo");
-		return userInfo;
+		try {
+			//获取租户id
+			String atTennentId = request.getHeader("atTennentId");
+			//获取租户域
+			String atTennentDomain = request.getHeader("atTennentDomain");
+			//获取风场
+			String atWindFarm = request.getHeader("atwindFarm");
+			User userInfo=(User) request.getAttribute("userInfo");
+			userInfo.setAtTennentId(atTennentId);
+			userInfo.setAtTennentDomain(atTennentDomain);
+			userInfo.setAtWindFarm(atWindFarm);
+			return userInfo;
+		} catch (Exception e) {
+			log.info("获取用户信息异常{}-{}",e,e.getMessage());
+		}
+		return null;
 	}
 
 }
