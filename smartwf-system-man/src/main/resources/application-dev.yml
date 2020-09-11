@@ -92,7 +92,7 @@ spring:
     user:
       user-server-uri: https://identity.windmagics.com
     token:
-      token-refresh-time: 3600
+      token-refresh-time: 28800
       
 # 配置ftp服务器信息
 ftp: 
