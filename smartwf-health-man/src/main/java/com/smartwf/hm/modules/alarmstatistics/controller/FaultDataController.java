@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.config.ftp.FtpConfig;
@@ -86,8 +87,8 @@ public class FaultDataController {
     	    @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "故障起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ,required = true),
-            @ApiImplicitParam(paramType = "query", name = "endTime", value = "故障截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
+    	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "故障起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "String" ,required = true),
+            @ApiImplicitParam(paramType = "query", name = "endTime", value = "故障截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "String" ),
 	        @ApiImplicitParam(paramType = "query", name = "manufacturers", value = "厂家", dataType = "String")
     })
     public ResponseEntity<Result<?>> saveFaultInformation(FaultInformation bean) {
@@ -123,8 +124,8 @@ public class FaultDataController {
 		    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
 		    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String",required = true),
 		    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
-		    @ApiImplicitParam(paramType = "query", name = "startTime", value = "故障起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ,required = true),
-	        @ApiImplicitParam(paramType = "query", name = "endTime", value = "故障截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
+		    @ApiImplicitParam(paramType = "query", name = "startTime", value = "故障起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "String" ,required = true),
+	        @ApiImplicitParam(paramType = "query", name = "endTime", value = "故障截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "String" ),
 	        @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String" ),
 	        @ApiImplicitParam(paramType = "query", name = "discovererName", value = "发现人姓名（逗号拼接）", dataType = "String" ),
 	        @ApiImplicitParam(paramType = "query", name = "discovererId", value = "发现人id（逗号拼接）", dataType = "String" )
