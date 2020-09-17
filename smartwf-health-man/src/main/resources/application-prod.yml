@@ -102,7 +102,7 @@ spring:
   #各子系统地址
   system:
     pms:
-      server-uri: http://192.168.1.151:8181/pms
+      server-uri: https://portal.windmagics.com/pms
 # 配置ftp服务器信息
 ftp: 
   # ftp服务器的IP地址
