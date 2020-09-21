@@ -16,7 +16,7 @@ server:
     
 #指定本地文件路径
 web:
-    upload-path: ${user.home}/mnt/file/smartwf-hm/upload
+    upload-path: /mnt
     
 # spring
 spring:
