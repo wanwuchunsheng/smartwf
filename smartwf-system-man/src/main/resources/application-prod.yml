@@ -15,7 +15,7 @@ server:
     context-path: /smartwf_sys_backend   
 #指定本地文件路径
 web:
-    upload-path: ${user.home}/file/smartwf-sm/upload
+    upload-path: ${user.home}/mnt/smartwf-sm/upload
     
 # spring
 spring:

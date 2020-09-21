@@ -2,6 +2,7 @@ package com.smartwf.hm.modules.alarmstatistics.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -60,11 +61,12 @@ public class FileUploadController {
 	                // 获取图片的扩展名
 	                String extensionName = fileName.substring(fileName.indexOf("."));
 	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
-	                String newFileName = String.valueOf(System.currentTimeMillis())  + extensionName;
+	                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
 	                // 数据库保存的目录
 	                String datdDirectory = temp.concat(newFileName);
 	                // 文件路径
 	                String filePath = localFilePath+File.separator+temp;
+	                log.info("路径{}  路径{}",filePath, newFileName);
 	                File dest = new File(filePath, newFileName);
 	                if (!dest.getParentFile().exists()) {
 	                    dest.getParentFile().mkdirs();
