@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.User;
+import com.smartwf.common.utils.Wso2ClientUtils;
 
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
@@ -29,7 +30,7 @@ public class UserProfile {
 			userInfo.setAtTennentId(atTennentId);
 			userInfo.setAtTennentDomain(atTennentDomain);
 			userInfo.setAtWindFarm(atWindFarm);
-			return userInfo;
+			return Wso2ClientUtils.resUserInfo(userInfo);
 		} catch (Exception e) {
 			log.info("获取用户信息异常{}-{}",e,e.getMessage());
 		}

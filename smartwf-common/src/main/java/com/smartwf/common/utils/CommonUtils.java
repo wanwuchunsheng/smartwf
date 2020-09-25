@@ -94,13 +94,14 @@ public class CommonUtils {
     	user.setRefreshToken(String.valueOf(oAuthResponse.getParam("refresh_token")));
     	user.setAccessToken(String.valueOf(oAuthResponse.getParam("access_token")));
     	user.setIdToken(String.valueOf(oAuthResponse.getParam("id_token")));
+    	user.setRedirectUri(redirectUri);
     	user.setSessionId(sessionId);
     	user.setSessionState(sessionState);
-    	//请求存储数据
-    	UserThreadLocal.setUser(user);
-    	request.setAttribute("userInfo",Wso2ClientUtils.resUserInfo(user));
     	//设置过期时间
+    	UserThreadLocal.setUser(user);
     	redisService.set(sessionId,JSONUtil.toJsonStr(user) ,wso2Config.tokenRefreshTime);
+    	//请求存储数据
+    	request.setAttribute("userInfo",user);
     	return true;
 	}
 	

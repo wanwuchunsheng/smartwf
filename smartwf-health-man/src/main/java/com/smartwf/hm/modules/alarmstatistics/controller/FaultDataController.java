@@ -157,6 +157,8 @@ public class FaultDataController {
     	                }
     	                // 上传到临时指定目录
     	                fl.transferTo(dest);
+    	                sb.append(datdDirectory).append(",");
+    	                /**
     	                //上传文件到远程ftp服务器
     	                boolean result =FtpUtil.ftpUpload(newFileName, ftpConfig.getUrl(),ftpConfig.getPort(),ftpConfig.getUsername(), ftpConfig.getPassword(), dest.toString(), ftpConfig.getRemotePath()+"/image/");
     	                if (result) {
@@ -164,6 +166,7 @@ public class FaultDataController {
     	        		}
     	        		//删除本地文件
     	        		dest.delete();
+    	        		*/
         	        }
             	}
             }
