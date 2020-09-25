@@ -54,7 +54,7 @@ public class Wso2LoginUtils {
     	};
     	*/
         //修改请求参数
-        request.setAttribute("userInfo",Wso2ClientUtils.resUserInfo(user));
+        request.setAttribute("userInfo",user);
         return true;
     }
 }
