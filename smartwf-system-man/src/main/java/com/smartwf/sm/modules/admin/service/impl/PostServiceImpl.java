@@ -17,7 +17,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.StrUtils;
+import com.smartwf.common.utils.CkUtils;
 import com.smartwf.sm.modules.admin.dao.PostDao;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Organization;
@@ -121,7 +121,7 @@ public class PostServiceImpl implements PostService{
 			//删除用户职务
 			this.postDao.deleteUserPostById(bean);
 		}else {
-			String ids=StrUtils.regex(bean.getIds());
+			String ids=CkUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
 				for(String val:ids.split(Constants.CHAR)) {

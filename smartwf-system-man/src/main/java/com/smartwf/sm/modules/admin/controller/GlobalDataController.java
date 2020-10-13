@@ -1,5 +1,6 @@
 package com.smartwf.sm.modules.admin.controller;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -18,16 +19,22 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.common.utils.CkUtils;
+import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
+import com.smartwf.sm.modules.admin.pojo.LoginRecord;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.service.GlobalDataService;
+import com.smartwf.sm.modules.admin.service.LoginRecordService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -54,6 +61,9 @@ public class GlobalDataController {
 	
 	@Autowired
     private UserInfoService userInfoService;
+	
+	@Autowired
+    private LoginRecordService loginRecordService;
 	
 	@Autowired
     private Wso2Config wso2Config;
@@ -287,7 +297,7 @@ public class GlobalDataController {
      */
     @GetMapping("oauth2client")
     @ApiOperation(value = "授权登录", notes = "授权登录，获取用户基础信息")
-    public ResponseEntity<Result<?>> oauth2client(User bean) {
+    public ResponseEntity<Result<?>> oauth2client(HttpServletRequest request, User bean) {
         try {
         	//1 通过参数验证是否redis是否存在
         	User user=UserThreadLocal.getUser();
@@ -311,6 +321,9 @@ public class GlobalDataController {
     		if(null==userInfo) {
     			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，通过wso2 user_id查询用户信息异常！"));
     		}
+    		//添加登录记录
+    		addLoginRecord(request, userInfo, Constants.ZERO);
+    		//更新替换redis数据
     		this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo),wso2Config.tokenRefreshTime);
     		//成功返回
     		return ResponseEntity.ok(Result.data(Wso2ClientUtils.resUserInfo(userInfo)));
@@ -383,18 +396,26 @@ public class GlobalDataController {
         		String[] keys=sessionIds.split(",");
         		for(String key: keys) {
            			this.redisService.del(key);
+           			//添加注销记录
+           			String value =redisService.get(key);
+                    if(StringUtils.isNotBlank(value)){
+               			User user=JSONUtil.toBean(value, User.class);
+               			//添加注销记录
+               			addLoginRecord(request,user,Constants.ONE);
+                    }
         		}
+        	}else {
+        		//单体注销
+                String sessionId=request.getHeader(Constants.SESSION_ID);
+                String userStr =redisService.get(sessionId);
+                if(StringUtils.isNotBlank(userStr)){
+           			User user=JSONUtil.toBean(userStr, User.class);
+           			//清空redis
+           			this.redisService.del(sessionId);
+           			//添加注销记录
+           			addLoginRecord(request,user,Constants.ONE);
+                }
         	}
-        	//单体注销
-            String sessionId=request.getHeader(Constants.SESSION_ID);
-            String userStr =redisService.get(sessionId);
-            if(StringUtils.isNotBlank(userStr)){
-       			User user=JSONUtil.toBean(userStr, User.class);
-       			//清空redis
-       			this.redisService.del(sessionId);
-       			//注销wso accessToken	
-       			//Wso2ClientUtils.userLogout(wso2Config, user);
-            }
             return ResponseEntity.status(HttpStatus.OK).body(Result.msg("注销成功！"));
         } catch (Exception e) {
             log.error("注销失败！{}", e.getMessage(), e);
@@ -402,5 +423,30 @@ public class GlobalDataController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("注销失败！"));
     }
     
-    
+    /**
+     * 说明：添加登录/注销记录
+     * @author WCH
+     * @param status 0-登录   1-注销
+     * 
+     * */
+    public void addLoginRecord(HttpServletRequest request,User user,int status) {
+		try {
+			//第一次登录，添加登录记录信息
+    		String ip=HttpClientUtil.getIpAddr(request);
+    		String loginType=HttpClientUtil.getBrowserInfo(request);
+    		String deviceName=HttpClientUtil.JudgeIsMoblie(request);
+    		LoginRecord lr=new LoginRecord();
+    		lr.setIpAddress(ip);
+    		lr.setLoginType(loginType);
+    		lr.setCreateTime(new Date());
+    		lr.setLoginCode(user.getLoginCode());
+    		lr.setTenantId(user.getTenantId());
+    		lr.setLoginTime(lr.getCreateTime());
+    		lr.setStatus(status);
+    		lr.setDeviceName(deviceName);
+    		this.loginRecordService.addLoginRecord(lr);
+		} catch (Exception e) {
+			log.error("ERROR：插入登录记录错误！{}-{}",e.getMessage(),e);
+		}
+    }
 }

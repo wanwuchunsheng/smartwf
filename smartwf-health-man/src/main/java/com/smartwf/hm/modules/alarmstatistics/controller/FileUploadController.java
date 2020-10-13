@@ -85,7 +85,7 @@ public class FileUploadController {
 	
 	
 	/**
-     * @Description： 删除操作日志
+     * @Description： 删除文件
      * @param filePath images/11.png
      * @return
      */

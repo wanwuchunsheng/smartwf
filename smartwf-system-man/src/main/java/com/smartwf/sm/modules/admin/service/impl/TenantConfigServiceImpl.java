@@ -16,7 +16,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.StrUtils;
+import com.smartwf.common.utils.CkUtils;
 import com.smartwf.sm.modules.admin.dao.TenantConfigDao;
 import com.smartwf.sm.modules.admin.pojo.TenantConfig;
 import com.smartwf.sm.modules.admin.service.TenantConfigService;
@@ -129,7 +129,7 @@ public class TenantConfigServiceImpl implements TenantConfigService{
 			//删除多租户配置表
 			this.tenantConfigDao.deleteById(bean);
 		}else {
-			String ids=StrUtils.regex(bean.getIds());
+			String ids=CkUtils.regex(bean.getIds());
 			//批量删除
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();

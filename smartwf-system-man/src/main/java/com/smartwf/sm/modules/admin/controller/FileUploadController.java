@@ -53,9 +53,6 @@ public class FileUploadController {
 	@Autowired
 	private FtpConfig ftpConfig;
 	
-	@Autowired
-	private StreamProducer streamProducer;
-	
 	
 	/**
 	 * 功能说明：图片上传
@@ -121,7 +118,7 @@ public class FileUploadController {
 	
 	
 	/**
-     * @Description： 删除操作日志
+     * @Description： 删除文件
      * @param filePath images/11.png
      * @return
      */
@@ -131,22 +128,18 @@ public class FileUploadController {
     	    @ApiImplicitParam(paramType = "query", name = "filePath", value = "删除路径", dataType = "String",required = true)
     })
     @TraceLog(content = "删除文件", paramIndexs = {0})
-	public void delFile(HttpServletRequest request, String filePath) {
-    	/**
+	public ResponseEntity<Result<?>> delFile(HttpServletRequest request, String filePath) {
     	StringBuffer sb=new StringBuffer();
     	File delFile=null;
 		try {
 			filePath=sb.append(localFilePath).append("/").append(filePath).toString();
 			delFile = new File(filePath);
 			delFile.delete();
+			return ResponseEntity.ok().body(Result.msg(Constants.EQU_SUCCESS,"删除成功！"));
 		} catch (Exception e) {
 			log.error("删除文件异常！{}", e.getMessage(), e);
 		}
-		*/
-    	User user=UserProfile.getUser(request);
-    	Map<String,String> map= new HashMap<>();
-    	map.put("farmMember", JSONUtil.toJsonStr(user));
-    	streamProducer.sendMsg("topic:pms2", map);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除失败！"));
 	}
 	
 	/**
@@ -156,7 +149,6 @@ public class FileUploadController {
 	 * */
 	public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception {
 	    File targetFile = new File(filePath);
-	    //PrintUtil.println("filePath="+filePath);
 	    if(!targetFile.exists()){
 	        targetFile.mkdirs();
 	    }

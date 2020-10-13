@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -43,6 +45,9 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.webservice.SslClient;
 
+import cn.hutool.http.useragent.Browser;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import lombok.extern.log4j.Log4j2;
 /**
  * @author WCH
@@ -306,7 +311,6 @@ public class HttpClientUtil {
 			StringBuffer sb=new StringBuffer();
 			sb.append(user.getTenantCode()).append("@").append(user.getTenantDomain()).append(":").append(user.getTenantPw());
 			httpPost.setHeader(new BasicHeader("Authorization","Basic " + Base64.encodeBase64String(sb.toString().getBytes())));
-			//httpPost.setHeader(new BasicHeader("token","Bearer 49c6e95f-36f3-31cc-895d-f0d5d6069253"));
 			StringEntity data = new StringEntity(soapXml, Charset.forName("UTF-8"));
 			httpPost.setEntity(data);
 			CloseableHttpResponse response = closeableHttpClient.execute(httpPost);
@@ -377,5 +381,82 @@ public class HttpClientUtil {
         return null;
 	}
 
+	/**
+	 * 通过HttpServletRequest返回IP地址
+	 * @param request HttpServletRequest
+	 * @return ip String
+	 * @throws Exception
+	 */
+	public static String getIpAddr(HttpServletRequest request) throws Exception {
+	    String ip = request.getHeader("x-forwarded-for");
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getHeader("Proxy-Client-IP");
+	    }
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getHeader("WL-Proxy-Client-IP");
+	    }
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getHeader("HTTP_CLIENT_IP");
+	    }
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+	    }
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getRemoteAddr();
+	    }
+	    return ip;
+	}
 	
+	/**
+	 * 获取浏览器信息
+	 * @param request HttpServletRequest
+	 * @return  String
+	 * @throws Exception
+	 */
+	public static String getBrowserInfo(HttpServletRequest request) throws Exception {
+		String ua = request.getHeader("user-agent");
+		if(ua.equalsIgnoreCase("Android") || ua.equalsIgnoreCase("IOS")) {
+			return ua;
+		}
+		//转成UserAgent对象
+		UserAgent userAgent = UserAgentUtil.parse(ua); 
+		Browser browser = userAgent.getBrowser();
+	    return browser.toString();//浏览器名;
+	}
+	
+	/**
+	 * 获取浏览器信息
+	 * @param request HttpServletRequest
+	 * @return  String
+	 * @throws Exception
+	 */
+	public static String JudgeIsMoblie(HttpServletRequest request) throws Exception{
+		String[] mobileAgents = { "iphone", "android", "phone", "mobile", "wap", "netfront", "java", "opera mobi",
+				"opera mini", "ucweb", "windows ce", "symbian", "series", "webos", "sony", "blackberry", "dopod",
+				"nokia", "samsung", "palmsource", "xda", "pieplus", "meizu", "midp", "cldc", "motorola", "foma",
+				"docomo", "up.browser", "up.link", "blazer", "helio", "hosin", "huawei", "novarra", "coolpad", "webos",
+				"techfaith", "palmsource", "alcatel", "amoi", "ktouch", "nexian", "ericsson", "philips", "sagem",
+				"wellcom", "bunjalloo", "maui", "smartphone", "iemobile", "spice", "bird", "zte-", "longcos",
+				"pantech", "gionee", "portalmmm", "jig browser", "hiptop", "benq", "haier", "^lct", "320x320",
+				"240x320", "176x220", "w3c ", "acs-", "alav", "alca", "amoi", "audi", "avan", "benq", "bird", "blac",
+				"blaz", "brew", "cell", "cldc", "cmd-", "dang", "doco", "eric", "hipt", "inno", "ipaq", "java", "jigs",
+				"kddi", "keji", "leno", "lg-c", "lg-d", "lg-g", "lge-", "maui", "maxo", "midp", "mits", "mmef", "mobi",
+				"mot-", "moto", "mwbp", "nec-", "newt", "noki", "oper", "palm", "pana", "pant", "phil", "play", "port",
+				"prox", "qwap", "sage", "sams", "sany", "sch-", "sec-", "send", "seri", "sgh-", "shar", "sie-", "siem",
+				"smal", "smar", "sony", "sph-", "symb", "t-mo", "teli", "tim-", "tosh", "tsm-", "upg1", "upsi", "vk-v",
+				"voda", "wap-", "wapa", "wapi", "wapp", "wapr", "webc", "winw", "winw", "xda", "xda-",
+				"Googlebot-Mobile" };
+		String ua= request.getHeader("User-Agent");
+		if(ua.equalsIgnoreCase("Android") || ua.equalsIgnoreCase("IOS")) {
+			return "移动app端";
+		}
+		if(request.getHeader("User-Agent") != null) {
+			for (String mobileAgent : mobileAgents) {
+				if (request.getHeader("User-Agent").toLowerCase().indexOf(mobileAgent) >= 0) {
+					return "移动web端";
+				}
+			}
+		}
+		return "pc端";
+	}
 }

@@ -74,7 +74,7 @@ public class LoginRecordServiceImpl implements LoginRecordService {
 	 * @return
 	 */
 	@Override
-	public void addLoginRecordByPage(LoginRecord bean) {
+	public void addLoginRecord(LoginRecord bean) {
 		this.loginRecordDao.insert(bean);
 	}
    

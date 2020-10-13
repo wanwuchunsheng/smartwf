@@ -15,7 +15,7 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.StrUtils;
+import com.smartwf.common.utils.CkUtils;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
@@ -338,7 +338,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		//租户
 		List<Tenant> tenantList=this.tenantService.initTenantDatas();
     	if(StringUtils.isNotBlank(bean.getFlushType())) {
-	    	String flushTypes=StrUtils.regex(bean.getFlushType());
+	    	String flushTypes=CkUtils.regex(bean.getFlushType());
 	    	if(StringUtils.isNotBlank(flushTypes)) {
 	    		for(String val:flushTypes.split(Constants.CHAR)) {
 	    			switch (val) {

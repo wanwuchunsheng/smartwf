@@ -230,6 +230,28 @@ public class Wso2ClientUtils {
     
     
     
-    
+    /**
+     * wso2请求-密码修改
+     * @Author WCH
+     * @param wso2Config ,user ,newPwd, oldPwd
+     * return 
+     * */
+    public static String updateUserPwd(Wso2Config wso2Config,User user,String newPwd,String oldPwd) {
+    	try {
+        	//封装wso2参数规范
+    		StringBuffer sb=new StringBuffer();
+    		sb.append(" <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://service.ws.um.carbon.wso2.org\"> ");
+    		sb.append(" <soapenv:Header/> <soapenv:Body>  <ser:updateCredential> ");
+    		sb.append(" <ser:userName>").append(user.getLoginCode()).append("</ser:userName> ");
+    		sb.append(" <ser:newCredential>").append(newPwd).append("</ser:newCredential>");
+    		sb.append(" <ser:oldCredential>").append(oldPwd).append("</ser:oldCredential>");
+    		sb.append(" </ser:updateCredential>  </soapenv:Body> ");
+    		sb.append(" </soapenv:Envelope> ");
+        	return HttpClientUtil.doPostApiEntitlement(String.valueOf(new StringBuffer().append(wso2Config.userServerUri).append("/services/RemoteUserStoreManagerService?wsdl")), String.valueOf(sb),user);
+		} catch (Exception e) {
+			log.error("wso2密码修改异常{}",e.getMessage(),e);
+		}
+    	return Constants.ERROR;
+    }
     
 }

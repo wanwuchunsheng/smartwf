@@ -1,5 +1,7 @@
 package com.smartwf.sm.modules.admin.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.ResponseEntity;
 
 import com.smartwf.common.pojo.Result;
@@ -20,7 +22,7 @@ public interface PersonalCenterService {
      *  @param newPwd
      * @return
      */
-	ResponseEntity<Result<?>> updateUserPwd(Integer id, String oldPwd, String newPwd);
+	ResponseEntity<Result<?>> updateUserPwd(HttpServletRequest request,Integer id, String oldPwd, String newPwd);
 	/**
      * 修改用户资料
      * @param bean

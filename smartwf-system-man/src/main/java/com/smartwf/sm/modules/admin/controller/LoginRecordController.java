@@ -42,12 +42,12 @@ public class LoginRecordController {
     @GetMapping("selectLoginRecordByPage")
     @ApiOperation(value = "查询所有登录记录", notes = "查询所有登录记录")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int"),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "loginType", value = "登录类型", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "ipAddress", value = "登录地址", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "status", value = "状态（0成功 1失败）", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "status", value = "状态（0登录  1注销）", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "loginTime", value = "登录时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date"),
@@ -69,7 +69,7 @@ public class LoginRecordController {
 	 * @author WCH
 	 * @return
 	 */
-    @GetMapping("addLoginRecordByPage")
+    @GetMapping("addLoginRecord")
     @ApiOperation(value = "保存登录记录接口", notes = "保存登录记录")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
@@ -77,13 +77,13 @@ public class LoginRecordController {
     	    @ApiImplicitParam(paramType = "query", name = "loginType", value = "登录类型", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "ipAddress", value = "登录地址", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "status", value = "状态（0成功 1失败）", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "status", value = "状态（0登录  1注销）", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "loginTime", value = "登录时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "createTime", value = "创建时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date")
     })
-    public ResponseEntity<Result<?>> addLoginRecordByPage(LoginRecord bean) {
+    public ResponseEntity<Result<?>> addLoginRecord(LoginRecord bean) {
         try {
-            this.loginRecordService.addLoginRecordByPage(bean);
+            this.loginRecordService.addLoginRecord(bean);
             return ResponseEntity.status(HttpStatus.OK).body(Result.msg("成功"));
         } catch (Exception e) {
             log.error("保存登录记录错误！{}", e.getMessage(), e);

@@ -4,8 +4,10 @@ package com.smartwf.common.utils;
  * @author WCH
  * 
  * */
-public class StrUtils {
-	 /**
+public class CkUtils {
+	
+	
+    /**
      * @ 去除前后逗号
      * @param clazz
      * @param xmlStr
@@ -15,7 +17,5 @@ public class StrUtils {
     	String regex = "^,*|,*$";
     	return str.replaceAll(regex, "");
     }
-
-   
    
 }

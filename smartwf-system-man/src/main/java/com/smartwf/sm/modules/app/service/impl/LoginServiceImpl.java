@@ -1,5 +1,6 @@
 package com.smartwf.sm.modules.app.service.impl;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +19,12 @@ import com.smartwf.common.exception.CommonException;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
+import com.smartwf.sm.modules.admin.controller.GlobalDataController;
+import com.smartwf.sm.modules.admin.pojo.LoginRecord;
+import com.smartwf.sm.modules.admin.service.LoginRecordService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.app.service.LoginService;
 
@@ -42,13 +47,15 @@ public class LoginServiceImpl implements LoginService{
 	@Autowired
     private UserInfoService userInfoService;
 	
+	@Autowired
+    private LoginRecordService loginRecordService;
+	
 	/**
      * @Description app登录认证
      * @return
      */
 	@Override
 	public Result<?> userLogin(HttpServletRequest request, User user) {
-		log.info("____________________"+user.getClientKey()+"    "+user.getLoginCode()+"      "+user.getPwd());
 		String isres=redisService.get(user.getClientKey());
     	if(StringUtils.isBlank(isres)) {
     		log.warn("失败！参数clientKey异常，请求uri：{}", user.getClientKey(), request.getRequestURI());
@@ -80,6 +87,24 @@ public class LoginServiceImpl implements LoginService{
 		User userInfo=this.userInfoService.selectUserInfoByUserCode(user);
 		if(null==userInfo) {
 			throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，user_id查询用户信息异常！");
+		}
+		try {
+			//第一次登录，添加登录记录信息
+    		String ip=HttpClientUtil.getIpAddr(request);
+    		String loginType=HttpClientUtil.getBrowserInfo(request);
+    		String deviceName=HttpClientUtil.JudgeIsMoblie(request);
+    		LoginRecord lr=new LoginRecord();
+    		lr.setIpAddress(ip);
+    		lr.setLoginType(loginType);
+    		lr.setCreateTime(new Date());
+    		lr.setLoginCode(userInfo.getLoginCode());
+    		lr.setTenantId(userInfo.getTenantId());
+    		lr.setLoginTime(lr.getCreateTime());
+    		lr.setStatus(Constants.ZERO);
+    		lr.setDeviceName(deviceName);
+    		this.loginRecordService.addLoginRecord(lr);
+		} catch (Exception e) {
+			log.error("ERROR：插入登录记录错误！{}-{}",e.getMessage(),e);
 		}
 		//区分子系统和app端过期时间
 		if(StringUtils.isNotBlank(userInfo.getSessionState())) {

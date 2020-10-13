@@ -19,7 +19,7 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.Md5Utils;
-import com.smartwf.common.utils.StrUtils;
+import com.smartwf.common.utils.CkUtils;
 import com.smartwf.sm.modules.admin.dao.DictionaryDao;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
@@ -291,7 +291,7 @@ public class TenantServiceImpl implements TenantService{
 			//删除数据字典
 			this.tenantDao.deleteDictionaryByTenantId(bean);
 		}else {
-			String ids=StrUtils.regex(bean.getIds());
+			String ids=CkUtils.regex(bean.getIds());
 			//批量删除
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();

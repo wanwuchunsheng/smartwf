@@ -20,7 +20,7 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.Md5Utils;
-import com.smartwf.common.utils.StrUtils;
+import com.smartwf.common.utils.CkUtils;
 import com.smartwf.sm.modules.admin.dao.OrganizationDao;
 import com.smartwf.sm.modules.admin.dao.PostDao;
 import com.smartwf.sm.modules.admin.dao.ResourceDao;
@@ -144,16 +144,16 @@ public class UserInfoServiceImpl implements UserInfoService{
 		}
 		bean.setUserCode(String.valueOf(map.get("id")) );
 		//md5加密
-		if(StringUtils.isNotBlank(bean.getPwd())) {
-			bean.setPwd(Md5Utils.convertMd5(bean.getPwd()));
-		}
+		//if(StringUtils.isNotBlank(bean.getPwd())) {
+			//bean.setPwd(Md5Utils.convertMd5(bean.getPwd()));
+		//}
 		//保存用户资料
 		this.userInfoDao.insert(bean);
 		
 		//批量添加与用户相关联表
 		//添加用户组织机构
 		if(StringUtils.isNotBlank(bean.getOrganizationIds())) {
-			String orgIds=StrUtils.regex(bean.getOrganizationIds());
+			String orgIds=CkUtils.regex(bean.getOrganizationIds());
 			if(StringUtils.isNotBlank(orgIds)) {
 				UserOrganization uo=null;
 				for(String id:orgIds.split(Constants.CHAR)) {
@@ -168,7 +168,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		
 		//添加用户职务
 		if(StringUtils.isNotBlank(bean.getPostIds())) {
-			String postIds=StrUtils.regex(bean.getPostIds());
+			String postIds=CkUtils.regex(bean.getPostIds());
 			if(StringUtils.isNotBlank(postIds)) {
 				UserPost up = null;
 				for(String id:postIds.split(Constants.CHAR)) {
@@ -182,7 +182,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		}
 		//添加用户角色
 		if(StringUtils.isNotBlank(bean.getRoleIds())) {
-			String roleIds=StrUtils.regex(bean.getRoleIds());
+			String roleIds=CkUtils.regex(bean.getRoleIds());
 			if(StringUtils.isNotBlank(roleIds)) {
 				UserRole ur = null;
 				for(String id:roleIds.split(Constants.CHAR)) {
@@ -214,7 +214,6 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void updateUserInfo(UserInfoVO bean) {
-		
 		//添加修改人信息
 		User user=UserThreadLocal.getUser();
 		bean.setUpdateTime(new Date());
@@ -243,7 +242,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		//3）重新添加新的关联关系
 		//添加用户组织机构
 		if(StringUtils.isNotBlank(bean.getOrganizationIds())){
-			String orgIds=StrUtils.regex(bean.getOrganizationIds());
+			String orgIds=CkUtils.regex(bean.getOrganizationIds());
 			if(StringUtils.isNotBlank(orgIds)) {
 				UserOrganization uo=null;
 				for(String id:orgIds.split(Constants.CHAR)) {
@@ -257,7 +256,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		}
 		//添加用户职务
 		if(StringUtils.isNotBlank(bean.getPostIds())){
-			String postIds=StrUtils.regex(bean.getPostIds());
+			String postIds=CkUtils.regex(bean.getPostIds());
 			if(StringUtils.isNotBlank(postIds)) {
 				UserPost up = null;
 				for(String id:postIds.split(Constants.CHAR)) {
@@ -271,7 +270,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		}
 		//添加用户角色
 		if(StringUtils.isNotBlank(bean.getRoleIds())){
-			String roleIds=StrUtils.regex(bean.getRoleIds());
+			String roleIds=CkUtils.regex(bean.getRoleIds());
 			if(StringUtils.isNotBlank(roleIds)) {
 				List<String> list=new ArrayList<>();
 				UserRole ur = null;
@@ -323,7 +322,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			this.userInfoDao.deleteUserRoleById(bean);
 		}else {
 			//批量删除
-			String ids=StrUtils.regex(bean.getIds());
+			String ids=CkUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
 				List<String> list=new ArrayList<>();
 				UserInfo userinfo=null;

@@ -14,7 +14,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.StrUtils;
+import com.smartwf.common.utils.CkUtils;
 import com.smartwf.sm.modules.admin.dao.UiSettingDao;
 import com.smartwf.sm.modules.admin.pojo.SysConfig;
 import com.smartwf.sm.modules.admin.service.UiSettingService;
@@ -132,7 +132,7 @@ public class UiSettingServiceImpl implements UiSettingService{
 			//删除
 			this.uiSettingDao.deleteById(bean);
 		}else {
-			String ids=StrUtils.regex(bean.getIds());
+			String ids=CkUtils.regex(bean.getIds());
 			if(StringUtils.isNotBlank(ids)) {
 				SysConfigVO scv=null;
 				for(String val:ids.split(Constants.CHAR)) {

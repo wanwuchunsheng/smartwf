@@ -25,7 +25,7 @@ public interface LoginRecordService {
 	 * @author WCH
 	 * @param bean
 	 */
-	void addLoginRecordByPage(LoginRecord bean);
+	void addLoginRecord(LoginRecord bean);
 
 
 }

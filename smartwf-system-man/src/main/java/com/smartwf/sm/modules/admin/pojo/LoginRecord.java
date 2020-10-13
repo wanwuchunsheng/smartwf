@@ -49,7 +49,7 @@ public class LoginRecord implements Serializable {
 	 */
 	private String deviceName;
 	/**
-	 * 状态(0成功  1失败)
+	 * 状态(0登录  1注销)
 	 */
 	private Integer status;
 	/**

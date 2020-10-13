@@ -1,5 +1,7 @@
 package com.smartwf.sm.modules.admin.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,16 +42,16 @@ public class PersonalCenterController {
      * @return
      */
     @PutMapping("updateUserPwd")
-    @ApiOperation(value = "修改密码错误接口", notes = "修改密码错误")
+    @ApiOperation(value = "修改密码接口", notes = "修改密码错误")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "用户（主键）", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "oldPwd", value = "旧密码", dataType = "String", required = true),
     	@ApiImplicitParam(paramType = "query", name = "newPwd", value = "新密码", dataType = "String", required = true),
     })
-    @TraceLog(content = "修改密码错误", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updateUserPwd(Integer id,String oldPwd,String newPwd) {
+    @TraceLog(content = "修改密码", paramIndexs = {0})
+    public ResponseEntity<Result<?>> updateUserPwd(HttpServletRequest request, Integer id,String oldPwd,String newPwd) {
         try {
-        	ResponseEntity<Result<?>> result= this.personalCenterService.updateUserPwd(id,oldPwd,newPwd);
+        	ResponseEntity<Result<?>> result= this.personalCenterService.updateUserPwd(request,id,oldPwd,newPwd);
             return result;
         } catch (Exception e) {
             log.error("修改密码错误！{}", e.getMessage(), e);
@@ -66,18 +68,13 @@ public class PersonalCenterController {
     @ApiOperation(value = "修改用户资料接口", notes = "修改用户资料资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
-        @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录账号", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "userName", value = "姓名", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "sex", value = "性别（0-女 1-男）", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "mobile", value = "手机号", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "address", value = "联系地址", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "avatar", value = "头像路径", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "address", value = "住址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "phone", value = "电话", dataType = "String"),
  	    @ApiImplicitParam(paramType = "query", name = "mgrType", value = "等级（0-普通 1-管理员 2-超级管理员）", dataType = "Integer"),
- 	    @ApiImplicitParam(paramType = "query", name = "enable", value = "状态（0-启用 1-禁用）", dataType = "Integer"),
- 	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "Integer"),
- 	    @ApiImplicitParam(paramType = "query", name = "userCode", value = "用户编码", dataType = "String"),
  	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改用户资料", paramIndexs = {0})
