@@ -65,7 +65,7 @@ public class LoginRecordServiceImpl implements LoginRecordService {
         	queryWrapper.eq("status", bean.getStatus());
         }
 		IPage<LoginRecord> list=this.loginRecordDao.selectPage(page, queryWrapper);
-		return Result.data(list.getTotal(), list.getRecords());
+		return Result.data(Constants.EQU_SUCCESS,list.getTotal(), list.getRecords());
 	}
 
 	/**

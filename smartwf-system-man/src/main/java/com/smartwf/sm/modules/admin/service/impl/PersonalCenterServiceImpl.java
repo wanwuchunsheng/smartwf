@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.handler.UserProfile;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
@@ -67,15 +68,15 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 					//修改本地密码
 					this.userInfoDao.updateById(uinfo);
 	        	}else {
-	        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(res));
+	        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"wso2修改异常"+res));
 	        	}
 			}else {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("旧密码不正确！"));
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"旧密码不正确！"));
 			}
 		}else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("改用户不存在，请确定UID是否正确！"));
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"改用户不存在，请确定UID是否正确！"));
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(Result.msg("密码修改成功！"));
+		return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"密码修改成功！"));
 	}
 
 	/**

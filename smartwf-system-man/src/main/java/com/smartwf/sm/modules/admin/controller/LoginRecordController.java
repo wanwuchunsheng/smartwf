@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.LoginRecord;
 import com.smartwf.sm.modules.admin.service.LoginRecordService;
@@ -61,7 +62,7 @@ public class LoginRecordController {
         } catch (Exception e) {
             log.error("查询所有登录记录错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有登录记录错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"查询所有登录记录错误！"));
     }
   
     /**
@@ -84,11 +85,11 @@ public class LoginRecordController {
     public ResponseEntity<Result<?>> addLoginRecord(LoginRecord bean) {
         try {
             this.loginRecordService.addLoginRecord(bean);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("成功"));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
         } catch (Exception e) {
             log.error("保存登录记录错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("保存登录记录错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"保存登录记录错误！"));
     }
 
 }

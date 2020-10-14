@@ -77,7 +77,7 @@ public class PersonalCenterController {
         } catch (Exception e) {
             log.error("修改密码错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("修改密码错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"修改密码错误！"));
     }
     
     
@@ -106,7 +106,7 @@ public class PersonalCenterController {
         } catch (Exception e) {
             log.error("修改用户资料信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("修改用户资料信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"修改用户资料信息错误！"));
     }
 	
 	/**
@@ -127,7 +127,7 @@ public class PersonalCenterController {
         } catch (Exception e) {
             log.error("主键查询个人用户资料信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询个人用户信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"主键查询个人用户信息错误！"));
     }
     
     /**
@@ -188,7 +188,7 @@ public class PersonalCenterController {
 		} catch (Exception e) {
 			log.error("删除文件异常！{}", e.getMessage(), e);
 		}
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除失败！"));
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"删除失败！"));
 	}
     
 }
