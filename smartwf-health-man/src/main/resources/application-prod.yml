@@ -14,10 +14,6 @@ server:
   servlet:
     context-path: /smartwf_health
     
-#指定本地文件路径
-web:
-    upload-path: /mnt/files/
-    
 # spring
 spring:
   application:
@@ -85,9 +81,7 @@ spring:
         time-between-eviction-runs-millis: 30000
         # 每次释放连接的最大数目
         num-tests-per-eviction-run: 1024
-  #挂载本地路径
-  resources:
-    static-locations: file:${web.upload-path}
+
   servlet:
     multipart:
       max-file-size: 200MB #单个文件上传大小
@@ -103,16 +97,6 @@ spring:
   system:
     pms:
       server-uri: https://portal.windmagics.com/pms
-# 配置ftp服务器信息
-ftp: 
-  # ftp服务器的IP地址
-  url: 192.168.1.151
-  # 默认端口是21
-  port: 21
-  username: wm
-  password: 1
-  # ftp服务器存放文件的路径
-  remotePath: /
 
 # 配置ftp服务器信息
 sftp: 

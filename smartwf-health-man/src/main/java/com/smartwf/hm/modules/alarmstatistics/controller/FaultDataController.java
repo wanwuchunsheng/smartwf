@@ -125,7 +125,7 @@ public class FaultDataController {
             	sb=new StringBuffer();
             	//保存图片
             	for(MultipartFile fl: files) {
-        	        if (fl.getContentType().contains("image")) {
+        	        if (fl.getContentType().contains(Constants.IMAGE)) {
         	        	String temp = "image/";
     	                // 获取图片的文件名
     	                String fileName = fl.getOriginalFilename();

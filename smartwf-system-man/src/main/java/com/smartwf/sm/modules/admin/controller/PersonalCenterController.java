@@ -1,12 +1,10 @@
 package com.smartwf.sm.modules.admin.controller;
 
-import java.io.File;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +24,6 @@ import com.smartwf.sm.config.ftp.SFtpConfig;
 import com.smartwf.sm.config.ftp.SFtpUtil;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.PersonalCenterService;
-import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 import io.swagger.annotations.Api;
@@ -102,7 +99,7 @@ public class PersonalCenterController {
     public ResponseEntity<Result<?>> updateSysUser(UserInfoVO bean) {
         try {
             this.personalCenterService.updateUserInfo(bean);
-            return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
+            return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"修改成功"));
         } catch (Exception e) {
             log.error("修改用户资料信息错误！{}", e.getMessage(), e);
         }
@@ -139,8 +136,7 @@ public class PersonalCenterController {
 	@ApiOperation(value = "上传图片接口", notes = "上传图片")
 	public ResponseEntity<Result<?>> upload(HttpServletRequest request, @ApiParam(value = "用户图片", required = true) MultipartFile file) {
 	    if (!file.isEmpty()) {
-	    	String image="image";
-	        if (file.getContentType().contains(image)) {
+	        if (file.getContentType().contains(Constants.IMAGE)) {
 	            try {
 	            	String temp = "image/";
 	                // 获取图片的文件名
@@ -160,10 +156,10 @@ public class PersonalCenterController {
 	                userinfo.setAvatar(datdDirectory);
 	                personalCenterService.updateUserInfo(userinfo);
 	        		//返回信息
-	                return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,datdDirectory));
+	                return ResponseEntity.ok(Result.msg(Constants.EQU_SUCCESS,datdDirectory));
 	            }catch (Exception e){
 	            	log.error("文件上传异常！{}", e.getMessage(), e);
-	            	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"失败！上传异常"));
+	            	return ResponseEntity.ok(Result.msg(Constants.INTERNAL_SERVER_ERROR,"失败！上传异常"));
 	            }
 	        }
 	    }

@@ -76,17 +76,6 @@
             <groupId>org.iherus</groupId>
             <artifactId>qrext4j</artifactId>
         </dependency>
-        <!-- zipkin
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-zipkin</artifactId>
-        </dependency>
-         -->
-        <!-- FTP Client -->
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-		</dependency>
 		<!-- SFTP Client -->
 		<dependency>
 	        <groupId>com.jcraft</groupId>

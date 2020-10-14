@@ -14,10 +14,6 @@ server:
   servlet:
     context-path: /smartwf_health
     
-#指定本地文件路径
-web:
-    upload-path: ${user.home}/file/smartwf-hm/upload
-    
 # spring
 spring:
   application:
@@ -85,9 +81,7 @@ spring:
         time-between-eviction-runs-millis: 30000
         # 每次释放连接的最大数目
         num-tests-per-eviction-run: 1024
-  #挂载本地路径
-  resources:
-    static-locations: file:${web.upload-path}
+
   servlet:
     multipart:
       max-file-size: 200MB #单个文件上传大小
@@ -104,29 +98,19 @@ spring:
     pms:
       server-uri: http://192.168.1.151:8181/pms
       #server-uri: http://192.168.3.48:8300/smartwf_sys_backend
-# 配置ftp服务器信息
-ftp: 
-  # ftp服务器的IP地址
-  url: 192.168.1.151
-  # 默认端口是21
-  port: 21
-  username: wm
-  password: 1
-  # ftp服务器存放文件的路径
-  remotePath: /
   
 # 配置ftp服务器信息
 sftp: 
   client:
     # ftp服务器的IP地址
     protocol: sftp
-    host: 101.201.67.138
+    host: 192.168.1.151
     # 默认端口是22
     port: 22
     username: wm
-    password: wind2@
+    password: 1
     # ftp服务器存放文件的路径
-    root: /mnt/files/
+    root: /usr/local/Upload_Vsftp/user/
     #秘钥文件路径
     privateKey: 
     #秘钥密码
