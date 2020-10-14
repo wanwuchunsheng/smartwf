@@ -135,8 +135,7 @@ public class TenantServiceImpl implements TenantService{
 	public void saveTenant(Tenant bean) {
 		//1）查询默认租户
 		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
-		//默认租户：1-否  0-是
-		queryWrapper.eq("sel", 0);
+		queryWrapper.eq("tenant_domain", "carbon.super");
 		Tenant dict=this.tenantDao.selectOne(queryWrapper);
 		//2）添加新租户
 		User user=UserThreadLocal.getUser();
@@ -177,6 +176,7 @@ public class TenantServiceImpl implements TenantService{
 		tv.setUpdateTime(tv.getCreateTime());
 		tv.setUpdateUserId(user.getId());
 		tv.setUpdateUserName(user.getUserName());
+		tv.setAvatar("image/img_101.png");
 		this.userInfoService.saveWso2UserInfo(tv,bean);
 		//3）批量添加新租户数据字典（从默认租户拷贝的数据字典）
 		if( null !=dict) {
