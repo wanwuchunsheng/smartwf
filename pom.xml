@@ -40,6 +40,7 @@
         <javax.activation>1.1.1</javax.activation>
         <hutool.version>5.2.4</hutool.version>
         <oauth2.client.version>1.0.0</oauth2.client.version>
+        <sftp.version>0.1.54</sftp.version>
     </properties>
 
     <dependencyManagement>
@@ -150,12 +151,18 @@
 			   <version>${lombok.version}</version>
 			   <scope>provided</scope>
 			</dependency>
-			<!-- FTPClient需要用到 -->
+			<!-- FTP Client -->
 			<dependency>
 				<groupId>commons-net</groupId>
 				<artifactId>commons-net</artifactId>
 				<version>${ftp.version}</version>
 			</dependency>
+			<!-- SFTP Client-->
+			<dependency>
+		        <groupId>com.jcraft</groupId>
+		        <artifactId>jsch</artifactId>
+		        <version>${sftp.version}</version>
+		    </dependency>
 	        <!-- hutool 工具类 -->
 	        <dependency>
 			    <groupId>cn.hutool</groupId>

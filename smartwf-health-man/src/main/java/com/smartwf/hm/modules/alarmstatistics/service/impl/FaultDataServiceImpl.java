@@ -51,17 +51,6 @@ public class FaultDataServiceImpl implements FaultDataService {
 		bean.setIncidentType(Constants.ONE);
 		//1）保存mysql
 		this.faultDataDao.insert(bean);
-	    /**
-		//主键：当天时间+租户域
-		String key=StrBuilder.create().append(DateUtil.today()).append(bean.getTenantDomain()).toString();
-		String tdDatas=this.redisService.get(key);
-	    //今日更新数
-		if(StringUtils.isNotBlank(tdDatas)) {
-			this.redisService.set( key, Convert.toStr(Convert.toInt(tdDatas)+1));
-		}else {
-			this.redisService.set( key, Convert.toStr(1), 86400);
-		}
-		*/
 	}
 	
 }

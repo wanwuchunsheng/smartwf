@@ -107,22 +107,6 @@ public class FileUploadController {
 		}
 	}
 	
-	/**
-	 * 功能说明：文件上传
-	 * @author WCH
-	 * @dateTime 2020-4-21 14:09:52
-	 * */
-	public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception {
-	    File targetFile = new File(filePath);
-	    //PrintUtil.println("filePath="+filePath);
-	    if(!targetFile.exists()){
-	        targetFile.mkdirs();
-	    }
-	    FileOutputStream out = new FileOutputStream(filePath+fileName);
-	    out.write(file);
-	    out.flush();
-	    out.close();
-	}
-
+	
 	
 }

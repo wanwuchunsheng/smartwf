@@ -448,15 +448,15 @@ public class HttpClientUtil {
 				"Googlebot-Mobile" };
 		String ua= request.getHeader("User-Agent");
 		if(ua.equalsIgnoreCase("Android") || ua.equalsIgnoreCase("IOS")) {
-			return "移动app端";
+			return "Mobile app";
 		}
 		if(request.getHeader("User-Agent") != null) {
 			for (String mobileAgent : mobileAgents) {
 				if (request.getHeader("User-Agent").toLowerCase().indexOf(mobileAgent) >= 0) {
-					return "移动web端";
+					return "Mobile web";
 				}
 			}
 		}
-		return "pc端";
+		return "PC";
 	}
 }

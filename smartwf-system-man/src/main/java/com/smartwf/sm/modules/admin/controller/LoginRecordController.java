@@ -43,7 +43,7 @@ public class LoginRecordController {
     @ApiOperation(value = "查询所有登录记录", notes = "查询所有登录记录")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录编码", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "loginCode", value = "登录编码", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "loginType", value = "登录类型", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "ipAddress", value = "登录地址", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称", dataType = "String"),

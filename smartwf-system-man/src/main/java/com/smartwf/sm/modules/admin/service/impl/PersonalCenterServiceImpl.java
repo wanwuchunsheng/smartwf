@@ -93,6 +93,8 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 	@Override
 	public Result<?> selectUserInfoById(UserInfo bean) {
 		UserInfo userInfo= this.userInfoDao.selectUserInfoById(bean);
+		//屏蔽关键信息
+		userInfo.setPwd(null);
 		return Result.data(userInfo);
 	}
    

@@ -102,7 +102,28 @@ ftp:
   username: wm
   password: 1
   # ftp服务器存放文件的路径
-  remotePath: /       
+  remotePath: / 
+  
+# 配置ftp服务器信息
+sftp: 
+  client:
+    # ftp服务器的IP地址
+    protocol: sftp
+    host: 101.201.67.138
+    # 默认端口是22
+    port: 22
+    username: wm
+    password: wind2@
+    # ftp服务器存放文件的路径
+    root: /mnt/files/
+    #秘钥文件路径
+    privateKey: 
+    #秘钥密码
+    passphrase: 
+    sessionStrictHostKeyChecking: no
+    sessionConnectTimeout: 15000
+    channelConnectedTimeout: 15000
+      
 # 日志
 logging:
   level:

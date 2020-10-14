@@ -136,6 +136,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		bean.setUpdateTime(bean.getCreateTime());
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
+		bean.setAvatar("image/img_001.png");//默认头像
 		//保存wso2用户
 		Map<String,Object> map=this.wso2UserService.addUser(bean);
 		//验证wso2插入是否成功，成功返回ID
@@ -223,6 +224,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 		UserInfo uf=this.userInfoDao.selectById(bean);
 		bean.setTenantId(uf.getTenantId());
 		bean.setUserCode(uf.getUserCode());
+		bean.setPwd(null);
 		//1)修改用户资料
 		this.userInfoDao.updateById(bean);
 		//2)角色为空，解绑Wso2用户对应的角色关系
