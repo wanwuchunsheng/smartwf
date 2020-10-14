@@ -1,36 +1,28 @@
 package com.smartwf.hm.modules.alarmstatistics.controller;
 
-import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.hm.config.ftp.FtpConfig;
-import com.smartwf.hm.config.ftp.FtpUtil;
+import com.smartwf.hm.config.ftp.SFtpConfig;
+import com.smartwf.hm.config.ftp.SFtpUtil;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
-import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
-
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -59,14 +51,8 @@ public class FaultDataController {
 	private DefectService defectService;
 	
 	@Autowired
-	private FtpConfig ftpConfig;
+	private SFtpConfig config;
 	
-	/**
-	 * 获取上传地址
-	 * 
-	 * */
-	@Value("${web.upload-path}")
-	private String localFilePath;  
 	
 	/**
 	 * @Description: 实时故障报警数据
@@ -140,7 +126,7 @@ public class FaultDataController {
             	//保存图片
             	for(MultipartFile fl: files) {
         	        if (fl.getContentType().contains("image")) {
-    	                String temp = "image" + File.separator ;
+        	        	String temp = "image/";
     	                // 获取图片的文件名
     	                String fileName = fl.getOriginalFilename();
     	                // 获取图片的扩展名
@@ -149,24 +135,12 @@ public class FaultDataController {
     	                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
     	                // 数据库保存的目录
     	                String datdDirectory = temp.concat(newFileName);
-    	                // 文件路径
-    	                String filePath = localFilePath+File.separator+temp;
-    	                File dest = new File(filePath, newFileName);
-    	                if (!dest.getParentFile().exists()) {
-    	                    dest.getParentFile().mkdirs();
-    	                }
-    	                // 上传到临时指定目录
-    	                fl.transferTo(dest);
-    	                sb.append(datdDirectory).append(",");
-    	                /**
-    	                //上传文件到远程ftp服务器
-    	                boolean result =FtpUtil.ftpUpload(newFileName, ftpConfig.getUrl(),ftpConfig.getPort(),ftpConfig.getUsername(), ftpConfig.getPassword(), dest.toString(), ftpConfig.getRemotePath()+"/image/");
-    	                if (result) {
-    	        			sb.append(datdDirectory).append(",");
-    	        		}
-    	        		//删除本地文件
-    	        		dest.delete();
-    	        		*/
+    	                //上传文件到sftp
+    	                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, fl.getInputStream());
+        	        	if(flag) {
+        	        		//上传成功，
+        	        		sb.append(datdDirectory).append(",");
+        	        	}
         	        }
             	}
             }
@@ -174,6 +148,7 @@ public class FaultDataController {
             if(sb!=null) {
             	bean.setFilePath(sb.toString().trim());
             }
+            //保存本地数据
         	this.defectService.saveDefect(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
         } catch (Exception e) {

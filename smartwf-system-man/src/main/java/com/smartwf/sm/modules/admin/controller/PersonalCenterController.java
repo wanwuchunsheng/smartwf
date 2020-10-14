@@ -57,9 +57,6 @@ public class PersonalCenterController {
 	@Autowired
     private SFtpConfig config;
 	
-	@Autowired
-    private UserInfoService userInfoService;
-	
 	
 	/**
      * @Description： 修改用户密码

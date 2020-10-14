@@ -82,11 +82,16 @@
             <artifactId>spring-cloud-starter-zipkin</artifactId>
         </dependency>
          -->
-        <!-- FTPClient需要用到 -->
+        <!-- FTP Client -->
 		<dependency>
 			<groupId>commons-net</groupId>
 			<artifactId>commons-net</artifactId>
 		</dependency>
+		<!-- SFTP Client -->
+		<dependency>
+	        <groupId>com.jcraft</groupId>
+	        <artifactId>jsch</artifactId>
+	    </dependency>
         <!-- rocketmq -->
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
