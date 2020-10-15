@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.smartwf.hm.modules.alarmstatistics.dao.AlarmInboxDao" >
+<mapper namespace="com.smartwf.hm.modules.alarmstatistics.dao.FaultInboxDao" >
     
     <!-- 分页查询故障报警信息 -->
-    <select id="selectAlarmInforByPage" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+    <select id="selectFaultInforByPage" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
         select 
         	a.id,
 			a.alarm_code,
@@ -25,7 +25,7 @@
 			a.update_time,
 			a.tenant_domain
         from fault_information a
-        where a.incident_type=3
+        where a.incident_type=1
         <if test="bean.tenantDomain != null ">
           and a.tenant_domain = #{bean.tenantDomain}
         </if>
@@ -64,7 +64,7 @@
     
     
     <!-- 查询所有故障报警信息 -->
-    <select id="selectAlarmInforByAll" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+    <select id="selectFaultInforByAll" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
         select 
         	a.id,
 			a.alarm_code,
@@ -86,7 +86,7 @@
 			a.update_time,
 			a.tenant_domain
         from fault_information a
-        where a.incident_type=3
+        where a.incident_type=1
         <if test="bean.id != null ">
           and a.id = #{bean.id}
         </if>
@@ -157,7 +157,7 @@
 			update_user_id,
 			update_user_name,
 			tenant_domain
-		 from fault_information where alarm_status=0 and incident_type=3 order by start_time desc
+		 from fault_information where alarm_status=0 and incident_type=1 order by start_time desc
     </select>
         
     <!-- 重点机位统计 -->
@@ -177,7 +177,7 @@
 			  -- 累计报警
 						SELECT asset_number, device_name, count(*) AS fault_type_all
 						FROM
-							fault_information WHERE incident_type = 3
+							fault_information WHERE incident_type = 1
 						<if test="bean.tenantDomain != null ">
 				          and tenant_domain = #{bean.tenantDomain}
 				        </if>
@@ -189,7 +189,7 @@
 			left join (
 			 -- 今日报警
 			  SELECT 	asset_number, device_name, 	count(*) AS fault_type_day
-					FROM 	fault_information WHERE incident_type = 3 
+					FROM 	fault_information WHERE incident_type = 1 
 					<if test="bean.tenantDomain != null ">
 			          and tenant_domain = #{bean.tenantDomain}
 			        </if>
@@ -206,7 +206,7 @@
 						asset_number, device_name, count(*) AS fault_type_mouth
 					FROM
 						fault_information
-					WHERE incident_type = 3
+					WHERE incident_type = 1
 					<if test="bean.tenantDomain != null ">
 			          and tenant_domain = #{bean.tenantDomain}
 			        </if>
@@ -231,7 +231,7 @@
 			         SELECT 	
 			           asset_number, device_name, TIMESTAMPDIFF( MINUTE, 	max(start_time), now() ) AS start_time
 					 FROM fault_information 
-			         WHERE incident_type = 3 
+			         WHERE incident_type = 1 
 			         <if test="bean.tenantDomain != null ">
 			          and tenant_domain = #{bean.tenantDomain}
 			         </if>
@@ -245,7 +245,7 @@
 			-- 未处理
 					SELECT asset_number, device_name, count(*) AS untreated
 					FROM fault_information 
-			    WHERE incident_type = 3 
+			    WHERE incident_type = 1 
 			     <if test="bean.tenantDomain != null ">
 		          and tenant_domain = #{bean.tenantDomain}
 		         </if>
@@ -288,7 +288,7 @@
 			b.update_time,
 			b.tenant_domain 
 		from key_position a left join fault_information b on a.asset_number=b.asset_number
-        where  b.incident_type=3
+        where  b.incident_type=1
         <if test="bean.tenantDomain != null ">
           and b.tenant_domain = #{bean.tenantDomain}
         </if>

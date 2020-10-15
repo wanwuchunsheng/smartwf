@@ -34,6 +34,7 @@ public class FaultOverviewController {
 	
 	/**
 	 * @Description: 故障类型统计 
+	 *  @param incidentType 1-故障 2-缺陷  3-告警
 	 *  @param faultType  0-故障    1-预警   2-人工提交（缺陷）
 	 * @param startTime
 	 * @param endTime

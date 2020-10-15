@@ -15,8 +15,8 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition;
-import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
+import com.smartwf.hm.modules.alarmstatistics.service.FaultInboxService;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
@@ -29,106 +29,106 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author WCH
  * @Date: 2019-10-25 15:04:26
- * @Description: 警告收件箱控制器
+ * @Description: 故障收件箱控制器
  */
 @RestController
-@RequestMapping("alarminbox")
+@RequestMapping("faultinbox")
 @Slf4j
-@Api(description = "警告收件箱(重点机位)控制器")
-public class AlarmInboxController {
+@Api(description = "故障收件箱(重点机位)控制器")
+public class FaultInboxController {
 	
 	@Autowired
-	private AlarmInboxService alarmInboxService;
+	private FaultInboxService faultInboxService;
 	
 	@Autowired
 	private DefectService defectService;
 
 	/**
-	 * @Description: 分页查询警告信息 
+	 * @Description: 分页查询故障报警信息 
 	 *    列表信息
 	 * @param startTime
 	 * @param endTime
 	 * @return
 	 */
-    @PostMapping("selectAlarmInforByPage")
-    @ApiOperation(value = "警告分页查询接口", notes = "警告分页查询")
+    @PostMapping("selectFaultInforByPage")
+    @ApiOperation(value = "故障分页查询接口", notes = "故障分页查询")
     @ApiImplicitParams({
 	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
 	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "警告码", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "警告源", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "警告描述", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmLocation", value = "警告部位", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "警告级别(0危急 1严重 2一般 3未知)", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "警告来源(0系统警告 1监控警告 2人工提交 3预警警告)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmLocation", value = "报警部位", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "故障等级(0危急 1严重 2一般 3未知)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "故障来源(0系统报警 1监控警告 2人工提交 3预警警告)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态( 0未处理 1已转工单 2处理中 3已处理 4已关闭 )", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1已转工单 2处理中 3已处理 4已关闭 )", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
     	    @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectAlarmInforByPage( Page<FaultInformation> page, FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectFaultInforByPage( Page<FaultInformation> page, FaultInformationVO bean) {
         try {
-        	Result<?> result = this.alarmInboxService.selectAlarmInforByPage(page,bean);
+        	Result<?> result = this.faultInboxService.selectFaultInforByPage(page,bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
-            log.error("警告类型统计信息错误！{}", e.getMessage(), e);
+            log.error("故障类型统计信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("警告类型统计信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障类型统计信息错误！"));
     }
     
     /**
-	 * @Description: 查询所有故障警告信息 
+	 * @Description: 查询所有故障报警信息 
 	 *   今天多少消息
 	 * @param startTime
 	 * @param endTime
 	 * @return
 	 */
-    @PostMapping("selectAlarmInforByAll")
-    @ApiOperation(value = "查询所有警告接口", notes = "查询所有警告")
+    @PostMapping("selectFaultInforByAll")
+    @ApiOperation(value = "查询所有故障报警接口", notes = "查询所有故障报警")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "警告码", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "警告源", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "警告描述", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmLocation", value = "警告部位", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "警告级别(0危急 1严重 2一般 3未知)", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "警告来源(0系统警告 1预警信息 2人工提交)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmLocation", value = "报警部位", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "故障等级(0危急 1严重 2一般 3未知)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "故障来源(0系统报警 1监控警告 2人工提交 3预警警告)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "警告状态( 0未处理 1已转工单 2处理中 3已处理 4已关闭 )", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(5待审核 6驳回 0未处理 1已转工单 2处理中 3已处理 4已关闭 7回收站 8未解决)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" )
     })
-    public ResponseEntity<Result<?>> selectAlarmInforByAll(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectFaultInforByAll(FaultInformationVO bean) {
         try {
-        	Result<?> result = this.alarmInboxService.selectAlarmInforByAll(bean);
+        	Result<?> result = this.faultInboxService.selectFaultInforByAll(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
-            log.error("警告类型统计信息错误！{}", e.getMessage(), e);
+            log.error("故障类型统计信息错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("警告类型统计信息错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障类型统计信息错误！"));
     }
     
     /**
-	 * @Description: 警告修改
+	 * @Description: 故障报警修改
 	 * @param WCH   
 	 * @param id
 	 */
-    @PutMapping("updateAlarmInforById")
-    @ApiOperation(value = "警告修改接口", notes = "警告修改")
+    @PutMapping("updateFaultInforById")
+    @ApiOperation(value = "故障修改接口", notes = "故障修改")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "警告码", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "警告源", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "警告描述", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmLocation", value = "警告部位", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "警告级别(0危急 1严重 2一般 3未知)", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "故障类型(0系统警告 1监控警告 2人工提交 3预警警告)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmLocation", value = "报警部位", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "故障等级(0危急 1严重 2一般 3未知)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "故障来源(0系统报警 1监控警告 2人工提交 3预警警告)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态(0未处理 1已转工单 2处理中 3已处理 4已关闭)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
@@ -137,44 +137,44 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" )
     })
-    public ResponseEntity<Result<?>> updateAlarmInforById(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> updateFaultInforById(FaultInformationVO bean) {
         try {
-        	 this.alarmInboxService.updateAlarmInforById(bean);
+        	 this.faultInboxService.updateFaultInforById(bean);
         	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
         } catch (Exception e) {
-            log.error("警告修改错误！{}", e.getMessage(), e);
+            log.error("故障修改错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("警告修改错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障修改错误！"));
     }
     
     /**
 	 * @Description: 主键查询
-	 *    警告详细
+	 *    故障详细
 	 * @param id
 	 */
-    @GetMapping("selectAlarmInforById")
-    @ApiOperation(value = "警告主键查询（系统警告）接口", notes = "警告主键查询（系统警告）")
+    @GetMapping("selectFaultInforById")
+    @ApiOperation(value = "故障主键查询（系统报警）接口", notes = "故障主键查询（系统报警）")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String")
     })
-    public ResponseEntity<Result<?>> selectAlarmInforById(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectFaultInforById(FaultInformationVO bean) {
         try {
-        	 Result<?> result = this.alarmInboxService.selectAlarmInforById(bean);
+        	 Result<?> result = this.faultInboxService.selectFaultInforById(bean);
         	 return ResponseEntity.ok(result);
         } catch (Exception e) {
-            log.error("警告主键查询错误！{}", e.getMessage(), e);
+            log.error("故障主键查询错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("警告主键查询错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障主键查询错误！"));
     }
     
     /**
-	 * @Description: 警告信息主键查询
+	 * @Description: 故障缺陷信息主键查询
 	 *    缺陷详细
 	 * @param id
 	 */
     @GetMapping("selectDefectById")
-    @ApiOperation(value = "警告主键查询（人工上报）接口", notes = "警告主键查询（人工上报）")
+    @ApiOperation(value = "故障主键查询（人工上报）接口", notes = "故障主键查询（人工上报）")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String")
@@ -190,22 +190,22 @@ public class AlarmInboxController {
     }
     
     /**
-	 * @Description: 实时警告未处理总数查询
-	 *    实时警告总和
+	 * @Description: 实时故障未处理总数查询
+	 *    实时故障总和
 	 * @return
 	 */
-    @GetMapping("selectAlarmsCountByAll")
-    @ApiOperation(value = "实时警告未处理总数接口", notes = "实时警告未处理总数查询")
+    @GetMapping("selectFaultCountByAll")
+    @ApiOperation(value = "实时故障未处理总数接口", notes = "实时故障未处理总数查询")
     @ApiImplicitParams({
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
 	})
-    public ResponseEntity<Result<?>> selectAlarmsCountByAll(String tenantDomain,String windFarm) {
+    public ResponseEntity<Result<?>> selectFaultCountByAll(String tenantDomain,String windFarm) {
         try {
-        	Integer count=this.alarmInboxService.selectAlarmsCountByAll(tenantDomain,windFarm);
+        	Integer count=this.faultInboxService.selectFaultCountByAll(tenantDomain,windFarm);
     	   	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
         } catch (Exception e) {
-            log.error("实时警告总数信息查询错误！{}", e.getMessage(), e);
+            log.error("实时故障总数信息查询错误！{}", e.getMessage(), e);
         }
 	   return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, Constants.ZERO));
     }
@@ -215,15 +215,15 @@ public class AlarmInboxController {
 	 * @author WCH
 	 * @return
 	 */
-    @GetMapping("selectAlarmsCountByToday")
+    @GetMapping("selectFaultCountByToday")
     @ApiOperation(value = "今日新增总数查询接口", notes = "今日新增总数查询")
     @ApiImplicitParams({
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
 	})
-    public ResponseEntity<Result<?>> selectAlarmsCountByToday(String tenantDomain,String windFarm) {
+    public ResponseEntity<Result<?>> selectFaultCountByToday(String tenantDomain,String windFarm) {
         try {
-        	Integer count=this.alarmInboxService.selectAlarmsCountByToday(tenantDomain,windFarm);
+        	Integer count=this.faultInboxService.selectFaultCountByToday(tenantDomain,windFarm);
     	   	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
         } catch (Exception e) {
             log.error("今日新增总数查询错误！{}", e.getMessage(), e);
@@ -240,20 +240,21 @@ public class AlarmInboxController {
    	 * @return
    	 */
       @PostMapping("selectFaultRecordByAll")
-      @ApiOperation(value = "查询所有警告操作记录接口", notes = "查询所有警告操作记录")
+      @ApiOperation(value = "查询所有故障操作记录接口", notes = "查询所有故障操作记录")
       @ApiImplicitParams({
   	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-       	    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "警告表（主键）", dataType = "String", required = true )
+       	    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "故障报警表（主键）", dataType = "String", required = true )
       })
       public ResponseEntity<Result<?>> selectFaultRecordByAll(FaultOperationRecord bean) {
 	       try {
-	       	 Result<?> result = this.alarmInboxService.selectFaultRecordByAll(bean);
+	       	 Result<?> result = this.faultInboxService.selectFaultRecordByAll(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
 	       } catch (Exception e) {
-	           log.error("查询所有警告操作记录信息错误！{}", e.getMessage(), e);
+	           log.error("查询所有故障操作记录信息错误！{}", e.getMessage(), e);
 	       }
-	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有警告操作记录信息错误！"));
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有故障操作记录信息错误！"));
       }
+      
       
 	    
 	    /**
@@ -270,7 +271,7 @@ public class AlarmInboxController {
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPosition(KeyPosition bean) {
 	       try {
-	    	   Result<?> result = this.alarmInboxService.selectKeyPosition(bean);
+	    	   Result<?> result = this.faultInboxService.selectKeyPosition(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
 	       } catch (Exception e) {
 	           log.error("重点机位已添加机位数据查询错误！{}", e.getMessage(), e);
@@ -298,7 +299,7 @@ public class AlarmInboxController {
 	    })
 	    public ResponseEntity<Result<?>> addKeyPosition(KeyPosition bean) {
 	       try {
-	       	 this.alarmInboxService.addKeyPosition(bean);
+	       	 this.faultInboxService.addKeyPosition(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
 	       } catch (Exception e) {
 	           log.error("重点机位添加错误！{}", e.getMessage(), e);
@@ -322,7 +323,7 @@ public class AlarmInboxController {
 	    })
 	    public ResponseEntity<Result<?>> deleteKeyPosition(KeyPosition bean) {
 	       try {
-	       	 this.alarmInboxService.deleteKeyPosition(bean);
+	       	 this.faultInboxService.deleteKeyPosition(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
 	       } catch (Exception e) {
 	           log.error("重点机位删除错误！{}", e.getMessage(), e);
@@ -332,7 +333,7 @@ public class AlarmInboxController {
 	    
 	    /**
 	 	 * @Description: 重点机位统计数据-图表
-	 	 *   重点风机的警告统计
+	 	 *   重点风机的报警统计
 	 	 * @author wch
 	 	 * @date 2020-04-07
 	 	 * @return
@@ -345,7 +346,7 @@ public class AlarmInboxController {
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByCount(KeyPosition bean) {
 	       try {
-	       	 Result<?> result = this.alarmInboxService.selectKeyPositionByCount(bean);
+	       	 Result<?> result = this.faultInboxService.selectKeyPositionByCount(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
 	       } catch (Exception e) {
 	           log.error("查询所有重点机位统计图表数据错误！{}", e.getMessage(), e);
@@ -355,7 +356,7 @@ public class AlarmInboxController {
 	    
 	    /**
 	 	 * @Description: 重点机位统计数据-列表
-	 	 *   重点风机的警告统计
+	 	 *   重点风机的报警统计
 	 	 * @author wch
 	 	 * @date 2020-04-07
 	 	 * @return
@@ -368,7 +369,7 @@ public class AlarmInboxController {
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByList(KeyPosition bean) {
 	       try {
-	       	 Result<?> result = this.alarmInboxService.selectKeyPositionByList(bean);
+	       	 Result<?> result = this.faultInboxService.selectKeyPositionByList(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
 	       } catch (Exception e) {
 	           log.error("查询所有重点机位统计列表数据错误！{}", e.getMessage(), e);
@@ -377,13 +378,13 @@ public class AlarmInboxController {
 	    }
 	    
 	    /**
-	 	 * @Description: 单个重点机位所有警告数据
+	 	 * @Description: 单个重点机位所有故障报警数据
 	 	 * @author wch
 	 	 * @date 2020-04-07
 	 	 * @return
 	 	 */
 	    @PostMapping("selectKeyPositionByDeviceCode")
-	    @ApiOperation(value = "重点机位(单个/全部)警告数据查询接口", notes = "单个重点机位所有警告数据查询")
+	    @ApiOperation(value = "重点机位(单个/全部)故障数据查询接口", notes = "单个重点机位所有故障数据查询")
 	    @ApiImplicitParams({
     	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String" , required = true),
     	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
@@ -392,17 +393,17 @@ public class AlarmInboxController {
 	    })
 	    public ResponseEntity<Result<?>> selectKeyPositionByDeviceCode(KeyPosition bean) {
 	       try {
-	       	 Result<?> result = this.alarmInboxService.selectKeyPositionByDeviceCode(bean);
+	       	 Result<?> result = this.faultInboxService.selectKeyPositionByDeviceCode(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
 	       } catch (Exception e) {
-	           log.error("单个重点机位所有警告数据查询错误！{}", e.getMessage(), e);
+	           log.error("单个重点机位所有故障数据查询错误！{}", e.getMessage(), e);
 	       }
-	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("单个重点机位所有警告数据查询错误！"));
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("单个重点机位所有故障数据查询错误！"));
 	    }
 	 
 	    
 	    /**
-		 * @Description: 警告处理意见
+		 * @Description: 故障处理意见
 		 *    添加
 		 * @author WCH
 		 * @dateTime 2020-7-20 17:55:35
@@ -410,23 +411,23 @@ public class AlarmInboxController {
 		 * @return
 		 */
 	    @PostMapping("addFaultOperationRecord")
-	    @ApiOperation(value = "添加警告处理意见接口", notes = "警告处理意见")
+	    @ApiOperation(value = "添加故障处理意见接口", notes = "故障处理意见")
 	    @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true ),
 		    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "故障主键（故障表主键）", dataType = "String", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "closureType", value = "操作类型{1处理记录  2处理意见}", dataType = "int", required = true),
 		    @ApiImplicitParam(paramType = "query", name = "closureReason", value = "操作说明", dataType = "String", required = true),
-		    @ApiImplicitParam(paramType = "query", name = "closureStatus", value = "操作状态{5待审核 0未处理  2处理中 3已处理 4已关闭}", dataType = "Integer"),
+		    @ApiImplicitParam(paramType = "query", name = "closureStatus", value = "操作状态{ 0未处理   2处理中 3已处理 4已关闭 }", dataType = "Integer"),
 		    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String" )
 		})
 	    public ResponseEntity<Result<?>> addFaultOperationRecord(FaultOperationRecord bean) {
 	        try {
-	        	this.alarmInboxService.addFaultOperationRecord(bean);
+	        	this.faultInboxService.addFaultOperationRecord(bean);
 	        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"添加成功！"));
 	        } catch (Exception e) {
-	            log.error("添加警告处理意见错误！{}", e.getMessage(), e);
+	            log.error("添加故障处理意见错误！{}", e.getMessage(), e);
 	        }
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"添加警告处理意见错误！"));
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"添加故障处理意见错误！"));
 	    }
 	    
 }

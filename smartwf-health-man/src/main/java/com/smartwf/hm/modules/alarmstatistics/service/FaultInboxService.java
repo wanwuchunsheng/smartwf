@@ -9,54 +9,54 @@ import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 /**
  * @Date: 2018/12/18 15:43
- * @Description: 警告收件箱业务层接口
+ * @Description: 故障收件箱业务层接口
  * @author WCH
  */
-public interface AlarmInboxService {
+public interface FaultInboxService {
 
 	/**
-	 * 分页查询警告报警信息 
+	 * 分页查询故障信息 
 	 * @param startTime
 	 * @param endTime
 	 * @param bean
 	 * @param page
 	 * @return
 	 */
-	Result<?> selectAlarmInforByPage( Page<FaultInformation> page,FaultInformationVO bean);
+	Result<?> selectFaultInforByPage( Page<FaultInformation> page,FaultInformationVO bean);
 	/**
-	 * 查询所有警告报警信息 
+	 * 查询所有故障信息 
 	 * @param startTime
 	 * @param endTime
 	 * @param bean
 	 * @return
 	 */
-	Result<?> selectAlarmInforByAll(FaultInformationVO bean);
+	Result<?> selectFaultInforByAll(FaultInformationVO bean);
 	/**
-	 * 实时警告报警总数查询
+	 * 实时故障总数查询
 	 * @return
 	 */
-	Integer selectAlarmsCountByAll(String tenantDomain,String windFarm);
+	Integer selectFaultCountByAll(String tenantDomain,String windFarm);
 	/**
-	 * 警告报警修改
+	 * 故障修改
 	 * @param bean
 	 * @param id
 	 */
-	void updateAlarmInforById(FaultInformationVO bean);
+	void updateFaultInforById(FaultInformationVO bean);
 	/**
 	 * 主键查询
 	 * @param id
 	 * @param bean
 	 * @return
 	 */
-	Result<?> selectAlarmInforById(FaultInformationVO bean);
+	Result<?> selectFaultInforById(FaultInformationVO bean);
 	/**
-	 * 初始化未结束的警告
+	 * 初始化未结束的故障
 	 * @return
 	 */
 	void selectFaultInformationByAll();
 	/**
-   	 * 查询所有警告报警记录信息 
-   	 *   警告操作记录
+   	 * 查询所有故障记录信息 
+   	 *   故障操作记录
    	 * @param faultInfoId
    	 * @param tenantDomain
    	 * @param bean
@@ -82,7 +82,7 @@ public interface AlarmInboxService {
 	void deleteKeyPosition(KeyPosition bean);
 	/**
  	 * 重点机位统计数据-图表
- 	 *   重点风机的报警统计
+ 	 *   重点风机的统计
  	 * @author wch
  	 * @date 2020-04-07
  	 * @param bean
@@ -91,7 +91,7 @@ public interface AlarmInboxService {
 	Result<?> selectKeyPositionByCount(KeyPosition bean);
 	/**
  	 * 重点机位统计数据-列表
- 	 *   重点风机的报警统计
+ 	 *   重点风机的统计
  	 * @author wch
  	 * @date 2020-04-07
  	 * @param bean
@@ -107,7 +107,7 @@ public interface AlarmInboxService {
  	 */
 	Result<?> selectKeyPosition(KeyPosition bean);
 	/**
- 	 * 单个重点机位所有警告报警数据
+ 	 * 单个重点机位所有故障数据
  	 * @author wch
  	 * @date 2020-04-07
  	 * @param bean
@@ -115,7 +115,7 @@ public interface AlarmInboxService {
  	 */
 	Result<?> selectKeyPositionByDeviceCode(KeyPosition bean);
 	/**
-	 *  警告处理意见
+	 *  故障处理意见
 	 *    添加
 	 * @author WCH
 	 * @dateTime 2020-7-20 17:55:35
@@ -123,21 +123,21 @@ public interface AlarmInboxService {
 	 */
 	void addFaultOperationRecord(FaultOperationRecord bean);
 	/**
-   	 *  警告、缺陷{转工单}
+   	 *  故障、缺陷{转工单}
    	 *      生产中心状态修改
    	 *      1）修改工单状态
    	 *      2）记录表插入修改记录
    	 * @author WCH
    	 * @param bean
    	 */
-	void updateAlarmInByParam(FaultInformationVO bean);
+	void updateFaultInByParam(FaultInformationVO bean);
 	
 	/**
 	 * 今日新增总数查询接口
 	 * @author WCH
 	 * @return
 	 */
-	Integer selectAlarmsCountByToday(String tenantDomain,String windFarm);
+	Integer selectFaultCountByToday(String tenantDomain,String windFarm);
 	
 	
 

@@ -9,8 +9,8 @@
 			select 
 				date_format(start_time,'%Y-%m-%d') as fname
 			from fault_information 
-			where incident_type=1 and fault_type=0
-			and start_time between #{bean.stime} and #{bean.etime}
+			where incident_type=1 
+			and DATE_FORMAT(start_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
@@ -27,8 +27,8 @@
 			select 
 				date_format(start_time,'%Y-%m-%d') as fname
 			from fault_information 
-			where incident_type=1 and fault_type=1
-			and start_time between #{bean.stime} and #{bean.etime}
+			where incident_type=3 
+			and DATE_FORMAT(start_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
@@ -45,8 +45,8 @@
 			select 
 				date_format(start_time,'%Y-%m-%d') as fname
 			from fault_information 
-			where incident_type=2 and fault_type=2
-			and start_time between #{bean.stime} and #{bean.etime}
+			where incident_type=2 
+			and DATE_FORMAT(start_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
@@ -65,7 +65,7 @@
 				alarm_level
 			from fault_information 
 			where incident_type=1
-			and start_time between #{bean.stime} and #{bean.etime}
+			and DATE_FORMAT(start_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
 			<if test="bean.alarmLevel != null ">
                 and alarm_level = #{bean.alarmLevel}
             </if>
@@ -86,7 +86,7 @@
 				alarm_status
 			from fault_information 
 			where incident_type=1
-			and start_time between #{bean.stime} and #{bean.etime}
+			and DATE_FORMAT(start_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
@@ -104,7 +104,7 @@
 				alarm_location
 			from fault_information 
 			where incident_type=1
-			and start_time between #{bean.stime} and #{bean.etime}
+			and DATE_FORMAT(start_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>

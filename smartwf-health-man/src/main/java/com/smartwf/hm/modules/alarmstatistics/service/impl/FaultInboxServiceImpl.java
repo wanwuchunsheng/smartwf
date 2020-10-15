@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +21,14 @@ import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.hm.modules.alarmstatistics.dao.AlarmInboxDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.DefectDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultDataDao;
+import com.smartwf.hm.modules.alarmstatistics.dao.FaultInboxDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOperationRecordDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.KeyPositionDao;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.pojo.KeyPosition;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
+import com.smartwf.hm.modules.alarmstatistics.service.FaultInboxService;
 import com.smartwf.hm.modules.alarmstatistics.service.PmsSendDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
@@ -37,18 +40,18 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @author WCH
  * @Date: 2019-11-27 11:25:24
- * @Description: 警告收件箱业务层实现
+ * @Description: 故障收件箱业务层实现
  */
 @Service
 @Log4j2
-public class AlarmInboxServiceImpl implements AlarmInboxService {
+public class FaultInboxServiceImpl implements FaultInboxService {
 	
 	@Autowired
-	private AlarmInboxDao alarmInboxDao;
+	private FaultInboxDao faultInboxDao;
 	
 	@Autowired
     private RedisService redisService;
-	
+
 	@Autowired
 	private FaultOperationRecordDao faultOperationRecordDao;
 	
@@ -58,44 +61,43 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	@Autowired
 	private KeyPositionDao keyPositionDao;
 	
-	
 	@Autowired
 	private PmsSendDataService pmsSendDataService;
 	
 	
 	/**
-	 * @Description: 分页查询警告信息 
+	 * @Description: 分页查询故障信息 
 	 * @param startTime
 	 * @param endTime
 	 * @return
 	 */
 	@Override
-	public Result<?> selectAlarmInforByPage( Page<FaultInformation> page,FaultInformationVO bean) {
-		List<FaultInformationVO> list=this.alarmInboxDao.selectAlarmInforByPage(page,bean);
+	public Result<?> selectFaultInforByPage( Page<FaultInformation> page,FaultInformationVO bean) {
+		List<FaultInformationVO> list=this.faultInboxDao.selectFaultInforByPage(page,bean);
 		return Result.data(page.getTotal(), list);
 	}
 	
 	/**
-	 * @Description: 查询所有警告信息 
+	 * @Description: 查询所有故障信息 
 	 * @param startTime
 	 * @param endTime
 	 * @return
 	 */
 	@Override
-	public Result<?> selectAlarmInforByAll(FaultInformationVO bean) {
-		List<FaultInformationVO> list=this.alarmInboxDao.selectAlarmInforByAll(bean);
+	public Result<?> selectFaultInforByAll(FaultInformationVO bean) {
+		List<FaultInformationVO> list=this.faultInboxDao.selectFaultInforByAll(bean);
 		return Result.data(list);
 	}
 	
 	/**
-	 * @Description: 实时警告总数查询
+	 * @Description: 实时故障总数查询
 	 * @return
 	 */
 	@Override
-	public Integer selectAlarmsCountByAll(String tenantDomain,String windFarm) {
+	public Integer selectFaultCountByAll(String tenantDomain,String windFarm) {
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("tenant_domain", tenantDomain);
-		queryWrapper.eq("incident_type", Constants.ZERO);
+		queryWrapper.eq("incident_type", Constants.ONE);
 		queryWrapper.eq("alarm_status", Constants.ZERO);
 		//支持批量拼接
 		if(StringUtils.isNotBlank(windFarm)) {
@@ -106,12 +108,12 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			}
 			queryWrapper.in("wind_farm", list);
 		}
-		Integer count= this.alarmInboxDao.selectCount(queryWrapper);
+		Integer count= this.faultInboxDao.selectCount(queryWrapper);
 		return count;
 	}
 	
 	/**
-	 * 警告修改
+	 * 故障修改
 	 *    0）获取当前登录人信息
 	 *    1）更新最后修改时间及相关状态
 	 *    2）向操作记录表插入操作记录
@@ -127,12 +129,12 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 */
 	@Transactional(rollbackFor=Exception.class)
 	@Override
-	public void updateAlarmInforById(FaultInformationVO bean) {
+	public void updateFaultInforById(FaultInformationVO bean) {
 		//1)获取当前登录人信息
 		User user=UserThreadLocal.getUser();
 		//2)更新修改状态
 		bean.setUpdateTime(new Date());
-		this.alarmInboxDao.updateById(bean);
+		this.faultInboxDao.updateById(bean);
 		//过滤重点关注修改，避免重复提交
 		if(null != bean.getAlarmStatus() && null==bean.getOperatingStatus()) {
 			//3）插入修改记录
@@ -195,8 +197,8 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 * @param id
 	 */
 	@Override
-	public Result<?> selectAlarmInforById(FaultInformationVO bean) {
-		FaultInformation list= this.alarmInboxDao.selectById(bean);
+	public Result<?> selectFaultInforById(FaultInformationVO bean) {
+		FaultInformation list= this.faultInboxDao.selectById(bean);
 		return Result.data(list);
 	}
 
@@ -208,12 +210,12 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 */
 	@Override
 	public void selectFaultInformationByAll() {
-		Map<String,FaultInformation> list = this.alarmInboxDao.selectFaultInformationByAll();
+		Map<String,FaultInformation> list = this.faultInboxDao.selectFaultInformationByAll();
 		this.redisService.set("faultCount",JSONUtil.toJsonStr(list));
 	}
 
 	/**
-   	 * @Description: 查询所有警告记录信息 
+   	 * @Description: 查询所有故障记录信息 
    	 *   故障操作记录
    	 * @param faultInfoId
    	 * @param tenantDomain
@@ -222,7 +224,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	@Override
 	public Result<?> selectFaultRecordByAll(FaultOperationRecord bean) {
 		QueryWrapper<FaultOperationRecord> queryWrapper = new QueryWrapper<>();
-		//警告表ID
+		//故障表ID
 		if(StringUtils.isNotBlank(bean.getFaultInfoId())) {
 			queryWrapper.eq("fault_info_id", bean.getFaultInfoId());
 		}
@@ -287,27 +289,27 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 
 	/**
  	 * @Description: 重点机位统计数据-图表
- 	 *   重点风机的报警统计
+ 	 *   重点风机的统计
  	 * @author wch
  	 * @date 2020-04-07
  	 * @return
  	 */
 	@Override
 	public Result<?> selectKeyPositionByCount(KeyPosition bean) {
-		List<FaultInformationVO> list=this.alarmInboxDao.selectKeyPositionByCount(bean);
+		List<FaultInformationVO> list=this.faultInboxDao.selectKeyPositionByCount(bean);
 		return Result.data(list);
 	}
 
 	/**
  	 * @Description: 重点机位统计数据-列表
- 	 *   重点风机的报警统计
+ 	 *   重点风机的统计
  	 * @author wch
  	 * @date 2020-04-07
  	 * @return
  	 */
 	@Override
 	public Result<?> selectKeyPositionByList(KeyPosition bean) {
-		List<FaultInformationVO> list=this.alarmInboxDao.selectKeyPositionByList(bean);
+		List<FaultInformationVO> list=this.faultInboxDao.selectKeyPositionByList(bean);
 		return Result.data(list);
 	}
 	
@@ -324,19 +326,19 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	}
 
 	/**
- 	 * @Description: 单个重点机位所有警告数据
+ 	 * @Description: 单个重点机位所有故障数据
  	 * @author wch
  	 * @date 2020-04-07
  	 * @return
  	 */
 	@Override
 	public Result<?> selectKeyPositionByDeviceCode(KeyPosition bean) {
-		List<FaultInformationVO> list=this.alarmInboxDao.selectKeyPositionByList(bean);
+		List<FaultInformationVO> list=this.faultInboxDao.selectKeyPositionByList(bean);
 		return Result.data(list);
 	}
 
 	/**
-	 * @Description: 警告处理意见
+	 * @Description: 故障处理意见
 	 *    添加
 	 * @author WCH
 	 * @dateTime 2020-7-20 17:55:35
@@ -352,7 +354,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	}
 
 	/**
-   	 *  警告、缺陷{转工单}
+   	 *  故障、缺陷{转工单}
    	 *      生产中心状态修改
    	 *      1）修改工单状态
    	 *      2）记录表插入修改记录
@@ -360,7 +362,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
    	 * @param bean
    	 */
 	@Override
-	public void updateAlarmInByParam(FaultInformationVO bean) {
+	public void updateFaultInByParam(FaultInformationVO bean) {
 		User user=UserThreadLocal.getUser();
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		//租户域
@@ -427,7 +429,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	 * @return
 	 */
 	@Override
-	public Integer selectAlarmsCountByToday(String tenantDomain,String windFarm) {
+	public Integer selectFaultCountByToday(String tenantDomain,String windFarm) {
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("tenant_domain", tenantDomain);
 		queryWrapper.ge("create_time", DateUtil.today());
@@ -442,7 +444,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			}
 			queryWrapper.in("wind_farm", list);
 		}
-		Integer count= this.alarmInboxDao.selectCount(queryWrapper);
+		Integer count= this.faultInboxDao.selectCount(queryWrapper);
 		return count;
 	}
 	
