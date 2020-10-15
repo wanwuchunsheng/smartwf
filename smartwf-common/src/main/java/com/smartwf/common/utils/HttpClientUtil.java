@@ -381,31 +381,6 @@ public class HttpClientUtil {
         return null;
 	}
 
-	/**
-	 * 通过HttpServletRequest返回IP地址
-	 * @param request HttpServletRequest
-	 * @return ip String
-	 * @throws Exception
-	 */
-	public static String getIpAddr(HttpServletRequest request) throws Exception {
-	    String ip = request.getHeader("x-forwarded-for");
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-	        ip = request.getHeader("Proxy-Client-IP");
-	    }
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-	        ip = request.getHeader("WL-Proxy-Client-IP");
-	    }
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-	        ip = request.getHeader("HTTP_CLIENT_IP");
-	    }
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-	        ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-	    }
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-	        ip = request.getRemoteAddr();
-	    }
-	    return ip;
-	}
 	
 	/**
 	 * 获取浏览器信息
@@ -414,14 +389,12 @@ public class HttpClientUtil {
 	 * @throws Exception
 	 */
 	public static String getBrowserInfo(HttpServletRequest request) throws Exception {
-		String ua = request.getHeader("user-agent");
-		if(ua.equalsIgnoreCase("Android") || ua.equalsIgnoreCase("IOS")) {
-			return ua;
+		String au=request.getHeader("User-Agent");
+		if(au.equalsIgnoreCase("Android") || au.equalsIgnoreCase("Ios") || au.equalsIgnoreCase("iPad")) {
+			return "app";
 		}
-		//转成UserAgent对象
-		UserAgent userAgent = UserAgentUtil.parse(ua); 
-		Browser browser = userAgent.getBrowser();
-	    return browser.toString();//浏览器名;
+		UserAgent userAgent = UserAgentUtil.parse(au);
+		return userAgent.getBrowser().getName();
 	}
 	
 	/**
@@ -430,33 +403,18 @@ public class HttpClientUtil {
 	 * @return  String
 	 * @throws Exception
 	 */
-	public static String JudgeIsMoblie(HttpServletRequest request) throws Exception{
-		String[] mobileAgents = { "iphone", "android", "phone", "mobile", "wap", "netfront", "java", "opera mobi",
-				"opera mini", "ucweb", "windows ce", "symbian", "series", "webos", "sony", "blackberry", "dopod",
-				"nokia", "samsung", "palmsource", "xda", "pieplus", "meizu", "midp", "cldc", "motorola", "foma",
-				"docomo", "up.browser", "up.link", "blazer", "helio", "hosin", "huawei", "novarra", "coolpad", "webos",
-				"techfaith", "palmsource", "alcatel", "amoi", "ktouch", "nexian", "ericsson", "philips", "sagem",
-				"wellcom", "bunjalloo", "maui", "smartphone", "iemobile", "spice", "bird", "zte-", "longcos",
-				"pantech", "gionee", "portalmmm", "jig browser", "hiptop", "benq", "haier", "^lct", "320x320",
-				"240x320", "176x220", "w3c ", "acs-", "alav", "alca", "amoi", "audi", "avan", "benq", "bird", "blac",
-				"blaz", "brew", "cell", "cldc", "cmd-", "dang", "doco", "eric", "hipt", "inno", "ipaq", "java", "jigs",
-				"kddi", "keji", "leno", "lg-c", "lg-d", "lg-g", "lge-", "maui", "maxo", "midp", "mits", "mmef", "mobi",
-				"mot-", "moto", "mwbp", "nec-", "newt", "noki", "oper", "palm", "pana", "pant", "phil", "play", "port",
-				"prox", "qwap", "sage", "sams", "sany", "sch-", "sec-", "send", "seri", "sgh-", "shar", "sie-", "siem",
-				"smal", "smar", "sony", "sph-", "symb", "t-mo", "teli", "tim-", "tosh", "tsm-", "upg1", "upsi", "vk-v",
-				"voda", "wap-", "wapa", "wapi", "wapp", "wapr", "webc", "winw", "winw", "xda", "xda-",
-				"Googlebot-Mobile" };
-		String ua= request.getHeader("User-Agent");
-		if(ua.equalsIgnoreCase("Android") || ua.equalsIgnoreCase("IOS")) {
-			return "Mobile app";
+	public static String getDeviceName(HttpServletRequest request) throws Exception{
+		String au=request.getHeader("User-Agent");
+		if(au.equalsIgnoreCase("Android")) {
+			return "Android";
 		}
-		if(request.getHeader("User-Agent") != null) {
-			for (String mobileAgent : mobileAgents) {
-				if (request.getHeader("User-Agent").toLowerCase().indexOf(mobileAgent) >= 0) {
-					return "Mobile web";
-				}
-			}
+		if(au.equalsIgnoreCase("Ios")) {
+			return "iPhone";
 		}
-		return "PC";
+		if(au.equalsIgnoreCase("iPad")) {
+			return "iPad";
+		}
+		UserAgent userAgent = UserAgentUtil.parse(au);
+		return userAgent.getPlatform().getName();
 	}
 }

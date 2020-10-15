@@ -21,6 +21,7 @@ import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.CkUtils;
 import com.smartwf.common.utils.HttpClientUtil;
+import com.smartwf.common.utils.IpUtils;
 import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
@@ -432,9 +433,9 @@ public class GlobalDataController {
     public void addLoginRecord(HttpServletRequest request,User user,int status) {
 		try {
 			//第一次登录，添加登录记录信息
-    		String ip=HttpClientUtil.getIpAddr(request);
+    		String ip=IpUtils.getClinetIpByReq(request);
     		String loginType=HttpClientUtil.getBrowserInfo(request);
-    		String deviceName=HttpClientUtil.JudgeIsMoblie(request);
+    		String deviceName=HttpClientUtil.getDeviceName(request);
     		LoginRecord lr=new LoginRecord();
     		lr.setIpAddress(ip);
     		lr.setLoginType(loginType);
