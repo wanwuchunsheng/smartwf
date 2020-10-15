@@ -81,7 +81,6 @@ spring:
         time-between-eviction-runs-millis: 30000
         # 每次释放连接的最大数目
         num-tests-per-eviction-run: 1024
-
   servlet:
     multipart:
       max-file-size: 200MB #单个文件上传大小
