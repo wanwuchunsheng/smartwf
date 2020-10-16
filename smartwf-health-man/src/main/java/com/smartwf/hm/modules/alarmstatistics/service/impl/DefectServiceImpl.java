@@ -236,7 +236,7 @@ public class DefectServiceImpl implements DefectService {
 	public Integer selectDefectCountByAll(String tenantDomain , String windFarm) {
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("tenant_domain", tenantDomain);
-		//1故障  2缺陷
+		//1故障  2缺陷 3告警
 		queryWrapper.eq("incident_type", Constants.TWO);
 		//0未处理
 		queryWrapper.eq("alarm_status", Constants.ZERO);

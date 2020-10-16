@@ -95,7 +95,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	public Integer selectAlarmsCountByAll(String tenantDomain,String windFarm) {
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("tenant_domain", tenantDomain);
-		queryWrapper.eq("incident_type", Constants.ZERO);
+		queryWrapper.eq("incident_type", 3);//1故障 2缺陷 3告警
 		queryWrapper.eq("alarm_status", Constants.ZERO);
 		//支持批量拼接
 		if(StringUtils.isNotBlank(windFarm)) {
