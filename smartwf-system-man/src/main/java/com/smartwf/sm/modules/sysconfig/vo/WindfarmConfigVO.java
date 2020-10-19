@@ -2,7 +2,7 @@ package com.smartwf.sm.modules.sysconfig.vo;
 
 import java.util.Date;
 
-import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
+import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class WindfarmConfigVO extends TenantConfig{
+public class WindfarmConfigVO extends WindfarmConfig{
 	
 	/**
 	 * 

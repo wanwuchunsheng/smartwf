@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("weatherconf")
 @Slf4j
-@Api(description ="多租户配置控制器")
+@Api(description ="天气配置控制器")
 public class WeatherConfigController {
 	
 	@Autowired
@@ -41,8 +41,8 @@ public class WeatherConfigController {
     @PostMapping("saveWeatherConfig")
     @ApiOperation(value = "添加天气配置", notes = "添加天气配置接口")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "apiUrl", value = "api地址", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "key", value = "秘钥", dataType = "String")
+    	@ApiImplicitParam(paramType = "query", name = "apiUrl", value = "api地址", dataType = "String",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "apiKey", value = "秘钥", dataType = "String",required = true)
     })
     @TraceLog(content = "添加多租户配置", paramIndexs = {0})
     public ResponseEntity<Result<?>> saveWeatherConfig(HttpServletRequest request, WeatherConfig bean) {

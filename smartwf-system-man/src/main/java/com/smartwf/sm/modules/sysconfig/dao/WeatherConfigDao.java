@@ -1,6 +1,8 @@
 package com.smartwf.sm.modules.sysconfig.dao;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -13,6 +15,12 @@ import com.smartwf.sm.modules.sysconfig.pojo.WeatherConfig;
  */
 @Repository
 public interface WeatherConfigDao extends BaseMapper<WeatherConfig> {
+
+	/**
+     * @Description: 初始化天气配置
+     * @return
+     */
+	List<WeatherConfig> initWeatherDatas();
 
 	
 

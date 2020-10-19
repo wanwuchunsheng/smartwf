@@ -49,7 +49,10 @@ public class WindFarmConfigServiceImpl implements WindFarmConfigService{
      */
 	@Override
 	public Result<?> selectWindFarmConfigById(WindfarmConfig bean) {
-		WindfarmConfig windfarmConfig= this.windFarmConfigDao.selectById(bean);
+		QueryWrapper<WindfarmConfig> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("tenant_id", bean.getTenantId());
+		queryWrapper.eq("wind_farm", bean.getWindFarm());
+		WindfarmConfig windfarmConfig= this.windFarmConfigDao.selectOne(queryWrapper);
 		return Result.data(windfarmConfig);
 	}
 	
@@ -58,9 +61,20 @@ public class WindFarmConfigServiceImpl implements WindFarmConfigService{
      * @return
      */
 	@Override
-	public void saveWindFarmConfig(WindfarmConfig bean) {
+	public Result<?> saveWindFarmConfig(WindfarmConfig bean) {
+		QueryWrapper<WindfarmConfig> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("tenant_id", bean.getTenantId());
+		queryWrapper.eq("wind_farm", bean.getWindFarm());
+		WindfarmConfig windfarmConfig= this.windFarmConfigDao.selectOne(queryWrapper);
+		//判断是否重复
+		if(null !=windfarmConfig) {
+			return Result.data(Constants.EQU_SUCCESS,"添加失败，数据重复添加");
+		}
 		bean.setCreateTime(new Date());
 		this.windFarmConfigDao.insert(bean);
+		return Result.data(Constants.EQU_SUCCESS,"添加成功");
+		
+		
 	}
 
 	/**

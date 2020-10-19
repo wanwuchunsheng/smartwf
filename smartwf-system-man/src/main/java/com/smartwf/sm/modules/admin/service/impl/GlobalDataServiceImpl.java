@@ -30,6 +30,7 @@ import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
+import com.smartwf.sm.modules.sysconfig.service.WeatherConfigService;
 import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
 import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
 
@@ -68,6 +69,11 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	
 	@Autowired
 	private TenantDao tenantDao;
+	
+	@Autowired
+	private WeatherConfigService weatherConfigService;
+	
+	
 	
 
 	/**
@@ -330,7 +336,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	
 	/**
      * @Description 刷新缓存
-     * @param flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+     * @param flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置 7天气预报
      * @return
      */
 	@Override
@@ -362,6 +368,8 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		                    		log.info("wso2配置信息{}",idt.getClientKey(), JSONUtil.toJsonStr(idt));
 		            			}
 		            		}
+		            		//天气预报
+		                	this.redisService.set("initWeatherConfig", JSONUtil.toJsonStr(this.weatherConfigService.initWeatherDatas()));
 		                	break;
 						case "1":
 							//租户
@@ -398,6 +406,10 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 								}
 							}
 							break;
+						case "7":
+							//天气预报
+		                	this.redisService.set("initWeatherConfig", JSONUtil.toJsonStr(this.weatherConfigService.initWeatherDatas()));
+		                	break;
 						default:
 							break;
 					}

@@ -30,9 +30,10 @@ public interface WindFarmConfigService {
 	/**
      * 添加风场配置
      * @param bean
+	 * @return 
      * 
      */
-	void saveWindFarmConfig(WindfarmConfig bean);
+	Result<?> saveWindFarmConfig(WindfarmConfig bean);
 	
 	/**
      *  修改风场配置

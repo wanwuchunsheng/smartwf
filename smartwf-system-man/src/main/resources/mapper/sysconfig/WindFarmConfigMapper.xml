@@ -12,7 +12,7 @@
 	    </foreach>
 	</delete>
     
-	<!-- 查询租户配置表 -->
+	<!-- 查询风场配置表 -->
     <select id="selectWindFarmConfigByPage" resultType="com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO">
         select 
 		    a.id as wind_farm,
@@ -42,6 +42,9 @@
 			b.create_time
 		 from sys_organization a left join basic_windfarm_config b on a.id=b.tenant_id
 		 where a.enable=0 and a.org_type=1
+		 <if test="bean.tenantId != null ">
+              and a.tenant_id=#{bean.tenantId}
+         </if>
          order by create_time asc
     </select>
 </mapper>

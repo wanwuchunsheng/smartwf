@@ -15,6 +15,7 @@ import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
+import com.smartwf.sm.modules.sysconfig.service.WeatherConfigService;
 import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
 import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
 
@@ -49,6 +50,9 @@ public class InitDataConfig implements CommandLineRunner{
 	
 	@Autowired
     private IdentityConfigService identityConfigService;
+	
+	@Autowired
+    private WeatherConfigService weatherConfigService;
 	
 	@Autowired
 	private UserInfoService userService;
@@ -86,8 +90,11 @@ public class InitDataConfig implements CommandLineRunner{
             		log.info("wso2配置信息{}",idt.getClientKey(), JSONUtil.toJsonStr(idt));
     			}
     		}
+    		//天气预报
+        	this.redisService.set("initWeatherConfig", JSONUtil.toJsonStr(this.weatherConfigService.initWeatherDatas()));
     		//初始化排班人员信息
     		//this.userService.selectUserInfoByShift();
+    		
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}

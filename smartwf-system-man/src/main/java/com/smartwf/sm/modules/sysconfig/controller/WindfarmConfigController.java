@@ -45,7 +45,7 @@ public class WindfarmConfigController {
     @GetMapping("selectWindFarmConfigByPage")
     @ApiOperation(value = "分页查询接口", notes = "分页查询风场配置信息")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键（租户下拉主键）", dataType = "int",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场（组织架构风场ID）", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "windFarmTitle", value = "风场名称（组织架构风场名称）", dataType = "String"),
@@ -78,9 +78,9 @@ public class WindfarmConfigController {
             Result<?> result = this.windFarmConfigService.selectWindFarmConfigByPage(page, bean);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
-            log.error("分页查询多租户配置错误！{}", e.getMessage(), e);
+            log.error("分页查询风场配置错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询多租户配置错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询风场配置错误！"));
     }
     
     /**
@@ -90,16 +90,17 @@ public class WindfarmConfigController {
     @GetMapping("selectWindFarmConfigById")
     @ApiOperation(value = "主键查询风场配置接口", notes = "主键查询风场配置")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int",required = true)
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键（租户下拉主键）", dataType = "int",required = true),
+        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场主键（组织机构主键）", dataType = "int",required = true)
     })
     public ResponseEntity<Result<?>> selectWindFarmConfigById(WindfarmConfig bean) {
         try {
             Result<?> result = this.windFarmConfigService.selectWindFarmConfigById(bean);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            log.error("主键查询多租户配置错误！{}", e.getMessage(), e);
+            log.error("主键查询风场配置错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询多租户配置错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询风场配置错误！"));
     }
     
     /**
@@ -109,34 +110,35 @@ public class WindfarmConfigController {
     @PostMapping("saveWindFarmConfig")
     @ApiOperation(value = "添加风场配置接口", notes = "添加风场配置接口")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场（组织架构风场ID）", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "windFarmTitle", value = "风场名称（组织架构风场名称）", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "kks", value = "kks编码", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "realTimeCapacity", value = "实时容量", dataType = "Double"),
-	    @ApiImplicitParam(paramType = "query", name = "installedCapacity", value = "装机容量", dataType = "Double"),
-	    @ApiImplicitParam(paramType = "query", name = "dailyGeneration", value = "日发电量", dataType = "Double"),
-	    @ApiImplicitParam(paramType = "query", name = "cumulativeGeneration", value = "累计发电量", dataType = "Double"),
-	    @ApiImplicitParam(paramType = "query", name = "proCode", value = "省编码", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "cityCode", value = "市编码", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "areaCode", value = "县/区编码", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "latitude", value = "纬度", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "longitude", value = "经度", dataType = "String"),
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场（组织架构风场ID）", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "windFarmTitle", value = "风场名称（组织架构风场名称）", dataType = "String",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "kks", value = "kks编码", dataType = "String",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "realTimeCapacity", value = "实时容量", dataType = "double",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "installedCapacity", value = "装机容量", dataType = "double",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "dailyGeneration", value = "日发电量", dataType = "double",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "cumulativeGeneration", value = "累计发电量", dataType = "double",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "proCode", value = "省编码", dataType = "String",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "cityCode", value = "市编码", dataType = "String",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "areaCode", value = "县/区编码", dataType = "String",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "latitude", value = "纬度", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "longitude", value = "经度", dataType = "int",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "geoJson", value = "GeoJson数据", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "generatingSet", value = "机组", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "powerGeneration", value = "发电", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "standBy", value = "待机", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "malfunctions", value = "故障", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "maintenance", value = "维护", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "powerRestriction", value = "限电", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "offLine", value = "离线", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "status", value = "状态（是否启用人工更新数据）0否  1是", dataType = "Integer"),
+	    @ApiImplicitParam(paramType = "query", name = "generatingSet", value = "机组", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "powerGeneration", value = "发电", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "standBy", value = "待机", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "malfunctions", value = "故障", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "maintenance", value = "维护", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "powerRestriction", value = "限电", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "offLine", value = "离线", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "type", value = "类型（0 场站  1光伏）", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "status", value = "状态（是否启用人工更新数据）0否  1是", dataType = "int",required = true)
     })
-    @TraceLog(content = "添加多租户配置", paramIndexs = {0})
+    @TraceLog(content = "添加风场配置", paramIndexs = {0})
     public ResponseEntity<Result<?>> saveWindFarmConfig( WindfarmConfig bean) {
-		this.windFarmConfigService.saveWindFarmConfig(bean);
-    	return ResponseEntity.status(HttpStatus.OK).body(Result.msg("添加成功"));
+		Result<?> result = this.windFarmConfigService.saveWindFarmConfig(bean);
+    	return ResponseEntity.status(HttpStatus.OK).body(result);
     }
     
     /**
@@ -169,7 +171,8 @@ public class WindfarmConfigController {
 	    @ApiImplicitParam(paramType = "query", name = "maintenance", value = "维护", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "powerRestriction", value = "限电", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "offLine", value = "离线", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "status", value = "状态（是否启用人工更新数据）0否  1是", dataType = "Integer"),
+	    @ApiImplicitParam(paramType = "query", name = "type", value = "类型（0 场站  1光伏）", dataType = "int"),
+	    @ApiImplicitParam(paramType = "query", name = "status", value = "状态（是否启用人工更新数据）0否  1是", dataType = "Integer")
     })
     @TraceLog(content = "修改风场配置", paramIndexs = {0})
     public ResponseEntity<Result<?>> updateWindFarmConfig(WindfarmConfig bean) {
@@ -178,7 +181,7 @@ public class WindfarmConfigController {
     }
     
     /**
-     * @Description： 删除多租户配置
+     * @Description： 删除风场配置
      * @param id 单个删除
      * @param ids 批量删除，逗号拼接
      * @return
@@ -189,7 +192,7 @@ public class WindfarmConfigController {
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
-    @TraceLog(content = "删除多租户配置系统用户", paramIndexs = {0})
+    @TraceLog(content = "删除风场配置系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteWindFarmConfig(WindfarmConfigVO bean) {
     	if(null==bean.getId() && StringUtils.isBlank(bean.getIds()) ) {
     		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键参数为空！"));

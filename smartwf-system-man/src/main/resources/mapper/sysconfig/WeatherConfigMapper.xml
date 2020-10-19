@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.sysconfig.dao.WeatherConfigDao" >
+
+	 <!-- 查询租户配置表 -->
+     <select id="initWeatherDatas" resultType="com.smartwf.sm.modules.sysconfig.pojo.WeatherConfig">
+        select id,api_key,api_url from basic_weather_config
+    </select>
+</mapper>

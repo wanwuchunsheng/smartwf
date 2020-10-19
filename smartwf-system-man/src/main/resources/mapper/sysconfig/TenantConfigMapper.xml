@@ -33,7 +33,7 @@
 		 from sys_tenant a left join basic_tenant_config b on a.id=b.tenant_id
 		 where a.enable=0
          <if test="bean.tenantId != null ">
-              and a.tenant_id=#{bean.tenantId}
+              and b.tenant_id=#{bean.tenantId}
          </if>
          <if test="bean.loginCode != null ">
               and b.login_code=#{bean.loginCode}
@@ -63,11 +63,11 @@
               and b.type=#{bean.type}
          </if>
          <if test="bean.startTime != null">
-              and b.create_time between #{bean.startTime} and #{bean.endTime}
+              and DATE_FORMAT(b.create_time,'%Y-%m-%d') between #{bean.startTime} and #{bean.endTime}
          </if>
          <if test="bean.remark != null ">
               and b.remark=#{bean.remark}
          </if>
-         order by create_time desc
+         order by b.create_time desc
     </select>
 </mapper>

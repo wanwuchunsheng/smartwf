@@ -91,6 +91,12 @@ public class WindfarmConfig implements Serializable {
 	 * 离线
 	 */
 	private Integer offLine;
+	
+	/**
+	 * 类型 0场站 1光伏
+	 */
+	private Integer type;
+	
 	/**
 	 * 状态（是否启用人工更新数据） 0否  1是
 	 */
