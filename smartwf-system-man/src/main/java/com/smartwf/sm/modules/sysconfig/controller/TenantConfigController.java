@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("tenantconf")
 @Slf4j
-@Api(description ="多租户配置控制器")
+@Api(description ="租户配置控制器")
 public class TenantConfigController {
 	
 	@Autowired
