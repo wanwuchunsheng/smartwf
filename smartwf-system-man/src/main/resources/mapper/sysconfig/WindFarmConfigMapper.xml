@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.sysconfig.dao.WindFarmConfigDao" >
+
+    <!-- 批量删除多租户配置 -->
+    <delete id="deleteWindFarmConfigByIds" parameterType = "java.util.List">
+	    delete 
+	       from basic_windfarm_config  
+	    where id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+    
+	<!-- 查询租户配置表 -->
+    <select id="selectWindFarmConfigByPage" resultType="com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO">
+        select 
+		    a.id as wind_farm,
+		    a.org_name as wind_farm_title,
+		    a.tenant_id,
+			b.id,
+			b.kks,
+			b.real_time_capacity,
+			b.installed_capacity,
+			b.daily_generation,
+			b.cumulative_generation,
+			b.pro_code,
+			b.city_code,
+			b.area_code,
+			b.latitude,
+			b.longitude,
+			b.geo_json,
+			b.generating_set,
+			b.power_generation,
+			b.stand_by,
+			b.malfunctions,
+			b.maintenance,
+			b.power_restriction,
+			b.off_line,
+			b.status,
+			b.remark,
+			b.create_time
+		 from sys_organization a left join basic_windfarm_config b on a.id=b.tenant_id
+		 where a.enable=0 and a.org_type=1
+         order by create_time asc
+    </select>
+</mapper>

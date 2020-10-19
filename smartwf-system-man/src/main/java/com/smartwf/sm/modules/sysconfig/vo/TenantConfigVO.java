@@ -1,8 +1,8 @@
-package com.smartwf.sm.modules.admin.vo;
+package com.smartwf.sm.modules.sysconfig.vo;
 
 import java.util.Date;
 
-import com.smartwf.sm.modules.admin.pojo.TenantConfig;
+import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,5 +37,13 @@ public class TenantConfigVO extends TenantConfig{
 	 * 结束时间
 	 */
 	private Date endTime;
+	/**
+	 * 租户名
+	 */
+	private String tenantName;
+	/**
+	 * 租户域
+	 */
+	private String tenantDomain;
 
 }

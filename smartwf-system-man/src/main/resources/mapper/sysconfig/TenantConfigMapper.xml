@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.sysconfig.dao.TenantConfigDao" >
+
+    <!-- 批量删除多租户配置 -->
+    <delete id="deleteTenantConfigByIds" parameterType = "java.util.List">
+	    delete 
+	       from basic_tenant_config  
+	    where id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+    
+	<!-- 查询租户配置表 -->
+     <select id="selectTenantConfigByParam" resultType="com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO">
+        select 
+			a.tenant_name,
+			a.tenant_domain,
+		    a.id as tenant_id,
+			b.id,
+			b.login_code,
+			b.login_pwd,
+			b.logo_url,
+			b.path,
+			b.type,
+			b.pro_code,
+			b.city_code,
+			b.area_code,
+			b.latitude,
+			b.longitude,
+			b.geo_json
+		 from sys_tenant a left join basic_tenant_config b on a.id=b.tenant_id
+		 where a.enable=0
+         <if test="bean.tenantId != null ">
+              and a.tenant_id=#{bean.tenantId}
+         </if>
+         <if test="bean.loginCode != null ">
+              and b.login_code=#{bean.loginCode}
+         </if>
+         <if test="bean.loginPwd != null ">
+              and b.login_pwd=#{bean.loginPwd}
+         </if> 
+         <if test="bean.proCode != null ">
+              and b.pro_code=#{bean.proCode}
+         </if> 
+         <if test="bean.cityCode != null ">
+              and b.city_code=#{bean.cityCode}
+         </if>
+         <if test="bean.areaCode != null ">
+              and b.area_code=#{bean.areaCode}
+         </if>
+         <if test="bean.latitude != null ">
+              and b.latitude=#{bean.latitude}
+         </if>
+         <if test="bean.longitude != null ">
+              and b.longitude=#{bean.longitude}
+         </if>
+         <if test="bean.geoJson != null ">
+              and b.geo_json=#{bean.geoJson}
+         </if>
+         <if test="bean.type != null ">
+              and b.type=#{bean.type}
+         </if>
+         <if test="bean.startTime != null">
+              and b.create_time between #{bean.startTime} and #{bean.endTime}
+         </if>
+         <if test="bean.remark != null ">
+              and b.remark=#{bean.remark}
+         </if>
+         order by create_time desc
+    </select>
+</mapper>

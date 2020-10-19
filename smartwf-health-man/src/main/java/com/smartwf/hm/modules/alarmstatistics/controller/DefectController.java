@@ -40,7 +40,7 @@ public class DefectController {
 	 * @Description: 缺陷工单处理
 	 *     缺陷工单审核，缺陷工单状态修改（缺陷工单关闭）
 	 * @param id
-	 * @param alarmStatus 5待审核  6驳回  0未处理  1已转工单  2处理中  3已处理  4已关闭  7回收站  8未解决
+	 * @param alarmStatus 0未处理  1已转工单  2处理中  3已处理  4已关闭 
      *
 	 */
     @PutMapping("updateDefectById")

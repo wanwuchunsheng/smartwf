@@ -1,8 +1,5 @@
 package com.smartwf.sm.modules.admin.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +17,7 @@ import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
-import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
-import com.smartwf.sm.modules.admin.vo.RoleVO;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 import io.swagger.annotations.Api;

@@ -19,7 +19,6 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.CkUtils;
 import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.IpUtils;
 import com.smartwf.common.utils.Wso2ClientUtils;
@@ -34,8 +33,6 @@ import com.smartwf.sm.modules.admin.service.LoginRecordService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
-import cn.hutool.http.useragent.UserAgent;
-import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

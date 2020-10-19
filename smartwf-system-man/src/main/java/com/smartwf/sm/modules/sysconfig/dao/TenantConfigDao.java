@@ -1,4 +1,4 @@
-package com.smartwf.sm.modules.admin.dao;
+package com.smartwf.sm.modules.sysconfig.dao;
 
 
 import java.util.List;
@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.smartwf.sm.modules.admin.pojo.TenantConfig;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
+import com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO;
 
 /**
  * @Date: 2019-11-27 11:29:02
@@ -23,6 +25,13 @@ public interface TenantConfigDao extends BaseMapper<TenantConfig> {
 	 * @result:
 	 */
 	void deleteTenantConfigByIds(@Param("list") List<String> list);
+
+	/**
+	 * 分页查询租户配置信息
+	 * @param page,bean
+	 * @result
+	 */
+	List<TenantConfigVO> selectTenantConfigByParam(Page<TenantConfig> page,@Param("bean") TenantConfigVO bean);
 
 	
 

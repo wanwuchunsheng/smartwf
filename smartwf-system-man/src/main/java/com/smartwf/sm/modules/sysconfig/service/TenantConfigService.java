@@ -1,9 +1,9 @@
-package com.smartwf.sm.modules.admin.service;
+package com.smartwf.sm.modules.sysconfig.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.sm.modules.admin.pojo.TenantConfig;
-import com.smartwf.sm.modules.admin.vo.TenantConfigVO;
+import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
+import com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO;
 
 /**
  * @Description: 多租户配置业务层接口
