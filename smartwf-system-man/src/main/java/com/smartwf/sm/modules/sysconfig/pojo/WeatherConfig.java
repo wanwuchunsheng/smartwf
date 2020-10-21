@@ -36,6 +36,14 @@ public class WeatherConfig implements Serializable {
 	 */
 	private String apiKey;
 	
+	/**
+	 * API接口类型
+	 * 0-实时
+	 * 3-3天
+	 * 7-七天
+	 */
+	private Integer apiType;
+	
 
 	private Date createTime;
 }

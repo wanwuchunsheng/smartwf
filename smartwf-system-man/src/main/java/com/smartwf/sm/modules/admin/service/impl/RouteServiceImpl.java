@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.common.utils.JSONUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,10 +24,16 @@ import com.smartwf.sm.modules.admin.pojo.Route;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.service.RouteService;
+import com.smartwf.sm.modules.sysconfig.dao.TenantConfigDao;
 import com.smartwf.sm.modules.sysconfig.dao.WindFarmConfigDao;
+import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
+import com.smartwf.sm.modules.sysconfig.pojo.WeatherConfig;
 import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
+import com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO;
+import com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j;
 /**
@@ -55,6 +62,9 @@ public class RouteServiceImpl implements RouteService{
 	
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
+	
+	@Autowired
+	private TenantConfigDao tenantConfigDao;
 	
 	/**
      * 门户菜单查询
@@ -159,7 +169,78 @@ public class RouteServiceImpl implements RouteService{
 		return Result.data(Constants.EQU_SUCCESS,JSONUtil.toJsonStr(map));
 	}
 
+	/**
+     * 门户天气查询
+     *    查询租户下所有风场天气
+     * @author WCH
+     * @param bean
+     * @return
+     * 
+     */
+	@Override
+	public Result<?> selectPortalWeatherByParam(TenantConfig bean) {
+		Map<String,Object> map=null;
+		List<Map<String,Object>> listmap=new ArrayList<>();
+		//租户天气
+		TenantConfigVO tcf= this.tenantConfigDao.selectTenantConfig(bean);
+		String locationWf=StrUtil.str(new StringBuilder().append(tcf.getLongitude()).append(",").append(tcf.getLatitude()));
+		String res=this.redisService.get(locationWf);
+		if(StrUtil.isNotBlank(res)) {
+			//直接将值返回
+			listmap.add(JSONUtil.toBean(res, Map.class));
+		}else {
+			map=new HashMap<>();
+			map.put("proName", tcf.getProName());
+			map.put("cityName", tcf.getCityName());
+			map.put("areaName", tcf.getAreaName());
+			listmap.add(requestWeather(locationWf, "0",map));
+		}
+		//查询各风场天气
+		List<WindfarmConfigVO> wtlist=this.windFarmConfigDao.selectWindfarmConfig(bean);
+		for(WindfarmConfig wt:wtlist) {
+			String locationWt=StrUtil.str(new StringBuilder().append(wt.getLongitude()).append(",").append(wt.getLatitude()));
+			String resWt=this.redisService.get(locationWt);
+			if(StrUtil.isNotBlank(resWt)) {
+				//直接将值返回
+				listmap.add(JSONUtil.toBean(resWt, Map.class));
+			}else {
+				map=new HashMap<>();
+				map.put("proName", tcf.getProName());
+				map.put("cityName", tcf.getCityName());
+				map.put("areaName", tcf.getAreaName());
+				listmap.add(requestWeather(locationWt, "1",map));
+			}
+		}
+		//查询租户下的所有风场信息
+		return Result.data(Constants.EQU_SUCCESS,listmap);
+	}
+
 	
+	/**
+	 * 说明：根据经纬度，查询天气
+	 * @param location 经纬度
+	 * @param type 0-租户域 天气  1-风场天气
+	 * 
+	 * */
+	public Map<String,Object> requestWeather(String location,String type,Map<String,Object> map){
+		//不存在，重新获取 请求url和key
+		List<WeatherConfig> wcfglist=JSONUtil.toList(JSONUtil.parseArray(this.redisService.get("initWeatherConfig")), WeatherConfig.class);
+		for(WeatherConfig wc:wcfglist) {
+			if(0==wc.getApiType()) {
+				map.put("location", location);
+				map.put("key", wc.getApiKey());
+				//发送http get请求
+				String resJson=HttpRequest.get(wc.getApiUrl()).form(map).timeout(60000).execute().body();
+				Map<String,Object> resmap=JSONUtil.toBean(resJson,Map.class);
+				map.put("weather", resmap.get("now"));
+				map.put("type", type);
+			    //保存redis，设置时间1小时
+				this.redisService.set(location,JSONUtil.toJsonStr(map), 1800);
+				return map;
+			}
+		}
+		return null;
+	}
 	
 	
 	

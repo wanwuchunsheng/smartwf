@@ -86,4 +86,28 @@
          group by type order by type asc
     </select>
     
+    
+    <!-- 查询租户配置表 -->
+    <select id="selectWindfarmConfig" resultType="com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO">
+        SELECT
+			a.id,
+			a.tenant_id,
+			a.tenant_domain,
+			a.wind_farm,
+			a.pro_code,
+			a.city_code,
+			a.area_code,
+		    (select pro_name from sys_province where pro_code=a.pro_code) as proName,
+			(select name from sys_city where code=a.city_code ) as cityName,
+			(select name from sys_area where code=a.area_code ) as areaName,
+			a.latitude,
+			a.longitude,
+			a.geo_json
+		FROM
+			basic_windfarm_config a where 1=1
+         <if test="bean.tenantId != null ">
+              and a.tenant_id=#{bean.tenantId}
+         </if>
+         
+    </select>
 </mapper>

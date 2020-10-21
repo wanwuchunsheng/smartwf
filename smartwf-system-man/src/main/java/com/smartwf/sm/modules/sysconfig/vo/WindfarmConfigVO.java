@@ -38,5 +38,17 @@ public class WindfarmConfigVO extends WindfarmConfig{
 	 */
 	private Date endTime;
 	
+	/**
+	 * 省名称
+	 */
+	private String proName;
+	/**
+	 * 市名称
+	 */
+	private String cityName;
+	/**
+	 * 县/区名称
+	 */
+	private String areaName;
 
 }

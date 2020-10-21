@@ -13,7 +13,7 @@
 	</delete>
     
 	<!-- 查询租户配置表 -->
-     <select id="selectTenantConfigByParam" resultType="com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO">
+    <select id="selectTenantConfigByParam" resultType="com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO">
         select 
 			a.tenant_name,
 			a.tenant_domain,
@@ -69,5 +69,29 @@
               and b.remark=#{bean.remark}
          </if>
          order by b.create_time desc
+    </select>
+    
+    
+    <!-- 查询租户配置表 -->
+    <select id="selectTenantConfig" resultType="com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO">
+        SELECT
+			a.id,
+			a.tenant_id,
+		    a.pro_code,
+		    a.city_code,
+		    a.area_code,
+			(select pro_name from sys_province where pro_code=a.pro_code) as proName,
+			(select name from sys_city where code=a.city_code ) as cityName,
+			(select name from sys_area where code=a.area_code ) as areaName,
+			a.latitude,
+			a.longitude,
+			a.geo_json,
+			a.remark
+		FROM
+			basic_tenant_config a where 1=1
+         <if test="bean.tenantId != null ">
+              and a.tenant_id=#{bean.tenantId}
+         </if>
+         
     </select>
 </mapper>

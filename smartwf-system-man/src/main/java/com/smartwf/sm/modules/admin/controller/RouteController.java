@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.service.RouteService;
+import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
 import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
 
 import io.swagger.annotations.Api;
@@ -121,5 +122,39 @@ public class RouteController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( Constants.BAD_REQUEST ,"人员统计查询错误！"));
     }
+    
+    
+    /**
+     * 门户天气查询
+     * @author WCH
+     * @param bean
+     * @return
+     * 
+     */
+    @PostMapping("/selectPortalWeatherByParam")
+    @ApiOperation(value = "天气查询接口", notes = "天气查询查询")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户Id", dataType = "String", required = true)
+    })
+    public ResponseEntity<Result<?>> selectPortalWeatherByParam(TenantConfig bean) {
+        try {
+            Result<?> result = this.routeService.selectPortalWeatherByParam(bean);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("天气查询错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( Constants.BAD_REQUEST ,"天气查询错误！"));
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }

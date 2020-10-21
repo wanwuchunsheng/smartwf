@@ -45,5 +45,18 @@ public class TenantConfigVO extends TenantConfig{
 	 * 租户域
 	 */
 	private String tenantDomain;
+	
+	/**
+	 * 省名称
+	 */
+	private String proName;
+	/**
+	 * 市名称
+	 */
+	private String cityName;
+	/**
+	 * 县/区名称
+	 */
+	private String areaName;
 
 }

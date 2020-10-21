@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
 import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
 import com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO;
 
@@ -52,6 +53,13 @@ public interface WindFarmConfigDao extends BaseMapper<WindfarmConfig> {
      * 
      */
 	List<WindfarmConfig> selectPortalStatusByParam(@Param("bean") WindfarmConfig bean);
+
+	/**
+	 * 门户天气 - 租户天气
+	 * @param page,bean
+	 * @result
+	 */
+	List<WindfarmConfigVO> selectWindfarmConfig(@Param("bean") TenantConfig bean);
 
 	
 

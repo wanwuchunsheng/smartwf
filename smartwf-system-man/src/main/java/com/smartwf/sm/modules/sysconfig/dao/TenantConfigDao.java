@@ -33,6 +33,13 @@ public interface TenantConfigDao extends BaseMapper<TenantConfig> {
 	 */
 	List<TenantConfigVO> selectTenantConfigByParam(Page<TenantConfig> page,@Param("bean") TenantConfigVO bean);
 
+	/**
+	 * 门户天气 - 租户天气
+	 * @param page,bean
+	 * @result
+	 */
+	TenantConfigVO selectTenantConfig(@Param("bean") TenantConfig bean);
+
 	
 
 	

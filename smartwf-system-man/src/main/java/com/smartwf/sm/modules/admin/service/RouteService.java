@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.admin.service;
 
 import com.smartwf.common.pojo.Result;
+import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
 import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
 
 /**
@@ -42,6 +43,15 @@ public interface RouteService {
      * 
      */
 	Result<?> selectPortalUserByParam(WindfarmConfig bean);
+
+	/**
+     * 门户天气查询
+     * @author WCH
+     * @param bean
+     * @return
+     * 
+     */
+	Result<?> selectPortalWeatherByParam(TenantConfig bean);
 
 	
 }

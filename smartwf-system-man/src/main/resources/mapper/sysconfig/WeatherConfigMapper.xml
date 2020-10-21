@@ -4,6 +4,6 @@
 
 	 <!-- 查询租户配置表 -->
      <select id="initWeatherDatas" resultType="com.smartwf.sm.modules.sysconfig.pojo.WeatherConfig">
-        select id,api_key,api_url from basic_weather_config
+        select id,api_key,api_url,api_type from basic_weather_config
     </select>
 </mapper>
