@@ -377,9 +377,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 			userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
 			//角色
 			userInfo.setRoleList(this.roleDao.selectTreeRoleByUserId(userInfo));
-			/**
 			//获取组织架构
-			userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
+			//userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
+			/**
 			//资源权限
 			//List<TreeResource> reslist=buildByRecursive(this.resourceDao.selectResourceByUserId(userInfo) );
 			userInfo.setResouceList(reslist);

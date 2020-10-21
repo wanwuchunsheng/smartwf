@@ -8,9 +8,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOverviewDao;
+import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultOverviewService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
@@ -18,6 +20,7 @@ import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -201,6 +204,25 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 			list.add(fr);
 		}
 		return Result.data(list);
+	}
+
+	/**
+     * 说明：门户故障/缺陷/警告 统计
+     *   1）查询所有信息状态
+     *   2）查询已处理的信息列表
+     * @param bean
+     * @return
+     * */
+	@Override
+	public Result<?> selectFaultByAlarmStatus(Page<FaultInformation> page,FaultInformationVO bean) {
+		//故障状态统计
+		List<Map<String,String>> listAlarmStatus= this.faultOverviewDao.selectFaultByAlarmStatus(bean);
+		//已处理故障分页查询
+		List<Map<String,String>> listFaultInfomation=this.faultOverviewDao.selectFaultInformationByPage(page,bean);
+		Map<Integer,List<Map<String,String>>> map =new HashMap<>();
+		map.put(0, listAlarmStatus);
+		map.put(1, listFaultInfomation);
+		return Result.data(Constants.EQU_SUCCESS, JSONUtil.toJsonStr(map));
 	}
 	
 	

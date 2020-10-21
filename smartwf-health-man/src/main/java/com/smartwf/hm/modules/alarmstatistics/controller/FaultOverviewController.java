@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultOverviewService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
@@ -116,4 +118,28 @@ public class FaultOverviewController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障等级分布统计信息错误！"));
     }
 
+    /**
+     * 说明：门户故障/缺陷/警告 统计
+     * @param bean
+     * @return
+     * */
+    @PostMapping("selectFaultByAlarmStatus")
+    @ApiOperation(value = "门户（故障/缺陷/警告）统计", notes = "故障处理统计查询")
+    @ApiImplicitParams({
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
+    })
+    public ResponseEntity<Result<?>> selectFaultByAlarmStatus(Page<FaultInformation> page,FaultInformationVO bean) {
+        try {
+            Result<?> result = this.faultOverviewService.selectFaultByAlarmStatus(page,bean);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }
+        } catch (Exception e) {
+            log.error("故障处理统计信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障处理统计信息错误！"));
+    }
 }

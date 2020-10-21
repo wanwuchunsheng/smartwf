@@ -47,4 +47,43 @@
          </if>
          order by create_time asc
     </select>
+    
+    
+    <!-- 发电量统计 -->
+    <select id="selectPortalPowerGenByParam" resultType="com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig">
+         select 
+			sum(daily_generation) as daily_generation,
+			sum(cumulative_generation) as cumulative_generation,
+			sum(real_time_capacity) as real_time_capacity,
+			sum(installed_capacity) as installed_capacity
+		 from basic_windfarm_config where 1=1
+		 <if test="bean.tenantDomain != null ">
+              and tenant_domain=#{bean.tenantDomain}
+         </if>
+         <if test="bean.windFarm != null ">
+              and wind_farm=#{bean.windFarm}
+         </if>
+    </select>
+    
+    <!-- 门户状态统计 -->
+    <select id="selectPortalStatusByParam" resultType="com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig">
+         select 
+			sum(generating_set) as generating_set,
+			sum(power_generation) as power_generation,
+			sum(stand_by) as stand_by,
+			sum(malfunctions) as malfunctions,
+		    sum(maintenance) as maintenance,
+			sum(power_restriction) as power_restriction,
+			sum(off_line) as off_line,
+		  type
+		from basic_windfarm_config where 1=1 
+		 <if test="bean.tenantDomain != null ">
+              and tenant_domain=#{bean.tenantDomain}
+         </if>
+         <if test="bean.windFarm != null ">
+              and wind_farm=#{bean.windFarm}
+         </if>
+         group by type order by type asc
+    </select>
+    
 </mapper>

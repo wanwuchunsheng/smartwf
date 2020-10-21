@@ -1,6 +1,8 @@
 package com.smartwf.hm.modules.alarmstatistics.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
 /**
@@ -34,6 +36,13 @@ public interface FaultOverviewService {
 	 * @return
 	 */
 	Result<?> selectFaultStatusByDate(FaultInformationVO bean);
+	
+	/**
+     * 说明：门户故障/缺陷/警告 统计
+     * @param bean
+     * @return
+     * */
+	Result<?> selectFaultByAlarmStatus(Page<FaultInformation> page,FaultInformationVO bean);
 
 
 }

@@ -2,6 +2,7 @@ package com.smartwf.sm.modules.sysconfig.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -32,6 +33,25 @@ public interface WindFarmConfigDao extends BaseMapper<WindfarmConfig> {
 	 * @result
 	 */
 	List<WindfarmConfigVO> selectWindFarmConfigByPage(Page<WindfarmConfig> page,@Param("bean") WindfarmConfigVO bean);
+
+	
+	/**
+     * 门户发电量统计数据 -发电量统计
+     * @author WCH
+     * @param bean
+     * @return
+     * 
+     */
+	WindfarmConfig selectPortalPowerGenByParam(@Param("bean") WindfarmConfig bean);
+
+	/**
+     * 门户状态统计 - 设备状态
+     * @author WCH
+     * @param bean
+     * @return
+     * 
+     */
+	List<WindfarmConfig> selectPortalStatusByParam(@Param("bean") WindfarmConfig bean);
 
 	
 

@@ -2,11 +2,13 @@ package com.smartwf.hm.modules.alarmstatistics.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
@@ -75,6 +77,23 @@ public interface FaultOverviewDao extends BaseMapper<FaultInformation> {
 	 * @return
 	 */
 	List<FaultInformationVO> selectFaultLocationByDate(@Param("bean") FaultInformationVO bean);
+	/**
+     * 说明：门户故障/缺陷/警告 统计  -统计
+     *   1）查询所有信息状态 
+     *   2）查询已处理的信息列表
+     * @param bean
+     * @return
+     * */
+	List<Map<String,String>> selectFaultByAlarmStatus(@Param("bean") FaultInformationVO bean);
+	
+	/**
+     * 说明：门户故障/缺陷/警告 统计 -列表
+     *   1）查询所有信息状态
+     *   2）查询已处理的信息列表
+     * @param bean
+     * @return
+     * */
+	List<Map<String,String>> selectFaultInformationByPage(Page<FaultInformation> page, @Param("bean") FaultInformationVO bean);
 	
 
 }

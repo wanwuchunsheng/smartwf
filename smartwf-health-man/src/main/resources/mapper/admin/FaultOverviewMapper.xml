@@ -115,4 +115,47 @@
     </select>
     
     
+    <!-- 门户故障状态统计 -总数 -->
+    <select id="selectFaultByAlarmStatus" resultType="java.util.Map">
+       select 
+			a.alarm_status as fname,
+			count(a.fname) as fvalue 
+		from (
+			select 
+				 date_format(start_time,'%Y-%m-%d') as fname,
+				 alarm_status 
+			from fault_information 
+			where 1=1 
+			<if test="bean.tenantDomain != null ">
+					and tenant_domain = #{bean.tenantDomain}
+			</if>
+			<if test="bean.windFarm != null ">
+					and wind_farm in (${bean.windFarm}) 
+			</if>
+		) a  group by a.alarm_status order by a.alarm_status asc
+    </select>
+    
+    <!-- 门户故障状态统计 - 列表-->
+    <select id="selectFaultInformationByPage" resultType="java.util.Map">
+        SELECT
+			id,
+			alarm_code,
+			alarm_source,
+			alarm_description,
+			alarm_location,
+			start_time,
+			end_time
+		FROM
+			fault_information
+		WHERE
+			alarm_status = 3
+		<if test="bean.tenantDomain != null ">
+            and tenant_domain = #{bean.tenantDomain}
+        </if>
+        <if test="bean.windFarm != null ">
+            and wind_farm in (${bean.windFarm}) 
+        </if>
+        order by update_time desc
+    </select>
+    
 </mapper>
