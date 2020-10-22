@@ -149,6 +149,14 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			fr.setRemark(bean.getRemark()); 
 			//租户域
 			fr.setTenantDomain(bean.getTenantDomain());
+			//对生产中心转工单状态修改
+			int alarmStatus=bean.getAlarmStatus();
+			if(alarmStatus==0 || alarmStatus==6 || alarmStatus==7 || alarmStatus==8) {
+				bean.setAlarmStatus(4);
+			}
+			if(alarmStatus==5){
+				bean.setAlarmStatus(3);
+			}
 			//0未处理  1已转工单  2处理中  3已处理  4已关闭
 			switch (bean.getAlarmStatus()) {
 				case 1:
@@ -388,6 +396,14 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			//租户域
 			fr.setTenantDomain(ft.getTenantDomain());
 			fr.setRemark(bean.getRemark());
+			//对生产中心转工单状态修改
+			int alarmStatus=bean.getAlarmStatus();
+			if(alarmStatus==0 || alarmStatus==6 || alarmStatus==7 || alarmStatus==8) {
+				bean.setAlarmStatus(4);
+			}
+			if(alarmStatus==5){
+				bean.setAlarmStatus(3);
+			}
 			//0未处理  1已转工单  2处理中  3已处理  4已关闭 
 			switch (bean.getAlarmStatus()) {
 				case 1:
