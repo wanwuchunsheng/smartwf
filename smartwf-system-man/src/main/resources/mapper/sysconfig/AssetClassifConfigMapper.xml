@@ -19,37 +19,41 @@
 			b.tenant_id,
 			b.tenant_domain,
 			b.wind_farm,
-			b.route_address,
-			b.secret_path,
+			b.classify_name,
+			b.svg,
+			b.remark,
 			b.create_time,
-			a.org_name as windFarmName
+			a.org_name as windFarmName,
+			( select tenant_name from sys_tenant where  enable =0 and id=b.tenant_id ) as tenantName
 		 from  sys_organization a left join  basic_asset_classification b on a.id =b.wind_farm where a.tenant_id=b.tenant_id and a.org_type=1
          <if test="bean.tenantId != null ">
-              and a.tenant_id=#{bean.tenantId}
+              and b.tenant_id=#{bean.tenantId}
          </if>
          <if test="bean.tenantDomain != null ">
-              and a.tenant_domain=#{bean.tenantDomain}
+              and b.tenant_domain=#{bean.tenantDomain}
          </if>
     </select>
     
-    <!-- 查询列表 -->
+    <!-- 主键查询 -->
     <select id="selectAssetClassifById" resultType="com.smartwf.sm.modules.sysconfig.vo.AssetClassifVO">
         select 
 			b.id,
 			b.tenant_id,
 			b.tenant_domain,
 			b.wind_farm,
-			b.route_address,
-			b.secret_path,
+			b.classify_name,
+			b.svg,
+			b.remark,
 			b.create_time,
-			a.org_name as windFarmName
+			a.org_name as windFarmName,
+			( select tenant_name from sys_tenant where  enable =0 and id=b.tenant_id ) as tenantName
 		 from  sys_organization a left join  basic_asset_classification b on a.id =b.wind_farm where a.tenant_id=b.tenant_id and a.org_type=1
-		 and b.id=#{bean.tenantId}
+         and b.id=#{bean.id}
          <if test="bean.tenantId != null ">
-              and a.tenant_id=#{bean.tenantId}
+              and b.tenant_id=#{bean.tenantId}
          </if>
          <if test="bean.tenantDomain != null ">
-              and a.tenant_domain=#{bean.tenantDomain}
+              and b.tenant_domain=#{bean.tenantDomain}
          </if>
     </select>
     

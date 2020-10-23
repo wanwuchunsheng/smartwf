@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.sysconfig.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +56,7 @@ public class AssetClassifServiceImpl implements AssetClassifService{
      */
 	@Override
 	public void saveAssetClassif(AssetClassification bean) {
+		bean.setCreateTime(new Date());
 		this.AssetClassifDao.insert(bean);
 	}
 

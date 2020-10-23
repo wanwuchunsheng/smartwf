@@ -32,6 +32,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -62,8 +63,8 @@ public class AssetClassifController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询资产分类信息")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "classifyName", value = "资产分类名", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "svg", value = "svg图片路径", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
@@ -107,47 +108,36 @@ public class AssetClassifController {
      * @param bean
      * @return
      */
-    @PostMapping("saveAssetClassif")
+    @PostMapping(value="saveAssetClassif", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     @ApiOperation(value = "添加接口", notes = "添加资产分类接口")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int"),
 	    @ApiImplicitParam(paramType = "query", name = "classifyName", value = "资产分类名", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "svg", value = "svg图片路径", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "添加资产分类", paramIndexs = {0})
-    public ResponseEntity<Result<?>> saveAssetClassif(HttpServletRequest request, AssetClassification bean) {
+    public ResponseEntity<Result<?>> saveAssetClassif(@ApiParam(value = "svg图片") MultipartFile file, AssetClassification bean) {
     	try {
-        	//获取前端上传的文件列表
-            List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-            StringBuffer sb=null;
-            if(files!=null && files.size()>0) {
-            	sb=new StringBuffer();
+    		if(null !=file) {
             	//保存图片
-            	for(MultipartFile fl: files) {
-    	        	String temp = "document/";
-	                // 获取图片的文件名
-	                String fileName = fl.getOriginalFilename();
-	                // 获取图片的扩展名
-	                String extensionName = fileName.substring(fileName.indexOf("."));
-	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
-	                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
-	                // 数据库保存的目录
-	                String datdDirectory = temp.concat(newFileName);
-	                //上传文件到sftp
-	                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, fl.getInputStream());
-    	        	if(flag) {
-    	        		//上传成功，
-    	        		sb.append(datdDirectory).append(",");
-    	        	}
-            	}
-            }
-            //拼接路径
-            if(sb!=null) {
-            	bean.setSvg(sb.toString().trim());
-            }
+	        	String temp = "document/";
+                // 获取图片的文件名
+                String fileName = file.getOriginalFilename();
+                // 获取图片的扩展名
+                String extensionName = fileName.substring(fileName.indexOf("."));
+                // 新的图片文件名 = 获取时间戳+"."图片扩展名
+                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
+                // 数据库保存的目录
+                String datdDirectory = temp.concat(newFileName);
+                //上传文件到sftp
+                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, file.getInputStream());
+	        	if(flag) {
+	        		//上传成功
+	        		bean.setSvg(datdDirectory);
+	        	}
+    		}
             //保存本地数据
         	this.assetClassifService.saveAssetClassif(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
@@ -162,44 +152,33 @@ public class AssetClassifController {
      * @param bean
      * @return
      */
-    @PutMapping("updateAssetClassif")
+    @PutMapping(value ="updateAssetClassif", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     @ApiOperation(value = "修改接口", notes = "修改资产分类资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "classifyName", value = "资产分类名", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "svg", value = "svg图片路径", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改资产分类", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updateAssetClassif(HttpServletRequest request, AssetClassification bean) {
+    public ResponseEntity<Result<?>> updateAssetClassif(@ApiParam(value = "svg图片") MultipartFile file, AssetClassification bean) {
     	try {
-        	//获取前端上传的文件列表
-            List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-            StringBuffer sb=null;
-            if(files!=null && files.size()>0) {
-            	sb=new StringBuffer();
+    		if(null !=file) {
             	//保存图片
-            	for(MultipartFile fl: files) {
-    	        	String temp = "document/";
-	                // 获取图片的文件名
-	                String fileName = fl.getOriginalFilename();
-	                // 获取图片的扩展名
-	                String extensionName = fileName.substring(fileName.indexOf("."));
-	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
-	                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
-	                // 数据库保存的目录
-	                String datdDirectory = temp.concat(newFileName);
-	                //上传文件到sftp
-	                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, fl.getInputStream());
-    	        	if(flag) {
-    	        		//上传成功，
-    	        		sb.append(datdDirectory).append(",");
-    	        	}
-            	}
-            }
-            //拼接路径
-            if(sb!=null) {
-            	bean.setSvg(sb.toString().trim());
+	        	String temp = "document/";
+                // 获取图片的文件名
+                String fileName = file.getOriginalFilename();
+                // 获取图片的扩展名
+                String extensionName = fileName.substring(fileName.indexOf("."));
+                // 新的图片文件名 = 获取时间戳+"."图片扩展名
+                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
+                // 数据库保存的目录
+                String datdDirectory = temp.concat(newFileName);
+                //上传文件到sftp
+                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, file.getInputStream());
+	        	if(flag) {
+	        		//上传成功
+	        		bean.setSvg(datdDirectory);
+	        	}
             }
             //保存本地数据
         	this.assetClassifService.updateAssetClassif(bean);
