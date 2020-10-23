@@ -32,7 +32,7 @@ public interface EmailConfigDao extends BaseMapper<EmailConfig> {
      * @param bean
      * @return
      */
-	EmailConfig selectEmailConfigById(@Param("bean") EmailConfig bean);
+	EmailConfigVO selectEmailConfigById(@Param("bean") EmailConfig bean);
 
 	/**
      * @Description： 删除邮件短信配置

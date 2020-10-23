@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.sysconfig.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +46,7 @@ public class EmailConfigServiceImpl implements EmailConfigService{
      */
 	@Override
 	public Result<?> selectEmailConfigById(EmailConfig bean) {
-		EmailConfig icfg=this.emailConfigDao.selectEmailConfigById(bean);
+		EmailConfigVO icfg=this.emailConfigDao.selectEmailConfigById(bean);
 		return Result.data(Constants.EQU_SUCCESS, icfg);
 	}
 
@@ -56,6 +57,7 @@ public class EmailConfigServiceImpl implements EmailConfigService{
      */
 	@Override
 	public void saveEmailConfig(EmailConfig bean) {
+		bean.setCreateTime(new Date());
 		this.emailConfigDao.insert(bean);
 	}
 

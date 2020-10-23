@@ -17,7 +17,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.sm.config.ftp.SFtpConfig;
 import com.smartwf.sm.modules.sysconfig.pojo.DocumentType;
 import com.smartwf.sm.modules.sysconfig.service.DocumentFileService;
 import com.smartwf.sm.modules.sysconfig.vo.DocumentTypeVO;
