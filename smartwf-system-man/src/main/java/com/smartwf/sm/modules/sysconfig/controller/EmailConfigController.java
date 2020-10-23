@@ -52,7 +52,7 @@ public class EmailConfigController {
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int"),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "serviceAddress", value = "服务地址", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "port", value = "端口", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "LoginCode", value = "登录名", dataType = "String"),

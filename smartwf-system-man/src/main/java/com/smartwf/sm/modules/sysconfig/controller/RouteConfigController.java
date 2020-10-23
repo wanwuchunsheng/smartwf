@@ -63,8 +63,8 @@ public class RouteConfigController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询路由配置信息")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", dataType = "Date"),

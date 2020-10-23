@@ -51,7 +51,7 @@ public class DocumentFileController {
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int"),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "styleName", value = "样式名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "type", value = "类型 0-可编辑 1不可编辑 2图片", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "uploadSize", value = "上传最大值/M", dataType = "Integer"),
