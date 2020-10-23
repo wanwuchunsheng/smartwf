@@ -144,6 +144,7 @@
 			alarm_description,
 			alarm_location,
 			start_time,
+			alarm_status,
 			end_time
 		FROM
 			fault_information
