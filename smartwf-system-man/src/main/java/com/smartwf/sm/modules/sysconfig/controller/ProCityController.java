@@ -1,37 +1,20 @@
 package com.smartwf.sm.modules.sysconfig.controller;
 
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.sm.config.ftp.SFtpConfig;
-import com.smartwf.sm.config.ftp.SFtpUtil;
 import com.smartwf.sm.modules.sysconfig.pojo.SysProvince;
-import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
 import com.smartwf.sm.modules.sysconfig.service.ProCityService;
-import com.smartwf.sm.modules.sysconfig.service.TenantConfigService;
-import com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 /**
