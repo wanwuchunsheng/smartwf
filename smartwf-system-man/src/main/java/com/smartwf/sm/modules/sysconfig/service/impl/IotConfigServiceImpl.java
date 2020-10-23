@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.sysconfig.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +47,7 @@ public class IotConfigServiceImpl implements IotConfigService{
      */
 	@Override
 	public Result<?> selectIotConfigById(IotConfig bean) {
-		IotConfig icfg=this.iotConfigDao.selectIotConfigById(bean);
+		IotConfigVO icfg=this.iotConfigDao.selectIotConfigById(bean);
 		return Result.data(Constants.EQU_SUCCESS, icfg);
 	}
 
@@ -57,6 +58,7 @@ public class IotConfigServiceImpl implements IotConfigService{
      */
 	@Override
 	public void saveIotConfig(IotConfig bean) {
+		bean.setCreateTime(new Date());
 		this.iotConfigDao.insert(bean);
 	}
 

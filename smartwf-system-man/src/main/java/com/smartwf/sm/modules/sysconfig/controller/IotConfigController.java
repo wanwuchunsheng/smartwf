@@ -32,6 +32,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -106,45 +107,35 @@ public class IotConfigController {
      * @param bean
      * @return
      */
-    @PostMapping("saveIotConfig")
+    @PostMapping(value="saveIotConfig", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     @ApiOperation(value = "添加接口", notes = "添加设备物联配置接口")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "secretPath", value = "证书地址", dataType = "String")
     })
     @TraceLog(content = "添加设备物联配置", paramIndexs = {0})
-    public ResponseEntity<Result<?>> saveIotConfig(HttpServletRequest request, IotConfig bean) {
+    public ResponseEntity<Result<?>> saveIotConfig(@ApiParam(value = "证书地址（多个文件压缩上传）") MultipartFile file, IotConfig bean) {
     	try {
-        	//获取前端上传的文件列表
-            List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-            StringBuffer sb=null;
-            if(files!=null && files.size()>0) {
-            	sb=new StringBuffer();
+    		if(null !=file) {
             	//保存图片
-            	for(MultipartFile fl: files) {
-    	        	String temp = "document/";
-	                // 获取图片的文件名
-	                String fileName = fl.getOriginalFilename();
-	                // 获取图片的扩展名
-	                String extensionName = fileName.substring(fileName.indexOf("."));
-	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
-	                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
-	                // 数据库保存的目录
-	                String datdDirectory = temp.concat(newFileName);
-	                //上传文件到sftp
-	                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, fl.getInputStream());
-    	        	if(flag) {
-    	        		//上传成功，
-    	        		sb.append(datdDirectory).append(",");
-    	        	}
-            	}
-            }
-            //拼接路径
-            if(sb!=null) {
-            	bean.setSecretPath(sb.toString().trim());
+	        	String temp = "document/";
+                // 获取图片的文件名
+                String fileName = file.getOriginalFilename();
+                // 获取图片的扩展名
+                String extensionName = fileName.substring(fileName.indexOf("."));
+                // 新的图片文件名 = 获取时间戳+"."图片扩展名
+                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
+                // 数据库保存的目录
+                String datdDirectory = temp.concat(newFileName);
+                //上传文件到sftp
+                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, file.getInputStream());
+	        	if(flag) {
+	        		//上传成功
+	        		bean.setSecretPath(datdDirectory);
+	        	}
             }
             //保存本地数据
         	this.IotConfigService.saveIotConfig(bean);
@@ -160,43 +151,32 @@ public class IotConfigController {
      * @param bean
      * @return
      */
-    @PutMapping("updateIotConfig")
+    @PutMapping(value="updateIotConfig", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     @ApiOperation(value = "修改接口", notes = "修改设备物联配置资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "secretPath", value = "证书地址", dataType = "String")
+    	@ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String")
     })
     @TraceLog(content = "修改设备物联配置", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updateIotConfig(HttpServletRequest request, IotConfig bean) {
+    public ResponseEntity<Result<?>> updateIotConfig(@ApiParam(value = "证书地址（多个文件压缩上传）") MultipartFile file, IotConfig bean) {
     	try {
-        	//获取前端上传的文件列表
-            List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-            StringBuffer sb=null;
-            if(files!=null && files.size()>0) {
-            	sb=new StringBuffer();
+    		if(null !=file) {
             	//保存图片
-            	for(MultipartFile fl: files) {
-    	        	String temp = "document/";
-	                // 获取图片的文件名
-	                String fileName = fl.getOriginalFilename();
-	                // 获取图片的扩展名
-	                String extensionName = fileName.substring(fileName.indexOf("."));
-	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
-	                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
-	                // 数据库保存的目录
-	                String datdDirectory = temp.concat(newFileName);
-	                //上传文件到sftp
-	                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, fl.getInputStream());
-    	        	if(flag) {
-    	        		//上传成功，
-    	        		sb.append(datdDirectory).append(",");
-    	        	}
-            	}
-            }
-            //拼接路径
-            if(sb!=null) {
-            	bean.setSecretPath(sb.toString().trim());
+	        	String temp = "document/";
+                // 获取图片的文件名
+                String fileName = file.getOriginalFilename();
+                // 获取图片的扩展名
+                String extensionName = fileName.substring(fileName.indexOf("."));
+                // 新的图片文件名 = 获取时间戳+"."图片扩展名
+                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
+                // 数据库保存的目录
+                String datdDirectory = temp.concat(newFileName);
+                //上传文件到sftp
+                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, file.getInputStream());
+	        	if(flag) {
+	        		//上传成功
+	        		bean.setSecretPath(datdDirectory);
+	        	}
             }
             //保存本地数据
         	this.IotConfigService.updateIotConfig(bean);

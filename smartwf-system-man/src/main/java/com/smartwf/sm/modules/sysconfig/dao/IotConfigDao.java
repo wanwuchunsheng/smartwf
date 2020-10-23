@@ -31,7 +31,7 @@ public interface IotConfigDao extends BaseMapper<IotConfig> {
      * @param bean
      * @return
      */
-	IotConfig selectIotConfigById(@Param("bean") IotConfig bean);
+	IotConfigVO selectIotConfigById(@Param("bean") IotConfig bean);
 
 	/**
      * @Description： 删除设备物联配置
