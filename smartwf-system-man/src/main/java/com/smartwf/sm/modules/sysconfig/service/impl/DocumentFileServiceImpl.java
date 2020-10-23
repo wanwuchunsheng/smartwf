@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.sysconfig.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +47,7 @@ public class DocumentFileServiceImpl implements DocumentFileService{
      */
 	@Override
 	public Result<?> selectDocumentTypeById(DocumentType bean) {
-		DocumentType icfg=this.documentFileDao.selectDocumentTypeById(bean);
+		DocumentTypeVO icfg=this.documentFileDao.selectDocumentTypeById(bean);
 		return Result.data(Constants.EQU_SUCCESS, icfg);
 	}
 
@@ -57,6 +58,7 @@ public class DocumentFileServiceImpl implements DocumentFileService{
      */
 	@Override
 	public void saveDocumentType(DocumentType bean) {
+		bean.setCreateTime(new Date());
 		this.documentFileDao.insert(bean);
 	}
 

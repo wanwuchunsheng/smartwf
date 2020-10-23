@@ -31,7 +31,7 @@ public interface DocumentFileDao extends BaseMapper<DocumentType> {
      * @param bean
      * @return
      */
-	DocumentType selectDocumentTypeById(@Param("bean") DocumentType bean);
+	DocumentTypeVO selectDocumentTypeById(@Param("bean") DocumentType bean);
 
 	/**
      * @Description： 删除文档文件配置

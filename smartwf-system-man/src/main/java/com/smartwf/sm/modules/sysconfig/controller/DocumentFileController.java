@@ -1,8 +1,5 @@
 package com.smartwf.sm.modules.sysconfig.controller;
 
-import java.util.List;
-import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,15 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.config.ftp.SFtpConfig;
-import com.smartwf.sm.config.ftp.SFtpUtil;
 import com.smartwf.sm.modules.sysconfig.pojo.DocumentType;
 import com.smartwf.sm.modules.sysconfig.service.DocumentFileService;
 import com.smartwf.sm.modules.sysconfig.vo.DocumentTypeVO;
@@ -47,12 +41,6 @@ public class DocumentFileController {
 	
 	@Autowired
 	private DocumentFileService documentTypeService;
-	/**
-	 * 获取上传地址
-	 * 
-	 * */
-	@Autowired
-    private SFtpConfig config;
 	
 	/**
 	 * @Description: 查询文档文件配置分页
@@ -63,8 +51,8 @@ public class DocumentFileController {
     @ApiOperation(value = "分页查询接口", notes = "分页查询文档文件配置信息")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int"),
             @ApiImplicitParam(paramType = "query", name = "styleName", value = "样式名称", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "type", value = "类型 0-可编辑 1不可编辑 2图片", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "uploadSize", value = "上传最大值/M", dataType = "Integer"),
@@ -114,7 +102,7 @@ public class DocumentFileController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "styleName", value = "样式名称", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "type", value = "类型 0-可编辑 1不可编辑 2图片", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "uploadSize", value = "上传最大值/M", dataType = "Integer"),
