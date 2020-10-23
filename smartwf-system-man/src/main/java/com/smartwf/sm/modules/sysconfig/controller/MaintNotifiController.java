@@ -28,26 +28,26 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Description: 设备系统维护控制层
+ * @Description: 系统维护控制层
  * @author WCH
  * @Date: 
  */
 @RestController
 @RequestMapping("maint")
 @Slf4j
-@Api(description ="设备系统维护控制器")
+@Api(description ="系统维护控制器")
 public class MaintNotifiController {
 	
 	@Autowired
 	private MaintNotifiService maintNotifiService;
 	
 	/**
-	 * @Description: 查询设备系统维护分页
+	 * @Description: 查询系统维护分页
 	 * @param bean
 	 * @return
 	 */
     @GetMapping("selectMaintNotifiByPage")
-    @ApiOperation(value = "分页查询接口", notes = "分页查询设备系统维护信息")
+    @ApiOperation(value = "分页查询接口", notes = "分页查询系统维护信息")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
@@ -66,18 +66,18 @@ public class MaintNotifiController {
             Result<?> result = this.maintNotifiService.selectMaintNotifiByPage(page, bean);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
-            log.error("分页查询设备系统维护错误！{}", e.getMessage(), e);
+            log.error("分页查询系统维护错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询设备系统维护错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询系统维护错误！"));
     }
     
     /**
-     * @Description: 主键查询设备系统维护
+     * @Description: 主键查询系统维护
      * @param bean
      * @return
      */
     @GetMapping("selectMaintNotifiById")
-    @ApiOperation(value = "主键查询接口", notes = "主键查询设备系统维护")
+    @ApiOperation(value = "主键查询接口", notes = "主键查询系统维护")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int",required = true)
     })
@@ -86,28 +86,28 @@ public class MaintNotifiController {
             Result<?> result = this.maintNotifiService.selectMaintNotifiById(bean);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            log.error("主键查询设备系统维护错误！{}", e.getMessage(), e);
+            log.error("主键查询系统维护错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询设备系统维护错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询系统维护错误！"));
     }
     
     /**
-     * @Description: 添加设备系统维护
+     * @Description: 添加系统维护
      * @param bean
      * @return
      */
     @PostMapping("saveMaintNotifi")
-    @ApiOperation(value = "添加接口", notes = "添加设备系统维护接口")
+    @ApiOperation(value = "添加接口", notes = "添加系统维护接口")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int",required = true),
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "serivceAddress", value = "服务地址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-运行  1-停止 ", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "msg", value = "通知内容", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
-    @TraceLog(content = "添加设备系统维护", paramIndexs = {0})
+    @TraceLog(content = "添加系统维护", paramIndexs = {0})
     public ResponseEntity<Result<?>> saveMaintNotifi(HttpServletRequest request, MaintNotification bean) {
     	try {
             //保存本地数据
@@ -120,12 +120,12 @@ public class MaintNotifiController {
     }
     
     /**
-     * @Description： 修改设备系统维护
+     * @Description： 修改系统维护
      * @param bean
      * @return
      */
     @PutMapping("updateMaintNotifi")
-    @ApiOperation(value = "修改接口", notes = "修改设备系统维护资料")
+    @ApiOperation(value = "修改接口", notes = "修改系统维护资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "serivceAddress", value = "服务地址", dataType = "String"),
@@ -133,7 +133,7 @@ public class MaintNotifiController {
         @ApiImplicitParam(paramType = "query", name = "msg", value = "通知内容", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
-    @TraceLog(content = "修改设备系统维护", paramIndexs = {0})
+    @TraceLog(content = "修改系统维护", paramIndexs = {0})
     public ResponseEntity<Result<?>> updateMaintNotifi(HttpServletRequest request, MaintNotification bean) {
     	try {
             //保存本地数据
@@ -146,18 +146,18 @@ public class MaintNotifiController {
     }
     
     /**
-     * @Description： 删除设备系统维护
+     * @Description： 删除系统维护
      * @param id 单个删除
      * @param ids 批量删除，逗号拼接
      * @return
      */
     @DeleteMapping("deleteMaintNotifi")
-    @ApiOperation(value = "删除接口", notes = "删除设备系统维护")
+    @ApiOperation(value = "删除接口", notes = "删除系统维护")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
-    @TraceLog(content = "删除设备系统维护", paramIndexs = {0})
+    @TraceLog(content = "删除系统维护", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteMaintNotifi(MaintNotifiVO bean) {
     	if(null==bean.getId() && StringUtils.isBlank(bean.getIds()) ) {
     		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键参数为空！"));

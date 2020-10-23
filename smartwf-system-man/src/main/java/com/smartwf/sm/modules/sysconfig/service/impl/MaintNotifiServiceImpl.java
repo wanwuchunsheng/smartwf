@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.sysconfig.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +47,7 @@ public class MaintNotifiServiceImpl implements MaintNotifiService{
      */
 	@Override
 	public Result<?> selectMaintNotifiById(MaintNotification bean) {
-		MaintNotification icfg=this.maintNotifiDao.selectMaintNotifiById(bean);
+		MaintNotifiVO icfg=this.maintNotifiDao.selectMaintNotifiById(bean);
 		return Result.data(Constants.EQU_SUCCESS, icfg);
 	}
 
@@ -57,6 +58,7 @@ public class MaintNotifiServiceImpl implements MaintNotifiService{
      */
 	@Override
 	public void saveMaintNotifi(MaintNotification bean) {
+		bean.setCreateTime(new Date());
 		this.maintNotifiDao.insert(bean);
 	}
 
@@ -67,6 +69,7 @@ public class MaintNotifiServiceImpl implements MaintNotifiService{
      */
 	@Override
 	public void updateMaintNotifi(MaintNotification bean) {
+		bean.setEndTime(new Date());
 		this.maintNotifiDao.updateById(bean);
 	}
 

@@ -3,6 +3,7 @@ package com.smartwf.sm.modules.sysconfig.vo;
 import java.util.Date;
 
 import com.smartwf.sm.modules.sysconfig.pojo.IotConfig;
+import com.smartwf.sm.modules.sysconfig.pojo.MaintNotification;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class MaintNotifiVO extends IotConfig{
+public class MaintNotifiVO extends MaintNotification{
 	
 	/**
 	 * 

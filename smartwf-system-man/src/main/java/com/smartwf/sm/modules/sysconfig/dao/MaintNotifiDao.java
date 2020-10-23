@@ -31,7 +31,7 @@ public interface MaintNotifiDao extends BaseMapper<MaintNotification> {
      * @param bean
      * @return
      */
-	MaintNotification selectMaintNotifiById(@Param("bean") MaintNotification bean);
+	MaintNotifiVO selectMaintNotifiById(@Param("bean") MaintNotification bean);
 
 	/**
      * @Description： 删除维护通告

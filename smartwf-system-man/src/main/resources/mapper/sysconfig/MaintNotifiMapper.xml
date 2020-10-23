@@ -5,7 +5,7 @@
     <!-- 批量删除 -->
     <delete id="deleteMaintNotifiByIds" parameterType = "java.util.List">
 	    delete 
-	       from basic_maint notification  
+	       from basic_maint_notification  
 	    where id in
 	    <foreach collection="list" item="item" open="(" separator="," close=")">
 	        #{item}
@@ -14,21 +14,25 @@
     
 	<!-- 查询列表 -->
     <select id="selectMaintNotifiByPage" resultType="com.smartwf.sm.modules.sysconfig.vo.MaintNotifiVO">
-        select 
+         select 
 			b.id,
 			b.tenant_id,
 			b.tenant_domain,
 			b.wind_farm,
-			b.route_address,
-			b.secret_path,
+			b.service_address,
+			b.status,
+			b.msg,
+			b.remark,
 			b.create_time,
-			a.org_name as windFarmName
-		 from  sys_organization a left join  basic_maint notification b on a.id =b.wind_farm where a.tenant_id=b.tenant_id and a.org_type=1
+			b.end_time,
+			a.org_name as windFarmName,
+			( select tenant_name from sys_tenant where  enable =0 and id=b.tenant_id ) as tenantName
+		 from  sys_organization a , basic_maint_notification b where a.id =b.wind_farm and a.tenant_id=b.tenant_id and a.org_type=1
          <if test="bean.tenantId != null ">
-              and a.tenant_id=#{bean.tenantId}
+              and b.tenant_id=#{bean.tenantId}
          </if>
          <if test="bean.tenantDomain != null ">
-              and a.tenant_domain=#{bean.tenantDomain}
+              and b.tenant_domain=#{bean.tenantDomain}
          </if>
     </select>
     
@@ -39,17 +43,21 @@
 			b.tenant_id,
 			b.tenant_domain,
 			b.wind_farm,
-			b.route_address,
-			b.secret_path,
+			b.service_address,
+			b.status,
+			b.msg,
+			b.remark,
 			b.create_time,
-			a.org_name as windFarmName
-		 from  sys_organization a left join  basic_maint notification b on a.id =b.wind_farm where a.tenant_id=b.tenant_id and a.org_type=1
-		 and b.id=#{bean.tenantId}
+			b.end_time,
+			a.org_name as windFarmName,
+			( select tenant_name from sys_tenant where  enable =0 and id=b.tenant_id ) as tenantName
+		 from  sys_organization a , basic_maint_notification b where a.id =b.wind_farm and a.tenant_id=b.tenant_id and a.org_type=1
+		 and b.id=#{bean.id}
          <if test="bean.tenantId != null ">
-              and a.tenant_id=#{bean.tenantId}
+              and b.tenant_id=#{bean.tenantId}
          </if>
          <if test="bean.tenantDomain != null ">
-              and a.tenant_domain=#{bean.tenantDomain}
+              and b.tenant_domain=#{bean.tenantDomain}
          </if>
     </select>
     
