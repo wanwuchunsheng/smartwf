@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.sm.modules.sysconfig.dao.EmailConfigDao" >
+
+    <!-- 批量删除 -->
+    <delete id="deleteEmailConfigByIds" parameterType = "java.util.List">
+	    delete 
+	       from basic_iot_config  
+	    where id in
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	</delete>
+    
+	<!-- 查询列表 -->
+    <select id="selectEmailConfigByPage" resultType="com.smartwf.sm.modules.sysconfig.vo.EmailConfigVO">
+        select 
+			b.id,
+			b.tenant_id,
+			b.tenant_domain,
+			b.wind_farm,
+			b.route_address,
+			b.secret_path,
+			b.create_time,
+			a.org_name as windFarmName
+		 from  sys_organization a left join  basic_iot_config b on a.id =b.wind_farm where a.tenant_id=b.tenant_id and a.org_type=1
+         <if test="bean.tenantId != null ">
+              and a.tenant_id=#{bean.tenantId}
+         </if>
+         <if test="bean.tenantDomain != null ">
+              and a.tenant_domain=#{bean.tenantDomain}
+         </if>
+    </select>
+    
+    <!-- 查询列表 -->
+    <select id="selectEmailConfigById" resultType="com.smartwf.sm.modules.sysconfig.pojo.EmailConfig">
+        select 
+			b.id,
+			b.tenant_id,
+			b.tenant_domain,
+			b.wind_farm,
+			b.route_address,
+			b.secret_path,
+			b.create_time,
+			a.org_name as windFarmName
+		 from  sys_organization a left join  basic_iot_config b on a.id =b.wind_farm where a.tenant_id=b.tenant_id and a.org_type=1
+		 and b.id=#{bean.tenantId}
+         <if test="bean.tenantId != null ">
+              and a.tenant_id=#{bean.tenantId}
+         </if>
+         <if test="bean.tenantDomain != null ">
+              and a.tenant_domain=#{bean.tenantDomain}
+         </if>
+    </select>
+    
+    
+    
+</mapper>

@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 
  */
 @RestController
-@RequestMapping("iotconf")
+@RequestMapping("iot")
 @Slf4j
 @Api(description ="设备物联配置控制器")
 public class IotConfigController {

@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 
  */
 @RestController
-@RequestMapping("dtconf")
+@RequestMapping("document")
 @Slf4j
 @Api(description ="文档文件配置控制器")
 public class DocumentFileController {

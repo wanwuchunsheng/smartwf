@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 
  */
 @RestController
-@RequestMapping("assetconf")
+@RequestMapping("asset")
 @Slf4j
 @Api(description ="资产分类控制器")
 public class AssetClassifController {

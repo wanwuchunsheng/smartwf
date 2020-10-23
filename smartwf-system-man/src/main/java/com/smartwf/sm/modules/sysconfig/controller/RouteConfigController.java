@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 
  */
 @RestController
-@RequestMapping("routeconf")
+@RequestMapping("route")
 @Slf4j
 @Api(description ="（数据中心）路由配置控制器")
 public class RouteConfigController {
