@@ -5,7 +5,7 @@
     <!-- 批量删除 -->
     <delete id="deleteAssetClassifByIds" parameterType = "java.util.List">
 	    delete 
-	       from basic_iot_config  
+	       from basic_asset_classification  
 	    where id in
 	    <foreach collection="list" item="item" open="(" separator="," close=")">
 	        #{item}
