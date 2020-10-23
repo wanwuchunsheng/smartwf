@@ -100,6 +100,7 @@
 		    (select pro_name from sys_province where pro_code=a.pro_code) as proName,
 			(select name from sys_city where code=a.city_code ) as cityName,
 			(select name from sys_area where code=a.area_code ) as areaName,
+			(select org_name from sys_organization where id=a.wind_farm and org_type=1) as wind_farm_title,
 			a.latitude,
 			a.longitude,
 			a.geo_json

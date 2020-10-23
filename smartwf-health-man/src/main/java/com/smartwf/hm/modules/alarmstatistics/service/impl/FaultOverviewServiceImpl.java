@@ -222,7 +222,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		Map<Integer,List<Map<String,String>>> map =new HashMap<>();
 		map.put(0, listAlarmStatus);
 		map.put(1, listFaultInfomation);
-		return Result.data(Constants.EQU_SUCCESS, JSONUtil.toJsonStr(map));
+		return Result.data(Constants.EQU_SUCCESS, map);
 	}
 	
 	

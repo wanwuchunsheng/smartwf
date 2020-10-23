@@ -197,7 +197,7 @@ public class RouteServiceImpl implements RouteService{
 		}
 		//查询各风场天气
 		List<WindfarmConfigVO> wtlist=this.windFarmConfigDao.selectWindfarmConfig(bean);
-		for(WindfarmConfig wt:wtlist) {
+		for(WindfarmConfigVO wt:wtlist) {
 			String locationWt=StrUtil.str(new StringBuilder().append(wt.getLongitude()).append(",").append(wt.getLatitude()));
 			String resWt=this.redisService.get(locationWt);
 			if(StrUtil.isNotBlank(resWt)) {
@@ -205,9 +205,10 @@ public class RouteServiceImpl implements RouteService{
 				listmap.add(JSONUtil.toBean(resWt, Map.class));
 			}else {
 				map=new HashMap<>();
-				map.put("proName", tcf.getProName());
-				map.put("cityName", tcf.getCityName());
-				map.put("areaName", tcf.getAreaName());
+				map.put("proName", wt.getProName());
+				map.put("cityName", wt.getCityName());
+				map.put("areaName", wt.getAreaName());
+				map.put("windfarmName", wt.getWindFarmTitle());
 				listmap.add(requestWeather(locationWt, "1",map));
 			}
 		}

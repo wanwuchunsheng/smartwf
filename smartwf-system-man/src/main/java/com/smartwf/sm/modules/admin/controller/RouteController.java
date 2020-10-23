@@ -139,7 +139,7 @@ public class RouteController {
     public ResponseEntity<Result<?>> selectPortalWeatherByParam(TenantConfig bean) {
         try {
             Result<?> result = this.routeService.selectPortalWeatherByParam(bean);
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             log.error("天气查询错误！{}", e.getMessage(), e);
         }

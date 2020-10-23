@@ -28,7 +28,7 @@ public class Constants {
     
     public static final String USERID = "user_id";
     
-    public static final String SHIFT_GROUP = "shift_group";
+    public static final String SHIFT_GROUP = "shift_group_role";
     
     public static final String CHAR = ",";
     
