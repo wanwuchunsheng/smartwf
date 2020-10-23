@@ -24,9 +24,9 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.config.ftp.SFtpConfig;
 import com.smartwf.sm.config.ftp.SFtpUtil;
-import com.smartwf.sm.modules.sysconfig.pojo.IotConfig;
-import com.smartwf.sm.modules.sysconfig.service.IotConfigService;
-import com.smartwf.sm.modules.sysconfig.vo.IotConfigVO;
+import com.smartwf.sm.modules.sysconfig.pojo.RouteConfig;
+import com.smartwf.sm.modules.sysconfig.service.RouteConfigService;
+import com.smartwf.sm.modules.sysconfig.vo.RouteConfigVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -35,18 +35,18 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Description: 设备物联配置控制层
+ * @Description: 数据中心-路由配置控制层
  * @author WCH
  * @Date: 
  */
 @RestController
-@RequestMapping("iotconf")
+@RequestMapping("routeconf")
 @Slf4j
-@Api(description ="设备物联配置控制器")
-public class IotConfigController {
+@Api(description ="（数据中心）路由配置控制器")
+public class RouteConfigController {
 	
 	@Autowired
-	private IotConfigService IotConfigService;
+	private RouteConfigService routeConfigService;
 	/**
 	 * 获取上传地址
 	 * 
@@ -55,12 +55,12 @@ public class IotConfigController {
     private SFtpConfig config;
 	
 	/**
-	 * @Description: 查询设备物联配置分页
+	 * @Description: 查询路由配置分页
 	 * @param bean
 	 * @return
 	 */
-    @GetMapping("selectIotConfigByPage")
-    @ApiOperation(value = "分页查询接口", notes = "分页查询设备物联配置信息")
+    @GetMapping("selectRouteConfigByPage")
+    @ApiOperation(value = "分页查询接口", notes = "分页查询路由配置信息")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
@@ -71,43 +71,43 @@ public class IotConfigController {
             @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectIotConfigByPage(Page<IotConfig> page, IotConfigVO bean) {
+    public ResponseEntity<Result<?>> selectRouteConfigByPage(Page<RouteConfig> page, RouteConfigVO bean) {
         try {
-            Result<?> result = this.IotConfigService.selectIotConfigByPage(page, bean);
+            Result<?> result = this.routeConfigService.selectRouteConfigByPage(page, bean);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
-            log.error("分页查询设备物联配置错误！{}", e.getMessage(), e);
+            log.error("分页查询路由配置错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询设备物联配置错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询路由配置错误！"));
     }
     
     /**
-     * @Description: 主键查询设备物联配置
+     * @Description: 主键查询路由配置
      * @param bean
      * @return
      */
-    @GetMapping("selectIotConfigById")
-    @ApiOperation(value = "主键查询接口", notes = "主键查询设备物联配置")
+    @GetMapping("selectRouteConfigById")
+    @ApiOperation(value = "主键查询接口", notes = "主键查询路由配置")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int",required = true)
     })
-    public ResponseEntity<Result<?>> selectIotConfigById(IotConfig bean) {
+    public ResponseEntity<Result<?>> selectRouteConfigById(RouteConfig bean) {
         try {
-            Result<?> result = this.IotConfigService.selectIotConfigById(bean);
+            Result<?> result = this.routeConfigService.selectRouteConfigById(bean);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            log.error("主键查询设备物联配置错误！{}", e.getMessage(), e);
+            log.error("主键查询路由配置错误！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询设备物联配置错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键查询路由配置错误！"));
     }
     
     /**
-     * @Description: 添加设备物联配置
+     * @Description: 添加路由配置
      * @param bean
      * @return
      */
-    @PostMapping("saveIotConfig")
-    @ApiOperation(value = "添加接口", notes = "添加设备物联配置接口")
+    @PostMapping("saveRouteConfig")
+    @ApiOperation(value = "添加接口", notes = "添加路由配置接口")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
@@ -115,8 +115,8 @@ public class IotConfigController {
         @ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "secretPath", value = "证书地址", dataType = "String")
     })
-    @TraceLog(content = "添加设备物联配置", paramIndexs = {0})
-    public ResponseEntity<Result<?>> saveIotConfig(HttpServletRequest request, IotConfig bean) {
+    @TraceLog(content = "添加路由配置", paramIndexs = {0})
+    public ResponseEntity<Result<?>> saveRouteConfig(HttpServletRequest request, RouteConfig bean) {
     	try {
         	//获取前端上传的文件列表
             List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
@@ -147,7 +147,7 @@ public class IotConfigController {
             	bean.setSecretPath(sb.toString().trim());
             }
             //保存本地数据
-        	this.IotConfigService.saveIotConfig(bean);
+        	this.routeConfigService.saveRouteConfig(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
     	}catch (Exception e) {
 			log.error("ERROR:保存失败！{}-{}",e,e.getMessage());
@@ -156,19 +156,19 @@ public class IotConfigController {
     }
     
     /**
-     * @Description： 修改设备物联配置
+     * @Description： 修改路由配置
      * @param bean
      * @return
      */
-    @PutMapping("updateIotConfig")
-    @ApiOperation(value = "修改接口", notes = "修改设备物联配置资料")
+    @PutMapping("updateRouteConfig")
+    @ApiOperation(value = "修改接口", notes = "修改路由配置资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "secretPath", value = "证书地址", dataType = "String")
     })
-    @TraceLog(content = "修改设备物联配置", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updateIotConfig(HttpServletRequest request, IotConfig bean) {
+    @TraceLog(content = "修改路由配置", paramIndexs = {0})
+    public ResponseEntity<Result<?>> updateRouteConfig(HttpServletRequest request, RouteConfig bean) {
     	try {
         	//获取前端上传的文件列表
             List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
@@ -199,7 +199,7 @@ public class IotConfigController {
             	bean.setSecretPath(sb.toString().trim());
             }
             //保存本地数据
-        	this.IotConfigService.updateIotConfig(bean);
+        	this.routeConfigService.updateRouteConfig(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
     	}catch (Exception e) {
 			log.error("ERROR:保存失败！{}-{}",e,e.getMessage());
@@ -208,23 +208,23 @@ public class IotConfigController {
     }
     
     /**
-     * @Description： 删除设备物联配置
+     * @Description： 删除路由配置
      * @param id 单个删除
      * @param ids 批量删除，逗号拼接
      * @return
      */
-    @DeleteMapping("deleteIotConfig")
-    @ApiOperation(value = "删除接口", notes = "删除设备物联配置")
+    @DeleteMapping("deleteRouteConfig")
+    @ApiOperation(value = "删除接口", notes = "删除路由配置")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
     })
-    @TraceLog(content = "删除设备物联配置", paramIndexs = {0})
-    public ResponseEntity<Result<?>> deleteIotConfig(IotConfigVO bean) {
+    @TraceLog(content = "删除路由配置", paramIndexs = {0})
+    public ResponseEntity<Result<?>> deleteRouteConfig(RouteConfigVO bean) {
     	if(null==bean.getId() && StringUtils.isBlank(bean.getIds()) ) {
     		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("主键参数为空！"));
     	}
-        this.IotConfigService.deleteIotConfig(bean);
+        this.routeConfigService.deleteRouteConfig(bean);
         return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
     }
 
