@@ -31,7 +31,7 @@ public interface RouteConfigDao extends BaseMapper<RouteConfig> {
      * @param bean
      * @return
      */
-	RouteConfig selectRouteConfigById(@Param("bean") RouteConfig bean);
+	RouteConfigVO selectRouteConfigById(@Param("bean") RouteConfig bean);
 
 	/**
      * @Description： 删除设备物联配置

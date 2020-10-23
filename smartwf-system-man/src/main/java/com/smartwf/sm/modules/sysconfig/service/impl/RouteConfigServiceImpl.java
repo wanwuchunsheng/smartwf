@@ -1,6 +1,7 @@
 package com.smartwf.sm.modules.sysconfig.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -56,6 +57,7 @@ public class RouteConfigServiceImpl implements RouteConfigService{
      */
 	@Override
 	public void saveRouteConfig(RouteConfig bean) {
+		bean.setCreateTime(new Date());
 		this.routeConfigDao.insert(bean);
 	}
 
@@ -66,6 +68,7 @@ public class RouteConfigServiceImpl implements RouteConfigService{
      */
 	@Override
 	public void updateRouteConfig(RouteConfig bean) {
+		bean.setCreateTime(new Date());
 		this.routeConfigDao.updateById(bean);
 	}
 

@@ -47,12 +47,6 @@ public class RouteConfigController {
 	
 	@Autowired
 	private RouteConfigService routeConfigService;
-	/**
-	 * 获取上传地址
-	 * 
-	 * */
-	@Autowired
-    private SFtpConfig config;
 	
 	/**
 	 * @Description: 查询路由配置分页
@@ -111,41 +105,12 @@ public class RouteConfigController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int",required = true),
-        @ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "secretPath", value = "证书地址", dataType = "String")
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String")
     })
     @TraceLog(content = "添加路由配置", paramIndexs = {0})
     public ResponseEntity<Result<?>> saveRouteConfig(HttpServletRequest request, RouteConfig bean) {
     	try {
-        	//获取前端上传的文件列表
-            List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-            StringBuffer sb=null;
-            if(files!=null && files.size()>0) {
-            	sb=new StringBuffer();
-            	//保存图片
-            	for(MultipartFile fl: files) {
-    	        	String temp = "document/";
-	                // 获取图片的文件名
-	                String fileName = fl.getOriginalFilename();
-	                // 获取图片的扩展名
-	                String extensionName = fileName.substring(fileName.indexOf("."));
-	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
-	                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
-	                // 数据库保存的目录
-	                String datdDirectory = temp.concat(newFileName);
-	                //上传文件到sftp
-	                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, fl.getInputStream());
-    	        	if(flag) {
-    	        		//上传成功，
-    	        		sb.append(datdDirectory).append(",");
-    	        	}
-            	}
-            }
-            //拼接路径
-            if(sb!=null) {
-            	bean.setSecretPath(sb.toString().trim());
-            }
             //保存本地数据
         	this.routeConfigService.saveRouteConfig(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
@@ -170,34 +135,6 @@ public class RouteConfigController {
     @TraceLog(content = "修改路由配置", paramIndexs = {0})
     public ResponseEntity<Result<?>> updateRouteConfig(HttpServletRequest request, RouteConfig bean) {
     	try {
-        	//获取前端上传的文件列表
-            List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-            StringBuffer sb=null;
-            if(files!=null && files.size()>0) {
-            	sb=new StringBuffer();
-            	//保存图片
-            	for(MultipartFile fl: files) {
-    	        	String temp = "document/";
-	                // 获取图片的文件名
-	                String fileName = fl.getOriginalFilename();
-	                // 获取图片的扩展名
-	                String extensionName = fileName.substring(fileName.indexOf("."));
-	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
-	                String newFileName = UUID.randomUUID().toString().replaceAll("-", "")  + extensionName;
-	                // 数据库保存的目录
-	                String datdDirectory = temp.concat(newFileName);
-	                //上传文件到sftp
-	                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, fl.getInputStream());
-    	        	if(flag) {
-    	        		//上传成功，
-    	        		sb.append(datdDirectory).append(",");
-    	        	}
-            	}
-            }
-            //拼接路径
-            if(sb!=null) {
-            	bean.setSecretPath(sb.toString().trim());
-            }
             //保存本地数据
         	this.routeConfigService.updateRouteConfig(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
