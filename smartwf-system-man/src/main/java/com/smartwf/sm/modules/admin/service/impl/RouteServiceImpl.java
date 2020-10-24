@@ -133,13 +133,18 @@ public class RouteServiceImpl implements RouteService{
 				List<Integer> list=new ArrayList<>();
 				for(String s : vallist) {
 					String res=this.redisService.get(s);
-					boolean str=res.contains("\"tenantDomain\":\""+bean.getTenantDomain()+"\",");
-					if(str) {
-						try {
-							User user=JSONUtil.toBean(res, User.class);
-							list.add(user.getId());
-						} catch (Exception e) {
-							log.error("ERROR：风场在线人数统计异常！");
+					//验证accessToken是否存在，唯一
+					boolean accessToken=res.contains("\"accessToken\":");
+					if(accessToken) {
+						//存在accessToken，验证是否属于当前租户
+						boolean str=res.contains("\"tenantDomain\":\""+bean.getTenantDomain()+"\",");
+						if(str) {
+							try {
+								User user=JSONUtil.toBean(res, User.class);
+								list.add(user.getId());
+							} catch (Exception e) {
+								log.error("ERROR：风场在线人数统计异常！");
+							}
 						}
 					}
 				}
@@ -158,9 +163,15 @@ public class RouteServiceImpl implements RouteService{
 			Set<String> vallist= this.redisTemplate.keys("*");
 			if(null !=vallist && vallist.size()>0) {
 				for(String s : vallist) {
-					boolean str=this.redisService.get(s).contains("\"tenantDomain\":\""+bean.getTenantDomain()+"\",");
-					if(str) {
-						online ++;
+					//验证accessToken是否存在，唯一
+					String redisVlaue=this.redisService.get(s);
+					boolean accessToken=redisVlaue.contains("\"accessToken\":");
+					if(accessToken) {
+						//存在accessToken，验证是否属于当前租户
+						boolean str=redisVlaue.contains("\"tenantDomain\":\""+bean.getTenantDomain()+"\",");
+						if(str) {
+							online ++;
+						}
 					}
 				}
 			}
