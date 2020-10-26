@@ -2,6 +2,8 @@ package com.smartwf.sm.modules.sysconfig.controller;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.config.ftp.SFtpConfig;
 import com.smartwf.sm.config.ftp.SFtpUtil;
+import com.smartwf.sm.config.util.HS256Utils;
 import com.smartwf.sm.modules.sysconfig.pojo.IotConfig;
 import com.smartwf.sm.modules.sysconfig.service.IotConfigService;
 import com.smartwf.sm.modules.sysconfig.vo.IotConfigVO;
@@ -86,23 +89,28 @@ public class IotConfigController {
     @GetMapping("selectIotConfigByAll")
     @ApiOperation(value = "查询全部", notes = "查询全部设备物联配置")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int",required = true),
-            @ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String"),
-            @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
-            @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", dataType = "Date"),
-            @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
-            @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String")
     })
-    public ResponseEntity<Result<?>> selectIotConfigByAll(IotConfigVO bean) {
+    public ResponseEntity<Result<?>> selectIotConfigByAll(HttpServletRequest request,IotConfigVO bean) {
         try {
-            Result<?> result = this.IotConfigService.selectIotConfigByAll(bean);
-            return ResponseEntity.status(HttpStatus.OK).body(result);
+        	//获取头部apitoken
+        	String apiToken = request.getHeader(Constants.ACCESS_TOKEN);
+        	if(apiToken==null) {
+        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"token为空！"));
+        	}
+        	//验证token
+        	if(HS256Utils.vaildToken(apiToken)) {
+        		 Result<?> result = this.IotConfigService.selectIotConfigByAll(bean);
+                 return ResponseEntity.status(HttpStatus.OK).body(result);
+        	};
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"token验证不通过！"));
         } catch (Exception e) {
-            log.error("分页查询设备物联配置错误！{}", e.getMessage(), e);
+            log.error("查询异常！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询设备物联配置错误！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询异常！"));
     }
     
     /**

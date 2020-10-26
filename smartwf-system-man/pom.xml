@@ -107,6 +107,11 @@
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
         </dependency>
+		<!-- jwt -->
+        <dependency>
+	         <groupId>com.nimbusds</groupId>
+	         <artifactId>nimbus-jose-jwt</artifactId>
+		</dependency>
         <!-- jdk 11 jar  -->
 		<dependency>
 		    <groupId>javax.validation</groupId>
