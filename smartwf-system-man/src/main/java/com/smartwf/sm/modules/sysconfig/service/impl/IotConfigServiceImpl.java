@@ -17,7 +17,6 @@ import com.smartwf.sm.modules.sysconfig.dao.IotConfigDao;
 import com.smartwf.sm.modules.sysconfig.pojo.IotConfig;
 import com.smartwf.sm.modules.sysconfig.service.IotConfigService;
 import com.smartwf.sm.modules.sysconfig.vo.IotConfigVO;
-import com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO;
 /**
  * @Description: 设备物联配置业务实现层
  * @author WCH
@@ -96,6 +95,17 @@ public class IotConfigServiceImpl implements IotConfigService{
 				this.iotConfigDao.deleteIotConfigByIds(list);
 			}
 		}
+	}
+
+	/**
+	 * @Description: 查询全部设备物联配置
+	 * @param bean
+	 * @return
+	 */
+	@Override
+	public Result<?> selectIotConfigByAll(IotConfigVO bean) {
+		List<IotConfig> list=this.iotConfigDao.selectIotConfigByAll(bean);
+		return Result.data(Constants.EQU_SUCCESS, list);
 	}
 	
 

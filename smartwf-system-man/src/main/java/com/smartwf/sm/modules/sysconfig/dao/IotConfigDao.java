@@ -41,6 +41,13 @@ public interface IotConfigDao extends BaseMapper<IotConfig> {
      */
 	void deleteIotConfigByIds(@Param("list") List<String> list);
 
+	/**
+	 * @Description: 查询全部设备物联配置
+	 * @param bean
+	 * @return
+	 */
+	List<IotConfig> selectIotConfigByAll(@Param("bean") IotConfigVO bean);
+
 	
 
     

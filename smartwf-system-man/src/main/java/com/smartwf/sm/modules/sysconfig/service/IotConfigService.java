@@ -48,6 +48,13 @@ public interface IotConfigService {
      */
 	void deleteIotConfig(IotConfigVO bean);
 
+	/**
+	 * @Description: 查询全部设备物联配置
+	 * @param bean
+	 * @return
+	 */
+	Result<?> selectIotConfigByAll(IotConfigVO bean);
+
 	
 	
 	

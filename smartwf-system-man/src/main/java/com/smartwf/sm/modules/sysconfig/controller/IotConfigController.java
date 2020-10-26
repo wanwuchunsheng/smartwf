@@ -1,9 +1,6 @@
 package com.smartwf.sm.modules.sysconfig.controller;
 
-import java.util.List;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
@@ -75,6 +71,33 @@ public class IotConfigController {
     public ResponseEntity<Result<?>> selectIotConfigByPage(Page<IotConfig> page, IotConfigVO bean) {
         try {
             Result<?> result = this.IotConfigService.selectIotConfigByPage(page, bean);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            log.error("分页查询设备物联配置错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询设备物联配置错误！"));
+    }
+    
+    /**
+	 * @Description: 查询全部设备物联配置
+	 * @param bean
+	 * @return
+	 */
+    @GetMapping("selectIotConfigByAll")
+    @ApiOperation(value = "查询全部", notes = "查询全部设备物联配置")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "int",required = true),
+            @ApiImplicitParam(paramType = "query", name = "routeAddress", value = "路由地址", dataType = "String"),
+            @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
+            @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", dataType = "Date"),
+            @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
+    })
+    public ResponseEntity<Result<?>> selectIotConfigByAll(IotConfigVO bean) {
+        try {
+            Result<?> result = this.IotConfigService.selectIotConfigByAll(bean);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
             log.error("分页查询设备物联配置错误！{}", e.getMessage(), e);

@@ -11,8 +11,29 @@
 	        #{item}
 	    </foreach>
 	</delete>
+	
+	<!-- 查询全部列表 -->
+    <select id="selectIotConfigByAll" resultType="com.smartwf.sm.modules.sysconfig.vo.IotConfigVO">
+        select 
+			b.id,
+			b.tenant_id,
+			b.tenant_domain,
+			b.wind_farm,
+			b.route_address,
+			b.secret_path,
+			b.create_time,
+			a.org_name as windFarmName,
+			( select tenant_name from sys_tenant where  enable =0 and id=a.tenant_id ) as tenantName
+		 from  sys_organization a left join  basic_iot_config b on a.id =b.wind_farm where a.org_type=1
+         <if test="bean.tenantId != null ">
+              and a.tenant_id=#{bean.tenantId}
+         </if>
+         <if test="bean.tenantDomain != null ">
+              and b.tenant_domain=#{bean.tenantDomain}
+         </if>
+    </select>
     
-	<!-- 查询列表 -->
+	<!-- 分页查询列表 -->
     <select id="selectIotConfigByPage" resultType="com.smartwf.sm.modules.sysconfig.vo.IotConfigVO">
         select 
 			b.id,
