@@ -1,6 +1,8 @@
 package com.smartwf.sm.test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 
 import com.smartwf.common.service.RedisService;
+import com.smartwf.sm.config.redis.StreamProducer;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.DictionaryService;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
@@ -57,6 +60,9 @@ public class SmartwfSystemTest {
 	@Autowired
 	private UserInfoService userService;
 	
+	@Autowired
+	private StreamProducer streamProducer;
+	
 	@Test
 	public void initBaseData() {
 		try {
@@ -88,8 +94,15 @@ public class SmartwfSystemTest {
             		log.info("wso2配置信息{}",idt.getClientKey(), JSONUtil.toJsonStr(idt));
     			}
     		}
-    		*/
-    		//初始化排班人员信息
+			Map<String,String> map = new HashMap<String, String>();
+			for(int i=20;i<1000;i++) {
+				map.put("iot", "消息是："+i);
+				System.out.println(JSONUtil.toJsonStr(map));
+				streamProducer.sendMsg("smartwf", map);
+				Thread.sleep(4000);
+			}
+			**/
+			//初始化排班人员信息
     		this.userService.selectUserInfoByShift();
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
