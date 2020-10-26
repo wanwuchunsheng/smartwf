@@ -102,7 +102,7 @@ public class MaintNotifiController {
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
-	    @ApiImplicitParam(paramType = "query", name = "serivceAddress", value = "服务地址", dataType = "String"),
+	    @ApiImplicitParam(paramType = "query", name = "serviceAddress", value = "服务地址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-运行  1-停止 ", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "msg", value = "通知内容", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
@@ -111,8 +111,8 @@ public class MaintNotifiController {
     public ResponseEntity<Result<?>> saveMaintNotifi(HttpServletRequest request, MaintNotification bean) {
     	try {
             //保存本地数据
-        	this.maintNotifiService.saveMaintNotifi(bean);
-        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
+        	Result<?> result= this.maintNotifiService.saveMaintNotifi(bean);
+        	return ResponseEntity.status(HttpStatus.OK).body(result);
     	}catch (Exception e) {
 			log.error("ERROR:保存失败！{}-{}",e,e.getMessage());
 		}
@@ -128,7 +128,7 @@ public class MaintNotifiController {
     @ApiOperation(value = "修改接口", notes = "修改系统维护资料")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "serivceAddress", value = "服务地址", dataType = "String"),
+    	@ApiImplicitParam(paramType = "query", name = "serviceAddress", value = "服务地址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-运行  1-停止 ", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "msg", value = "通知内容", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
@@ -137,8 +137,8 @@ public class MaintNotifiController {
     public ResponseEntity<Result<?>> updateMaintNotifi(HttpServletRequest request, MaintNotification bean) {
     	try {
             //保存本地数据
-        	this.maintNotifiService.updateMaintNotifi(bean);
-        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"成功"));
+    		Result<?> result=this.maintNotifiService.updateMaintNotifi(bean);
+        	return ResponseEntity.status(HttpStatus.OK).body(result);
     	}catch (Exception e) {
 			log.error("ERROR:保存失败！{}-{}",e,e.getMessage());
 		}

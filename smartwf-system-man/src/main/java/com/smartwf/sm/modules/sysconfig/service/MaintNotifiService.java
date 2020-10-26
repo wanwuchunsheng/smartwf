@@ -31,14 +31,14 @@ public interface MaintNotifiService {
      * @param bean
      * @return
      */
-	void saveMaintNotifi(MaintNotification bean);
+	Result<?> saveMaintNotifi(MaintNotification bean);
 
 	/**
      * @Description： 修改设备系统维护
      * @param bean
      * @return
      */
-	void updateMaintNotifi(MaintNotification bean);
+	Result<?> updateMaintNotifi(MaintNotification bean);
 
 	/**
      * @Description： 删除设备系统维护

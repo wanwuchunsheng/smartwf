@@ -14,6 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.smartwf.common.service.RedisService;
 import com.smartwf.sm.config.redis.StreamProducer;
+import com.smartwf.sm.config.util.HS256Utils;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.service.DictionaryService;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
@@ -104,6 +105,9 @@ public class SmartwfSystemTest {
 			**/
 			//初始化排班人员信息
     		this.userService.selectUserInfoByShift();
+			String token=HS256Utils.buildJWT();
+			System.out.println(token);
+			System.out.println(HS256Utils.vaildToken(token));
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}

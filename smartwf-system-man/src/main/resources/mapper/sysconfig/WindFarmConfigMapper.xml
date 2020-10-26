@@ -50,7 +50,7 @@
     
     
     <!-- 发电量统计 -->
-    <select id="selectPortalPowerGenByParam" resultType="com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig">
+    <select id="selectPortalPowerGenByParam" resultType="com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO">
          select 
 			sum(daily_generation) as daily_generation,
 			sum(cumulative_generation) as cumulative_generation,

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
@@ -57,9 +58,17 @@ public class MaintNotifiServiceImpl implements MaintNotifiService{
      * @return
      */
 	@Override
-	public void saveMaintNotifi(MaintNotification bean) {
+	public Result<?> saveMaintNotifi(MaintNotification bean) {
+		//添加之前，查询是否已在维护，已在维护，不能继续发送维护信息
+		QueryWrapper<MaintNotification> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("status", Constants.ONE); 
+		List<MaintNotification> list=this.maintNotifiDao.selectList(queryWrapper);
+		if(list!=null && list.size()>0) {
+			return Result.msg(Constants.BAD_REQUEST, "失败，已处在维护状态！");
+		}
 		bean.setCreateTime(new Date());
 		this.maintNotifiDao.insert(bean);
+		return Result.msg(Constants.EQU_SUCCESS, "成功！");
 	}
 
 	/**
@@ -68,9 +77,18 @@ public class MaintNotifiServiceImpl implements MaintNotifiService{
      * @return
      */
 	@Override
-	public void updateMaintNotifi(MaintNotification bean) {
+	public Result<?> updateMaintNotifi(MaintNotification bean) {
+		//添加之前，查询是否已在维护，已在维护，不能继续发送维护信息
+		QueryWrapper<MaintNotification> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("status", Constants.ONE); 
+		List<MaintNotification> list=this.maintNotifiDao.selectList(queryWrapper);
+		if(list!=null && list.size()>0) {
+			return Result.msg(Constants.BAD_REQUEST, "失败，已处在维护状态！");
+		}
 		bean.setEndTime(new Date());
 		this.maintNotifiDao.updateById(bean);
+		return Result.msg(Constants.EQU_SUCCESS, "成功！");
+		
 	}
 
 	/**

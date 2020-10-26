@@ -86,7 +86,8 @@ public class RouteServiceImpl implements RouteService{
 	@Override
 	public Result<?> selectPortalPowerGenByParam(WindfarmConfig bean) {
 		//查询日发电量，装机量，实时量
-		WindfarmConfig ppg=this.windFarmConfigDao.selectPortalPowerGenByParam(bean);
+		WindfarmConfigVO ppg=this.windFarmConfigDao.selectPortalPowerGenByParam(bean);
+		ppg.setUnit("MW·h");
 		//返回
 		return Result.data(Constants.EQU_SUCCESS,ppg);
 	}

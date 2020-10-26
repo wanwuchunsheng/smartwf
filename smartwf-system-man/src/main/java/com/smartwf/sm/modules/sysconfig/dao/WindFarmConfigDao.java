@@ -43,7 +43,7 @@ public interface WindFarmConfigDao extends BaseMapper<WindfarmConfig> {
      * @return
      * 
      */
-	WindfarmConfig selectPortalPowerGenByParam(@Param("bean") WindfarmConfig bean);
+	WindfarmConfigVO selectPortalPowerGenByParam(@Param("bean") WindfarmConfig bean);
 
 	/**
      * 门户状态统计 - 设备状态

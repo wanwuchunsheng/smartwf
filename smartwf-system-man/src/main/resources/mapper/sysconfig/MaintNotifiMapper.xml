@@ -34,6 +34,7 @@
          <if test="bean.tenantDomain != null ">
               and b.tenant_domain=#{bean.tenantDomain}
          </if>
+         order by b.create_time desc
     </select>
     
     <!-- 主键查询 -->

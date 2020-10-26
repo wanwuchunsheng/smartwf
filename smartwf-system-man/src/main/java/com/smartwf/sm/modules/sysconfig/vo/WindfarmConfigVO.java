@@ -50,5 +50,7 @@ public class WindfarmConfigVO extends WindfarmConfig{
 	 * 县/区名称
 	 */
 	private String areaName;
+	
+	private String unit;
 
 }
