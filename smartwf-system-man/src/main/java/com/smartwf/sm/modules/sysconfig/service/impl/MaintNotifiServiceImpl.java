@@ -18,7 +18,6 @@ import com.smartwf.sm.modules.sysconfig.dao.MaintNotifiDao;
 import com.smartwf.sm.modules.sysconfig.pojo.MaintNotification;
 import com.smartwf.sm.modules.sysconfig.service.MaintNotifiService;
 import com.smartwf.sm.modules.sysconfig.vo.MaintNotifiVO;
-import com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO;
 /**
  * @Description: 系统维护业务实现层
  * @author WCH

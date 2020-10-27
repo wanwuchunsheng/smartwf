@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
-import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.sysconfig.pojo.MaintNotification;
 import com.smartwf.sm.modules.sysconfig.service.MaintNotifiService;
@@ -49,7 +48,7 @@ public class MaintNotifiController {
     @GetMapping("selectMaintNotifiByPage")
     @ApiOperation(value = "分页查询接口", notes = "分页查询系统维护信息")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "serivceAddress", value = "服务地址", dataType = "String"),
@@ -99,8 +98,8 @@ public class MaintNotifiController {
     @PostMapping("saveMaintNotifi")
     @ApiOperation(value = "添加接口", notes = "添加系统维护接口")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
-	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "Integer"),
+	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "serviceAddress", value = "服务地址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-运行  1-停止 ", dataType = "Integer"),
@@ -127,7 +126,7 @@ public class MaintNotifiController {
     @PutMapping("updateMaintNotifi")
     @ApiOperation(value = "修改接口", notes = "修改系统维护资料")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "Integer"),
     	@ApiImplicitParam(paramType = "query", name = "serviceAddress", value = "服务地址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-运行  1-停止 ", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "msg", value = "通知内容", dataType = "String"),

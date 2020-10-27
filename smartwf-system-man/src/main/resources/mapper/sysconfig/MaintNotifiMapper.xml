@@ -24,16 +24,8 @@
 			b.msg,
 			b.remark,
 			b.create_time,
-			b.end_time,
-			a.org_name as windFarmName,
-			( select tenant_name from sys_tenant where  enable =0 and id=b.tenant_id ) as tenantName
-		 from  sys_organization a , basic_maint_notification b where a.id =b.wind_farm and a.tenant_id=b.tenant_id and a.org_type=1
-         <if test="bean.tenantId != null ">
-              and b.tenant_id=#{bean.tenantId}
-         </if>
-         <if test="bean.tenantDomain != null ">
-              and b.tenant_domain=#{bean.tenantDomain}
-         </if>
+			b.end_time
+		 from basic_maint_notification b
          order by b.create_time desc
     </select>
     
@@ -49,17 +41,9 @@
 			b.msg,
 			b.remark,
 			b.create_time,
-			b.end_time,
-			a.org_name as windFarmName,
-			( select tenant_name from sys_tenant where  enable =0 and id=b.tenant_id ) as tenantName
-		 from  sys_organization a , basic_maint_notification b where a.id =b.wind_farm and a.tenant_id=b.tenant_id and a.org_type=1
+			b.end_time
+		 from basic_maint_notification b
 		 and b.id=#{bean.id}
-         <if test="bean.tenantId != null ">
-              and b.tenant_id=#{bean.tenantId}
-         </if>
-         <if test="bean.tenantDomain != null ">
-              and b.tenant_domain=#{bean.tenantDomain}
-         </if>
     </select>
     
     
