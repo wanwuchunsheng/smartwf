@@ -65,6 +65,8 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		map.put("orderSource", String.valueOf(Constants.ORDERSOURCES));
 		//租户
 		map.put("tenantDomain", user.getTenantDomain());
+		//故障描述
+		map.put("orderDescribe", fim.getAlarmDescription());
 		//封装头部
 		Map<String,String> headers = new HashMap<>(16);
 		headers.put("sessionId", user.getSessionId());
@@ -106,6 +108,8 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		map.put("orderType", String.valueOf(Constants.ORDERTYPE));
 		//资源3
 		map.put("orderSource", String.valueOf(Constants.ORDERSOURCES));
+		//故障描述
+		map.put("orderDescribe", fim.getAlarmDescription());
 		//租户
 		map.put("tenantDomain", user.getTenantDomain());
 		//封装头部
