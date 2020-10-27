@@ -60,10 +60,10 @@ public class MaintNotifiServiceImpl implements MaintNotifiService{
 	public Result<?> saveMaintNotifi(MaintNotification bean) {
 		//添加之前，查询是否已在维护，已在维护，不能继续发送维护信息
 		QueryWrapper<MaintNotification> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("status", Constants.ONE); 
+		queryWrapper.eq("status", Constants.ZERO); 
 		List<MaintNotification> list=this.maintNotifiDao.selectList(queryWrapper);
 		if(list!=null && list.size()>0) {
-			return Result.msg(Constants.BAD_REQUEST, "失败，已处在维护状态！");
+			return Result.msg(Constants.ERRCODE502012, "失败，已处在维护状态！");
 		}
 		bean.setCreateTime(new Date());
 		this.maintNotifiDao.insert(bean);
@@ -79,10 +79,10 @@ public class MaintNotifiServiceImpl implements MaintNotifiService{
 	public Result<?> updateMaintNotifi(MaintNotification bean) {
 		//添加之前，查询是否已在维护，已在维护，不能继续发送维护信息
 		QueryWrapper<MaintNotification> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("status", Constants.ONE); 
+		queryWrapper.eq("status", Constants.ZERO); 
 		List<MaintNotification> list=this.maintNotifiDao.selectList(queryWrapper);
 		if(list!=null && list.size()>0) {
-			return Result.msg(Constants.BAD_REQUEST, "失败，已处在维护状态！");
+			return Result.msg(Constants.ERRCODE502012, "失败，已处在维护状态！");
 		}
 		bean.setEndTime(new Date());
 		this.maintNotifiDao.updateById(bean);

@@ -43,7 +43,7 @@ public class MaintNotification implements Serializable {
 	 */
 	private String serviceAddress;
 	/**
-	 * 状态 0运行  1停止
+	 * 状态 0-启用维护状态  1-关闭维护状态
 	 */
 	private Integer status;
 	/**

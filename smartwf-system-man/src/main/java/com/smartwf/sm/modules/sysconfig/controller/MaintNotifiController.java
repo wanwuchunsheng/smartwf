@@ -52,7 +52,7 @@ public class MaintNotifiController {
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "serivceAddress", value = "服务地址", dataType = "String"),
-            @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-运行  1-停止 ", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-启用维护状态  1-关闭维护状态 ", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "msg", value = "通知内容", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
@@ -102,7 +102,7 @@ public class MaintNotifiController {
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "serviceAddress", value = "服务地址", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-运行  1-停止 ", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-启用维护状态  1-关闭维护状态 ", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "msg", value = "通知内容", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
@@ -128,7 +128,7 @@ public class MaintNotifiController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "Integer"),
     	@ApiImplicitParam(paramType = "query", name = "serviceAddress", value = "服务地址", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-运行  1-停止 ", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "status", value = "状态0-启用维护状态  1-关闭维护状态 ", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "msg", value = "通知内容", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })

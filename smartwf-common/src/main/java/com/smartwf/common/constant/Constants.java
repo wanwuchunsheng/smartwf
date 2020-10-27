@@ -105,5 +105,12 @@ public class Constants {
     
     public static final int APP_TIMEOUT = 43200;
     
-
+    /** 
+     * 统一状态码 
+     * 参考微信：
+     *   https://developers.weixin.qq.com/miniprogram/dev/wxcloud/reference/errcode.html
+     * 
+     * */
+    public static final int ERRCODE502012 = 502012;
+    
 }
