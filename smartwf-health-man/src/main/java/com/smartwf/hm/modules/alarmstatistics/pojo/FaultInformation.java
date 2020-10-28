@@ -56,24 +56,25 @@ public class FaultInformation extends BasePojo implements Serializable{
 	private String endTime;
 	/**
 	 * 事变类型
-	 *  1-	故障类型
-		2-	缺陷类型
+	 *  1-故障类型
+     *  2-缺陷类型
+     *  3-告警类型
 	 */
 	private Integer incidentType;
 	/**
 	 * 报警级别
-	   0红：危急
+	    0红：危急
 		1橙：严重
 		2紫：一般
 		3灰：未知
-  
 	 */
 	private Integer alarmLevel;
 	/**
 	 * 故障类型
-	 * 0-系统报警
-		1-预警信息
-		2-人工提交
+	 * 0-系统故障
+	 * 1-监控警告
+	 * 2-人工提交
+	 * 3-预警警告
 
 	 */
 	private String faultType;

@@ -28,6 +28,7 @@ import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 import com.smartwf.hm.modules.alarmstatistics.service.PmsSendDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -82,9 +83,14 @@ public class DefectServiceImpl implements DefectService {
 	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public void saveDefect(DefectVO bean) {
+		User user= UserThreadLocal.getUser();
 		//添加工单
 		bean.setCreateTime(new Date());
+		bean.setCreateUserId(user.getId());
+		bean.setCreateUserName(user.getUserName());
 		bean.setUpdateTime(bean.getCreateTime());
+		bean.setUpdateUserId(user.getId());
+		bean.setUpdateUserName(user.getUserName());
 		//0未处理 1已转工单 2处理中 3已处理 4已关闭
 		bean.setAlarmStatus(Constants.ZERO);
 		this.defectDao.insert(bean);
@@ -101,6 +107,8 @@ public class DefectServiceImpl implements DefectService {
 		//1处理记录  2处理意见
 		fr.setClosureType(Constants.ONE);
 		fr.setCreateTime(new Date());
+		fr.setCreateUserId(Convert.toStr(user.getId()));
+		fr.setCreateUserName(user.getUserName());
 		fr.setTenantDomain(bean.getTenantDomain());
 		this.faultOperationRecordDao.insert(fr);
 		//添加附件
@@ -114,6 +122,8 @@ public class DefectServiceImpl implements DefectService {
 					fuRecord.setFilePath(s);
 					fuRecord.setTenantDomain(bean.getTenantDomain());
 					fuRecord.setCreateTime(new Date());
+					fuRecord.setCreateUserId(user.getId());
+					fuRecord.setCreateUserName(user.getUserName());
 					this.fileUploadRecordDao.insert(fuRecord);
 				}
 			}

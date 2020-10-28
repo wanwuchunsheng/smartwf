@@ -96,7 +96,7 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "警告描述", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmLocation", value = "警告部位", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmLevel", value = "警告级别(0危急 1严重 2一般 3未知)", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "警告来源(0系统警告 1预警信息 2人工提交)", dataType = "Integer"),
+    	    @ApiImplicitParam(paramType = "query", name = "faultType", value = "警告来源(0系统警告 1监控警告 2人工提交 3预警警告)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "警告状态( 0未处理 1已转工单 2处理中 3已处理 4已关闭 )", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),

@@ -130,7 +130,7 @@ public interface AlarmInboxService {
    	 * @author WCH
    	 * @param bean
    	 */
-	void updateAlarmInByParam(FaultInformationVO bean);
+	Result<?> updateAlarmInByParam(FaultInformationVO bean);
 	
 	/**
 	 * 今日新增总数查询接口

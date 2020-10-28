@@ -149,7 +149,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			fr.setRemark(bean.getRemark()); 
 			//租户域
 			fr.setTenantDomain(bean.getTenantDomain());
-			//对生产中心转工单状态修改
+			//对生产中心转工单状态修改{0478状态表示关闭，5已处理}
 			int alarmStatus=bean.getAlarmStatus();
 			if(alarmStatus==0 || alarmStatus==6 || alarmStatus==7 || alarmStatus==8) {
 				bean.setAlarmStatus(4);
@@ -163,7 +163,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 					//已转工单{状态已废弃}
 					fr.setClosureStatus(1);
 					//删除redis对应数据
-					this.rmFaultInformationByRedis(bean.getId()); 
+					this.rmFaultInformationByRedis(bean.getId());
 					//转工单
 					this.pmsSendDataService.faultWordOrder(bean);
 					break;
@@ -368,11 +368,11 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
    	 * @param bean
    	 */
 	@Override
-	public void updateAlarmInByParam(FaultInformationVO bean) {
+	public Result<?> updateAlarmInByParam(FaultInformationVO bean) {
 		User user=UserThreadLocal.getUser();
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		//租户域
-  		queryWrapper.eq("tenant_domain", bean.getTenantDomain()); 
+  		//queryWrapper.eq("tenant_domain", bean.getTenantDomain()); 
   		//资产编码
   		queryWrapper.eq("id", bean.getFaultId()); 
   		//查询对象
@@ -433,8 +433,10 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			fr.setClosureType(Constants.ONE); 
 			//插入处理记录
 			this.faultOperationRecordDao.insert(fr);
+			return Result.msg(Constants.EQU_SUCCESS,"成功！");
   		}
   	    
+  		return Result.msg(Constants.ERRCODE502012,"参数异常！请检查接口参数是否真确！");
 	}
 
 	/**
