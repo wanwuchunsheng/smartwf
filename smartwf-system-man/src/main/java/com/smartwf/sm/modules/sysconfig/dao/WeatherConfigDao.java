@@ -21,6 +21,10 @@ public interface WeatherConfigDao extends BaseMapper<WeatherConfig> {
      * @return
      */
 	List<WeatherConfig> initWeatherDatas();
+	/**
+     * @Description: 情况表数据
+     */
+	void deleteWeatherConfig();
 
 	
 

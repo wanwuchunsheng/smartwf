@@ -6,4 +6,10 @@
      <select id="initWeatherDatas" resultType="com.smartwf.sm.modules.sysconfig.pojo.WeatherConfig">
         select id,api_key,api_url,api_type from basic_weather_config
     </select>
+    
+    <!-- 查询租户配置表 -->
+     <select id="deleteWeatherConfig" >
+        truncate table  basic_weather_config
+    </select>
+    
 </mapper>

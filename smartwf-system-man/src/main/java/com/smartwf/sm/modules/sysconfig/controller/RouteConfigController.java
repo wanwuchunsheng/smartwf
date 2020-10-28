@@ -1,8 +1,5 @@
 package com.smartwf.sm.modules.sysconfig.controller;
 
-import java.util.List;
-import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,15 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.sm.config.ftp.SFtpConfig;
-import com.smartwf.sm.config.ftp.SFtpUtil;
 import com.smartwf.sm.modules.sysconfig.pojo.RouteConfig;
 import com.smartwf.sm.modules.sysconfig.service.RouteConfigService;
 import com.smartwf.sm.modules.sysconfig.vo.RouteConfigVO;
