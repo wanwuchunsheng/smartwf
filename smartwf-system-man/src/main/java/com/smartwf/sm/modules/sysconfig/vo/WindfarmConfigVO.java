@@ -51,6 +51,4 @@ public class WindfarmConfigVO extends WindfarmConfig{
 	 */
 	private String areaName;
 	
-	private String unit;
-
 }

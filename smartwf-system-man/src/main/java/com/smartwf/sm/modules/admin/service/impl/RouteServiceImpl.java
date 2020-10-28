@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.oltu.oauth2.common.utils.JSONUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -87,9 +85,31 @@ public class RouteServiceImpl implements RouteService{
 	public Result<?> selectPortalPowerGenByParam(WindfarmConfig bean) {
 		//查询日发电量，装机量，实时量
 		WindfarmConfigVO ppg=this.windFarmConfigDao.selectPortalPowerGenByParam(bean);
-		ppg.setUnit("MW·h");
+		//构建返回数据
+		Map<String,Map<String,Object>> maplist= new HashMap<>();
+		Map<String,Object> map=null;
+		//日发电量
+		map=new HashMap<>();
+		map.put("value", ppg.getDailyGeneration());
+		map.put("unit", "MW·h");
+		maplist.put("dailyGeneration", map);
+		//累计发电量
+		map=new HashMap<>();
+		map.put("value", ppg.getCumulativeGeneration());
+		map.put("unit", "MW·h");
+		maplist.put("cumulativeGeneration", map);
+		//实时容量
+		map=new HashMap<>();
+		map.put("value", ppg.getRealTimeCapacity());
+		map.put("unit", "MW");
+		maplist.put("realTimeCapacity", map);
+		//装机容量
+		map=new HashMap<>();
+		map.put("value", ppg.getInstalledCapacity());
+		map.put("unit", "MW");
+		maplist.put("installedCapacity", map);
 		//返回
-		return Result.data(Constants.EQU_SUCCESS,ppg);
+		return Result.data(Constants.EQU_SUCCESS,maplist);
 	}
 
 	/**
