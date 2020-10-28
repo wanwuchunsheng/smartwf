@@ -201,6 +201,7 @@ public class RouteServiceImpl implements RouteService{
 	public Result<?> selectPortalWeatherByParam(TenantConfig bean) {
 		Map<String,Object> map=null;
 		List<Map<String,Object>> listmap=new ArrayList<>();
+		log.info(JSONUtil.toJsonStr(bean));
 		//租户天气
 		TenantConfigVO tcf= this.tenantConfigDao.selectTenantConfig(bean);
 		String locationWf=StrUtil.str(new StringBuilder().append(tcf.getLongitude()).append(",").append(tcf.getLatitude()));

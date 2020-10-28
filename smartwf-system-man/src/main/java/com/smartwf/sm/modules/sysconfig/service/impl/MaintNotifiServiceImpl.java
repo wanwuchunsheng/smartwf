@@ -58,7 +58,8 @@ public class MaintNotifiServiceImpl implements MaintNotifiService{
      */
 	@Override
 	public Result<?> saveMaintNotifi(MaintNotification bean) {
-		//添加之前，查询是否已在维护，已在维护，不能继续发送维护信息
+		/**
+		//添加前，查询是否已在维护，已在维护，不能继续发送维护信息
 		QueryWrapper<MaintNotification> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("status", Constants.ZERO); 
 		List<MaintNotification> list=this.maintNotifiDao.selectList(queryWrapper);
@@ -67,6 +68,16 @@ public class MaintNotifiServiceImpl implements MaintNotifiService{
 		}
 		bean.setCreateTime(new Date());
 		this.maintNotifiDao.insert(bean);
+		return Result.msg(Constants.EQU_SUCCESS, "成功！");
+		*/
+		//status: 0-启用维护状态  1-关闭维护状态
+		//启用停机维护，清空表数据
+		this.maintNotifiDao.deleteMaintNotifiAll();
+		//添加新的记录
+		this.maintNotifiDao.insert(bean);
+		//根据状态发送消息服务，通知前端做出相关调整
+		
+		//返回
 		return Result.msg(Constants.EQU_SUCCESS, "成功！");
 	}
 

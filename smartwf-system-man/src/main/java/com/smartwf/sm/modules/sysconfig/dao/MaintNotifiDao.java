@@ -41,6 +41,13 @@ public interface MaintNotifiDao extends BaseMapper<MaintNotification> {
      */
 	void deleteMaintNotifiByIds(@Param("list") List<String> list);
 
+	/**
+     * @Description: 删除表
+     * @param bean
+     * @return
+     */
+	void deleteMaintNotifiAll();
+
 	
 
     

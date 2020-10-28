@@ -11,6 +11,13 @@
 	        #{item}
 	    </foreach>
 	</delete>
+	
+	<!-- 批量删除 -->
+    <select id="deleteMaintNotifiAll">
+	    truncate table basic_maint_notification
+	</select>
+	
+	
     
 	<!-- 查询列表 -->
     <select id="selectMaintNotifiByPage" resultType="com.smartwf.sm.modules.sysconfig.vo.MaintNotifiVO">

@@ -14,53 +14,40 @@
     
 	<!-- 查询列表 -->
     <select id="selectEmailConfigByPage" resultType="com.smartwf.sm.modules.sysconfig.vo.EmailConfigVO">
-        select 
-			b.id,
-			b.tenant_id,
-			b.tenant_domain,
-			b.wind_farm,
-			b.service_address,
-			b.port,
-			b.login_code,
-			b.pwd,
-			b.type,
-			b.remark,
-			b.create_time,
-			a.org_name as windFarmName,
-			( select tenant_name from sys_tenant where  enable =0 and id=b.tenant_id ) as tenantName
-		 from  sys_organization a ,  basic_email_config b where a.id =b.wind_farm and a.tenant_id=b.tenant_id and a.org_type=1
-         <if test="bean.tenantId != null ">
-              and b.tenant_id=#{bean.tenantId}
-         </if>
-         <if test="bean.tenantDomain != null ">
-              and b.tenant_domain=#{bean.tenantDomain}
-         </if>
+         select 
+		    id,
+			tenant_id,
+			tenant_domain,
+			wind_farm,
+			service_address,
+			port,
+			login_code,
+			pwd,
+			is_ssl,
+			is_mass,
+			type,
+			remark,
+			create_time
+		from basic_email_config order by create_time desc
     </select>
     
     <!-- 主键查询 -->
     <select id="selectEmailConfigById" resultType="com.smartwf.sm.modules.sysconfig.vo.EmailConfigVO">
         select 
-			b.id,
-			b.tenant_id,
-			b.tenant_domain,
-			b.wind_farm,
-			b.service_address,
-			b.port,
-			b.login_code,
-			b.pwd,
-			b.type,
-			b.remark,
-			b.create_time,
-			a.org_name as windFarmName,
-			( select tenant_name from sys_tenant where  enable =0 and id=b.tenant_id ) as tenantName
-		 from  sys_organization a ,  basic_email_config b where a.id =b.wind_farm and a.tenant_id=b.tenant_id and a.org_type=1
-		 and b.id=#{bean.id}
-         <if test="bean.tenantId != null ">
-              and b.tenant_id=#{bean.tenantId}
-         </if>
-         <if test="bean.tenantDomain != null ">
-              and b.tenant_domain=#{bean.tenantDomain}
-         </if>
+		    id,
+			tenant_id,
+			tenant_domain,
+			wind_farm,
+			service_address,
+			port,
+			login_code,
+			pwd,
+			is_ssl,
+			is_mass,
+			type,
+			remark,
+			create_time
+		from basic_email_config where id=#{bean.id}
     </select>
     
     

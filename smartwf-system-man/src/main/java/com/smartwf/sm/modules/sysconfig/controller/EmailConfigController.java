@@ -57,7 +57,9 @@ public class EmailConfigController {
             @ApiImplicitParam(paramType = "query", name = "port", value = "端口", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "LoginCode", value = "登录名", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "pwd", value = "密码", dataType = "String"),
-            @ApiImplicitParam(paramType = "query", name = "type", value = "类型 0-邮箱  1-短信", dataType = "String"),
+            @ApiImplicitParam(paramType = "query", name = "type", value = "类型 0-邮箱  1-短信", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "isSsl", value = "使用SSL （0 是  1否）", dataType = "Integer"),
+            @ApiImplicitParam(paramType = "query", name = "isMass", value = "允许群发 （0 是  1否）", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "startTime", value = "开始时间", dataType = "Date"),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", dataType = "Date"),
@@ -109,7 +111,9 @@ public class EmailConfigController {
         @ApiImplicitParam(paramType = "query", name = "port", value = "端口", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "LoginCode", value = "登录名", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "pwd", value = "密码", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "type", value = "类型 0-邮箱  1-短信", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "type", value = "类型 0-邮箱  1-短信", dataType = "int",required = true),
+        @ApiImplicitParam(paramType = "query", name = "isSsl", value = "使用SSL （0 是  1否）", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "isMass", value = "允许群发 （0 是  1否）", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "添加邮件短信配置", paramIndexs = {0})
@@ -137,7 +141,9 @@ public class EmailConfigController {
         @ApiImplicitParam(paramType = "query", name = "port", value = "端口", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "LoginCode", value = "登录名", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "pwd", value = "密码", dataType = "String"),
-        @ApiImplicitParam(paramType = "query", name = "type", value = "类型 0-邮箱  1-短信", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "type", value = "类型 0-邮箱  1-短信", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "isSsl", value = "使用SSL （0 是  1否）", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "isMass", value = "允许群发 （0 是  1否）", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改邮件短信配置", paramIndexs = {0})

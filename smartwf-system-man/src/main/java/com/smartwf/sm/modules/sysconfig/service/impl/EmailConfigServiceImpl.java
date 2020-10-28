@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
@@ -57,6 +58,11 @@ public class EmailConfigServiceImpl implements EmailConfigService{
      */
 	@Override
 	public void saveEmailConfig(EmailConfig bean) {
+		//根据type删除， 重新添加
+		QueryWrapper<EmailConfig> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("type", bean.getType());
+		this.emailConfigDao.delete(queryWrapper);
+		//添加
 		bean.setCreateTime(new Date());
 		this.emailConfigDao.insert(bean);
 	}

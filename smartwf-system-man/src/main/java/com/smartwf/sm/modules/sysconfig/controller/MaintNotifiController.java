@@ -40,6 +40,34 @@ public class MaintNotifiController {
 	@Autowired
 	private MaintNotifiService maintNotifiService;
 	
+	
+	
+	/**
+     * @Description: 添加系统维护 - 修订
+     * @param bean
+     * @return
+     */
+    @PostMapping("saveMaintNotifi")
+    @ApiOperation(value = "（修订）添加接口", notes = "（修订）添加系统维护接口")
+    @ApiImplicitParams({
+	    @ApiImplicitParam(paramType = "query", name = "serviceAddress", value = "服务地址", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "status", value = "状态 0-启用维护状态  1-关闭维护状态 ", dataType = "Integer"),
+        @ApiImplicitParam(paramType = "query", name = "msg", value = "通知内容", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
+    })
+    @TraceLog(content = "添加系统维护", paramIndexs = {0})
+    public ResponseEntity<Result<?>> saveMaintNotifi(HttpServletRequest request, MaintNotification bean) {
+    	try {
+            //保存本地数据
+        	Result<?> result= this.maintNotifiService.saveMaintNotifi(bean);
+        	return ResponseEntity.status(HttpStatus.OK).body(result);
+    	}catch (Exception e) {
+			log.error("ERROR:保存失败！{}-{}",e,e.getMessage());
+		}
+    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("失败！"));
+    }
+	
+	
 	/**
 	 * @Description: 查询系统维护分页
 	 * @param bean
@@ -94,7 +122,7 @@ public class MaintNotifiController {
      * @Description: 添加系统维护
      * @param bean
      * @return
-     */
+     
     @PostMapping("saveMaintNotifi")
     @ApiOperation(value = "添加接口", notes = "添加系统维护接口")
     @ApiImplicitParams({
@@ -117,6 +145,7 @@ public class MaintNotifiController {
 		}
     	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("失败！"));
     }
+    */
     
     /**
      * @Description： 修改系统维护

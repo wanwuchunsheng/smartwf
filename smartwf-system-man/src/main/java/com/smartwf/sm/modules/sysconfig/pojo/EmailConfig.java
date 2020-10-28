@@ -55,6 +55,14 @@ public class EmailConfig implements Serializable {
 	 */
 	private String pwd;
 	/**
+	 * 使用SSL（0 是  1否）
+	 */
+	private Integer isSsl;
+	/**
+	 * 允许群发 （0 是  1否）
+	 */
+	private Integer isMass;
+	/**
 	 * 类型 0邮件 1短信 
 	 */
 	private Integer type;
