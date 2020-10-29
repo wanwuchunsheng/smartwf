@@ -53,6 +53,7 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 	 * 
 	 *  json规范：
 		{
+		  "orderContent": "",
 		  "orderType": 6,
 		  "createUserId": 301,
 		  "orderSource": 3,
@@ -85,6 +86,8 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		FaultInformation fim=this.alarmInboxDao.selectById(bean);
 		//故障编码
 		json1.put("faultId", fim.getId());
+		//工单标题
+		json1.put("orderContent", bean.getWorkOrderTitle());
 		//工单描述
 		json1.put("orderDescribe", fim.getAlarmDescription());
 		//工单类型 1巡检,2维护,3实验,4大小修,5培训,6其他)
@@ -163,6 +166,8 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		FaultInformation fim=this.alarmInboxDao.selectById(bean);
 		//故障编码
 		json1.put("faultId", fim.getId());
+		//工单标题
+		json1.put("orderContent", bean.getWorkOrderTitle());
 		//工单描述
 		json1.put("orderDescribe", fim.getAlarmDescription());
 		//工单类型 1巡检,2维护,3实验,4大小修,5培训,6其他)

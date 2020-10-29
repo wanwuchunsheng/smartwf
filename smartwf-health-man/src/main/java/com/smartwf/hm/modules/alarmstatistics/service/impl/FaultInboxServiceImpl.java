@@ -207,7 +207,7 @@ public class FaultInboxServiceImpl implements FaultInboxService {
 	@Override
 	public Result<?> selectFaultInforById(FaultInformationVO bean) {
 		FaultInformation list= this.faultInboxDao.selectById(bean);
-		return Result.data(list);
+		return Result.data(Constants.EQU_SUCCESS,list);
 	}
 
 	/**

@@ -230,7 +230,7 @@ public class DefectServiceImpl implements DefectService {
 	@Override
 	public Result<?> selectDefectById(DefectVO bean) {
 		FaultInformation faultInformation= this.defectDao.selectDefectById(bean);
-		return Result.data(faultInformation);
+		return Result.data(Constants.EQU_SUCCESS,faultInformation);
 	}
 
 	/**

@@ -77,7 +77,7 @@ public class FaultInformation extends BasePojo implements Serializable{
 	 * 3-预警警告
 
 	 */
-	private String faultType;
+	private Integer faultType;
 	/**
 	 * 厂家
 	 */

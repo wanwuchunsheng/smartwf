@@ -134,6 +134,7 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "closureReason", value = "关闭原因", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "workOrderTitle", value = "工单标题", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" )
     })
@@ -402,8 +403,7 @@ public class AlarmInboxController {
 	 
 	    
 	    /**
-		 * @Description: 警告处理意见
-		 *    添加
+		 * @Description: 警告处理意见 - 添加
 		 * @author WCH
 		 * @dateTime 2020-7-20 17:55:35
 		 * @param bean

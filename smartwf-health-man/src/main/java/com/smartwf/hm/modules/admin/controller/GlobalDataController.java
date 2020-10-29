@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.handler.UserProfile;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.hm.modules.admin.service.GlobalService;
+import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
@@ -37,6 +40,9 @@ public class GlobalDataController {
 	
 	@Autowired
     private AlarmInboxService alarmInboxService;
+	
+	@Autowired
+    private GlobalService globalService;
 
     /**
      * @Description：认证登录
@@ -84,6 +90,50 @@ public class GlobalDataController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("转工单状态修改错误！"));
     }
     
-      
+    
+    /**
+   	 *  故障、警告、缺陷 主键查询{生产中心提供接口}
+   	 *     1）根据id查询对象
+   	 *     2）根据对象类型判断调用哪个接口返回
+   	 * @author WCH
+   	 * @return
+   	 */
+    @GetMapping("selectfaultInformationById")
+    @ApiOperation(value = "（故障/缺陷/警告）主键查询接口", notes = "（故障/缺陷/警告）主键查询")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "id", value = "（故障/缺陷/警告）主键", dataType = "String", required = true)
+    })
+    public ResponseEntity<Result<?>> selectfaultInformationById(String id) {
+        try {
+           Result<?> result= this.globalService.selectfaultInformationById(id);
+       	   return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("（故障/缺陷/警告）主键查询错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.ERRCODE502012,"（故障/缺陷/警告）主键查询错误！"));
+    }
+    
+    /**
+	 * @Description: 故障、警告、缺陷处理意见 {生产中心提供接口}
+	 * @author WCH
+	 * @dateTime 2020-7-20 17:55:35
+	 * @param bean
+	 * @return
+	 */
+    @PostMapping("selectFaultRecordByAll")
+      @ApiOperation(value = "查询（故障、警告、缺陷）操作记录接口", notes = "查询操作记录")
+      @ApiImplicitParams({
+  	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+       	    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "（故障、警告、缺陷）主键", dataType = "String", required = true )
+      })
+      public ResponseEntity<Result<?>> selectFaultRecordByAll(FaultOperationRecord bean) {
+	       try {
+	       	 Result<?> result = this.globalService.selectFaultRecordByAll(bean);
+	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
+	       } catch (Exception e) {
+	           log.error("查询所有警告操作记录信息错误！{}", e.getMessage(), e);
+	       }
+	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有警告操作记录信息错误！"));
+      }
    
 }

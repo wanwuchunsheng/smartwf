@@ -47,6 +47,10 @@ public class DefectVO extends FaultInformation implements Serializable{
 	 * 关闭原因
 	 */
 	private String closureReason;
+	/**
+	 * 故障转工单名称
+	 */
+	private String workOrderTitle;
 	
 	
 	

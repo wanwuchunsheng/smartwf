@@ -198,7 +198,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	@Override
 	public Result<?> selectAlarmInforById(FaultInformationVO bean) {
 		FaultInformation list= this.alarmInboxDao.selectById(bean);
-		return Result.data(list);
+		return Result.data(Constants.EQU_SUCCESS,list);
 	}
 
 	/**
