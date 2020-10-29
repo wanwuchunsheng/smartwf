@@ -12,6 +12,7 @@ import com.smartwf.common.pojo.TreeOrganization;
 import com.smartwf.common.pojo.TreePost;
 import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Organization;
+import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.pojo.UserPost;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
@@ -60,6 +61,12 @@ public interface OrganizationDao extends BaseMapper<Organization> {
 	 * 
 	 */
 	List<TreeOrganization> selectOrganizationByUserId(@Param("bean") User userInfo);
+
+	/**
+     * @Description 通过租户查询   - 所有风场
+     * @return
+     */
+	List<OrganizationVO> selectOrganizationByOrgUserId(@Param("bean") UserOrganization uobean);
 	
 	
 

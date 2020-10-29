@@ -6,6 +6,7 @@ import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Role;
+import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
 /**
@@ -71,7 +72,7 @@ public interface GlobalDataService {
      * @Description 通过租户查询   - 所有风场
      * @return
      */
-	Result<?> windFarmByTenantId(Integer tenantId);
+	Result<?> windFarmByTenantId(UserOrganization bean);
 	
 	/**
      * @Description 根据用户等级，返回租户列表

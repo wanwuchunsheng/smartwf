@@ -91,4 +91,27 @@
         </if>
     </select>
     
+    <!-- 查询用户所属风场 -->
+    <select id="selectOrganizationByOrgUserId" resultType="com.smartwf.sm.modules.admin.vo.OrganizationVO">
+        select 
+		    a.id,
+			a.pid,
+			a.uid,
+			a.sort,
+			a.org_code,
+			a.org_name,
+			a.org_type,
+			a.wfmark,
+			a.remark,
+			a.tenant_id,
+			a.wind_farm,
+			a.enable,
+			a.level,
+			a.create_time
+		from sys_organization a ,sys_user_organization b where a.id=b.organization_id and a.tenant_id=b.tenant_id and a.org_type=1 and a.enable=0
+		and b.tenant_id=#{bean.tenantId} 
+		and b.user_id=#{bean.userId}
+        order by sort asc
+    </select>
+    
 </mapper>

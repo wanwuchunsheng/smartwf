@@ -22,6 +22,7 @@ import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.service.DictionaryService;
 import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
@@ -143,27 +144,16 @@ public class GlobalDataServiceImpl implements GlobalDataService{
      * @return
      */
 	@Override
-	public Result<?> windFarmByTenantId(Integer tenantId) {
-		//获取所有租户下的组织架构数据
-		Map<String, Object> map = JSONUtil.parseObj(redisService.get("initOrganization"));
-		//判断是否为空
-		if(map!=null && map.size()> 0 ) {
-			//通过编码，获取对象集合
-			List<OrganizationVO> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get(Convert.toStr(tenantId))), OrganizationVO.class) ;	
-			//判断当前租户下是否有组织架构数据
-    		if(orglist!=null && orglist.size()>0 ) {
-    			List<OrganizationVO> reslist=new ArrayList<>();
-    			//orgType 0分公司  1风场  2一般组织{通过租户找出分区公司}
-    			for(OrganizationVO ov: orglist) {
-    				if(ov.getOrgType()!=null && ov.getOrgType()==Constants.ONE) {
-    					reslist.add(ov);
-    				}
-    			}
-    			//返回列表数据
-        		return Result.data(reslist);
-    		}
+	public Result<?> windFarmByTenantId(UserOrganization uobean) {
+		try {
+			User user = UserThreadLocal.getUser();
+			uobean.setUserId(user.getId());
+			List<OrganizationVO> reslist=this.organizationService.selectOrganizationByUserId(uobean);
+			return Result.data(reslist);
+		} catch (Exception e) {
+			log.error("ERROR:根据租户查询用户所属风场异常{}-{}",e,e.getMessage());
 		}
-    	return null;
+		return Result.msg(Constants.BAD_REQUEST, "查询数据异常！");
 	}
 	
 	

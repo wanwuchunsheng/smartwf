@@ -28,6 +28,7 @@ import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.LoginRecord;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Role;
+import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.LoginRecordService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
@@ -110,17 +111,18 @@ public class GlobalDataController {
     
     
     /**
-     * @Description 通过租户查询   - 所有风场
+     * @Description 通过租户查询   - 用户所属风场
      * @return
      */
     @GetMapping("windFarmByTenantId")
-    @ApiOperation(value = "租户查询风场接口", notes = "租户查询风场信息")
+    @ApiOperation(value = "租户查询风场接口", notes = "1.租户ID返回租户下所有风场  2.租户用户参数，返回用户所属风场")
     @ApiImplicitParams({
-	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
+	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+	    @ApiImplicitParam(paramType = "query", name = "userId", value = "用户（主键）", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> windFarmByTenantId(Integer tenantId) {
+    public ResponseEntity<Result<?>> windFarmByTenantId(UserOrganization bean) {
         try {
-           Result<?> result= this.globalDataService.windFarmByTenantId(tenantId);
+           Result<?> result= this.globalDataService.windFarmByTenantId(bean);
            return ResponseEntity.ok(result);
         } catch (Exception e) {
             log.error("获取区公司数据错误！{}", e.getMessage(), e);

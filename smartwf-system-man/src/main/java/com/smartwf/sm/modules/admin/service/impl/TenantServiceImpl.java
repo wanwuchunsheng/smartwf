@@ -26,6 +26,7 @@ import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.service.TenantService;
@@ -345,6 +346,22 @@ public class TenantServiceImpl implements TenantService{
 		 //0启用  1禁用
 		queryWrapper.eq("enable", 0);
 		return this.tenantDao.selectList(queryWrapper);
+	}
+
+	/**
+     * 查询用户是否属于租户域用户
+     * @return
+     */
+	@Override
+	public boolean selectTenantByParma(UserInfo uf) {
+		QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("tenant_code", uf.getLoginCode());
+		queryWrapper.eq("id", uf.getTenantId());
+		Integer count = this.tenantDao.selectCount(queryWrapper);
+		if(count==0) {
+			return true;
+		}
+		return false;
 	}
 
 	

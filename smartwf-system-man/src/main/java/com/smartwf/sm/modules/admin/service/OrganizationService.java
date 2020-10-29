@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
 /**
@@ -65,6 +66,11 @@ public interface OrganizationService {
 	 * @return
 	 */
 	Map<Integer,List<OrganizationVO>> initOrganizationDatas(List<Tenant> list);
+	/**
+     * @Description 通过租户查询   - 所有风场
+     * @return
+     */
+	List<OrganizationVO> selectOrganizationByUserId(UserOrganization uobean);
 	
 	
 

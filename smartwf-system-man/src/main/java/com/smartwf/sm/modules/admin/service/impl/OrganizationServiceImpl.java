@@ -22,7 +22,7 @@ import com.smartwf.sm.modules.admin.dao.OrganizationDao;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
-import com.smartwf.sm.modules.admin.pojo.UserPost;
+import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
@@ -224,6 +224,16 @@ public class OrganizationServiceImpl implements OrganizationService{
 			map.put(t.getId(), this.organizationDao.selectOrganizationByAll(bean));
 		}
 		return map;
+	}
+
+	/**
+     * @Description 通过租户查询   - 所有风场
+     * @return
+     */
+	@Override
+	public List<OrganizationVO> selectOrganizationByUserId(UserOrganization uobean) {
+		List<OrganizationVO> list= this.organizationDao.selectOrganizationByOrgUserId(uobean);
+		return list;
 	}
 	
 

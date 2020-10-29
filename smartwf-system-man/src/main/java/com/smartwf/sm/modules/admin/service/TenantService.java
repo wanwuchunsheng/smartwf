@@ -5,6 +5,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
 
 /**
@@ -52,6 +53,11 @@ public interface TenantService {
      * @return
      */
 	List<Tenant> initTenantDatas();
+	/**
+     * 查询用户是否属于租户域用户
+     * @return
+     */
+	boolean selectTenantByParma(UserInfo uf);
 	
 	
 	

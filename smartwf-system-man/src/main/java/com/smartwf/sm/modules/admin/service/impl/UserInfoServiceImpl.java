@@ -36,6 +36,7 @@ import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.pojo.UserPost;
 import com.smartwf.sm.modules.admin.pojo.UserRole;
+import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 import com.smartwf.sm.modules.wso2.service.Wso2RoleService;
@@ -76,6 +77,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 	
 	@Autowired
 	private RoleDao roleDao;
+	
+	@Autowired
+	private TenantService tenantService;
 
 	@Autowired
 	private ResourceDao resourceDao;
@@ -227,8 +231,10 @@ public class UserInfoServiceImpl implements UserInfoService{
 		bean.setPwd(null);
 		//1)修改用户资料
 		this.userInfoDao.updateById(bean);
+		//标识是否需要同步wso2 false:否  true：是
+		boolean flag=this.tenantService.selectTenantByParma(uf);
 		//2)角色为空，解绑Wso2用户对应的角色关系
-		if(StringUtils.isBlank(bean.getRoleIds())){
+		if(StringUtils.isBlank(bean.getRoleIds()) && flag){
 			//查询所有角色集合对象
 			List<Role> listRole=this.roleDao.selectRoleByUserId(bean);
 			//wso2角色和用户绑定
@@ -285,7 +291,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 					this.userRoleDao.insert(ur);
 				}
 				//Wso2实时更新
-				if(!list.isEmpty()) {
+				if(!list.isEmpty() && flag) {
 					//查询所有角色集合对象
 					List<Role> listRole=this.roleDao.selectRoleByIds(list);
 					//wso2角色和用户绑定
