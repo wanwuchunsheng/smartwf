@@ -94,7 +94,6 @@ public class InitDataConfig implements CommandLineRunner{
         	this.redisService.set("initWeatherConfig", JSONUtil.toJsonStr(this.weatherConfigService.initWeatherDatas()));
     		//初始化排班人员信息
     		//this.userService.selectUserInfoByShift();
-    		
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}

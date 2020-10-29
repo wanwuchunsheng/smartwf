@@ -34,8 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @Api(description = "全局数据控制器")
 public class GlobalDataController {
 	
-	@Autowired
-    private RedisService redisService;
 	
 	@Autowired
     private AlarmInboxService alarmInboxService;

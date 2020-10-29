@@ -18,7 +18,6 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.hm.modules.alarmstatistics.dao.AlarmInboxDao;
-import com.smartwf.hm.modules.alarmstatistics.dao.DefectDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultDataDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOperationRecordDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.KeyPositionDao;
@@ -132,6 +131,8 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		User user=UserThreadLocal.getUser();
 		//2)更新修改状态
 		bean.setUpdateTime(new Date());
+		bean.setUpdateUserId(user.getId());
+		bean.setUpdateUserName(user.getUserName());
 		this.alarmInboxDao.updateById(bean);
 		//过滤重点关注修改，避免重复提交
 		if(null != bean.getAlarmStatus() && null==bean.getOperatingStatus()) {
@@ -149,14 +150,6 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			fr.setRemark(bean.getRemark()); 
 			//租户域
 			fr.setTenantDomain(bean.getTenantDomain());
-			//对生产中心转工单状态修改{0478状态表示关闭，5已处理}
-			int alarmStatus=bean.getAlarmStatus();
-			if(alarmStatus==0 || alarmStatus==6 || alarmStatus==7 || alarmStatus==8) {
-				bean.setAlarmStatus(4);
-			}
-			if(alarmStatus==5){
-				bean.setAlarmStatus(3);
-			}
 			//0未处理  1已转工单  2处理中  3已处理  4已关闭
 			switch (bean.getAlarmStatus()) {
 				case 1:
@@ -371,8 +364,6 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 	public Result<?> updateAlarmInByParam(FaultInformationVO bean) {
 		User user=UserThreadLocal.getUser();
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
-		//租户域
-  		//queryWrapper.eq("tenant_domain", bean.getTenantDomain()); 
   		//资产编码
   		queryWrapper.eq("id", bean.getFaultId()); 
   		//查询对象
@@ -384,12 +375,24 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
   	  	    ft.setOrderNumber(bean.getOrderNumber());
   	  	    //对生产中心转工单状态修改
 			int alarmStatus=bean.getAlarmStatus();
+			//生产中心：工单流程状态(0其他,1待审核(正常待审核,驳回待审核,已分配待审核),2待分配,3执行中,4待验收,5已完成(验收失败,验收通过),6已拒绝(审核拒绝,验收拒绝),7草稿,8回收站)   
 			if(alarmStatus==0 || alarmStatus==6 || alarmStatus==7 || alarmStatus==8) {
+				//已关闭
 				bean.setAlarmStatus(4);
 			}
+			if(alarmStatus==1 || alarmStatus==2 || alarmStatus==3 || alarmStatus==4) {
+				//处理中
+				bean.setAlarmStatus(2);
+			}
 			if(alarmStatus==5){
+				//已完成
 				bean.setAlarmStatus(3);
 			}
+			//更新状态
+			ft.setAlarmStatus(bean.getAlarmStatus());
+			ft.setUpdateTime(new Date());
+			ft.setUpdateUserId(user.getId());
+			ft.setUpdateUserName(user.getUserName());
   	  	    this.faultDataDao.updateById(ft);
   	  	    //3）插入修改记录
 			FaultOperationRecord fr=new FaultOperationRecord();
@@ -436,7 +439,7 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 			return Result.msg(Constants.EQU_SUCCESS,"成功！");
   		}
   	    
-  		return Result.msg(Constants.ERRCODE502012,"参数异常！请检查接口参数是否真确！");
+  		return Result.msg(Constants.ERRCODE502012,"参数异常！请检查接口参数是否正确！");
 	}
 
 	/**
