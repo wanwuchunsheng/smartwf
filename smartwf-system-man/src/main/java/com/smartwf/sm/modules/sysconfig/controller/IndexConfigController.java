@@ -54,7 +54,7 @@ public class IndexConfigController {
     })
     public ResponseEntity<Result<?>> selectWindFarmConfigById(String sysStyle,Integer userId) {
         try {
-        	this.redisService.set(Convert.toStr(userId), sysStyle);
+        	this.redisService.set("userIndexStayle", sysStyle);
             return ResponseEntity.ok(Result.msg(Constants.EQU_SUCCESS, "成功"));
         } catch (Exception e) {
             log.error("主页样式配置错误！{}", e.getMessage(), e);
@@ -71,12 +71,12 @@ public class IndexConfigController {
     @PostMapping("updaeIndexStyleById")
     @ApiOperation(value = "修改主页样式接口", notes = "修改主页样式接配置")
     @ApiImplicitParams({
-        @ApiImplicitParam(paramType = "query", name = "userId", value = "用户Id", dataType = "int",required = true),
+        @ApiImplicitParam(paramType = "query", name = "userId", value = "用户Id", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "sysStyle", value = "系统样式（JSON数据）", dataType = "String",required = true)
     })
     public ResponseEntity<Result<?>> updaeIndexStyleById(String sysStyle,Integer userId) {
         try {
-        	this.redisService.set(Convert.toStr(userId), sysStyle);
+        	this.redisService.set("userIndexStayle", sysStyle);
             return ResponseEntity.ok(Result.msg(Constants.EQU_SUCCESS, "成功"));
         } catch (Exception e) {
             log.error("修改主页样式配置错误！{}", e.getMessage(), e);
@@ -88,17 +88,16 @@ public class IndexConfigController {
      * @Description：查询
      * @return
      */
-    @DeleteMapping("selectIndexStyleById")
+    @GetMapping("selectIndexStyleById")
     @ApiOperation(value = "查询主页样式接口", notes = "查询主页样式接口配置")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "userId", value = "用户主键", dataType = "int", required = true),
-    	
+    	@ApiImplicitParam(paramType = "query", name = "userId", value = "用户主键", dataType = "Integer")
     })
     @TraceLog(content = "查询首页样式配置", paramIndexs = {0})
     public ResponseEntity<Result<?>> selectIndexStyleById(Integer userId) {
     	try {
-        	this.redisService.get(Convert.toStr(userId));
-            return ResponseEntity.ok(Result.msg(Constants.EQU_SUCCESS, "成功"));
+        	String json=this.redisService.get("userIndexStayle");
+            return ResponseEntity.ok(Result.msg(Constants.EQU_SUCCESS, json));
         } catch (Exception e) {
             log.error("查询主页样式配置错误！{}", e.getMessage(), e);
         }
@@ -118,7 +117,7 @@ public class IndexConfigController {
     @TraceLog(content = "删除首页样式配置", paramIndexs = {0})
     public ResponseEntity<Result<?>> updateWindFarmConfig(Integer userId) {
     	try {
-        	this.redisService.del(Convert.toStr(userId));
+        	this.redisService.del("userIndexStayle");
             return ResponseEntity.ok(Result.msg(Constants.EQU_SUCCESS, "成功"));
         } catch (Exception e) {
             log.error("删除主页样式配置错误！{}", e.getMessage(), e);

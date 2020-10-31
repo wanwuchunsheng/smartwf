@@ -110,6 +110,7 @@ public class WindfarmConfigController {
     @PostMapping("saveWindFarmConfig")
     @ApiOperation(value = "添加风场配置接口", notes = "添加风场配置接口")
     @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "Integer"),
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "int",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场（组织架构风场ID）", dataType = "int",required = true),
