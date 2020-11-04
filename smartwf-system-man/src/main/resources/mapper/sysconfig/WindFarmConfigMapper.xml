@@ -40,8 +40,8 @@
 			b.status,
 			b.remark,
 			b.create_time
-		 from sys_organization a left join basic_windfarm_config b on a.id=b.tenant_id
-		 where a.enable=0 and a.org_type=1
+		 from sys_organization a left join basic_windfarm_config b on a.tenant_id=b.tenant_id
+		 where a.enable=0 and a.org_type=1 and a.id=b.wind_farm
 		 <if test="bean.tenantId != null ">
               and a.tenant_id=#{bean.tenantId}
          </if>

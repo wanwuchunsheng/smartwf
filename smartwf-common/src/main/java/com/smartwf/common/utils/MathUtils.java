@@ -11,10 +11,13 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.smartwf.common.constant.Constants;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * @author WCH
  * @Description: 通用工具类
  */
+@Log4j2
 public class MathUtils {
 
 
@@ -49,6 +52,7 @@ public class MathUtils {
      */
     public static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
+        log.info("id address:{}",ip);
         if (ip != null && ip.length() != 0 && ! Constants.UNKNOWN.equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip
             if( ip.indexOf(Constants.CHAR)!=-1 ){
@@ -75,7 +79,7 @@ public class MathUtils {
         }
         return StringUtils.equalsIgnoreCase(ip, "0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
     }
-
+    
 
     /**
      * 获取文件名称
