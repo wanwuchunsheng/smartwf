@@ -66,43 +66,39 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 		User user=UserProfile.getUser(request);
 		UserInfo userInfo=userInfoDao.selectById(id);
   		if(userInfo!=null) {
-			if(oldPwd.equals(userInfo.getPwd())) {
-				//修改wso2密码
-				//补全用户租户信息
-				Tenant tenant=tenantDao.selectById(user.getTenantId());
-				user.setTenantPw(tenant.getTenantPw());
-				String res=Wso2ClientUtils.updateUserPwd(wso2Config, user, newPwd, oldPwd);
-				//res为空，修改成功，反正返回失败提醒
-				if(StringUtils.isEmpty(res)) {
-					UserInfo uinfo=new UserInfo();
-					uinfo.setId(user.getId());
-					uinfo.setPwd(newPwd);
-					//修改本地密码
-					this.userInfoDao.updateById(uinfo);
-					//判断当前用户是否为租户管理员，通过租户ID，租户登录名修改租户表密码
-					QueryWrapper<Tenant> qw=new QueryWrapper<>();
-					qw.eq("id", user.getTenantId());
-					qw.eq("tenant_code", user.getLoginCode());
-					Tenant tbean=this.tenantDao.selectOne(qw);
-					if(null!=tbean) {
-						Tenant tt=new Tenant();
-						tt.setId(user.getTenantId());
-						tt.setTenantPw(newPwd);
-						this.tenantDao.updateById(tt);
-						//刷新redis存储数据
-						String ruser=this.redisService.get(user.getSessionId());
-				        if (StringUtils.isNotBlank(ruser)) {
-					        User userObj= JSONUtil.toBean(ruser, User.class);
-					        userObj.setTenantPw(newPwd);
-					        this.redisService.set(user.getSessionId(),JSONUtil.toJsonStr(userObj) ,wso2Config.tokenRefreshTime);
-				        }
-					}
-	        	}else {
-	        		return ResponseEntity.ok(Result.msg(Constants.INTERNAL_SERVER_ERROR,"wso2修改异常"));
-	        	}
-			}else {
-				return ResponseEntity.ok(Result.msg(Constants.INTERNAL_SERVER_ERROR,"旧密码不正确！"));
-			}
+			//修改wso2密码
+			//补全用户租户信息
+			Tenant tenant=tenantDao.selectById(user.getTenantId());
+			user.setTenantPw(tenant.getTenantPw());
+			String res=Wso2ClientUtils.updateUserPwd(wso2Config, user, newPwd, oldPwd);
+			//res为空，修改成功，反正返回失败提醒
+			if(StringUtils.isEmpty(res)) {
+				UserInfo uinfo=new UserInfo();
+				uinfo.setId(user.getId());
+				uinfo.setPwd(newPwd);
+				//修改本地密码
+				this.userInfoDao.updateById(uinfo);
+				//判断当前用户是否为租户管理员，通过租户ID，租户登录名修改租户表密码
+				QueryWrapper<Tenant> qw=new QueryWrapper<>();
+				qw.eq("id", user.getTenantId());
+				qw.eq("tenant_code", user.getLoginCode());
+				Tenant tbean=this.tenantDao.selectOne(qw);
+				if(null!=tbean) {
+					Tenant tt=new Tenant();
+					tt.setId(user.getTenantId());
+					tt.setTenantPw(newPwd);
+					this.tenantDao.updateById(tt);
+					//刷新redis存储数据
+					String ruser=this.redisService.get(user.getSessionId());
+			        if (StringUtils.isNotBlank(ruser)) {
+				        User userObj= JSONUtil.toBean(ruser, User.class);
+				        userObj.setTenantPw(newPwd);
+				        this.redisService.set(user.getSessionId(),JSONUtil.toJsonStr(userObj) ,wso2Config.tokenRefreshTime);
+			        }
+				}
+        	}else {
+        		return ResponseEntity.ok(Result.msg(Constants.INTERNAL_SERVER_ERROR,"wso2修改异常"));
+        	}
 		}else {
 			return ResponseEntity.ok(Result.msg(Constants.INTERNAL_SERVER_ERROR,"改用户不存在，请确定UID是否正确！"));
 		}
