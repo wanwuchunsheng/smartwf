@@ -70,10 +70,10 @@ public class IotConfigServiceImpl implements IotConfigService{
 		//添加成功，发送消息提醒Iot有配置有变更
 		Map<String, Object> msgMap = new HashMap<>();
 		msgMap.put("status", "1");
-		msgMap.put("msg", "Iot配置有新增！");
+		msgMap.put("msg", "配置有新增！");
 		Map<String, String> map = new HashMap<>();
-		map.put("iot", JSONUtil.toJsonStr(map));
-		this.streamProducer.sendMsg("topic:smartwf", map);
+		map.put("iot", JSONUtil.toJsonStr(msgMap));
+		this.streamProducer.sendMsg(Constants.REDIS_TOPIC, map);
 	}
 
 	/**
@@ -87,10 +87,10 @@ public class IotConfigServiceImpl implements IotConfigService{
 		//添加成功，发送消息提醒Iot有配置有变更
 		Map<String, Object> msgMap = new HashMap<>();
 		msgMap.put("status", "1");
-		msgMap.put("msg", "Iot配置有修改！");
+		msgMap.put("msg", "配置有修改！");
 		Map<String, String> map = new HashMap<>();
 		map.put("iot", JSONUtil.toJsonStr(map));
-		this.streamProducer.sendMsg("topic:smartwf", map);
+		this.streamProducer.sendMsg(Constants.REDIS_TOPIC, map);
 	}
 
 	/**

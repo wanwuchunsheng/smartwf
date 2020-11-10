@@ -146,7 +146,26 @@ public class RouteController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( Constants.BAD_REQUEST ,"天气查询错误！"));
     }
     
-    
+    /**
+     * 门户-省份风场统计
+     * @author WCH
+     * @param bean
+     * @return
+     */
+    @GetMapping("/selectWindfarmConfigByProCode")
+    @ApiOperation(value = "省份风场统计接口", notes = "省份风场统计查询")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户Id", dataType = "String", required = true)
+    })
+    public ResponseEntity<Result<?>> selectWindfarmConfigByProCode(WindfarmConfig bean) {
+        try {
+            Result<?> result = this.routeService.selectWindfarmConfigByProCode(bean);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            log.error("省份风场统计错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( Constants.BAD_REQUEST ,"省份风场统计错误！"));
+    }
     
     
     

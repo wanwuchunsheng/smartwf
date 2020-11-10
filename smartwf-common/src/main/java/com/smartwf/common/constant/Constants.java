@@ -30,6 +30,8 @@ public class Constants {
     
     public static final String SHIFT_GROUP = "shift_group_role";
     
+    public static final String REDIS_TOPIC = "topic:smartwf";
+    
     public static final String CHAR = ",";
     
     public static final String ID = "id";

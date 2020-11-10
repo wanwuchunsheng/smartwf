@@ -283,6 +283,29 @@ public class RouteServiceImpl implements RouteService{
 		}
 		return null;
 	}
+
+	/**
+     * 门户-省份风场统计
+     * @author WCH
+     * @param bean
+     * @return
+     */
+	@Override
+	public Result<?> selectWindfarmConfigByProCode(WindfarmConfig bean) {
+		Map<String,Object> mapPor=null;
+		//分组统计省份风场数
+		List<Map<String,Object>> maplist= this.windFarmConfigDao.selectProWindfarm(bean);
+		//查询所有风场
+		List<WindfarmConfigVO> windfarmList=this.windFarmConfigDao.selectWindfarmConfigByProCode(bean);
+		//规范数据返回
+		/**
+		for(Map<String,Object> m:maplist) {
+			mapPor= new HashMap<>();
+			m.get("");
+		}
+		*/
+		return null;
+	}
 	
 	
 	

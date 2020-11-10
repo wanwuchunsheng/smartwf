@@ -18,10 +18,10 @@
 			b.id,
 			b.tenant_id,
 			b.tenant_domain,
-			b.wind_farm,
 			b.route_address,
 			b.secret_path,
 			b.create_time,
+			a.id as windFarm,
 			a.org_name as windFarmName,
 			( select tenant_name from sys_tenant where  enable =0 and id=a.tenant_id ) as tenantName
 		 from  sys_organization a left join  basic_route_config b on a.id =b.wind_farm where a.org_type=1
@@ -37,10 +37,10 @@
 			b.id,
 			b.tenant_id,
 			b.tenant_domain,
-			b.wind_farm,
 			b.route_address,
 			b.secret_path,
 			b.create_time,
+			a.id as windFarm,
 			a.org_name as windFarmName,
 			( select tenant_name from sys_tenant where  enable =0 and id=a.tenant_id ) as tenantName
 		 from  sys_organization a left join  basic_route_config b on a.id =b.wind_farm where  a.org_type=1

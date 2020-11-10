@@ -185,8 +185,6 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 	 */
 	@Override
 	public Result<?> selectFaultStatusByDate(FaultInformationVO bean) {
-		List<Map<String,Object>> list=new ArrayList<>();
-		Map<String,Object> fr=null;
 		String[][] master=null;
 		//故障状态，数量统计
 		List<FaultInformationVO> alarmStatus= this.faultOverviewDao.selectFaultStatusByDate(bean);
@@ -199,13 +197,8 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 				master[i][1]=fivo.getFvalue();
 				i++;
 			}
-			fr = new HashMap<String,Object>(4);
-			fr.put("id", 1);
-			fr.put("title", "故障处理状态统计");
-			fr.put("content",master);
-			list.add(fr);
 		}
-		return Result.data(list);
+		return Result.data(Constants.EQU_SUCCESS,master);
 	}
 
 	
@@ -219,8 +212,6 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 	 */
 	@Override
 	public Result<?> selectProcessingEfficByDate(FaultInformationVO bean) {
-		List<Map<String,Object>> list=new ArrayList<>();
-		Map<String,Object> fr=null;
 		String[][] master=null;
 		//故障部位，数量统计
 		List<FaultInformationVO> alarmLocation= this.faultOverviewDao.selectFaultLocationByDate(bean);
@@ -233,13 +224,8 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 				master[i][1]=fivo.getFvalue();
 				i++;
 			}
-			fr = new HashMap<String,Object>(4);
-			fr.put("id", 2);
-			fr.put("title", "处理效率统计");
-			fr.put("content",master);
-			list.add(fr);
 		}
-		return Result.data(list);
+		return Result.data(Constants.EQU_SUCCESS,master);
 	}
 
 

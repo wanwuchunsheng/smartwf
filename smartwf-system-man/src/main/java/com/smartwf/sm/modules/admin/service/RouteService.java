@@ -53,5 +53,13 @@ public interface RouteService {
      */
 	Result<?> selectPortalWeatherByParam(TenantConfig bean);
 
+	/**
+     * 门户-省份风场统计
+     * @author WCH
+     * @param bean
+     * @return
+     */
+	Result<?> selectWindfarmConfigByProCode(WindfarmConfig bean);
+
 	
 }
