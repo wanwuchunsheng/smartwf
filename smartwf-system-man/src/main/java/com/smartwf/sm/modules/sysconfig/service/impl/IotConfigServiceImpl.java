@@ -2,7 +2,9 @@ package com.smartwf.sm.modules.sysconfig.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.utils.CkUtils;
+import com.smartwf.sm.config.redis.StreamProducer;
 import com.smartwf.sm.modules.sysconfig.dao.IotConfigDao;
 import com.smartwf.sm.modules.sysconfig.pojo.IotConfig;
 import com.smartwf.sm.modules.sysconfig.service.IotConfigService;
 import com.smartwf.sm.modules.sysconfig.vo.IotConfigVO;
+
+import cn.hutool.json.JSONUtil;
 /**
  * @Description: 设备物联配置业务实现层
  * @author WCH
@@ -27,6 +32,9 @@ public class IotConfigServiceImpl implements IotConfigService{
 	
 	@Autowired
 	private IotConfigDao iotConfigDao;
+	
+	@Autowired
+	private StreamProducer streamProducer;
 
 	/**
 	 * @Description: 查询设备物联配置分页
@@ -59,6 +67,13 @@ public class IotConfigServiceImpl implements IotConfigService{
 	public void saveIotConfig(IotConfig bean) {
 		bean.setCreateTime(new Date());
 		this.iotConfigDao.insert(bean);
+		//添加成功，发送消息提醒Iot有配置有变更
+		Map<String, Object> msgMap = new HashMap<>();
+		msgMap.put("status", "1");
+		msgMap.put("msg", "Iot配置有新增！");
+		Map<String, String> map = new HashMap<>();
+		map.put("iot", JSONUtil.toJsonStr(map));
+		this.streamProducer.sendMsg("topic:smartwf", map);
 	}
 
 	/**
@@ -69,6 +84,13 @@ public class IotConfigServiceImpl implements IotConfigService{
 	@Override
 	public void updateIotConfig(IotConfig bean) {
 		this.iotConfigDao.updateById(bean);
+		//添加成功，发送消息提醒Iot有配置有变更
+		Map<String, Object> msgMap = new HashMap<>();
+		msgMap.put("status", "1");
+		msgMap.put("msg", "Iot配置有修改！");
+		Map<String, String> map = new HashMap<>();
+		map.put("iot", JSONUtil.toJsonStr(map));
+		this.streamProducer.sendMsg("topic:smartwf", map);
 	}
 
 	/**
