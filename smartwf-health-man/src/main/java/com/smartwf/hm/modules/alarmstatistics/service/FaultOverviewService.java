@@ -43,6 +43,22 @@ public interface FaultOverviewService {
      * @return
      * */
 	Result<?> selectFaultByAlarmStatus(Page<FaultInformation> page,FaultInformationVO bean);
+	/**
+	 * @Description: 处理效率统计
+	 * @param alarmStatus 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	Result<?> selectProcessingEfficByDate(FaultInformationVO bean);
+	/**
+   	 * @Description: (故障、缺陷、警告)未处理记录统计
+   	 * @author WCH
+   	 * @dateTime 2020-7-20 17:55:35
+   	 * @param bean
+   	 * @return
+   	 */
+	Result<?> selectFaultRecordByIncidentType(FaultInformationVO bean);
 
 
 }

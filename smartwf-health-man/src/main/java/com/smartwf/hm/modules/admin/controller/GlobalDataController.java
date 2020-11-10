@@ -14,7 +14,6 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.handler.UserProfile;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
-import com.smartwf.common.service.RedisService;
 import com.smartwf.hm.modules.admin.service.GlobalService;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
@@ -114,7 +113,7 @@ public class GlobalDataController {
     }
     
     /**
-	 * @Description: 故障、警告、缺陷处理意见 {生产中心提供接口}
+	 * @Description: 故障、警告、缺陷处理意见 {流程：门户-生产中心-健康中心}
 	 * @author WCH
 	 * @dateTime 2020-7-20 17:55:35
 	 * @param bean

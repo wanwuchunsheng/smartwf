@@ -157,55 +157,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		//返回结果
 		return Result.data(list);
 	}
-
-	/**
-	 * @Description: 故障处理状态&部件故障分析
-	 * @param startTime
-	 * @param endTime
-	 * @return
-	 */
-	@Override
-	public Result<?> selectFaultStatusByDate(FaultInformationVO bean) {
-		List<Map<String,Object>> list=new ArrayList<>();
-		Map<String,Object> fr=null;
-		String[][] master=null;
-		//故障状态，数量统计
-		List<FaultInformationVO> alarmStatus= this.faultOverviewDao.selectFaultStatusByDate(bean);
-		//故障部位，数量统计
-		List<FaultInformationVO> alarmLocation= this.faultOverviewDao.selectFaultLocationByDate(bean);
-		//故障状态
-		if(alarmStatus!=null && alarmStatus.size()>0) {
-			master =new String[alarmStatus.size()][2];
-			int i = 0; 
-			for(FaultInformationVO fivo: alarmStatus ) {
-				master[i][0]=String.valueOf(fivo.getAlarmStatus());
-				master[i][1]=fivo.getFvalue();
-				i++;
-			}
-			fr = new HashMap<String,Object>(4);
-			fr.put("id", 1);
-			fr.put("title", "故障处理状态统计");
-			fr.put("content",master);
-			list.add(fr);
-		}
-		//故障部位
-		if(alarmLocation!=null && alarmLocation.size()>0) {
-			master =new String[alarmLocation.size()][2];
-			int i = 0; 
-			for(FaultInformationVO fivo: alarmLocation ) {
-				master[i][0]=String.valueOf(fivo.getAlarmLocation());
-				master[i][1]=fivo.getFvalue();
-				i++;
-			}
-			fr = new HashMap<String,Object>(4);
-			fr.put("id", 2);
-			fr.put("title", "故障部位统计");
-			fr.put("content",master);
-			list.add(fr);
-		}
-		return Result.data(list);
-	}
-
+	
 	/**
      * 说明：门户故障/缺陷/警告 统计
      *   1）查询所有信息状态
@@ -223,6 +175,104 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		map.put(0, listAlarmStatus);
 		map.put(1, listFaultInfomation);
 		return Result.data(Constants.EQU_SUCCESS, map);
+	}
+
+	/**
+	 * @Description: 故障处理状态
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@Override
+	public Result<?> selectFaultStatusByDate(FaultInformationVO bean) {
+		List<Map<String,Object>> list=new ArrayList<>();
+		Map<String,Object> fr=null;
+		String[][] master=null;
+		//故障状态，数量统计
+		List<FaultInformationVO> alarmStatus= this.faultOverviewDao.selectFaultStatusByDate(bean);
+		//故障状态
+		if(alarmStatus!=null && alarmStatus.size()>0) {
+			master =new String[alarmStatus.size()][2];
+			int i = 0; 
+			for(FaultInformationVO fivo: alarmStatus ) {
+				master[i][0]=String.valueOf(fivo.getAlarmStatus());
+				master[i][1]=fivo.getFvalue();
+				i++;
+			}
+			fr = new HashMap<String,Object>(4);
+			fr.put("id", 1);
+			fr.put("title", "故障处理状态统计");
+			fr.put("content",master);
+			list.add(fr);
+		}
+		return Result.data(list);
+	}
+
+	
+
+	/**
+	 * @Description: 处理效率统计
+	 * @param alarmStatus 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@Override
+	public Result<?> selectProcessingEfficByDate(FaultInformationVO bean) {
+		List<Map<String,Object>> list=new ArrayList<>();
+		Map<String,Object> fr=null;
+		String[][] master=null;
+		//故障部位，数量统计
+		List<FaultInformationVO> alarmLocation= this.faultOverviewDao.selectFaultLocationByDate(bean);
+		//故障部位
+		if(alarmLocation!=null && alarmLocation.size()>0) {
+			master =new String[alarmLocation.size()][2];
+			int i = 0; 
+			for(FaultInformationVO fivo: alarmLocation ) {
+				master[i][0]=String.valueOf(fivo.getFname());
+				master[i][1]=fivo.getFvalue();
+				i++;
+			}
+			fr = new HashMap<String,Object>(4);
+			fr.put("id", 2);
+			fr.put("title", "处理效率统计");
+			fr.put("content",master);
+			list.add(fr);
+		}
+		return Result.data(list);
+	}
+
+
+	/**
+   	 * @Description: (故障、缺陷、警告)未处理记录统计
+   	 * @author WCH
+   	 * @dateTime 2020-7-20 17:55:35
+   	 * @param bean
+   	 * @return
+   	 */
+	@Override
+	public Result<?> selectFaultRecordByIncidentType(FaultInformationVO bean) {
+		List<Map<String,Object>> list=new ArrayList<>();
+		Map<String,Object> fr=null;
+		String[][] master=null;
+		//故障部位，数量统计
+		List<FaultInformationVO> alarmLocation= this.faultOverviewDao.selectFaultRecordByIncidentType(bean);
+		//故障部位
+		if(alarmLocation!=null && alarmLocation.size()>0) {
+			master =new String[alarmLocation.size()][2];
+			int i = 0; 
+			for(FaultInformationVO fivo: alarmLocation ) {
+				master[i][0]=String.valueOf(fivo.getFname());
+				master[i][1]=fivo.getFvalue();
+				i++;
+			}
+			fr = new HashMap<String,Object>(4);
+			fr.put("id", 1);
+			fr.put("title", "处理效率统计");
+			fr.put("content",master);
+			list.add(fr);
+		}
+		return Result.data(list);
 	}
 	
 	

@@ -85,7 +85,7 @@
 				date_format(start_time,'%Y-%m-%d') as fname,
 				alarm_status
 			from fault_information 
-			where incident_type=1
+			where incident_type=${bean.incidentType}
 			and DATE_FORMAT(start_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
@@ -96,14 +96,14 @@
 		) a  group by a.alarm_status order by a.alarm_status asc
     </select>
     
-    <!-- 故障部位 -->
+    <!-- 完成率统计    alarm_status ： 3完成  4关闭 -->
     <select id="selectFaultLocationByDate" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
-       select a.alarm_location,count(a.fname) as fvalue from (
+       select a.incident_type as fname,avg(a.fvalue) as fvalue from (
 			select 
-				date_format(start_time,'%Y-%m-%d') as fname,
-				alarm_location
+				incident_type,
+	            timestampdiff(HOUR,start_time,end_time) as fvalue
 			from fault_information 
-			where incident_type=1
+			where alarm_status in (3,4) and end_time is not null
 			and DATE_FORMAT(start_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
@@ -111,7 +111,7 @@
             <if test="bean.windFarm != null ">
 	          and wind_farm in (${bean.windFarm}) 
 	        </if>
-		) a  group by a.alarm_location order by a.alarm_location asc
+		) a  group by a.incident_type order by a.incident_type asc
     </select>
     
     
@@ -157,6 +157,28 @@
             and wind_farm in (${bean.windFarm}) 
         </if>
         order by update_time desc
+    </select>
+    
+    
+    <!-- (故障、缺陷、警告)未处理记录统计 -->
+    <select id="selectFaultRecordByIncidentType" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+      select 
+        case a.incident_type 
+		  when 1 then 'fault'
+		  when 2 then 'defect'
+		  when 3 then 'alert'
+		else 'null'
+		end as fname,
+		count(a.incident_type) as fvalue 
+	  from (
+		 select incident_type from fault_information where alarm_status=0
+		 <if test="bean.tenantDomain != null ">
+               and tenant_domain = #{bean.tenantDomain}
+            </if>
+            <if test="bean.windFarm != null ">
+            and wind_farm in (${bean.windFarm}) 
+         </if>
+	  ) a GROUP BY a.incident_type order by a.incident_type asc
     </select>
     
 </mapper>

@@ -208,6 +208,7 @@ public class TenantServiceImpl implements TenantService{
 		org.setPid(Constants.ZERO);
 		org.setLevel(Constants.ONE);
 		org.setOrgCode("T001");
+		org.setOrgType(-99);
 		org.setOrgName(bean.getTenantName());
 		org.setEnable(Constants.ZERO);
 	    //默认添加组织根节点

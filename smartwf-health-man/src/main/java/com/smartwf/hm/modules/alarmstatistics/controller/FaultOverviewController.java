@@ -64,17 +64,18 @@ public class FaultOverviewController {
     
     
     /**
-	 * @Description: 故障处理状态&部件故障分析
+	 * @Description: 故障处理状态
 	 * @param alarmStatus 
 	 * @param startTime
 	 * @param endTime
 	 * @return
 	 */
     @PostMapping("selectFaultStatusByDate")
-    @ApiOperation(value = "故障处理状态&部件故障分析接口", notes = "故障处理状态&部件故障分析查询")
+    @ApiOperation(value = "故障处理状态接口", notes = "故障处理状态查询")
     @ApiImplicitParams({
 	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
 	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "incidentType", value = "事变类型{1故障  2警告  3缺陷}", dataType = "int",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "stime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true ),
             @ApiImplicitParam(paramType = "query", name = "etime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true )
     })
@@ -88,6 +89,33 @@ public class FaultOverviewController {
             log.error("故障处理状态&部件故障分析错误！{}", e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障处理状态&部件故障分析错误！"));
+    }
+    
+    /**
+	 * @Description: 处理效率统计
+	 * @param alarmStatus 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+    @PostMapping("selectProcessingEfficByDate")
+    @ApiOperation(value = "处理效率统计", notes = "处理效率统计")
+    @ApiImplicitParams({
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "stime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true ),
+            @ApiImplicitParam(paramType = "query", name = "etime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true )
+    })
+    public ResponseEntity<Result<?>> selectProcessingEfficByDate(FaultInformationVO bean) {
+        try {
+            Result<?> result = this.faultOverviewService.selectProcessingEfficByDate(bean);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }
+        } catch (Exception e) {
+            log.error("处理效率统计错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("处理效率统计错误！"));
     }
     
     
@@ -141,5 +169,28 @@ public class FaultOverviewController {
             log.error("故障处理统计信息错误！{}", e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("故障处理统计信息错误！"));
+    }
+
+    /**
+   	 * @Description: (故障、缺陷、警告)未处理记录统计
+   	 * @author WCH
+   	 * @dateTime 2020-7-20 17:55:35
+   	 * @param bean
+   	 * @return
+   	 */
+    @PostMapping("selectFaultRecordByIncidentType")
+    @ApiOperation(value = "（故障、缺陷、警告）未处理记录统计接口", notes = "故障、缺陷、警告未处理记录统计")
+    @ApiImplicitParams({
+   	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+          @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true)
+    })
+    public ResponseEntity<Result<?>> selectFaultRecordByIncidentType(FaultInformationVO bean) {
+       try {
+       	 Result<?> result =this.faultOverviewService.selectFaultRecordByIncidentType(bean);
+       	 return ResponseEntity.status(HttpStatus.OK).body(result);
+       } catch (Exception e) {
+           log.error("(故障、缺陷、警告)未处理记录统计错误！{}", e.getMessage(), e);
+       }
+       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("(故障、缺陷、警告)未处理记录统计错误！"));
     }
 }

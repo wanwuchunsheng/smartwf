@@ -1,6 +1,9 @@
 package com.smartwf.sm.modules.admin.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -28,12 +31,15 @@ import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.LoginRecord;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Role;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.LoginRecordService;
+import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -66,6 +72,9 @@ public class GlobalDataController {
 	
 	@Autowired
     private Wso2Config wso2Config;
+	
+	@Autowired
+    private TenantService tenantService;
 	
 	 
    
@@ -449,4 +458,58 @@ public class GlobalDataController {
 			log.error("ERROR：插入登录记录错误！{}-{}",e.getMessage(),e);
 		}
     }
+    
+    /**
+     * @Description：获取全部租户和风场
+     * @return
+     */
+    @GetMapping("selectTenantOrWindFarm")
+    @ApiOperation(value = "获取全部租户和风场接口", notes = "获取全部租户和风场")
+    public ResponseEntity<Result<?>> selectTenantOrWindFarm(HttpServletRequest request) {
+        try {
+        	//租户
+        	List<Tenant> tenantList= JSONUtil.toList( JSONUtil.parseArray( this.redisService.get("initTenant")), Tenant.class);
+        	//组织机构
+        	Map<String, Object> map = JSONUtil.parseObj(redisService.get("initOrganization"));
+        	Map<String,Object> tenantMap=null;
+        	Map<String,Object> orgMap=null;
+        	List<Map<String,Object>> windfarmlist=null;
+        	List<Map<String,Object>> reslist=new ArrayList<>();
+        	for(Tenant t:tenantList) {
+        		tenantMap=new HashMap<>();
+        		tenantMap.put("tenantId", t.getId());
+        		tenantMap.put("tenantDomain", t.getTenantDomain());
+        		tenantMap.put("tenantName", t.getTenantName());
+        		if(map!=null && map.size()> 0 ) {
+    				//组织机构
+    				List<OrganizationVO> orglist= JSONUtil.toList( JSONUtil.parseArray( map.get(Convert.toStr(t.getId()))), OrganizationVO.class) ;
+    				windfarmlist=new ArrayList<>();
+    				//过滤风场
+    				for(OrganizationVO orgVo:orglist) {
+    					orgMap=new HashMap<>();
+    					//风场
+    					if(orgVo.getOrgType()==Constants.ONE) {
+    						orgMap.put("windFarmId", orgVo.getId());
+    						orgMap.put("windFarmName", orgVo.getOrgName());
+    						windfarmlist.add(orgMap);
+    					}
+    				}
+    				tenantMap.put("windFarms", windfarmlist);
+        		}
+        		//租户风场树形结构
+        		reslist.add(tenantMap);
+        	}
+        	//封装根节点返回
+        	tenantMap=new HashMap<>();
+        	tenantMap.put("tenantStation", reslist);
+    		//成功返回
+    		return ResponseEntity.ok(Result.data(Constants.EQU_SUCCESS,tenantMap));
+        } catch (Exception e) {
+            log.error("获取全部租户和风场！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( "获取全部租户和风场！"));
+    }
+   
+    
+    
 }

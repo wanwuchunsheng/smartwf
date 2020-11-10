@@ -70,10 +70,10 @@ public interface FaultOverviewDao extends BaseMapper<FaultInformation> {
 	 */
 	List<FaultInformationVO> selectFaultStatusByDate(@Param("bean") FaultInformationVO bean);
 	/**
-	 * 故障部位，数量统计
+	 * @Description: 处理效率统计
+	 * @param alarmStatus 
 	 * @param startTime
 	 * @param endTime
-	 * @param bean
 	 * @return
 	 */
 	List<FaultInformationVO> selectFaultLocationByDate(@Param("bean") FaultInformationVO bean);
@@ -94,6 +94,15 @@ public interface FaultOverviewDao extends BaseMapper<FaultInformation> {
      * @return
      * */
 	List<Map<String,String>> selectFaultInformationByPage(Page<FaultInformation> page, @Param("bean") FaultInformationVO bean);
+	
+	/**
+   	 * @Description: (故障、缺陷、警告)未处理记录统计
+   	 * @author WCH
+   	 * @dateTime 2020-7-20 17:55:35
+   	 * @param bean
+   	 * @return
+   	 */
+	List<FaultInformationVO> selectFaultRecordByIncidentType(@Param("bean") FaultInformationVO bean);
 	
 
 }

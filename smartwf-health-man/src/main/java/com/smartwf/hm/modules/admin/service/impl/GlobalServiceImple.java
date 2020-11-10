@@ -97,4 +97,5 @@ public class GlobalServiceImple implements GlobalService{
 		return Result.data(list);
 	}
 
+	
 }
