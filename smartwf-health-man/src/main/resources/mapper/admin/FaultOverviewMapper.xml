@@ -98,7 +98,7 @@
     
     <!-- 完成率统计    alarm_status ： 3完成  4关闭 -->
     <select id="selectFaultLocationByDate" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
-       select a.incident_type as fname,avg(a.fvalue) as fvalue from (
+       select a.incident_type as fname,ROUND(avg(a.fvalue)) as fvalue from (
 			select 
 				incident_type,
 	            timestampdiff(HOUR,start_time,end_time) as fvalue
