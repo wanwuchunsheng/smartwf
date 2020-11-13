@@ -91,7 +91,7 @@
         </if>
     </select>
     
-    <!-- 查询用户所属风场 -->
+    <!-- 查询租户、用户所属风场 -->
     <select id="selectOrganizationByOrgUserId" resultType="com.smartwf.sm.modules.admin.vo.OrganizationVO">
         select 
 		    a.id,
@@ -108,6 +108,21 @@
 			a.enable,
 			a.level,
 			a.create_time
+		from sys_organization a ,sys_user_organization b where a.id=b.organization_id and a.tenant_id=b.tenant_id and a.org_type=1 and a.enable=0
+		and b.tenant_id=#{bean.tenantId} 
+		<if test="bean.userId != null ">
+            and b.user_id=#{bean.userId}
+        </if>
+        order by sort asc
+    </select>
+    
+    
+    
+    <!-- 查询用户所属风场 -->
+    <select id="selectUserInfoByWindFarm" resultType="java.util.Map">
+        select 
+		   a.id as windFarm,
+		   a.org_name as windFarmName
 		from sys_organization a ,sys_user_organization b where a.id=b.organization_id and a.tenant_id=b.tenant_id and a.org_type=1 and a.enable=0
 		and b.tenant_id=#{bean.tenantId} 
 		and b.user_id=#{bean.userId}

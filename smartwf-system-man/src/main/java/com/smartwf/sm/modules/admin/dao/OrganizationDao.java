@@ -2,14 +2,13 @@ package com.smartwf.sm.modules.admin.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.TreeOrganization;
-import com.smartwf.common.pojo.TreePost;
 import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.UserOrganization;
@@ -63,10 +62,19 @@ public interface OrganizationDao extends BaseMapper<Organization> {
 	List<TreeOrganization> selectOrganizationByUserId(@Param("bean") User userInfo);
 
 	/**
-     * @Description 通过租户查询   - 所有风场
+     * @Description 通过租户、用户查询   - 所有风场
      * @return
      */
 	List<OrganizationVO> selectOrganizationByOrgUserId(@Param("bean") UserOrganization uobean);
+	
+	/**
+     * @Description：知识中心-获取用户风场信息
+     * @param sessionId
+     * @return
+     */
+	List<Map<String, Object>> selectUserInfoByWindFarm(@Param("bean") UserOrganization bean);
+
+	
 	
 	
 

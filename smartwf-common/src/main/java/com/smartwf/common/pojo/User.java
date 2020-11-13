@@ -192,11 +192,7 @@ public class User implements Serializable{
 	private List<TreeRole> roleList;
 	
 	/**
-	 * 资源菜单
-	 */
-	//private List<TreeResource> resouceList;
-	/**
 	 * 组织架构 
 	 */
-	//private List<TreeOrganization> organizationList;
+	private List<TreeOrganization> organizationList;
 }

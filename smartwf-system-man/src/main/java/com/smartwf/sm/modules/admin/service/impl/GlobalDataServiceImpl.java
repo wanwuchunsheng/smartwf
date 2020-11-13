@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.common.utils.CkUtils;
+import com.smartwf.sm.modules.admin.dao.OrganizationDao;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
@@ -30,7 +30,6 @@ import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
-import com.smartwf.sm.modules.admin.vo.TenantVO;
 import com.smartwf.sm.modules.sysconfig.service.WeatherConfigService;
 import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
 import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
@@ -57,6 +56,9 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	private OrganizationService organizationService;
 	
 	@Autowired
+	private OrganizationDao organizationDao;
+	
+	@Autowired
     private PostService postService;
 	
 	@Autowired
@@ -79,7 +81,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 
 	/**
      * @Description 根据用户等级，返回租户列表
-     * @param MgrType {2平台管理员 1管理员 0普通}
+     * @param user
      * @return
      */
 	@Override
@@ -91,7 +93,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		//过滤启用租户
 		queryWrapper.eq("enable", Constants.ZERO);
 		//判断是否平台管理员{2平台管理员 1管理员 0普通}
-		if(!Constants.MGRTYPE_ADMIN.equals(user.getMgrType())) {
+		if(!CkUtils.verifyUser(user)) {
 			queryWrapper.eq("id", user.getTenantId());
 		}
 		List<Tenant> list=this.tenantDao.selectList(queryWrapper);
@@ -147,7 +149,10 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	public Result<?> windFarmByTenantId(UserOrganization uobean) {
 		try {
 			User user = UserThreadLocal.getUser();
-			uobean.setUserId(user.getId());
+			//平台管理员跨租户控制
+			if(!CkUtils.verifyUser(user)) {
+				uobean.setUserId(user.getId());
+			}
 			List<OrganizationVO> reslist=this.organizationService.selectOrganizationByUserId(uobean);
 			return Result.data(reslist);
 		} catch (Exception e) {
@@ -440,6 +445,17 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 			 }
 		}
 		return treeNode;
+	}
+
+	 /**
+     * @Description：知识中心-获取用户风场信息
+     * @param sessionId
+     * @return
+     */
+	@Override
+	public Result<?> selectUserInfoByWindFarm(UserOrganization bean) {
+		List<Map<String,Object>> list= this.organizationDao.selectUserInfoByWindFarm(bean);
+		return Result.data(Constants.EQU_SUCCESS, list);
 	}
 
 	

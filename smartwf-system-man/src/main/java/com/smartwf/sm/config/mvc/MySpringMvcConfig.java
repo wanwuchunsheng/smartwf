@@ -44,7 +44,7 @@ public class MySpringMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/user/selectByUsername")
                 // swagger2页面
-                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**", "/error/","/iot/selectIotConfigByAll**")
+                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**", "/error/","/iot/selectIotConfigByAll**","/globaldata/selectTenantOrWindFarm**")
                 // rpc注册中心
                 .excludePathPatterns("/rpc/**")
                 .addPathPatterns("/**");

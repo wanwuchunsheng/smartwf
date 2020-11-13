@@ -51,7 +51,7 @@ public class CommonUtils {
     	String code=request.getParameter("code");
     	if(StringUtils.isBlank(code)) {
     		log.warn("未登录！参数code为空异常{}，请求uri：{}", code, request.getRequestURI());
-    		throw new CommonException(Constants.UNAUTHORIZED, "未登录！参数code异常！")  ;
+    		throw new CommonException(Constants.UNAUTHORIZED, "未登录！参数code异常！");
     	}
     	//获取redirect_uri并验证
     	String redirectUri=request.getParameter("redirect_uri");

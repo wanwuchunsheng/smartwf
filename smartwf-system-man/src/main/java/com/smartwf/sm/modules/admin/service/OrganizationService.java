@@ -67,10 +67,11 @@ public interface OrganizationService {
 	 */
 	Map<Integer,List<OrganizationVO>> initOrganizationDatas(List<Tenant> list);
 	/**
-     * @Description 通过租户查询   - 所有风场
+     * @Description 通过租户、用户查询   - 所有风场
      * @return
      */
 	List<OrganizationVO> selectOrganizationByUserId(UserOrganization uobean);
+	
 	
 	
 

@@ -3,14 +3,12 @@ package com.smartwf.sm.modules.admin.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.druid.sql.ast.statement.SQLWithSubqueryClause.Entry;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -18,7 +16,6 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.Md5Utils;
 import com.smartwf.common.utils.CkUtils;
 import com.smartwf.sm.modules.admin.dao.DictionaryDao;
 import com.smartwf.sm.modules.admin.dao.TenantDao;
@@ -37,7 +34,6 @@ import com.smartwf.sm.modules.wso2.pojo.Wso2Tenant;
 import com.smartwf.sm.modules.wso2.service.Wso2TenantService;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.math.MathUtil;
 import lombok.extern.log4j.Log4j;
 /**
  * @Description: 租户业务层接口实现
@@ -78,7 +74,7 @@ public class TenantServiceImpl implements TenantService{
 	public Result<?> selectTenantByPage(Page<Tenant> page, TenantVO bean) {
 		User user=UserThreadLocal.getUser();
 		//判断是否平台管理员{2平台管理员 1管理员 0普通}
-		if( Constants.MGRTYPE_ADMIN.equals(user.getMgrType())) {
+		if( CkUtils.verifyUser(user)) {
 			bean.setId(null);
 			bean.setTenantCode(null);
 		}else {

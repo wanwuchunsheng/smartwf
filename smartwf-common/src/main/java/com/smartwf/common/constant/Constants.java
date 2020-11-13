@@ -27,8 +27,10 @@ public class Constants {
     public static final String ACTIVE = "active";
     
     public static final String USERID = "user_id";
-    
+    /** 排班角色 */
     public static final String SHIFT_GROUP = "shift_group_role";
+    /** 是否平台管理员角色 */
+    public static final String SUPER_ADMIN="platform_administration";
     
     public static final String REDIS_TOPIC = "topic:smartwf";
     
@@ -67,13 +69,7 @@ public class Constants {
      * 默认租户状态
      */ 
     public static final Integer ISSEL = 1;
-    /**
-     * 角色等级
-     *   0-普通
-     *   1-管理员
-     *   2-平台管理员
-     * */
-    public static final Integer MGRTYPE_ADMIN=2;
+    
     
     
     /**

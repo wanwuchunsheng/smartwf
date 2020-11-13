@@ -117,7 +117,7 @@
     
     <!-- 门户-省份风场统计  -->
     <select id="selectProWindfarm" resultType="java.util.Map">
-        select f.proName,f.pro_code as proCode,count(*) as wfCount from (
+        select f.proName,f.pro_code as proCode,count(*) as windFarmCount from (
 		     select 
 				a.id as wind_farm,
 				a.org_name as wind_farm_title,

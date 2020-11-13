@@ -133,9 +133,14 @@ public class RoleServiceImpl implements RoleService{
      */
 	@Override
 	public Result<?> updateRole(Role bean) {
-		/** 修改wso2角色 */
+		//判断是否为空
 		if(StringUtils.isNotBlank(bean.getEngName())) {
 			Role rl=this.roleDao.selectById(bean);
+			//平台管理员角色不能修改，不能删除
+			if(Constants.SUPER_ADMIN.equalsIgnoreCase(rl.getEngName())) {
+				return Result.msg(Constants.BAD_REQUEST, "平台管理员角色不能修改！");
+			}
+			//非平台管理员可修改
 			rl.setEngName(bean.getEngName());
 			Map<String ,Object> map=this.wso2RoleService.updateRole(rl);
 			if(null!=map) {
@@ -151,7 +156,6 @@ public class RoleServiceImpl implements RoleService{
 				GlobalData gd=new GlobalData();
 				gd.setFlushType(Convert.toStr(Constants.ZERO));
 				this.globalDataService.flushCache(gd);
-				
 				return Result.data(Constants.EQU_SUCCESS,"修改成功！");
 			}
 		}
@@ -164,42 +168,25 @@ public class RoleServiceImpl implements RoleService{
      */
 	@Transactional(rollbackFor=Exception.class)
 	@Override
-	public void deleteRole(RoleVO bean) {
-		if( null!=bean.getId()) {
-			/** 删除wso2角色 */
-			Role rl=this.roleDao.selectById(bean);
-			this.wso2RoleService.deleteRole(rl);
-			//删除角色
-			this.roleDao.deleteById(bean);
-			//删除用户角色
-			this.roleDao.deleteUserRoleById(bean);
-			//删除角色权限
-			this.roleDao.deleteRolePermissionById(bean);
-		}else {
-			String ids=CkUtils.regex(bean.getIds());
-			if(StringUtils.isNotBlank(ids)) {
-				List<String> list=new ArrayList<>();
-				for(String val:ids.split(Constants.CHAR)) {
-					list.add(val);
-					bean=new RoleVO();
-					bean.setId(Integer.valueOf(val));
-					/** 删除wso2角色 */
-					Role rl=this.roleDao.selectById(bean);
-					this.wso2RoleService.deleteRole(rl);
-					//删除用户角色
-					this.roleDao.deleteUserRoleById(bean);
-					//删除角色权限
-					this.roleDao.deleteRolePermissionById(bean);
-				}
-				//批量删除角色
-				this.roleDao.deleteRoleByIds(list);
-			}
+	public Result<?> deleteRole(RoleVO bean) {
+		Role rl=this.roleDao.selectById(bean);
+		if(Constants.SUPER_ADMIN.equalsIgnoreCase(rl.getEngName())) {
+			return Result.msg(Constants.BAD_REQUEST, "平台管理员角色不能删除！");
 		}
+		// 删除wso2角色
+		this.wso2RoleService.deleteRole(rl);
+		//删除角色
+		this.roleDao.deleteById(bean);
+		//删除用户角色
+		this.roleDao.deleteUserRoleById(bean);
+		//删除角色权限
+		this.roleDao.deleteRolePermissionById(bean);
 		/**刷新缓存 */
 		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
 		GlobalData gd=new GlobalData();
 		gd.setFlushType(Convert.toStr(Constants.ZERO));
 		this.globalDataService.flushCache(gd);
+		return Result.msg(Constants.EQU_SUCCESS, "成功");
 	}
 
 	/**

@@ -30,6 +30,7 @@ import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
 import com.smartwf.sm.modules.sysconfig.vo.TenantConfigVO;
 import com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
@@ -292,19 +293,35 @@ public class RouteServiceImpl implements RouteService{
      */
 	@Override
 	public Result<?> selectWindfarmConfigByProCode(WindfarmConfig bean) {
+		List<Map<String,Object>> mapRes=new ArrayList<>();
+		List<Map<String,Object>> mapWfList=null;
 		Map<String,Object> mapPor=null;
+		Map<String,Object> mapWf=null;
 		//分组统计省份风场数
 		List<Map<String,Object>> maplist= this.windFarmConfigDao.selectProWindfarm(bean);
 		//查询所有风场
 		List<WindfarmConfigVO> windfarmList=this.windFarmConfigDao.selectWindfarmConfigByProCode(bean);
 		//规范数据返回
-		/**
 		for(Map<String,Object> m:maplist) {
+			mapWfList=new ArrayList<>();
 			mapPor= new HashMap<>();
-			m.get("");
+			mapPor.put("proName", m.get("proName"));
+			mapPor.put("windFarmCount", m.get("windFarmCount"));
+			String proCode=Convert.toStr(m.get("proCode"));
+			for(WindfarmConfigVO wv:windfarmList) {
+				if(proCode.equals(wv.getProCode())) {
+					mapWf= new HashMap<>();
+					mapWf.put("windFarmTitle", wv.getWindFarmTitle());
+					mapWf.put("installedCapacity", wv.getInstalledCapacity());
+					mapWf.put("dailyGeneration", wv.getDailyGeneration());
+					mapWfList.add(mapWf);
+				}
+			}
+			mapPor.put("windFarms", mapWfList);
+			mapRes.add(mapPor);
 		}
-		*/
-		return null;
+		log.info(JSONUtil.toJsonStr(mapRes));
+		return Result.data(Constants.EQU_SUCCESS,mapRes);
 	}
 	
 	

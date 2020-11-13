@@ -227,13 +227,12 @@ public class OrganizationServiceImpl implements OrganizationService{
 	}
 
 	/**
-     * @Description 通过租户查询   - 所有风场
+     * @Description 通过租户、用户查询   - 所有风场
      * @return
      */
 	@Override
 	public List<OrganizationVO> selectOrganizationByUserId(UserOrganization uobean) {
-		List<OrganizationVO> list= this.organizationDao.selectOrganizationByOrgUserId(uobean);
-		return list;
+		return this.organizationDao.selectOrganizationByOrgUserId(uobean);
 	}
 	
 

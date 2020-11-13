@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,7 @@ import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.utils.MathUtils;
 import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
+import com.smartwf.sm.config.util.HS256Utils;
 import com.smartwf.sm.modules.admin.pojo.Dictionary;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.LoginRecord;
@@ -463,10 +465,19 @@ public class GlobalDataController {
      * @Description：获取全部租户和风场
      * @return
      */
-    @GetMapping("selectTenantOrWindFarm")
+    @PostMapping("selectTenantOrWindFarm")
     @ApiOperation(value = "获取全部租户和风场接口", notes = "获取全部租户和风场")
     public ResponseEntity<Result<?>> selectTenantOrWindFarm(HttpServletRequest request) {
         try {
+        	//获取头部apitoken
+        	String apiToken = request.getHeader(Constants.ACCESS_TOKEN);
+        	if(apiToken==null) {
+        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"token为空！"));
+        	}
+        	//验证token
+        	if(!HS256Utils.vaildToken(apiToken)) {
+        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"token无效！"));
+        	};
         	//租户
         	List<Tenant> tenantList= JSONUtil.toList( JSONUtil.parseArray( this.redisService.get("initTenant")), Tenant.class);
         	//组织机构
@@ -511,5 +522,21 @@ public class GlobalDataController {
     }
    
     
+    /**
+     * @Description：知识中心-获取用户风场信息
+     * @param sessionId
+     * @return
+     */
+    @GetMapping("selectUserInfoByWindFarm")
+    @ApiOperation(value = "用户风场接口", notes = "获取用户风场信息")
+    public ResponseEntity<Result<?>> selectUserInfoByWindFarm(UserOrganization bean) {
+        try {
+        	Result<?> result= this.globalDataService.selectUserInfoByWindFarm(bean);
+        	return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            log.error("获取用户风场失败！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( "用户风场失败！"));
+    }
     
 }

@@ -384,13 +384,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			//角色
 			userInfo.setRoleList(this.roleDao.selectTreeRoleByUserId(userInfo));
 			//获取组织架构
-			//userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
-			/**
-			//资源权限
-			//List<TreeResource> reslist=buildByRecursive(this.resourceDao.selectResourceByUserId(userInfo) );
-			userInfo.setResouceList(reslist);
-			 * 
-			 */
+			userInfo.setOrganizationList(this.organizationDao.selectOrganizationByUserId(userInfo));
 		}
 		return userInfo;
 	}
@@ -484,8 +478,6 @@ public class UserInfoServiceImpl implements UserInfoService{
 		List<UserInfo> userInfoList=this.userInfoDao.selectUserInfoByRoleParam(tenantDomain,windFarm,Constants.SHIFT_GROUP,page);
 		return Result.data(Constants.EQU_SUCCESS,page.getTotal(), userInfoList);
 	}
-
-	
 	
 	/**
    	 *  排班人员信息

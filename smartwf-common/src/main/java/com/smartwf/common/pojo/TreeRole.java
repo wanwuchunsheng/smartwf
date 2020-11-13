@@ -22,6 +22,12 @@ public class TreeRole implements Serializable{
 	 * 角色编号
 	 */
 	private String roleCode;
+	
+	/**
+	 * wso2角色名称
+	 */
+	private String engName;
+	
 	/**
 	 * 角色名称
 	 */

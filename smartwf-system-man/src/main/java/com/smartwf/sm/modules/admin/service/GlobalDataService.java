@@ -80,6 +80,12 @@ public interface GlobalDataService {
      * @return
      */
 	Result<?> selectTenantByPage(User user);
+	 /**
+     * @Description：知识中心-获取用户风场信息
+     * @param sessionId
+     * @return
+     */
+	Result<?> selectUserInfoByWindFarm(UserOrganization bean);
 
 	
 }

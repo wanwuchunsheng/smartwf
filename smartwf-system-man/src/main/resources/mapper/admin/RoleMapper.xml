@@ -43,6 +43,7 @@
 			b.id,
 			b.role_code,
 			b.role_name,
+			b.eng_name,
 			b.tenant_id
 		from sys_user_role a ,sys_role b 
 		where a.role_id=b.id and b.enable = 0

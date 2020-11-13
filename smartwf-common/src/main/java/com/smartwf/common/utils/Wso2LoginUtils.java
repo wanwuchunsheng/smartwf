@@ -1,7 +1,5 @@
 package com.smartwf.common.utils;
 
-import java.io.InputStream;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,8 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.smartwf.common.constant.Constants;
-import com.smartwf.common.exception.CommonException;
-import com.smartwf.common.handler.BodyReaderHttpServletRequestWrapper;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.wso2.Wso2Config;
@@ -27,7 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class Wso2LoginUtils {
-	
+	/**
+	 * 拦截器
+	 * 
+	 * */
     public static boolean checkLogin(HttpServletRequest request, HttpServletResponse response, Object handler, RedisService redisService,Wso2Config wso2Config) throws Exception{	
     	log.info("进入拦截器"+request.getMethod()+"{}"+request.getRequestURI());
     	//1判断是否accessToken令牌请求

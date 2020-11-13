@@ -49,7 +49,7 @@ public interface RoleService {
      * 删除角色
      * @param bean
      */
-	void deleteRole(RoleVO bean);
+	Result<?> deleteRole(RoleVO bean);
 	
 	/**
      * 初始化角色信息

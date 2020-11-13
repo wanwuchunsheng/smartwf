@@ -2,7 +2,6 @@ package com.smartwf.sm.modules.admin.controller;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,7 @@ import com.smartwf.common.annotation.ParamValidated.Query;
 import com.smartwf.common.annotation.ParamValidated.QueryParam;
 import com.smartwf.common.annotation.ParamValidated.Update;
 import com.smartwf.common.annotation.TraceLog;
+import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.service.RoleService;
@@ -155,16 +155,12 @@ public class RoleController {
     @DeleteMapping("deleteRole")
     @ApiOperation(value = "删除接口", notes = "删除角色")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer"),
-    	    @ApiImplicitParam(paramType = "query", name = "ids", value = "主键批量删除（逗号拼接）", dataType = "String")
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键单个删除", dataType = "Integer")
     })
     @TraceLog(content = "删除角色系统用户", paramIndexs = {0})
     public ResponseEntity<Result<?>> deleteRole(RoleVO bean) {
-    	if(null==bean.getId() && StringUtils.isBlank(bean.getIds()) ) {
-    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("删除数据为空！"));
-    	}
-    	this.roleService.deleteRole(bean);
-        return ResponseEntity.status(HttpStatus.OK).body(Result.msg("删除成功"));
+    	Result<?> data= this.roleService.deleteRole(bean);
+        return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, data));
     }
 
 
