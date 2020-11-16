@@ -136,9 +136,18 @@ public class RoleServiceImpl implements RoleService{
 		//判断是否为空
 		if(StringUtils.isNotBlank(bean.getEngName())) {
 			Role rl=this.roleDao.selectById(bean);
-			//平台管理员角色不能修改，不能删除
-			if(Constants.SUPER_ADMIN.equalsIgnoreCase(rl.getEngName())) {
-				return Result.msg(Constants.BAD_REQUEST, "平台管理员角色不能修改！");
+			//验证是否修改RoleCode,平台、租户、风场角色RoleCode不能修改，只能修改名称
+			if(!bean.getEngName().equals(rl.getEngName())) {
+				//平台管理员角色不能修改，不能删除
+				if(Constants.SUPER_ADMIN.equalsIgnoreCase(rl.getEngName())) {
+					return Result.msg(Constants.BAD_REQUEST, "平台管理员角色不能修改！");
+				}
+				if(Constants.SUPER_TENANT.equalsIgnoreCase(rl.getEngName())) {
+					return Result.msg(Constants.BAD_REQUEST, "租户管理员角色不能修改！");
+				}
+				if(Constants.SUPER_WINDFARM.equalsIgnoreCase(rl.getEngName())) {
+					return Result.msg(Constants.BAD_REQUEST, "风场管理员角色不能修改！");
+				}
 			}
 			//非平台管理员可修改
 			rl.setEngName(bean.getEngName());
@@ -172,6 +181,12 @@ public class RoleServiceImpl implements RoleService{
 		Role rl=this.roleDao.selectById(bean);
 		if(Constants.SUPER_ADMIN.equalsIgnoreCase(rl.getEngName())) {
 			return Result.msg(Constants.BAD_REQUEST, "平台管理员角色不能删除！");
+		}
+		if(Constants.SUPER_TENANT.equalsIgnoreCase(rl.getEngName())) {
+			return Result.msg(Constants.BAD_REQUEST, "租户管理员角色不能删除！");
+		}
+		if(Constants.SUPER_WINDFARM.equalsIgnoreCase(rl.getEngName())) {
+			return Result.msg(Constants.BAD_REQUEST, "风场管理员角色不能删除！");
 		}
 		// 删除wso2角色
 		this.wso2RoleService.deleteRole(rl);
@@ -208,6 +223,40 @@ public class RoleServiceImpl implements RoleService{
 			map.put(t.getId(), this.roleDao.selectList(queryWrapper));
 		}
 		return map;
+	}
+
+	/**
+	 * @Description: 查询角色列表
+	 *   根据当前用户的角色，过滤列表
+	 *   平台管理员显示全部角色
+	 *   租户管理员不能显示平台管理员角色
+	 *   风场管理员不能显示平台管理员、租户管理员角色
+	 * @return
+	 */
+	@Override
+	public Result<?> selectRoleByUserId(Role bean) {
+		User user=UserThreadLocal.getUser();
+		QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+		//是否租户管理员角色
+		if(CkUtils.verifyTenantUser(user)) {
+			queryWrapper.notIn("eng_name", Constants.SUPER_ADMIN);
+		}
+		//是否风场管理员角色
+		if(CkUtils.verifyWindFarmUser(user)) {
+			queryWrapper.notIn("eng_name", Constants.SUPER_ADMIN,Constants.SUPER_TENANT);
+		}
+		//是否平台管理员角色
+		if(!CkUtils.verifyAdminUser(user)) {
+			queryWrapper.notIn("eng_name", Constants.SUPER_ADMIN,Constants.SUPER_TENANT,Constants.SUPER_ADMIN);
+		}
+		//降序
+		queryWrapper.orderByDesc("update_time"); 
+        //租户
+  		if (null!=bean.getTenantId()) { 
+  			queryWrapper.eq("tenant_id", bean.getTenantId()); 
+  		} 
+  		List<Role> list=this.roleDao.selectList(queryWrapper);
+		return Result.data(list.size(), list);
 	}
 	
 

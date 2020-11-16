@@ -234,6 +234,15 @@ public class OrganizationServiceImpl implements OrganizationService{
 	public List<OrganizationVO> selectOrganizationByUserId(UserOrganization uobean) {
 		return this.organizationDao.selectOrganizationByOrgUserId(uobean);
 	}
+
+	/**
+     * @Description 通过租户查询   - 所有风场
+     * @return
+     */
+	@Override
+	public List<OrganizationVO> selectOrganizationByTenantId(UserOrganization uobean) {
+		return this.organizationDao.selectOrganizationByTenantId(uobean);
+	}
 	
 
 

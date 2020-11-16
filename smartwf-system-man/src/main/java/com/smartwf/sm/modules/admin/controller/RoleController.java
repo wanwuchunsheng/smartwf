@@ -74,6 +74,32 @@ public class RoleController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("分页查询角色信息错误！"));
     }
     
+    
+    /**
+	 * @Description: 查询角色列表
+	 *   根据当前用户的角色，过滤列表
+	 *   平台管理员显示全部角色
+	 *   租户管理员不能显示平台管理员角色
+	 *   风场管理员不能显示平台管理员、租户管理员角色
+	 * @return
+	 */
+    @GetMapping("selectRoleByUserId")
+    @ApiOperation(value = "筛选角色列表接口", notes = "筛选角色列表")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> selectRoleByUserId(Role bean) {
+        try {
+            Result<?> result = this.roleService.selectRoleByUserId(bean);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }
+        } catch (Exception e) {
+            log.error("筛选角色列表信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("筛选角色列表信息错误！"));
+    }
+    
     /**
      * @Description: 主键查询角色
      * @return

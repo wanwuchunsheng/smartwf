@@ -74,7 +74,7 @@ public class TenantServiceImpl implements TenantService{
 	public Result<?> selectTenantByPage(Page<Tenant> page, TenantVO bean) {
 		User user=UserThreadLocal.getUser();
 		//判断是否平台管理员{2平台管理员 1管理员 0普通}
-		if( CkUtils.verifyUser(user)) {
+		if( CkUtils.verifyAdminUser(user)) {
 			bean.setId(null);
 			bean.setTenantCode(null);
 		}else {

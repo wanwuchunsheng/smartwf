@@ -93,7 +93,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		//过滤启用租户
 		queryWrapper.eq("enable", Constants.ZERO);
 		//判断是否平台管理员{2平台管理员 1管理员 0普通}
-		if(!CkUtils.verifyUser(user)) {
+		if(!CkUtils.verifyAdminUser(user)) {
 			queryWrapper.eq("id", user.getTenantId());
 		}
 		List<Tenant> list=this.tenantDao.selectList(queryWrapper);
@@ -150,9 +150,11 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		try {
 			User user = UserThreadLocal.getUser();
 			//平台管理员跨租户控制
-			if(!CkUtils.verifyUser(user)) {
-				uobean.setUserId(user.getId());
+			if(CkUtils.verifyAdminUser(user)) {
+				List<OrganizationVO> reslist=this.organizationService.selectOrganizationByTenantId(uobean);
+				return Result.data(reslist);
 			}
+			uobean.setUserId(user.getId());
 			List<OrganizationVO> reslist=this.organizationService.selectOrganizationByUserId(uobean);
 			return Result.data(reslist);
 		} catch (Exception e) {

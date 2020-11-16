@@ -71,6 +71,11 @@ public interface OrganizationService {
      * @return
      */
 	List<OrganizationVO> selectOrganizationByUserId(UserOrganization uobean);
+	/**
+     * @Description 通过租户查询   - 所有风场
+     * @return
+     */
+	List<OrganizationVO> selectOrganizationByTenantId(UserOrganization uobean);
 	
 	
 	

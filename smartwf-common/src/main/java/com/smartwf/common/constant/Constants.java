@@ -29,8 +29,12 @@ public class Constants {
     public static final String USERID = "user_id";
     /** 排班角色 */
     public static final String SHIFT_GROUP = "shift_group_role";
-    /** 是否平台管理员角色 */
+    /** 平台管理员角色 */
     public static final String SUPER_ADMIN="platform_administration";
+    /** 租户管理员角色 */
+    public static final String SUPER_TENANT="tenants_super_administrator";
+    /** 风场管理员角色 */
+    public static final String SUPER_WINDFARM="station_manager";
     
     public static final String REDIS_TOPIC = "topic:smartwf";
     

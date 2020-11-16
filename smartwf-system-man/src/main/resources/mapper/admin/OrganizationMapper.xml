@@ -116,6 +116,27 @@
         order by sort asc
     </select>
     
+    <!-- 查询租户、用户所属风场 -->
+    <select id="selectOrganizationByTenantId" resultType="com.smartwf.sm.modules.admin.vo.OrganizationVO">
+	     select 
+		    a.id,
+			a.pid,
+			a.uid,
+			a.sort,
+			a.org_code,
+			a.org_name,
+			a.org_type,
+			a.wfmark,
+			a.remark,
+			a.tenant_id,
+			a.wind_farm,
+			a.enable,
+			a.level,
+			a.create_time
+		from sys_organization a where a.org_type=1 and a.enable=0
+		and a.tenant_id=#{bean.tenantId} 
+        order by sort asc
+    </select>
     
     
     <!-- 查询用户所属风场 -->

@@ -57,6 +57,15 @@ public interface RoleService {
      * @return
      */
 	Map<Integer,List<Role>> initRoleDatas(List<Tenant> list);
+	/**
+	 * @Description: 查询角色列表
+	 *   根据当前用户的角色，过滤列表
+	 *   平台管理员显示全部角色
+	 *   租户管理员不能显示平台管理员角色
+	 *   风场管理员不能显示平台管理员、租户管理员角色
+	 * @return
+	 */
+	Result<?> selectRoleByUserId(Role bean);
 	
 	
 

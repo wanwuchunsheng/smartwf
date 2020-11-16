@@ -31,10 +31,43 @@ public class CkUtils {
      * @Data 2020-11-12 14:04:56
      * @return
      * */
-    public static boolean verifyUser(User user){
+    public static boolean verifyAdminUser(User user){
     	List<TreeRole> rolelist=user.getRoleList();
     	for(TreeRole tr:rolelist) {
     		if(Constants.SUPER_ADMIN.equalsIgnoreCase(tr.getEngName())) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    /**
+     * 验证是否租户管理员
+     * @param user
+     * @author WCH
+     * @Data 2020-11-12 14:04:56
+     * @return
+     * */
+    public static boolean verifyTenantUser(User user){
+    	List<TreeRole> rolelist=user.getRoleList();
+    	for(TreeRole tr:rolelist) {
+    		if(Constants.SUPER_TENANT.equalsIgnoreCase(tr.getEngName())) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    /**
+     * 验证是否风场管理员
+     * @param user
+     * @author WCH
+     * @Data 2020-11-12 14:04:56
+     * @return
+     * */
+    public static boolean verifyWindFarmUser(User user){
+    	List<TreeRole> rolelist=user.getRoleList();
+    	for(TreeRole tr:rolelist) {
+    		if(Constants.SUPER_WINDFARM.equalsIgnoreCase(tr.getEngName())) {
     			return true;
     		}
     	}
