@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.smartwf.parent</groupId>
   <artifactId>smartwf</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.3.RELEASE</version>
   <packaging>pom</packaging>
   <name>smartwf</name>
   <description>智慧风电场</description>
@@ -17,6 +17,19 @@
     	<module>smartwf-health-man</module>
     	<module>smartwf-proxy</module>
   </modules>
+  
+  <!-- 私服上传 -->
+  <distributionManagement>
+		<repository>
+			<id>maven-releases</id>
+			<url>http://repo.windmagics.com/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>maven-snapshots</id>
+			<url>http://repo.windmagics.com/repository/maven-snapshots/</url>
+		</snapshotRepository>
+  </distributionManagement>
+
   <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -43,7 +56,6 @@
         <oauth2.client.version>1.0.0</oauth2.client.version>
         <sftp.version>0.1.54</sftp.version>
         <jwt.version>6.0</jwt.version>
-        
     </properties>
 
     <dependencyManagement>

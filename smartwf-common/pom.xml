@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.smartwf.parent</groupId>
     <artifactId>smartwf</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.3.RELEASE</version>
   </parent>
   <groupId>com.smartwf.common</groupId>
   <artifactId>smartwf-common</artifactId>
