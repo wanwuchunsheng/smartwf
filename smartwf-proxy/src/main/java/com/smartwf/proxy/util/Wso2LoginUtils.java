@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import com.smartwf.proxy.constant.Constants;
 import com.smartwf.proxy.exception.CommonException;
 import com.smartwf.proxy.pojo.Result;
+import com.smartwf.proxy.pojo.User;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
@@ -51,6 +52,14 @@ public class Wso2LoginUtils {
 		if(StringUtils.isEmpty(result.getData())) {
 			throw new CommonException(Constants.UNAUTHORIZED,  result.getMsg());
 		}
+		//获取头部其他信息{为门户选中的租户，风场信息。非当前登录人风场}
+		String atTennentId = request.getHeader("atTennentId");
+		String atTennentDomain = request.getHeader("atTennentDomain");
+		String atWindFarm = request.getHeader("atwindFarm");
+		User userInfo=(User) result.getData();
+		userInfo.setAtTennentId(atTennentId);
+		userInfo.setAtTennentDomain(atTennentDomain);
+		userInfo.setAtWindFarm(atWindFarm);
 		//增加用户信息
 		request.setAttribute("userInfo",result.getData());
         return true;
