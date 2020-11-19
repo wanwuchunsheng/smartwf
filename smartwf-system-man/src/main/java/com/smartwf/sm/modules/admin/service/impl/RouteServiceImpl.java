@@ -315,8 +315,8 @@ public class RouteServiceImpl implements RouteService{
 				if(proCode.equals(wv.getProCode())) {
 					mapWf= new HashMap<>();
 					mapWf.put("windFarmTitle", wv.getWindFarmTitle());
-					mapWf.put("installedCapacity", wv.getInstalledCapacity()+"MW");
-					mapWf.put("dailyGeneration", wv.getDailyGeneration()+"MW.h");
+					mapWf.put("installedCapacity", wv.getInstalledCapacity()+" MW");
+					mapWf.put("dailyGeneration", wv.getDailyGeneration()+" MW.h");
 					mapWfList.add(mapWf);
 				}
 			}
