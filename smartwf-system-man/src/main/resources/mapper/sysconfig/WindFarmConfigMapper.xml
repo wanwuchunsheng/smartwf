@@ -117,7 +117,7 @@
     
     <!-- 门户-省份风场统计  -->
     <select id="selectProWindfarm" resultType="java.util.Map">
-        select f.proName,f.pro_code as proCode,count(*) as windFarmCount from (
+        select f.proName,f.pro_code as proCode,count(*) as windFarmCount, f.proLongitude, f.proLatitude from (
 		     select 
 				a.id as wind_farm,
 				a.org_name as wind_farm_title,
@@ -146,6 +146,8 @@
 				(select pro_name from sys_province where pro_code=b.pro_code) as proName,
 				(select name from sys_city where code=b.city_code) as cityName,
 				(select name from sys_area where code=b.area_code) as areaName,
+				(select pro_longitude from sys_province_dict where pro_code=b.pro_code) as proLongitude,
+                (select pro_latitude from sys_province_dict where pro_code=b.pro_code) as proLatitude,
 				b.create_time
 			 from sys_organization a , basic_windfarm_config b 
 		     WHERE a.tenant_id=b.tenant_id
