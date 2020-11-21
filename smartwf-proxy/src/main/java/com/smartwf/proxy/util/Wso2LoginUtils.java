@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -29,10 +28,14 @@ public class Wso2LoginUtils {
 	
 	/**
 	 * user
-	 * https://portal.windmagics.com/smartwf_sys_endback/globaldata/oauth2client
+	 * https://portal.windmagics.com/smartwf_sys_backend/globaldata/oauth2client
 	 * */
+	private static  String systemserverurl;
+	
 	@Value("${spring.smartwf.system-server-url}")
-	public static String systemServerUrl;
+	public void setKey(String systemserverurl) {    
+		Wso2LoginUtils.systemserverurl = systemserverurl;  
+	}
 	
 	/**
 	 * 内网拦截器
@@ -46,22 +49,22 @@ public class Wso2LoginUtils {
     		throw new CommonException(Constants.UNAUTHORIZED, "未登录！参数sessionId为空！");
         }
         //验证sessionId
-		String res = HttpRequest.get(systemServerUrl).header(Constants.SESSION_ID, sessionId).timeout(60000).execute().body();
+		String res = HttpRequest.get(systemserverurl).header(Constants.SESSION_ID, sessionId).timeout(60000).execute().body();
 		//验证返回值
 		Result<?> result= JSONUtil.toBean(res, Result.class);
-		if(StringUtils.isEmpty(result.getData())) {
-			throw new CommonException(Constants.UNAUTHORIZED,  result.getMsg());
+		if(JSONUtil.isNull(result.getData())) {
+			throw new CommonException(Constants.UNAUTHORIZED, "sessionId验证失败！");
 		}
 		//获取头部其他信息{为门户选中的租户，风场信息。非当前登录人风场}
 		String atTennentId = request.getHeader("atTennentId");
 		String atTennentDomain = request.getHeader("atTennentDomain");
 		String atWindFarm = request.getHeader("atwindFarm");
-		User userInfo=(User) result.getData();
+		User userInfo=JSONUtil.toBean( JSONUtil.parseObj(result.getData()) , User.class);
 		userInfo.setAtTennentId(atTennentId);
 		userInfo.setAtTennentDomain(atTennentDomain);
 		userInfo.setAtWindFarm(atWindFarm);
 		//增加用户信息
-		request.setAttribute("userInfo",result.getData());
+		request.setAttribute("userInfo",userInfo);
         return true;
     }
     

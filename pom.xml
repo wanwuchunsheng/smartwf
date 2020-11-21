@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.smartwf.parent</groupId>
   <artifactId>smartwf</artifactId>
-  <version>0.0.3.RELEASE</version>
+  <version>0.0.6.RELEASE</version>
   <packaging>pom</packaging>
   <name>smartwf</name>
   <description>智慧风电场</description>
