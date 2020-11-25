@@ -179,7 +179,7 @@ public class FaultOverviewController {
    	 * @return
    	 */
     @PostMapping("selectFaultRecordByIncidentType")
-    @ApiOperation(value = "（故障、缺陷、警告）未处理记录统计接口", notes = "故障、缺陷、警告未处理记录统计")
+    @ApiOperation(value = "（故障、缺陷、警告）未处理记录统计接口", notes = "故障、缺陷、警告未处理记录统计{右上角通知警告提醒}")
     @ApiImplicitParams({
    	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
           @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true)

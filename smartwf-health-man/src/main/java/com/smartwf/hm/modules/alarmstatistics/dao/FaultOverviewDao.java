@@ -102,7 +102,7 @@ public interface FaultOverviewDao extends BaseMapper<FaultInformation> {
    	 * @param bean
    	 * @return
    	 */
-	List<FaultInformationVO> selectFaultRecordByIncidentType(@Param("bean") FaultInformationVO bean);
+	List<Map<String,Object>> selectFaultRecordByIncidentType(@Param("bean") FaultInformationVO bean);
 	
 
 }

@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.handler.UserProfile;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
+import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.sm.modules.admin.dao.RouteDao;
 import com.smartwf.sm.modules.admin.dao.UserInfoDao;
 import com.smartwf.sm.modules.admin.dao.UserOrganizationDao;
@@ -293,14 +295,15 @@ public class RouteServiceImpl implements RouteService{
      */
 	@Override
 	public Result<?> selectWindfarmConfigByProCode(WindfarmConfig bean) {
+		User user=UserThreadLocal.getUser();
 		List<Map<String,Object>> mapRes=new ArrayList<>();
 		List<Map<String,Object>> mapWfList=null;
 		Map<String,Object> mapPor=null;
 		Map<String,Object> mapWf=null;
 		//分组统计省份风场数
-		List<Map<String,Object>> maplist= this.windFarmConfigDao.selectProWindfarm(bean);
+		List<Map<String,Object>> maplist= this.windFarmConfigDao.selectProWindfarm(bean,user);
 		//查询所有风场
-		List<WindfarmConfigVO> windfarmList=this.windFarmConfigDao.selectWindfarmConfigByProCode(bean);
+		List<WindfarmConfigVO> windfarmList=this.windFarmConfigDao.selectWindfarmConfigByProCode(bean,user);
 		//规范数据返回
 		for(Map<String,Object> m:maplist) {
 			mapWfList=new ArrayList<>();
@@ -315,6 +318,7 @@ public class RouteServiceImpl implements RouteService{
 				if(proCode.equals(wv.getProCode())) {
 					mapWf= new HashMap<>();
 					mapWf.put("windFarmTitle", wv.getWindFarmTitle());
+					mapWf.put("windFarm", wv.getWindFarm());
 					mapWf.put("installedCapacity", wv.getInstalledCapacity()+" MW");
 					mapWf.put("dailyGeneration", wv.getDailyGeneration()+" MW.h");
 					mapWfList.add(mapWf);

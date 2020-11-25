@@ -161,7 +161,7 @@
     
     
     <!-- (故障、缺陷、警告)未处理记录统计 -->
-    <select id="selectFaultRecordByIncidentType" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+    <select id="selectFaultRecordByIncidentType" resultType="java.util.Map">
       select 
         case a.incident_type 
 		  when 1 then 'fault'

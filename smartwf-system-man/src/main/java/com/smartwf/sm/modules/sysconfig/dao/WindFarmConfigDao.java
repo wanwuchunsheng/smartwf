@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
 import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
 import com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO;
@@ -67,7 +68,7 @@ public interface WindFarmConfigDao extends BaseMapper<WindfarmConfig> {
      * @param bean
      * @return
      */
-	List<Map<String, Object>> selectProWindfarm(@Param("bean") WindfarmConfig bean);
+	List<Map<String, Object>> selectProWindfarm(@Param("bean") WindfarmConfig bean,@Param("user") User user);
 
 	/**
      * 门户-省份风场统计 （查询所有风场）
@@ -75,7 +76,7 @@ public interface WindFarmConfigDao extends BaseMapper<WindfarmConfig> {
      * @param bean
      * @return
      */
-	List<WindfarmConfigVO> selectWindfarmConfigByProCode(@Param("bean") WindfarmConfig bean);
+	List<WindfarmConfigVO> selectWindfarmConfigByProCode(@Param("bean") WindfarmConfig bean,@Param("user") User user);
 
 	
 

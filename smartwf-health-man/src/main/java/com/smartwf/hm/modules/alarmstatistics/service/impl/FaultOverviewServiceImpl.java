@@ -238,27 +238,23 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
    	 */
 	@Override
 	public Result<?> selectFaultRecordByIncidentType(FaultInformationVO bean) {
-		List<Map<String,Object>> list=new ArrayList<>();
-		Map<String,Object> fr=null;
-		String[][] master=null;
 		//故障部位，数量统计
-		List<FaultInformationVO> alarmLocation= this.faultOverviewDao.selectFaultRecordByIncidentType(bean);
-		//故障部位
-		if(alarmLocation!=null && alarmLocation.size()>0) {
-			master =new String[alarmLocation.size()][2];
-			int i = 0; 
-			for(FaultInformationVO fivo: alarmLocation ) {
-				master[i][0]=String.valueOf(fivo.getFname());
-				master[i][1]=fivo.getFvalue();
-				i++;
-			}
-			fr = new HashMap<String,Object>(4);
-			fr.put("id", 1);
-			fr.put("title", "处理效率统计");
-			fr.put("content",master);
-			list.add(fr);
+		List<Map<String,Object>> alarmLocation= this.faultOverviewDao.selectFaultRecordByIncidentType(bean);
+		Map<String,Object> map=new HashMap<>();
+		for(Map<String,Object> m: alarmLocation) {
+			map.put(JSONUtil.toJsonStr(m.get("fname")), m.get("fvalue"));
 		}
-		return Result.data(list);
+		//验证是否存在
+		if(!map.containsKey("fault")) {
+			map.put("fault", 0);
+		}
+		if(!map.containsKey("defect")) {
+			map.put("defect", 0);
+		}
+		if(!map.containsKey("alert")) {
+			map.put("alert", 0);
+		}
+		return Result.data(map);
 	}
 	
 	
