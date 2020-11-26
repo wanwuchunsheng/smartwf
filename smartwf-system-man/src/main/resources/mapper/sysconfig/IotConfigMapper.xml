@@ -18,7 +18,7 @@
 			b.id,
 			b.tenant_id,
 			b.tenant_domain,
-			b.wind_farm,
+			a.id as wind_farm,
 			b.route_address,
 			b.secret_path,
 			b.create_time,
