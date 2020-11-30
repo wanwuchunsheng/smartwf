@@ -472,12 +472,12 @@ public class GlobalDataController {
         	//获取头部apitoken
         	String apiToken = request.getHeader(Constants.ACCESS_TOKEN);
         	if(apiToken==null) {
-        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"token为空！"));
+        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"Api调用握手信息为空！"));
         	}
         	//验证token
         	boolean flag=HS256Utils.vaildToken(apiToken);
         	if(flag==false) {
-        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"token无效！"));
+        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"Api调用握手信息验证无效！"));
         	};
         	//租户
         	List<Tenant> tenantList= JSONUtil.toList( JSONUtil.parseArray( this.redisService.get("initTenant")), Tenant.class);

@@ -13,6 +13,8 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
+import lombok.extern.log4j.Log4j2;
+@Log4j2
 public class HS256Utils {
 	
 	 /**
@@ -95,6 +97,7 @@ public class HS256Utils {
             return true;
 		} catch (Exception e) {
 			//e.printStackTrace();
+			log.info("Api调用握手验证失败！");
 		}
         return false;
     }
