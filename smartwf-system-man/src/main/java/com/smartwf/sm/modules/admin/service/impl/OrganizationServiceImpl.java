@@ -243,6 +243,29 @@ public class OrganizationServiceImpl implements OrganizationService{
 	public List<OrganizationVO> selectOrganizationByTenantId(UserOrganization uobean) {
 		return this.organizationDao.selectOrganizationByTenantId(uobean);
 	}
+
+	/**
+	 * @Description: 查询组织机构人员信息（知识中心提供）
+	 * @return
+	 */
+	@Override
+	public Result<?> selectUserOrganizationByParam(OrganizationVO bean) {
+		try {
+			//是否返回人员信息 0-否  1-是
+			if(bean.getOrgType()==0) {
+				List<Map<String,Object>> orgMaps=this.organizationDao.selectUserOrganizationByUid(bean);
+				return Result.data(Constants.EQU_SUCCESS, orgMaps);
+			}
+            if(bean.getOrgType()==1){
+				//查询人员信息
+				List<Map<String,Object>> orgMaps=this.organizationDao.selectUserOrganizationByOrgId(bean);
+				return Result.data(Constants.EQU_SUCCESS, orgMaps);
+			}
+		} catch (Exception e) {
+			log.error("查询异常{}",e);
+		}
+		return Result.data(Constants.INTERNAL_SERVER_ERROR, "查询异常！");
+	}
 	
 
 

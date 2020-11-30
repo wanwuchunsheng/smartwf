@@ -11,10 +11,10 @@
     <jmxConfigurator/>
 
     <!-- 定义日志文件 输出位置 -->
-    <property name="log.home_dir" value="${user.home}/logs/smartwf-health-man/"/>
+    <property name="log.home_dir" value="/mnt/files/logs/smartwf-health-man/"/>
 
-    <!-- 日志最大的历史 30天 -->
-    <property name="log.maxHistory" value="30"/>
+    <!-- 日志最大的历史 3天 -->
+    <property name="log.maxHistory" value="3"/>
 
     <!-- ConsoleAppender 控制台输出日志 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -143,14 +143,13 @@
     </appender>
 
     <root>
-        <!-- 控制台输出 -->
-        <appender-ref ref="console"/>
-        <!-- 文件输出 -->
+        <!-- 文件输出-->
         <appender-ref ref="ERROR"/>
         <appender-ref ref="INFO"/>
         <appender-ref ref="WARN"/>
         <appender-ref ref="DEBUG"/>
         <appender-ref ref="TRACE"/>
+         
     </root>
 
 </configuration>

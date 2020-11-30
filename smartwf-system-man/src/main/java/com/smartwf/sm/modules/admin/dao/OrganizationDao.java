@@ -80,6 +80,19 @@ public interface OrganizationDao extends BaseMapper<Organization> {
      */
 	List<OrganizationVO> selectOrganizationByTenantId(@Param("bean") UserOrganization uobean);
 
+	/**
+	 * @Description: 查询组织机构人员信息（知识中心提供）
+	 *      组织机构信息
+	 * @return
+	 */
+	List<Map<String, Object>> selectUserOrganizationByUid(@Param("bean") OrganizationVO bean);
+	/**
+	 * @Description: 查询组织机构人员信息（知识中心提供）
+	 *     组织机构人员信息
+	 * @return
+	 */
+	List<Map<String, Object>> selectUserOrganizationByOrgId(@Param("bean") OrganizationVO bean);
+
 	
 	
 	

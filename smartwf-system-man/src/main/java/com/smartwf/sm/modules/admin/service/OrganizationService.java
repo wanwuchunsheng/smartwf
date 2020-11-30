@@ -76,6 +76,12 @@ public interface OrganizationService {
      * @return
      */
 	List<OrganizationVO> selectOrganizationByTenantId(UserOrganization uobean);
+
+	/**
+	 * @Description: 查询组织机构人员信息（知识中心提供）
+	 * @return
+	 */
+	Result<?> selectUserOrganizationByParam(OrganizationVO bean);
 	
 	
 	

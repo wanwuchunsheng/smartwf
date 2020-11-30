@@ -116,5 +116,5 @@ sftp:
 # 日志
 logging:
   level:
-    root: INFO
-  config: classpath:log/logback-spring-prod.xml
+    root: DEBUG
+  config: classpath:log/logback-spring-dev.xml

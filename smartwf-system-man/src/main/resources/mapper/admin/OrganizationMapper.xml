@@ -150,4 +150,26 @@
         order by sort asc
     </select>
     
+    
+    <select id="selectUserOrganizationByUid" resultType="java.util.Map">
+        select 
+			a.id,
+			a.org_name as orgName,
+			(select count(*) from sys_user_organization where organization_id=a.id) as count
+		from sys_organization a
+		where a.tenant_id=#{bean.tenantId} 
+		and a.uid=#{bean.id} 
+		order by a.id asc
+    </select>
+    
+    <select id="selectUserOrganizationByOrgId" resultType="java.util.Map">
+        select 
+         b.id,
+         b.user_name
+	   from sys_user_organization a, sys_user_info b
+	   where a.user_id=b.id
+	   and a.tenant_id=#{bean.tenantId} 
+	   and a.organization_id=#{bean.id} 
+    </select>
+    
 </mapper>

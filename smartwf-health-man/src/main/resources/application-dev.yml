@@ -122,4 +122,4 @@ sftp:
 logging:
   level:
     root: DEBUG
-  config: classpath:log/logback-spring-prod.xml
+  config: classpath:log/logback-spring-dev.xml
