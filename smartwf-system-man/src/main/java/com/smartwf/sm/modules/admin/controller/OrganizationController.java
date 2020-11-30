@@ -21,7 +21,9 @@ import com.smartwf.common.annotation.ParamValidated.Update;
 import com.smartwf.common.annotation.TraceLog;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Organization;
+import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.OrganizationService;
+import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
 import io.swagger.annotations.Api;
@@ -43,6 +45,9 @@ public class OrganizationController {
 	
 	@Autowired
 	private OrganizationService organizationService;
+	
+	@Autowired
+	private UserInfoService userInfoService;
 	
     
     /**
@@ -172,11 +177,31 @@ public class OrganizationController {
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "组织机构id", dataType = "int",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "orgType", value = "是否返回人员信息（0-否 1：是）", dataType = "int",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "orgType", value = "是否返回人员信息（0-否 1：是）", dataType = "int",required = true)
     })
     public ResponseEntity<Result<?>> selectUserOrganizationByParam(OrganizationVO bean) {
         try {
             Result<?> result = this.organizationService.selectUserOrganizationByParam(bean);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            log.error("查询组织机构人员信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询组织机构人员信息错误！"));
+    }
+    
+    /**
+	 * @Description: 全局用户查询（知识中心提供）
+	 * @return
+	 */
+    @GetMapping("selectUserInfoByParam")
+    @ApiOperation(value = "全局用户查询（知识中心提供）", notes = "全局用户查询（知识中心提供）")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "remark", value = "模糊查询（人员姓名，手机号）", dataType = "String",required = true)
+    })
+    public ResponseEntity<Result<?>> selectUserInfoByParam(UserInfo bean) {
+        try {
+            Result<?> result = this.userInfoService.selectUserInfoByParam(bean);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
             log.error("查询组织机构人员信息错误！{}", e.getMessage(), e);

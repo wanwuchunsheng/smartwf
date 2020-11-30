@@ -165,7 +165,7 @@
     <select id="selectUserOrganizationByOrgId" resultType="java.util.Map">
         select 
          b.id,
-         b.user_name
+         b.user_name as userName
 	   from sys_user_organization a, sys_user_info b
 	   where a.user_id=b.id
 	   and a.tenant_id=#{bean.tenantId} 

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Organization;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
@@ -82,6 +83,8 @@ public interface OrganizationService {
 	 * @return
 	 */
 	Result<?> selectUserOrganizationByParam(OrganizationVO bean);
+
+	
 	
 	
 	

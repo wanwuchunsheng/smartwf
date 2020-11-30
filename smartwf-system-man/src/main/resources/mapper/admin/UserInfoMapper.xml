@@ -284,4 +284,11 @@
     </select>
     
     
+    <select id="selectUserInfoByParam" resultType="java.util.Map">
+        select 
+			id,
+			user_name 
+		from sys_user_info where user_name like '%${bean.remark}%' or mobile like '%${bean.remark}%'
+	    and tenant_id=#{bean.tenantId} 
+    </select>
 </mapper>

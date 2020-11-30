@@ -257,9 +257,13 @@ public class OrganizationServiceImpl implements OrganizationService{
 				return Result.data(Constants.EQU_SUCCESS, orgMaps);
 			}
             if(bean.getOrgType()==1){
+            	Map<String,Object> map=new HashMap<>();
 				//查询人员信息
-				List<Map<String,Object>> orgMaps=this.organizationDao.selectUserOrganizationByOrgId(bean);
-				return Result.data(Constants.EQU_SUCCESS, orgMaps);
+            	List<Map<String,Object>> orgMaps=this.organizationDao.selectUserOrganizationByUid(bean);
+				List<Map<String,Object>> orgUserMaps=this.organizationDao.selectUserOrganizationByOrgId(bean);
+				map.put("organization", orgMaps);
+				map.put("users", orgUserMaps);
+				return Result.data(Constants.EQU_SUCCESS, map);
 			}
 		} catch (Exception e) {
 			log.error("查询异常{}",e);

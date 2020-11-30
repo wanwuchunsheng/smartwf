@@ -520,4 +520,14 @@ public class UserInfoServiceImpl implements UserInfoService{
 	public void updateBaseUserInfo(UserInfo bean) {
 		this.userInfoDao.updateById(bean);
 	}
+
+	/**
+	 * @Description: 全局用户查询（知识中心提供）
+	 * @return
+	 */
+	@Override
+	public Result<?> selectUserInfoByParam(UserInfo bean) {
+		List<Map<String, Object>> resMap=this.userInfoDao.selectUserInfoByParam(bean);
+		return Result.data(Constants.EQU_SUCCESS, resMap);
+	}
 }

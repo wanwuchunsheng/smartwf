@@ -105,4 +105,10 @@ public interface UserInfoService {
      * @return
      */
 	void updateBaseUserInfo(UserInfo bean);
+
+	/**
+	 * @Description: 全局用户查询（知识中心提供）
+	 * @return
+	 */
+	Result<?> selectUserInfoByParam(UserInfo bean);
 }
