@@ -475,7 +475,8 @@ public class GlobalDataController {
         		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"token为空！"));
         	}
         	//验证token
-        	if(!HS256Utils.vaildToken(apiToken)) {
+        	boolean flag=HS256Utils.vaildToken(apiToken);
+        	if(flag==false) {
         		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"token无效！"));
         	};
         	//租户
@@ -518,7 +519,7 @@ public class GlobalDataController {
         } catch (Exception e) {
             log.error("获取全部租户和风场！{}", e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( "获取全部租户和风场！"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR, "获取全部租户和风场异常！"));
     }
    
     

@@ -92,10 +92,11 @@ public class HS256Utils {
             if (Objects.isNull(account)){
                 return false;
             }
+            return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
-        return true;
+        return false;
     }
 
 }
