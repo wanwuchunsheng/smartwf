@@ -145,6 +145,7 @@
 
     <root>
         <!-- 文件输出 -->
+        <appender-ref ref="console"/>
         <appender-ref ref="ERROR"/>
         <appender-ref ref="INFO"/>
         <appender-ref ref="WARN"/>

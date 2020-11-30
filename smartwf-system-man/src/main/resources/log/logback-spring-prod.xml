@@ -144,6 +144,7 @@
     </appender>
 
     <root>
+        <appender-ref ref="console"/>
         <!-- 文件输出 -->
         <appender-ref ref="ERROR"/>
         <appender-ref ref="INFO"/>
