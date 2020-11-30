@@ -11,10 +11,10 @@
     <jmxConfigurator/>
 
     <!-- 定义日志文件 输出位置 -->
-    <property name="log.home_dir" value="${user.home}/logs/smartwf-system-man/"/>
+    <property name="log.home_dir" value="/mnt/logs/smartwf-system-man/"/>
 
     <!-- 日志最大的历史 30天 -->
-    <property name="log.maxHistory" value="30"/>
+    <property name="log.maxHistory" value="3"/>
 
     <!-- ConsoleAppender 控制台输出日志 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
