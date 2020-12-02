@@ -1,5 +1,6 @@
 package com.smartwf.sm.modules.wso2.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import com.smartwf.common.utils.HttpClientUtil;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.wso2.service.Wso2AuthorizeService;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -37,6 +39,7 @@ public class Wso2AuthorizeServiceImpl implements Wso2AuthorizeService {
 	 * */
 	@Override
 	public String batchUiAuthorization(Object jsonStr) {
+		log.info("UI批量授权请求----进入方法{} "+DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss:SSS"));
 		//获取登录人信息
 		User user = UserThreadLocal.getUser();
 		//封装http请求头
@@ -49,7 +52,9 @@ public class Wso2AuthorizeServiceImpl implements Wso2AuthorizeService {
         sb=new StringBuffer();
         sb.append(wso2Config.userServerUri).append("/t/").append(user.getTenantDomain()).append("/api/identity/entitlement/decision/pdp");
         //发送请求
+        log.info("UI批量授权请求----开始请求{} "+DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss:SSS"));
         String str=HttpClientUtil.post(String.valueOf(sb),JSONUtil.toJsonStr(jsonStr),headers);
+        log.info("UI批量授权请求----结束返回{} "+DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss:SSS"));
         log.info("UI批量授权返回："+str);
 		return str;
 	}
