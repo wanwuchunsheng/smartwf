@@ -17,6 +17,7 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.common.utils.CkUtils;
 import com.smartwf.sm.modules.admin.dao.RouteDao;
 import com.smartwf.sm.modules.admin.dao.UserInfoDao;
 import com.smartwf.sm.modules.admin.dao.UserOrganizationDao;
@@ -301,9 +302,16 @@ public class RouteServiceImpl implements RouteService{
 		Map<String,Object> mapPor=null;
 		Map<String,Object> mapWf=null;
 		//分组统计省份风场数
-		List<Map<String,Object>> maplist= this.windFarmConfigDao.selectProWindfarm(bean,user);
-		//查询所有风场
-		List<WindfarmConfigVO> windfarmList=this.windFarmConfigDao.selectWindfarmConfigByProCode(bean,user);
+		List<Map<String,Object>> maplist= null;
+		List<WindfarmConfigVO> windfarmList=null;
+		//验证是否平台管理员
+		if(CkUtils.verifyAdminUser(user)) {
+			maplist=this.windFarmConfigDao.selectProWindfarmByAdmin(bean);
+			windfarmList=this.windFarmConfigDao.selectWindfarmConfigByAdmin(bean);
+		}else {
+			maplist=this.windFarmConfigDao.selectProWindfarm(bean,user);
+			windfarmList=this.windFarmConfigDao.selectWindfarmConfigByProCode(bean,user);
+		}
 		//规范数据返回
 		for(Map<String,Object> m:maplist) {
 			mapWfList=new ArrayList<>();

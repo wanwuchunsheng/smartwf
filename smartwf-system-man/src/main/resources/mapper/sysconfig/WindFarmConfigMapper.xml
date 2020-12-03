@@ -163,7 +163,7 @@
          
     </select>
     
-    <!-- 门户-省份风场统计  -->
+    <!-- 门户-省份风场统计-用户过滤  -->
     <select id="selectWindfarmConfigByProCode" resultType="com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO">
        select 
 			f.proName,
@@ -213,4 +213,94 @@
 		     </if>
 		)f 
     </select>
+    
+    <!-- 门户-省份风场统计-平台管理员过滤  -->
+    <select id="selectWindfarmConfigByAdmin" resultType="com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO">
+         select 
+			f.proName,
+			f.pro_code as proCode,
+			f.installed_capacity,
+			f.daily_generation,
+			f.wind_farm_title,
+			f.wind_farm
+		 from (
+				select 
+					a.id as wind_farm,
+					a.org_name as wind_farm_title,
+					a.tenant_id,
+					b.id,
+					b.kks,
+					b.real_time_capacity,
+					b.installed_capacity,
+					b.daily_generation,
+					b.cumulative_generation,
+					b.pro_code,
+					b.city_code,
+					b.area_code,
+					b.latitude,
+					b.longitude,
+					b.geo_json,
+					b.generating_set,
+					b.power_generation,
+					b.stand_by,
+					b.malfunctions,
+					b.maintenance,
+					b.power_restriction,
+					b.off_line,
+					b.status,
+					b.remark,
+					(select pro_name from sys_province where pro_code=b.pro_code) as proName,
+					(select name from sys_city where code=b.city_code) as cityName,
+					(select name from sys_area where code=b.area_code) as areaName,
+					b.create_time
+				from sys_organization a , basic_windfarm_config b 
+					 WHERE a.tenant_id=b.tenant_id 
+				and a.enable=0  and a.id=b.wind_farm and a.org_type=1
+				and a.tenant_id=#{bean.tenantId}
+		)f 
+    </select>
+    
+    <!-- 门户-省份风场统计-平台管理员过滤  -->
+    <select id="selectProWindfarmByAdmin" resultType="java.util.Map">
+        select f.proName,f.pro_code as proCode,count(*) as windFarmCount, f.proLongitude, f.proLatitude from (
+		     select 
+				a.id as wind_farm,
+				a.org_name as wind_farm_title,
+				a.tenant_id,
+				b.id,
+				b.kks,
+				b.real_time_capacity,
+				b.installed_capacity,
+				b.daily_generation,
+				b.cumulative_generation,
+				b.pro_code,
+				b.city_code,
+				b.area_code,
+				b.latitude,
+				b.longitude,
+				b.geo_json,
+				b.generating_set,
+				b.power_generation,
+				b.stand_by,
+				b.malfunctions,
+				b.maintenance,
+				b.power_restriction,
+				b.off_line,
+				b.status,
+				b.remark,
+				(select pro_name from sys_province where pro_code=b.pro_code) as proName,
+				(select name from sys_city where code=b.city_code) as cityName,
+				(select name from sys_area where code=b.area_code) as areaName,
+				(select pro_longitude from sys_province_dict where pro_code=b.pro_code) as proLongitude,
+                (select pro_latitude from sys_province_dict where pro_code=b.pro_code) as proLatitude,
+				b.create_time
+			 from sys_organization a , basic_windfarm_config b 
+		     WHERE a.tenant_id=b.tenant_id 
+				and a.enable=0 and a.org_type=1 and a.id=b.wind_farm
+				and a.tenant_id=#{bean.tenantId}
+		       
+		)f GROUP BY f.pro_code
+         
+    </select>
+    
 </mapper>

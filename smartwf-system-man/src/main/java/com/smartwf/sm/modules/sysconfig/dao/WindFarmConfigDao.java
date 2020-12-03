@@ -71,12 +71,28 @@ public interface WindFarmConfigDao extends BaseMapper<WindfarmConfig> {
 	List<Map<String, Object>> selectProWindfarm(@Param("bean") WindfarmConfig bean,@Param("user") User user);
 
 	/**
-     * 门户-省份风场统计 （查询所有风场）
+     * 门户-省份风场统计-用户过滤 （查询所有风场）
      * @author WCH
      * @param bean
      * @return
      */
 	List<WindfarmConfigVO> selectWindfarmConfigByProCode(@Param("bean") WindfarmConfig bean,@Param("user") User user);
+
+	/**
+     * 门户-省份风场统计 -平台管理员过滤（查询所有风场）
+     * @author WCH
+     * @param bean
+     * @return
+     */
+	List<WindfarmConfigVO> selectWindfarmConfigByAdmin(@Param("bean") WindfarmConfig bean);
+
+	/**
+     * 门户-省份风场统计 -平台管理员过滤(查询省份风场数)
+     * @author WCH
+     * @param bean
+     * @return
+     */
+	List<Map<String, Object>> selectProWindfarmByAdmin(@Param("bean") WindfarmConfig bean);
 
 	
 
