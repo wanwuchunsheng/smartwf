@@ -139,16 +139,28 @@
     </select>
     
     
-    <!-- 查询用户所属风场 -->
+    <!-- 查询用户所属风场 #非平台管理员 -->
     <select id="selectUserInfoByWindFarm" resultType="java.util.Map">
         select 
 		   a.id as windFarm,
 		   a.org_name as windFarmName
 		from sys_organization a ,sys_user_organization b where a.id=b.organization_id and a.tenant_id=b.tenant_id and a.org_type=1 and a.enable=0
+		<if test="bean.tenantId != null ">
 		and b.tenant_id=#{bean.tenantId} 
+		</if>
 		and b.user_id=#{bean.userId}
         order by sort asc
     </select>
+    
+    <!-- 查询用户所属风场 #平台管理员 -->
+    <select id="selectUserInfoByWindFarmByAdminUser" resultType="java.util.Map">
+        select 
+		   a.id as windFarm,
+		   a.org_name as windFarmName
+		from sys_organization a  where a.org_type=1 and a.enable=0
+        order by a.sort asc
+    </select>
+    
     
     
     <select id="selectUserOrganizationByUid" resultType="java.util.Map">

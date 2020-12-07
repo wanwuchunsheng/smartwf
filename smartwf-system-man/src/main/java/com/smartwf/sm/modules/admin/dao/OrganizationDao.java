@@ -92,6 +92,12 @@ public interface OrganizationDao extends BaseMapper<Organization> {
 	 * @return
 	 */
 	List<Map<String, Object>> selectUserOrganizationByOrgId(@Param("bean") OrganizationVO bean);
+	/**
+     * @Description：知识中心-获取用户风场信息 -平台管理员
+     * @param sessionId
+     * @return
+     */
+	List<Map<String, Object>> selectUserInfoByWindFarmByAdminUser(@Param("bean") UserOrganization bean);
 
 	
 	

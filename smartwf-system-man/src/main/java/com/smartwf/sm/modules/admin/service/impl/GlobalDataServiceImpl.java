@@ -456,6 +456,14 @@ public class GlobalDataServiceImpl implements GlobalDataService{
      */
 	@Override
 	public Result<?> selectUserInfoByWindFarm(UserOrganization bean) {
+		/**
+		User user = UserThreadLocal.getUser();
+		//平台管理员跨租户控制
+		if(CkUtils.verifyAdminUser(user)) {
+			List<Map<String,Object>> list= this.organizationDao.selectUserInfoByWindFarmByAdminUser(bean);
+			return Result.data(Constants.EQU_SUCCESS, list);
+		}
+		*/
 		List<Map<String,Object>> list= this.organizationDao.selectUserInfoByWindFarm(bean);
 		return Result.data(Constants.EQU_SUCCESS, list);
 	}
