@@ -90,6 +90,9 @@ public class OrganizationServiceImpl implements OrganizationService{
 		List<OrganizationVO> list=buildByRecursive(this.organizationDao.selectOrganizationByAll(bean));
 		return Result.data(list);
 	}
+	
+	
+	
 	 /**
      * 使用递归方法建树
 	* @param treeNodes
@@ -270,10 +273,35 @@ public class OrganizationServiceImpl implements OrganizationService{
 		}
 		return Result.data(Constants.INTERNAL_SERVER_ERROR, "查询异常！");
 	}
+
+	/**
+	 * @Description: 查询组织机构人员信息-全局返回（知识中心提供）
+	 *   提供：1）租户下组织机构人员信息 2）树形结构返回
+	 * @return
+	 */
+	@Override
+	public Result<?> selectUserOrganizationByAll(OrganizationVO bean) {
+		//查询组织机构和用户
+		List<OrganizationVO> userOrg=this.organizationDao.selectUserOrganizationByAll(bean);
+		//查询组织机构
+		List<OrganizationVO> org=this.organizationDao.selectOrganizationByAll(bean);
+		List<Map<String,Object>> listmap=null;
+		Map<String,Object> umap=null;
+		for(OrganizationVO ov : org) {
+			listmap=new ArrayList<>();
+			for(OrganizationVO uov: userOrg) {
+				if(ov.getId()==uov.getId()) {
+					umap=new HashMap<>();
+					umap.put("id", uov.getUserId());
+					umap.put("orgName", uov.getOrgName());
+					listmap.add(umap);
+				}
+			}
+			ov.setLmap(listmap);
+		}
+		List<OrganizationVO> list=buildByRecursive(org);
+		return Result.data(list);
+	}
 	
-
-
-	
-
 
 }

@@ -95,19 +95,18 @@ public class SmartwfSystemTest {
             		log.info("wso2配置信息{}",idt.getClientKey(), JSONUtil.toJsonStr(idt));
     			}
     		}
+    		//初始化排班人员信息
+    		this.userService.selectUserInfoByShift();
+    		
 			Map<String,String> map = new HashMap<String, String>();
-			for(int i=20;i<1000;i++) {
-				map.put("iot", "消息是："+i);
+			for(int i=1996;i<2000;i++) {
+				map.put("system", "消息是："+i);
 				System.out.println(JSONUtil.toJsonStr(map));
-				streamProducer.sendMsg("smartwf", map);
-				Thread.sleep(4000);
+				streamProducer.sendMsg("topic:smartwf_sys_backend2", map);
+				//Thread.sleep(15000);
 			}
 			**/
-			//初始化排班人员信息
-    		this.userService.selectUserInfoByShift();
-			String token=HS256Utils.buildJWT();
-			System.out.println(token);
-			System.out.println(HS256Utils.vaildToken(token));
+			
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);
 		}

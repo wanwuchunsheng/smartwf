@@ -99,6 +99,13 @@ public interface OrganizationDao extends BaseMapper<Organization> {
      */
 	List<Map<String, Object>> selectUserInfoByWindFarmByAdminUser(@Param("bean") UserOrganization bean);
 
+	/**
+     * @Description：查询组织机构和用户列表
+     * @param sessionId
+     * @return
+     */
+	List<OrganizationVO> selectUserOrganizationByAll(@Param("bean") OrganizationVO bean);
+
 	
 	
 	

@@ -2,6 +2,7 @@ package com.smartwf.sm.modules.admin.vo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.smartwf.sm.modules.admin.pojo.Organization;
 
@@ -46,6 +47,14 @@ public class OrganizationVO extends Organization {
 	 * 
 	 * */
 	private String label;
+	/**
+	 * 用户ID
+	 * 
+	 * */
+	private Integer userId;
+	
+	private List<Map<String,Object>> lmap;
+	
 	/**
 	 * 封装树形结构
 	 * 

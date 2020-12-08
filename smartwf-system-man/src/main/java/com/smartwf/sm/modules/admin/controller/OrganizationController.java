@@ -169,11 +169,11 @@ public class OrganizationController {
     }
 
     /**
-	 * @Description: 查询组织机构人员信息（知识中心提供）
+	 * @Description: 查询组织机构人员信息-部分返回（知识中心提供）
 	 * @return
 	 */
     @GetMapping("selectUserOrganizationByParam")
-    @ApiOperation(value = "查询组织机构人员信息（知识中心提供）", notes = "查询组织机构人员信息（知识中心提供）")
+    @ApiOperation(value = "查询组织机构人员信息-部分返回（知识中心提供）", notes = "查询组织机构人员信息（知识中心提供）")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "组织机构id", dataType = "int",required = true),
@@ -182,6 +182,25 @@ public class OrganizationController {
     public ResponseEntity<Result<?>> selectUserOrganizationByParam(OrganizationVO bean) {
         try {
             Result<?> result = this.organizationService.selectUserOrganizationByParam(bean);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            log.error("查询组织机构人员信息错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询组织机构人员信息错误！"));
+    }
+    
+    /**
+	 * @Description: 查询组织机构人员信息-全局返回（知识中心提供）
+	 * @return
+	 */
+    @GetMapping("selectUserOrganizationByAll")
+    @ApiOperation(value = "查询组织机构人员信息-全局返回（知识中心提供）", notes = "查询组织机构人员信息（知识中心提供）")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> selectUserOrganizationByAll(OrganizationVO bean) {
+        try {
+            Result<?> result = this.organizationService.selectUserOrganizationByAll(bean);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
             log.error("查询组织机构人员信息错误！{}", e.getMessage(), e);
@@ -208,4 +227,6 @@ public class OrganizationController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询组织机构人员信息错误！"));
     }
+    
+    
 }

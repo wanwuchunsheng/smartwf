@@ -1,6 +1,5 @@
 package com.smartwf.sm.config.redis;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -8,15 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import cn.hutool.json.JSONUtil;
 import io.lettuce.core.Consumer;
 import io.lettuce.core.RedisBusyException;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisFuture;
 import io.lettuce.core.StreamMessage;
 import io.lettuce.core.XGroupCreateArgs;
 import io.lettuce.core.XReadArgs;
 import io.lettuce.core.api.StatefulRedisConnection;
-import io.lettuce.core.api.sync.RedisCommands;
+import io.lettuce.core.api.async.RedisAsyncCommands;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -52,54 +51,53 @@ public class StreamConsumer implements CommandLineRunner {
     public void messageListener() {
     	//获取源
     	StatefulRedisConnection<String, String> connection=redisClient.connect();
-    	RedisCommands<String, String> redisStream = connection.sync();
+    	RedisAsyncCommands<String, String> redisStream = connection.async();
     	try {
     		//创建组，重复创建组跳过异常
     		try {
     			redisStream.xgroupCreate( XReadArgs.StreamOffset.from(STREAMS_KEY, "0-0"), GROUP_NAME, XGroupCreateArgs.Builder.mkstream(true) );
             } catch (RedisBusyException redisBusyException) {
-               log.warn( String.format("\t Group '%s' already exists", "application_1"));
+            	 log.warn( String.format("\t Group '%s' already exists", "application"));
             }
     		//阻塞读取，读取完成继续阻塞读取
             while(true) {
+            	log.info("进入消费服务。。。。。。");
             	// 阻塞读取分组{无消息等待，有消息向下执行}
                 @SuppressWarnings("unchecked")
-				List<StreamMessage<String, String>> messages = redisStream.xreadgroup(Consumer.from(GROUP_NAME, CONSUMER_NAME),XReadArgs.Builder.count(1).block(Duration.ofSeconds(20)),XReadArgs.StreamOffset.lastConsumed(STREAMS_KEY));
-                //判断消息是否为空{进入相关业务流程}
+				RedisFuture<List<StreamMessage<String, String>>> redisFuture =redisStream.xreadgroup(Consumer.from(GROUP_NAME, CONSUMER_NAME),XReadArgs.Builder.count(1).block(0),XReadArgs.StreamOffset.lastConsumed(STREAMS_KEY));
+                List<StreamMessage<String, String>> messages = redisFuture.get();
                 if (!messages.isEmpty()) {
                     for (StreamMessage<String, String> message : messages) {
-                        log.info(JSONUtil.toJsonStr(message));
                         //获取消息
             			Map<String,String> map=message.getBody();
             			//获取map键
             			String type=map.entrySet().iterator().next().getKey();
             			//进入相应的业务处理
             			switch (type) {
-    					case "1":
-    						log.info("msg - {}", map.get(type));
-    						break;
-    					case "2":
-    						log.info("msg - {}", map.get(type));
-    						break;
-    					default:
-    						break;
-    				};
-                    //处理完成后，删除MQ消息记录
-                    redisStream.xdel(STREAMS_KEY, message.getId());
+	    					case "system":
+	    						System.err.print("msg - {}"+ map.get(type));
+	    						break;
+	    					case "health":
+	    						System.err.println("msg - {}"+ map.get(type));
+	    						break;
+	    					default:
+	    						break;
+    				   };
+	                   //处理完成后，删除MQ消息记录
+	                   redisStream.xdel(STREAMS_KEY, message.getId());
                     }
                 }
             }
 		} catch (Exception e) {
-			log.error("消息消费发生异常{}{}",e.getMessage(),e);
-			//异常关闭源
+			//关闭源
 			connection.close();
+			redisStream.quit();
 			try {
 				Thread.sleep(10000);
 				messageListener();
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			
 		}
     }
   

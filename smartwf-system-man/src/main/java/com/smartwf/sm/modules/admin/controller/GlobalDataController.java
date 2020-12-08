@@ -531,7 +531,7 @@ public class GlobalDataController {
     @GetMapping("selectUserInfoByWindFarm")
     @ApiOperation(value = "用户风场接口", notes = "获取用户风场信息")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "Integer"),
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "userId", value = "用户ID", dataType = "int", required = true)
     })
     public ResponseEntity<Result<?>> selectUserInfoByWindFarm(UserOrganization bean) {

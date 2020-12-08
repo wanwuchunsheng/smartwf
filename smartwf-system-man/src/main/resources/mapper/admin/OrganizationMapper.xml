@@ -42,6 +42,22 @@
         order by sort asc
     </select>
     
+    
+    <!-- 组织人员列表 -->
+    <select id="selectUserOrganizationByAll" resultType="com.smartwf.sm.modules.admin.vo.OrganizationVO">
+        select
+		    a.organization_id as id, 
+			a.user_id as userId,
+			b.user_name as orgName 
+		from sys_user_organization a,sys_user_info b 
+		where a.user_id= b.id and a.tenant_id=b.tenant_id
+		<if test="bean.tenantId != null ">
+            and a.tenant_id = #{bean.tenantId}
+        </if>
+        order by a.organization_id
+    </select>
+    
+    
     <!-- 查询所有组织架构 -->
     <select id="queryUserPostByOrgId" resultType="com.smartwf.sm.modules.admin.pojo.UserPost">
         select 
@@ -148,7 +164,9 @@
 		<if test="bean.tenantId != null ">
 		and b.tenant_id=#{bean.tenantId} 
 		</if>
+		<if test="bean.userId != null ">
 		and b.user_id=#{bean.userId}
+		</if>
         order by sort asc
     </select>
     
