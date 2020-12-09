@@ -115,8 +115,8 @@ sftp:
     #秘钥密码
     passphrase: 
     sessionStrictHostKeyChecking: no
-    sessionConnectTimeout: 15000
-    channelConnectedTimeout: 15000
+    sessionConnectTimeout: 30000
+    channelConnectedTimeout: 30000
            
 # 日志
 logging:
