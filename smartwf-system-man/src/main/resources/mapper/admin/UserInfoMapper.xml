@@ -291,4 +291,19 @@
 		from sys_user_info where user_name like '%${bean.remark}%' or mobile like '%${bean.remark}%'
 	    and tenant_id=#{bean.tenantId} 
     </select>
+    
+    <!-- 知识中心（用户id查询用户姓名） -->
+    <select id="selectUserInfoByIds" resultType="java.util.Map">
+        select 
+			id,
+			user_name 
+		from sys_user_info where id in 
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	    <if test="tenantId != null ">
+	        and tenant_id=#{tenantId} 
+	    </if>
+    </select>
+    
 </mapper>
