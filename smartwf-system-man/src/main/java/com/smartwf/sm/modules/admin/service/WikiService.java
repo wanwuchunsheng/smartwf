@@ -16,5 +16,14 @@ public interface WikiService {
      * @param userId
      * @return
      */
-	Result<?> selectUserInfoByIds(String tenantId, String userId);
+	Result<?> selectUserInfoByIds(String tenantId, String userId,String orgId);
+
+	/**
+     * @Description：知识中心-组织ID查询组织下的所有用户（
+     *    不包括当前组织人员）
+     * @param tenantId
+     * @param orgId
+     * @return
+     */
+	Result<?> selectUserOrganizationByOrgId(String tenantId, String orgId);
 }

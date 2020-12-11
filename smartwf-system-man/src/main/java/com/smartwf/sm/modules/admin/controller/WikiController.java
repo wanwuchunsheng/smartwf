@@ -41,11 +41,35 @@ public class WikiController {
     @ApiOperation(value = "用户ID查询名称", notes = "根据用户id返回用户名称（支持批量查询）")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "userId", value = "用户ID(逗号拼接)", dataType = "String", required = true)
+    	@ApiImplicitParam(paramType = "query", name = "userId", value = "用户ID(逗号拼接)", dataType = "String", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "orgId", value = "组织机构ID(逗号拼接)", dataType = "String", required = true)
     })
-    public ResponseEntity<Result<?>> selectUserInfoByIds(String tenantId, String userId) {
+    public ResponseEntity<Result<?>> selectUserInfoByIds(String tenantId, String userId,String orgId) {
         try {
-        	Result<?> result= this.wikiService.selectUserInfoByIds(tenantId, userId);
+        	Result<?> result= this.wikiService.selectUserInfoByIds(tenantId, userId,orgId);
+        	return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            log.error("用户ID查询名称失败！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR, "用户ID查询名称失败！"));
+    }
+    
+    /**
+     * @Description：知识中心-组织ID查询组织下的所有用户（
+     *    不包括当前组织人员）
+     * @param tenantId
+     * @param orgId
+     * @return
+     */
+    @GetMapping("selectUserOrganizationByOrgId")
+    @ApiOperation(value = "组织人员查询接口", notes = "组织ID查询组织下的所有用户（支持批量查询）")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "orgId", value = "组织机构ID(逗号拼接)", dataType = "String", required = true)
+    })
+    public ResponseEntity<Result<?>> selectUserOrganizationByOrgId(String tenantId, String orgId) {
+        try {
+        	Result<?> result= this.wikiService.selectUserOrganizationByOrgId(tenantId, orgId);
         	return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             log.error("用户ID查询名称失败！{}", e.getMessage(), e);

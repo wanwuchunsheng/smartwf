@@ -202,4 +202,15 @@
 	   and a.organization_id=#{bean.id} 
     </select>
     
+    <!-- 知识中心 通过组织机构id，返回组织名称 -->
+    <select id="selectOrganizationByIds" resultType="java.util.Map">
+        select id,org_name as orgName from sys_organization where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+	    <if test="tenantId != null ">
+	        and tenant_id=#{tenantId} 
+	    </if>
+    </select>
+    
 </mapper>

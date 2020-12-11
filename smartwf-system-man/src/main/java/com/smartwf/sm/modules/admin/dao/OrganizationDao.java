@@ -106,6 +106,14 @@ public interface OrganizationDao extends BaseMapper<Organization> {
      */
 	List<OrganizationVO> selectUserOrganizationByAll(@Param("bean") OrganizationVO bean);
 
+	/**
+     * @Description：知识中心-用户ID返回名称
+     * @param tenantId
+     * @param userId
+     * @return
+     */
+	List<Map<String, Object>> selectOrganizationByIds(@Param("tenantId") String tenantId, @Param("list") List<String> list);
+
 	
 	
 	

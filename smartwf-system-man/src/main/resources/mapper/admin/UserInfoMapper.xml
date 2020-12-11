@@ -296,7 +296,7 @@
     <select id="selectUserInfoByIds" resultType="java.util.Map">
         select 
 			id,
-			user_name 
+			user_name as userName
 		from sys_user_info where id in 
 	    <foreach collection="list" item="item" open="(" separator="," close=")">
 	        #{item}
@@ -305,5 +305,27 @@
 	        and tenant_id=#{tenantId} 
 	    </if>
     </select>
+    
+    <!-- 知识中心（用户id查询用户姓名） -->
+    <select id="selectUserOrganizationByOrgId" resultType="java.util.Map">
+       select f.id,f.userName from (
+			select c.id,c.user_name as userName from sys_user_organization a  ,(
+			        select f1.id from ( select #{orgid} as id from sys_organization limit 0,1  ) f1
+                    UNION all 
+			        (
+						select id from (
+								select t1.id,
+										if(find_in_set(uid, @pids) > 0, @pids := concat(@pids, ',', id), 0) as ischild
+								from ( select id,uid from sys_organization t 
+								where 1=1 order by uid, id ) t1, (select @pids := #{orgid} ) t2 ) t3 
+						where ischild != 0
+					)
+			) b,sys_user_info c where a.organization_id = b.id and c.id=a.user_id  
+			<if test="tenantId != null ">
+		        and c.tenant_id=#{tenantId} 
+		    </if>
+		) f group by f.id
+    </select>
+    
     
 </mapper>
