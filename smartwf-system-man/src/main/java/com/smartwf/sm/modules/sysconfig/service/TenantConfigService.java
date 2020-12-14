@@ -47,6 +47,15 @@ public interface TenantConfigService {
      */
 	void deleteTenantConfig(TenantConfigVO bean);
 
+	/**
+	 * 说明： 租户样式上传（logo、样式json）
+	 * @param tenantId
+	 * @param remark  样式json
+	 * @return
+	 * 
+	 * */
+	Result<?> saveIndexStyleById(TenantConfig bean);
+
 	
 
 	

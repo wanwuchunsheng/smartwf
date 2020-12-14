@@ -41,7 +41,7 @@ public class TenantConfig implements Serializable {
 	/**
 	 * 租户logo
 	 */
-	private String logoUrl;
+	private String styleJson;
 	/**
 	 * 地址
 	 */
