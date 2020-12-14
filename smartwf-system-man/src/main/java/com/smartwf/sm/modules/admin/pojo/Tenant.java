@@ -51,6 +51,12 @@ public class Tenant extends BasePojo implements Serializable{
 	 */
 	@NotNull(message = "租户名称不能为空！", groups = Add.class)
 	private String tenantName;
+	
+	/**
+	 * 租户logo
+	 */
+	private String logoUrl;
+	
 	/**
 	 * 默认选中
 	 *   0-默认

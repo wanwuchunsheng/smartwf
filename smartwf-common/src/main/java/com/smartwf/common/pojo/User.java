@@ -158,6 +158,12 @@ public class User implements Serializable{
 	 */
 	private Integer mgrType;
 	
+	/**
+	 * 租户logo
+	 * 
+	 * */
+	private String logoUrl;
+	
 	
 	
 	/**================  其他相关信息  ================================================*/

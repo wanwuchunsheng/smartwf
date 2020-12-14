@@ -159,6 +159,7 @@
 		  b.tenant_name,
 		  b.tenant_pw,
 		  b.tenant_domain,
+		  b.logo_url,
 		  b.sel
 		from sys_user_info a left join sys_tenant b on a.tenant_id=b.id 
 		where a.enable=0  and b.enable=0
