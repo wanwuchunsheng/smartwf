@@ -204,8 +204,8 @@
 		and b.eng_name=#{bean.engName} and b.tenant_id=#{bean.tenantId}
     </select>
     
-    <!-- 查询所有排班用户 -->
-    <select id="selectUserInfoByRoleParam"  resultType="com.smartwf.sm.modules.admin.vo.UserInfoVO" >
+    <!-- 查询所有排班用户 (预留接口) -->
+    <select id="selectUserInfoByRoleParam-BAK"  resultType="com.smartwf.sm.modules.admin.vo.UserInfoVO" >
          select 
 		  a.id,
 			a.user_code,
@@ -241,6 +241,93 @@
 		from sys_user_info  a, sys_role b, sys_user_role c 
 		where a.id=c.user_id and b.id= c.role_id and a.tenant_id=c.tenant_id and b.tenant_id = c.tenant_id
 		and b.eng_name=#{shiftGroup} and b.tenant_id= (select id from sys_tenant where enable=0 and tenant_domain=#{tenantDomain} ) 
+		<if test="windFarm != null ">
+		and a.id in (
+			select k3.id from sys_organization k1 , sys_user_organization k2 ,sys_user_info k3
+			where k1.id=k2.organization_id and k2.user_id=k3.id
+			and k1.tenant_id=k2.tenant_id and k2.tenant_id=k3.tenant_id
+			and k1.org_type=1
+			and k1.id=#{windFarm}
+        )
+        </if>
+    </select>
+    
+    <!-- 查询所有排班用户  -->
+    <select id="selectUserInfoByRoleParam"  resultType="com.smartwf.sm.modules.admin.vo.UserInfoVO" >
+         select 
+		      		f.id,
+					f.user_code,
+					f.login_code,
+					f.user_name,
+					f.email,
+					f.mobile,
+					f.phone,
+					f.sex,
+					f.avatar,
+					f.sign,
+					f.wx_openid,
+					f.qq_openid,
+					f.address,
+					f.remark,
+					f.tenant_id,
+					f.status,
+					f.mgr_type,
+					f.pwd_question,
+					f.pwd_question_answer,
+					f.pwd_question2,
+					f.pwd_question_answer2,
+					f.pwd_question3,
+					f.pwd_question_answer3,
+					f.enable,
+		      f.windfarmName,
+		      (select group_concat(b1.id separator ',') from sys_user_organization a1,sys_organization b1  where a1.organization_id = b1.id and f.id=a1.user_id and f.tenant_id=a1.tenant_id and b1.org_type not in (-99,1)   group by a1.tenant_id,a1.user_id) as organizationIds,
+		      (select group_concat(b1.org_name separator ',') from sys_user_organization a1,sys_organization b1  where a1.organization_id = b1.id and f.id=a1.user_id and f.tenant_id=a1.tenant_id and  b1.org_type not in (-99,1)  group by a1.tenant_id,a1.user_id) as organizationName,
+		      group_concat(postIds separator ',') as postIds,
+		      group_concat(postName separator ',') as postName,
+		      (select group_concat(b1.id separator ',') from sys_user_role a1,sys_role b1 where a1.role_id = b1.id and f.id=user_id and f.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as roleIds, 
+					(select group_concat(b1.role_name separator ',') from sys_user_role a1,sys_role b1 where a1.role_id = b1.id and f.id=user_id and f.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as roleName 
+		 from (
+		   select 
+				  a.id,
+					a.user_code,
+					a.login_code,
+					a.user_name,
+					a.email,
+					a.mobile,
+					a.phone,
+					a.sex,
+					a.avatar,
+					a.sign,
+					a.wx_openid,
+					a.qq_openid,
+					a.address,
+					a.remark,
+					a.tenant_id,
+					a.status,
+					a.mgr_type,
+					a.pwd_question,
+					a.pwd_question_answer,
+					a.pwd_question2,
+					a.pwd_question_answer2,
+					a.pwd_question3,
+					a.pwd_question_answer3,
+					a.enable,
+				      d1.id as organizationIds,
+				      d1.org_name as windfarmName,
+				      d1.org_name as organizationName,
+				      e1.id as postIds,
+				      e1.post_name as postName,
+				      b.id as roleIds,
+					  b.role_name as roleName
+				from sys_user_info a, sys_role b, sys_user_role c ,sys_organization d1, sys_user_organization d2, sys_post e1 ,sys_user_post e2
+				where a.enable=0 and b.enable=0 and d1.enable=0 and e1.enable =0 and d1.org_type=1
+		    and a.id=c.user_id and b.id= c.role_id 
+		    and a.id=d2.user_id and d1.id=d2.organization_id
+		    and a.id=e2.user_id and e1.id=e2.post_id
+		    and a.tenant_id=c.tenant_id and b.tenant_id = c.tenant_id and a.tenant_id=d1.tenant_id and a.tenant_id=e1.tenant_id
+			and b.eng_name=#{shiftGroup} and a.tenant_id= (select id from sys_tenant where enable=0 and tenant_domain=#{tenantDomain})
+		    and d1.id=#{windFarm}
+		) f group by f.id,f.roleIds,f.organizationIds order by f.id
     </select>
     
     

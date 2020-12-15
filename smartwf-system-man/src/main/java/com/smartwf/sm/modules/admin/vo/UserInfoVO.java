@@ -54,7 +54,7 @@ public class UserInfoVO extends UserInfo{
 	private String roleName; 
 	
 	/**
-	 *  风场
+	 *  风场名称
 	 */
 	private String windfarmName; 
 

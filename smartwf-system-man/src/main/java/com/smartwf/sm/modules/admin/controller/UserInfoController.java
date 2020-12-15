@@ -250,7 +250,7 @@ public class UserInfoController {
     @ApiOperation(value = "排班用户（分页）查询接口", notes = "排班用户查询")
     @ApiImplicitParams({
    	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
-   	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String")
+   	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true)
     })
     public ResponseEntity<Result<?>> selectUserInfoByRoleParam(Page<UserInfo> page, String tenantDomain,String windFarm) {
         try {
