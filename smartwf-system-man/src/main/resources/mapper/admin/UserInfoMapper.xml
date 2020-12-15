@@ -326,7 +326,9 @@
 		    and a.id=e2.user_id and e1.id=e2.post_id
 		    and a.tenant_id=c.tenant_id and b.tenant_id = c.tenant_id and a.tenant_id=d1.tenant_id and a.tenant_id=e1.tenant_id
 			and b.eng_name=#{shiftGroup} and a.tenant_id= (select id from sys_tenant where enable=0 and tenant_domain=#{tenantDomain})
+			<if test="windFarm != null ">
 		    and d1.id=#{windFarm}
+		    </if>
 		) f group by f.id,f.roleIds,f.organizationIds order by f.id
     </select>
     
