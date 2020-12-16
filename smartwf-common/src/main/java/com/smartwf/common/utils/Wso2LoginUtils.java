@@ -28,7 +28,7 @@ public class Wso2LoginUtils {
 	 * 
 	 * */
     public static boolean checkLogin(HttpServletRequest request, HttpServletResponse response, Object handler, RedisService redisService,Wso2Config wso2Config) throws Exception{	
-    	log.info("进入拦截器"+request.getMethod()+"{}"+request.getRequestURI());
+    	log.info("进入拦截器{},{}",request.getMethod(),request.getRequestURI());
     	//1判断是否accessToken令牌请求
     	String accessToken = request.getHeader(Constants.ACCESS_TOKEN);
     	if (StringUtils.isNotBlank(accessToken)) {

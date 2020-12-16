@@ -320,10 +320,6 @@ public class GlobalDataController {
     			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，accessToken查询用户信息失败！"));
     		}
     		Map<String,Object> resmap=JSONUtil.parseObj(str);
-			//打印返回结果
-			for(Entry<String, Object> m:resmap.entrySet()) {
-        		log.info(m.getKey()+"    "+m.getValue());
-        	}
 			//验证是否成功
 			if(resmap.containsKey(Constants.USERID)) {
 				user.setUserCode(String.valueOf(resmap.get("user_id")));

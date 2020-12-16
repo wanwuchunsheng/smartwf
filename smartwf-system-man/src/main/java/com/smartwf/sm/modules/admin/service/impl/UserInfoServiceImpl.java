@@ -44,6 +44,7 @@ import com.smartwf.sm.modules.wso2.service.Wso2RoleService;
 import com.smartwf.sm.modules.wso2.service.Wso2UserService;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.digest.MD5;
@@ -380,7 +381,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 			userInfo.setRedirectUri(user.getRedirectUri());
 			userInfo.setDateTime(user.getDateTime());
 			userInfo.setSessionState(user.getSessionState());
-			userInfo.setLoginCode(user.getLoginCode());
+			if(StrUtil.isNotEmpty(user.getLoginCode())) {
+				userInfo.setLoginCode(user.getLoginCode());
+			}
 			//职务
 			userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
 			//角色
