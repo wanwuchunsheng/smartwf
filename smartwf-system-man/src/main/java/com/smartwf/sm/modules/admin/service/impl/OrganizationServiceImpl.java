@@ -18,6 +18,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.thread.UserThreadLocal;
+import com.smartwf.sm.config.redis.StreamProducer;
 import com.smartwf.sm.modules.admin.dao.OrganizationDao;
 import com.smartwf.sm.modules.admin.pojo.GlobalData;
 import com.smartwf.sm.modules.admin.pojo.Organization;
@@ -28,14 +29,15 @@ import com.smartwf.sm.modules.admin.service.OrganizationService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
 
 import cn.hutool.core.convert.Convert;
-import lombok.extern.log4j.Log4j;
+import cn.hutool.json.JSONUtil;
+import lombok.extern.log4j.Log4j2;
 /**
  * @Description: 组织架构业务层接口实现
  * @author WCH
  * @Date: 2019-11-27 11:25:24
  */
 @Service
-@Log4j
+@Log4j2
 public class OrganizationServiceImpl implements OrganizationService{
 	
 	@Autowired
@@ -43,6 +45,9 @@ public class OrganizationServiceImpl implements OrganizationService{
 	
 	@Autowired
     private GlobalDataService globalDataService;
+	
+	@Autowired
+    private StreamProducer streamProducer;
 
 	/**
 	 * @Description:查询组织架构分页
@@ -151,11 +156,21 @@ public class OrganizationServiceImpl implements OrganizationService{
 		bean.setUpdateUserName(bean.getCreateUserName());
 		//保存
 		this.organizationDao.insert(bean);
-		/**刷新缓存 */
-		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
-		GlobalData gd=new GlobalData();
-		gd.setFlushType(Convert.toStr(Constants.ZERO));
-		this.globalDataService.flushCache(gd);
+		try {
+			/**刷新缓存 */
+			//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+			GlobalData gd=new GlobalData();
+			gd.setFlushType(Convert.toStr(Constants.ZERO));
+			this.globalDataService.flushCache(gd);
+			/** 向知识中心推送新增 */
+			Map<String,String> map=new HashMap<>();
+			bean.setRemark("add");
+			map.put("org", JSONUtil.toJsonStr(bean));
+			this.streamProducer.sendMsg("topic:smartwf_wiki", map);
+			log.info("向消息中心推送-组织机构新增{}",JSONUtil.toJsonStr(map));
+		} catch (Exception e) {
+			log.error("组织机构添加异常！",e,e.getMessage());
+		}
 	}
 
 	/**
@@ -171,11 +186,21 @@ public class OrganizationServiceImpl implements OrganizationService{
 		bean.setUpdateUserName(user.getUserName());
 		//修改
 		this.organizationDao.updateById(bean);
-		/**刷新缓存 */
-		//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
-		GlobalData gd=new GlobalData();
-		gd.setFlushType(Convert.toStr(Constants.ZERO));
-		this.globalDataService.flushCache(gd);
+		try {
+			/**刷新缓存 */
+			//flushType 0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置
+			GlobalData gd=new GlobalData();
+			gd.setFlushType(Convert.toStr(Constants.ZERO));
+			this.globalDataService.flushCache(gd);
+			/** 向知识中心推送新增 */
+			Map<String,String> map=new HashMap<>();
+			bean.setRemark("update");
+			map.put("org", JSONUtil.toJsonStr(bean));
+			this.streamProducer.sendMsg("topic:smartwf_wiki", map);
+			log.info("向消息中心推送-组织机构修改{}",JSONUtil.toJsonStr(map));
+		} catch (Exception e) {
+			log.error("组织机构添加异常！",e,e.getMessage());
+		}
 	}
 
 	/**

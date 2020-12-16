@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.exception.CommonException;
@@ -379,6 +380,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 			userInfo.setRedirectUri(user.getRedirectUri());
 			userInfo.setDateTime(user.getDateTime());
 			userInfo.setSessionState(user.getSessionState());
+			userInfo.setLoginCode(user.getLoginCode());
 			//职务
 			userInfo.setPostList(this.postDao.selectPostByUserId(userInfo));
 			//角色
@@ -529,5 +531,15 @@ public class UserInfoServiceImpl implements UserInfoService{
 	public Result<?> selectUserInfoByParam(UserInfo bean) {
 		List<Map<String, Object>> resMap=this.userInfoDao.selectUserInfoByParam(bean);
 		return Result.data(Constants.EQU_SUCCESS, resMap);
+	}
+
+	/**
+	 * @Description: 登录名查询用户
+	 * @param Object
+	 * @return
+	 */
+	@Override
+	public UserInfo selectUserInfoByLoginCode(User user) {
+		return this.userInfoDao.selectUserInfoByLoginCode(user);
 	}
 }

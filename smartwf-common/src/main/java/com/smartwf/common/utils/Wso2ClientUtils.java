@@ -224,12 +224,10 @@ public class Wso2ClientUtils {
     	map.put("id_token_hint",user.getIdToken());
         String url=new StringBuffer().append(wso2Config.userServerUri).append("/oidc/logout").toString();
         String res=HttpRequest.get(url).header("Authorization",new StringBuffer().append("Bearer ").append(user.getAccessToken()).toString()).form(map).timeout(60000).execute().body();
-		log.info("res="+res);
+		log.info("统一注销返回{}",res);
     	return res;
     }
-    
-    
-    
+   
     /**
      * wso2请求-密码修改
      * @Author WCH

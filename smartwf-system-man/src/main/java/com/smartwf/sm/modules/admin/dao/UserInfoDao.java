@@ -138,6 +138,12 @@ public interface UserInfoDao extends BaseMapper<UserInfo> {
      * @return
      */
 	List<Map<String, Object>> selectUserOrganizationByOrgId(@Param("tenantId") String tenantId, @Param("orgid") String orgid);
+	/**
+	 * @Description: 登录名查询用户
+	 * @param Object
+	 * @return
+	 */
+	UserInfo selectUserInfoByLoginCode(@Param("user") User user);
 
 
     

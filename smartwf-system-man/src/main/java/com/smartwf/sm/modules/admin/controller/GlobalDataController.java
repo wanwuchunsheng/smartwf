@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.exception.CommonException;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
@@ -34,6 +35,7 @@ import com.smartwf.sm.modules.admin.pojo.LoginRecord;
 import com.smartwf.sm.modules.admin.pojo.Post;
 import com.smartwf.sm.modules.admin.pojo.Role;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
+import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.pojo.UserOrganization;
 import com.smartwf.sm.modules.admin.service.GlobalDataService;
 import com.smartwf.sm.modules.admin.service.LoginRecordService;
@@ -322,11 +324,19 @@ public class GlobalDataController {
 			for(Entry<String, Object> m:resmap.entrySet()) {
         		log.info(m.getKey()+"    "+m.getValue());
         	}
-			//4验证是否成功
-			if(!resmap.containsKey(Constants.USERID)) {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，WSO2 user_id为空！"));
+			//验证是否成功
+			if(resmap.containsKey(Constants.USERID)) {
+				user.setUserCode(String.valueOf(resmap.get("user_id")));
+			}else {
+				//失败，反向查询用户ID
+				UserInfo uinfo=this.userInfoService.selectUserInfoByLoginCode(user);
+				if(null!=uinfo) {
+					user.setUserCode(uinfo.getUserCode());
+				}else {
+					log.warn("失败！返回user_id异常，请求uri：{}", JSONUtil.toJsonStr(user), request.getRequestURI());
+					throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，WSO2 user_id为空！");
+				}
 			}
-			user.setUserCode(String.valueOf(resmap.get("user_id")));
 			//5通过user_id查询用户基础信息	
     		User userInfo=this.userInfoService.selectUserInfoByUserCode(user);
     		if(null==userInfo) {
@@ -365,11 +375,19 @@ public class GlobalDataController {
         			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，accessToken查询用户信息失败！"));
         		}
         		Map<String,Object> resmap=JSONUtil.parseObj(str);
-    			//4验证是否成功
-    			if(!resmap.containsKey(Constants.USERID)) {
-    				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("授权参数异常，WSO2 user_id为空！"));
+    			//验证是否成功
+    			if(resmap.containsKey(Constants.USERID)) {
+    				user.setUserCode(String.valueOf(resmap.get("user_id")));
+    			}else {
+    				//失败，反向查询用户ID
+    				UserInfo uinfo=this.userInfoService.selectUserInfoByLoginCode(user);
+    				if(null!=uinfo) {
+    					user.setUserCode(uinfo.getUserCode());
+    				}else {
+    					log.warn("失败！返回user_id异常，请求uri：{}", JSONUtil.toJsonStr(user), request.getRequestURI());
+    					throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，WSO2 user_id为空！");
+    				}
     			}
-    			user.setUserCode(String.valueOf(resmap.get("user_id")));
 				//5通过user_id查询用户基础信息	
         		User userInfo=this.userInfoService.selectUserInfoByUserCode(user);
         		if(null==userInfo) {

@@ -418,4 +418,22 @@
     </select>
     
     
+    <!-- 手机移动app查询 -->
+    <select id="selectUserInfoByLoginCode" resultType="com.smartwf.sm.modules.admin.pojo.UserInfo">
+       select f.id,f.user_code,f.login_code,f.user_name,f.tenant_id from (
+			SELECT
+				a.id,
+			    a.user_code,
+				a.login_code,
+				a.user_name,
+				b.id AS tenant_id,
+				b.tenant_domain,
+			  CONCAT(a.login_code,'@',tenant_domain) as userDomain
+			FROM
+				sys_user_info a,
+				sys_tenant b
+			WHERE
+				a.tenant_id = b.id
+		) f where f.userDomain=#{user.loginCode}
+    </select>
 </mapper>

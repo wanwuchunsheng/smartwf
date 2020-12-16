@@ -2,6 +2,7 @@ package com.smartwf.sm.modules.admin.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
@@ -111,4 +112,10 @@ public interface UserInfoService {
 	 * @return
 	 */
 	Result<?> selectUserInfoByParam(UserInfo bean);
+	/**
+	 * @Description: 登录名查询用户
+	 * @param Object
+	 * @return
+	 */
+	UserInfo selectUserInfoByLoginCode(User user);
 }

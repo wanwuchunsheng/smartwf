@@ -85,6 +85,7 @@ public class StreamConsumer implements CommandLineRunner {
     				   };
 	                   //处理完成后，删除MQ消息记录
 	                   redisStream.xdel(STREAMS_KEY, message.getId());
+	                   //redisStream.xack(STREAMS_KEY, GROUP_NAME, message.getId());
                     }
                 }
             }

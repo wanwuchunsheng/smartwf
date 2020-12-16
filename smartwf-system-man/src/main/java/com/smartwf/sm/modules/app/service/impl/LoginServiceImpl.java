@@ -24,6 +24,7 @@ import com.smartwf.common.utils.MathUtils;
 import com.smartwf.common.utils.Wso2ClientUtils;
 import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.admin.pojo.LoginRecord;
+import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.service.LoginRecordService;
 import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.app.service.LoginService;
@@ -58,7 +59,7 @@ public class LoginServiceImpl implements LoginService{
 	public Result<?> userLogin(HttpServletRequest request, User user) {
 		String isres=redisService.get(user.getClientKey());
     	if(StringUtils.isBlank(isres)) {
-    		log.warn("失败！参数clientKey异常，请求uri：{}", user.getClientKey(), request.getRequestURI());
+    		log.warn("失败！参数clientKey异常，请求uri：{}", JSONUtil.toJsonStr(user), request.getRequestURI());
     		throw new CommonException(Constants.UNAUTHORIZED, "失败！参数clientKey异常！");
     	}
 		Map<String,Object> idtmap=JSONUtil.parseObj(isres);
@@ -75,21 +76,31 @@ public class LoginServiceImpl implements LoginService{
     	//根据accessToken查询用户ID
 		String str=Wso2ClientUtils.reqWso2UserInfo(wso2Config, user);
 		if(StringUtils.isBlank(str)) {
+			log.warn("失败！返回accessToken异常，请求uri：{}", JSONUtil.toJsonStr(user), request.getRequestURI());
 			throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，accessToken查询用户信息失败！");
 		}
 		Map<String,Object> resmap=JSONUtil.parseObj(str);
 		//验证是否成功
-		if(!resmap.containsKey(Constants.USERID)) {
-			throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，WSO2 user_id为空！");
+		if(resmap.containsKey(Constants.USERID)) {
+			user.setUserCode(String.valueOf(resmap.get("user_id")));
+		}else {
+			//失败，反向查询用户ID
+			UserInfo uinfo=this.userInfoService.selectUserInfoByLoginCode(user);
+			if(null!=uinfo) {
+				user.setUserCode(uinfo.getUserCode());
+			}else {
+				log.warn("失败！返回user_id异常，请求uri：{}", JSONUtil.toJsonStr(user), request.getRequestURI());
+				throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，WSO2 user_id为空！");
+			}
 		}
-		user.setUserCode(String.valueOf(resmap.get("user_id")));
 		//通过user_id查询用户基础信息	
 		User userInfo=this.userInfoService.selectUserInfoByUserCode(user);
 		if(null==userInfo) {
+			log.warn("失败！返回用户信息异常，请求uri：{}", JSONUtil.toJsonStr(user), request.getRequestURI());
 			throw new CommonException(Constants.UNAUTHORIZED,"授权参数异常，user_id查询用户信息异常！");
 		}
+		//添加登录记录信息
 		try {
-			//第一次登录，添加登录记录信息
     		String ip=MathUtils.getIpAddress(request);
     		String loginType=HttpClientUtil.getBrowserInfo(request);
     		String deviceName=HttpClientUtil.getDeviceName(request);
@@ -106,12 +117,8 @@ public class LoginServiceImpl implements LoginService{
 		} catch (Exception e) {
 			log.error("ERROR：插入登录记录错误！{}-{}",e.getMessage(),e);
 		}
-		//区分子系统和app端过期时间
-		if(StringUtils.isNotBlank(userInfo.getSessionState())) {
-			this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo),wso2Config.tokenRefreshTime);
-		}else {
-			this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo),Constants.APP_TIMEOUT);
-		}
+		//保存redis
+		this.redisService.set(userInfo.getSessionId(), JSONUtil.toJsonStr(userInfo),Constants.APP_TIMEOUT);
 		//成功返回
 		return Result.data(Constants.EQU_SUCCESS,Wso2ClientUtils.resUserInfo(userInfo));
 	}
