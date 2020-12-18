@@ -84,6 +84,8 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		User user=UserThreadLocal.getUser();
 		//查询数据
 		FaultInformation fim=this.alarmInboxDao.selectById(bean);
+		//风场ID
+		json1.put("farmId", fim.getWindFarm());
 		//故障编码
 		json1.put("faultId", fim.getId());
 		//工单标题
@@ -164,6 +166,8 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		User user=UserThreadLocal.getUser();
 		//查询数据
 		FaultInformation fim=this.alarmInboxDao.selectById(bean);
+		//风场ID
+		json1.put("farmId", fim.getWindFarm());
 		//故障编码
 		json1.put("faultId", fim.getId());
 		//工单标题

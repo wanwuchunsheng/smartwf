@@ -36,7 +36,7 @@ public class Constants {
     /** 风场管理员角色 */
     public static final String SUPER_WINDFARM="station_manager";
     
-    public static final String REDIS_TOPIC = "topic:smartwf";
+    public static final String REDIS_TOPIC = "topic:smartwf_monitor";
     
     public static final String CHAR = ",";
     
