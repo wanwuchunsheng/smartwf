@@ -50,7 +50,7 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 	 * 故障报警信息转工单
 	 * @author WCH
 	 * @Date: 2020-7-23 09:29:25
-	 * 
+	 * jSON:增加风场ID，管控措施
 	 *  json规范：
 		{
 		  "orderContent": "",
@@ -90,6 +90,8 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		json1.put("faultId", fim.getId());
 		//工单标题
 		json1.put("orderContent", bean.getWorkOrderTitle());
+		//管控措施
+		json1.put("managementMeasures", bean.getManagementMeasures());
 		//工单描述
 		json1.put("orderDescribe", fim.getAlarmDescription());
 		//工单类型 1巡检,2维护,3实验,4大小修,5培训,6其他)
@@ -172,6 +174,8 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		json1.put("faultId", fim.getId());
 		//工单标题
 		json1.put("orderContent", bean.getWorkOrderTitle());
+		//管控措施
+		json1.put("managementMeasures", bean.getManagementMeasures());
 		//工单描述
 		json1.put("orderDescribe", fim.getAlarmDescription());
 		//工单类型 1巡检,2维护,3实验,4大小修,5培训,6其他)

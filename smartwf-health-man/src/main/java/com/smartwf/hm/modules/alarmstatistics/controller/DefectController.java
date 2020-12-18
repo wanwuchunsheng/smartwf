@@ -53,6 +53,7 @@ public class DefectController {
     	    @ApiImplicitParam(paramType = "query", name = "incidentType", value = "事变类型(1故障类型 2缺陷类型)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "workOrderTitle", value = "工单标题", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "managementMeasures", value = "管控措施", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     public ResponseEntity<Result<?>> updateDefectById(DefectVO bean) {

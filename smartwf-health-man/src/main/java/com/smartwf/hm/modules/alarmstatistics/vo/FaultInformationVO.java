@@ -88,11 +88,14 @@ public class FaultInformationVO extends FaultInformation implements Serializable
 	 * */
 	private String recentTime;
 	/**
-	 * 最近时间
+	 * 工单标题
 	 * 
 	 * */
 	private String workOrderTitle;
 	
-	
+	/**
+	 * 管控措施
+	 */
+	private String managementMeasures;
 	
 }

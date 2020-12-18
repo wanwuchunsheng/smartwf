@@ -51,8 +51,10 @@ public class DefectVO extends FaultInformation implements Serializable{
 	 * 故障转工单名称
 	 */
 	private String workOrderTitle;
-	
-	
+	/**
+	 * 管控措施
+	 */
+	private String managementMeasures;
 	
 	
 }
