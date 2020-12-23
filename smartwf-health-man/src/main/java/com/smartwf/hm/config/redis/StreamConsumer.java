@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.smartwf.hm.modules.admin.service.IotRealTimeDataService;
+
 import io.lettuce.core.Consumer;
 import io.lettuce.core.RedisBusyException;
 import io.lettuce.core.RedisClient;
@@ -23,12 +25,15 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 2020-8-18 17:06:23
  */
 
-//@Component
+@Component
 @Slf4j
 public class StreamConsumer implements CommandLineRunner {
 	
 	@Autowired
 	private RedisClient redisClient;
+	
+	@Autowired
+	private IotRealTimeDataService iotRealTimeDataService;
 
 	//主题，不同的子系统主题不要一样遵循{topic:子系统名称}
 	public final static String STREAMS_KEY = "topic:smartwf_health";
@@ -71,14 +76,17 @@ public class StreamConsumer implements CommandLineRunner {
                         //获取消息
             			Map<String,String> map=message.getBody();
             			//获取map键
-            			String type=map.entrySet().iterator().next().getKey();
+            			String key=map.entrySet().iterator().next().getKey();
             			//进入相应的业务处理
-            			switch (type) {
+            			switch (key) {
+	            			case "iot":
+	    						iotRealTimeDataService.saveIotRealTimeData(map.get(key));
+	    						break;
 	    					case "system":
-	    						System.err.print("msg - {}"+ map.get(type));
+	    						System.err.print("msg - {}"+ map.get(key));
 	    						break;
 	    					case "health":
-	    						System.err.println("msg - {}"+ map.get(type));
+	    						System.err.println("msg - {}"+ map.get(key));
 	    						break;
 	    					default:
 	    						break;
@@ -94,8 +102,8 @@ public class StreamConsumer implements CommandLineRunner {
 			connection.close();
 			redisStream.quit();
 			try {
-				Thread.sleep(10000);
 				messageListener();
+				Thread.sleep(10000);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
