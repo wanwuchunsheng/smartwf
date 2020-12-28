@@ -1,12 +1,15 @@
 package com.smartwf.sm.modules.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
 import com.smartwf.sm.modules.admin.vo.TenantVO;
+
+import cn.hutool.json.JSON;
 
 /**
  * @Description: 租户业务层接口
@@ -58,6 +61,12 @@ public interface TenantService {
      * @return
      */
 	boolean selectTenantByParma(UserInfo uf);
+	
+	/**
+     * 风场租户域映射关系
+     * @return
+     */
+	List<Map<String,String>> initWeatherTenant();
 	
 	
 	

@@ -289,7 +289,7 @@ public class GlobalDataController {
     @GetMapping("flushCacheAll")
     @ApiOperation(value = "刷新缓存接口", notes = "刷新缓存信息")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "flushType", value = "刷新类型,可字符串拼接（0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置）7天气预报", dataType = "String", required = true)
+    	@ApiImplicitParam(paramType = "query", name = "flushType", value = "刷新类型,可字符串拼接（0全部 1租户 2组织机构 3职务  4数据字典 5角色 6wso2配置）7天气预报 8风场租户域映射", dataType = "String", required = true)
     })
     public ResponseEntity<Result<?>> flushCache(GlobalData bean) {
         try {

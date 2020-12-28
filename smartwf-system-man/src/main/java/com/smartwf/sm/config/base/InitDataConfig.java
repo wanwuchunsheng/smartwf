@@ -76,11 +76,6 @@ public class InitDataConfig implements CommandLineRunner{
             	this.redisService.set("initRole", JSONUtil.toJsonStr(this.roleService.initRoleDatas(tenantList)));
             	//数据字典
             	this.redisService.set("initDictionary", JSONUtil.toJsonStr(this.dictionaryService.initDictionaryDatas(tenantList)));
-            	log.info("租户数据{}",redisService.get("initTenant"));
-            	log.info("组织机构数据{}",redisService.get("initOrganization"));
-            	log.info("职务基础数据{}",redisService.get("initPost"));
-            	log.info("角色基础数据{}",redisService.get("initRole"));
-            	log.info("数据字典数据--{}",redisService.get("initDictionary"));
     		}
     		//初始化wos2配置数据
     		List<IdentityConfig> idtconfig=this.identityConfigService.initIdentityConfig();
@@ -92,6 +87,8 @@ public class InitDataConfig implements CommandLineRunner{
     		}
     		//天气预报
         	this.redisService.set("initWeatherConfig", JSONUtil.toJsonStr(this.weatherConfigService.initWeatherDatas()));
+        	//风场租户域映射关系
+        	this.redisService.set("initWeatherTenant", JSONUtil.toJsonStr(this.tenantService.initWeatherTenant()));
     		//初始化排班人员信息
     		//this.userService.selectUserInfoByShift();
 		} catch (Exception e) {

@@ -3,6 +3,7 @@ package com.smartwf.sm.modules.admin.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -359,6 +360,15 @@ public class TenantServiceImpl implements TenantService{
 			return true;
 		}
 		return false;
+	}
+
+	/**
+     * 风场租户域映射关系
+     * @return
+     */
+	@Override
+	public List<Map<String, String>> initWeatherTenant() {
+		return this.tenantDao.initWeatherTenant();
 	}
 
 	

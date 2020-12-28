@@ -2,6 +2,7 @@ package com.smartwf.sm.modules.admin.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -196,6 +197,11 @@ public interface TenantDao extends BaseMapper<Tenant> {
 	 * @param bean
 	 * */
 	Tenant selectTenantById(@Param("bean") UserInfo bean);
+	/**
+     * 风场租户域映射关系
+     * @return
+     */
+	List<Map<String, String>> initWeatherTenant();
 
 	
     

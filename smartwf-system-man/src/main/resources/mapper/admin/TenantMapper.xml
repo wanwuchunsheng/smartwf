@@ -168,6 +168,9 @@
         </if>
     </select>
 	
-	
+	<!-- 风场租户域映射关系  -->
+    <select id="initWeatherTenant" resultType="java.util.Map">
+       select a.id,b.tenant_domain from sys_organization a,sys_tenant b where a.tenant_id=b.id and b.enable=0 and a.enable=0 and a.org_type=1
+    </select>
 	
 </mapper>
