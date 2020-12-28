@@ -409,7 +409,7 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		                	break;
 						case "8":
 							//风场租户域映射
-		                	this.redisService.set("initWeatherTenant", JSONUtil.toJsonStr(this.tenantService.initWeatherTenant()));
+		                	this.redisService.set("initWindfarmTenant", JSONUtil.toJsonStr(this.tenantService.initWeatherTenant()));
 		                	break;
 						default:
 							break;

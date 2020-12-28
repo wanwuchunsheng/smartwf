@@ -88,7 +88,7 @@ public class InitDataConfig implements CommandLineRunner{
     		//天气预报
         	this.redisService.set("initWeatherConfig", JSONUtil.toJsonStr(this.weatherConfigService.initWeatherDatas()));
         	//风场租户域映射关系
-        	this.redisService.set("initWeatherTenant", JSONUtil.toJsonStr(this.tenantService.initWeatherTenant()));
+        	this.redisService.set("initWindfarmTenant", JSONUtil.toJsonStr(this.tenantService.initWeatherTenant()));
     		//初始化排班人员信息
     		//this.userService.selectUserInfoByShift();
 		} catch (Exception e) {
