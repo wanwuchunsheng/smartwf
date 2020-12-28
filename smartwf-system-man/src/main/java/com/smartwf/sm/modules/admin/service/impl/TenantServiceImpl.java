@@ -2,8 +2,10 @@ package com.smartwf.sm.modules.admin.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -367,8 +369,13 @@ public class TenantServiceImpl implements TenantService{
      * @return
      */
 	@Override
-	public List<Map<String, String>> initWeatherTenant() {
-		return this.tenantDao.initWeatherTenant();
+	public Map<String,String> initWeatherTenant() {
+		List<Map<String, String>> maps=this.tenantDao.initWeatherTenant();
+		Map<String,String> newMap=new HashMap<>();
+		for(Map<String, String> map:maps) {
+			newMap.put(Convert.toStr(map.get("id")), map.get("tenant_domain"));
+		}
+		return newMap;
 	}
 
 	

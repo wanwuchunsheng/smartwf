@@ -1,8 +1,10 @@
 package com.smartwf.sm.test;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +27,7 @@ import com.smartwf.sm.modules.admin.service.UserInfoService;
 import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
 import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 /**
@@ -99,13 +102,25 @@ public class SmartwfSystemTest {
     		this.userService.selectUserInfoByShift();
     		
 			Map<String,String> map = new HashMap<String, String>();
-			for(int i=1996;i<2000;i++) {
-				map.put("system", "消息是："+i);
-				System.out.println(JSONUtil.toJsonStr(map));
-				streamProducer.sendMsg("topic:smartwf_sys_backend2", map);
+			log.error("------------------------------------------------------------开始时间：",new Date());
+			for(int i=5000;i<10000;i++) {
+				new HashMap<String, String>();
+				map.put("problemCode", "1");
+				map.put("deviceId", "EM01");
+				map.put("time", "2020-12-23 16:49:41");
+				map.put("wfid", "6");
+				map.put("problemType", "3");
+				Map<String,String> map2 = new HashMap<String, String>();
+				map2.put("iot", JSONUtil.toJsonStr(map));
+				
+				streamProducer.sendMsg("topic:smartwf_health", map2);
 				//Thread.sleep(15000);
 			}
+			log.error("-----------------------------------------------------------------结束时间：",new Date());
+			
+			
 			**/
+			
 			
 		} catch (Exception e) {
 			log.error("错误：初始化基础数据异常{}",e);

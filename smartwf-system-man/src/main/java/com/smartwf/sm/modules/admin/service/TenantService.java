@@ -66,7 +66,7 @@ public interface TenantService {
      * 风场租户域映射关系
      * @return
      */
-	List<Map<String,String>> initWeatherTenant();
+	Map<String,String> initWeatherTenant();
 	
 	
 	

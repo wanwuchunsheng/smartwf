@@ -352,11 +352,6 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		                	this.redisService.set("initPost", JSONUtil.toJsonStr(this.postService.initPostDatas(tenantList)));
 		                	this.redisService.set("initRole", JSONUtil.toJsonStr(this.roleService.initRoleDatas(tenantList)));
 		                	this.redisService.set("initDictionary", JSONUtil.toJsonStr(this.dictionaryService.initDictionaryDatas(tenantList)));
-		                	log.info("租户数据{}",redisService.get("initTenant"));
-		                	log.info("组织机构数据{}",redisService.get("initOrganization"));
-		                	log.info("职务基础数据{}",redisService.get("initPost"));
-		                	log.info("角色基础数据{}",redisService.get("initRole"));
-		                	log.info("数据字典数据{}",redisService.get("initDictionary"));
 		                	//wos2配置初始化数据
 		            		List<IdentityConfig> idtconfig=this.identityConfigService.initIdentityConfig();
 		            		if(idtconfig!=null && idtconfig.size()>0) {
@@ -367,6 +362,8 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		            		}
 		            		//天气预报
 		                	this.redisService.set("initWeatherConfig", JSONUtil.toJsonStr(this.weatherConfigService.initWeatherDatas()));
+		                	//风场租户域映射
+		                	this.redisService.set("initWindfarmTenant", JSONUtil.toJsonStr(this.tenantService.initWeatherTenant()));
 		                	break;
 						case "1":
 							//租户
