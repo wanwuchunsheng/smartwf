@@ -2,13 +2,10 @@ package com.smartwf.hm.modules.admin.service.impl;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.unit.DataUnit;
 
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.service.RedisService;
@@ -18,7 +15,6 @@ import com.smartwf.hm.modules.alarmstatistics.dao.AlarmInboxDao;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
