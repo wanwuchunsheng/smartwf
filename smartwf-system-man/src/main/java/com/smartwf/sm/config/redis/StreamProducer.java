@@ -43,7 +43,6 @@ public class StreamProducer {
 		}finally {
 			if(connection!=null) {
 				connection.close();
-				//redisClient.shutdown();
 			}
 		}
     }
