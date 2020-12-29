@@ -38,6 +38,8 @@ public class Constants {
     
     public static final String REDIS_TOPIC = "topic:smartwf_monitor";
     
+    public static final String HEALTH_TOPIC_ERROR = "topic:smartwf_health_error";
+    
     public static final String CHAR = ",";
     
     public static final String ID = "id";

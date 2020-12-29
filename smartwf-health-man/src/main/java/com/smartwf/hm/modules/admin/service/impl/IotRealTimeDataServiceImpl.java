@@ -65,8 +65,9 @@ public class IotRealTimeDataServiceImpl implements IotRealTimeDataService{
 		        				if(StrUtil.isEmpty(res)) {
 		        					//redis记录异常数据
 		        					Map<String,String> errMap= new HashMap<>();
+		        					map.put("msg", "补全数据为空");
 		        					errMap.put("iot", JSONUtil.toJsonStr(map));
-		        					streamProducer.sendMsg("topic:smartwf_monitor_error", errMap);
+		        					streamProducer.sendMsg(Constants.HEALTH_TOPIC_ERROR, errMap);
 		        					break;
 		        				}
 		        				Map<String,Object> resmap=JSONUtil.parseObj(res);
@@ -86,8 +87,8 @@ public class IotRealTimeDataServiceImpl implements IotRealTimeDataService{
 								fit.setStartTime(Convert.toStr(map.get("time")));
 								//1-故障  2-缺陷   3-警告
 								fit.setIncidentType(3);
-								//0-危急 1-严重  2-一般  3-未知      底层：1040未知 1041低 1042中 1043高 
-								fit.setAlarmLevel(Constants.ZERO);
+								//0-危急 1-严重  2-一般  3-未知 
+								fit.setAlarmLevel(3);
 						        //数据来源 0-系统故障  1-监控告警  2人工提交  3预警警告
 								fit.setFaultType(problemType);
 								//设备编码（风机ID）
@@ -106,6 +107,11 @@ public class IotRealTimeDataServiceImpl implements IotRealTimeDataService{
 								fit.setUpdateTime(fit.getCreateTime());
 							    this.alarmInboxDao.insert(fit);
 							} catch (Exception e) {
+								//redis记录异常数据
+	        					Map<String,String> errMap= new HashMap<>();
+	        					map.put("msg", "异常数据");
+	        					errMap.put("iot", JSONUtil.toJsonStr(map));
+	        					streamProducer.sendMsg(Constants.HEALTH_TOPIC_ERROR, errMap);
 								log.error("告警数据补全接口异常{}-{}",e,e.getMessage());
 							}
 							break;
@@ -156,6 +162,10 @@ public class IotRealTimeDataServiceImpl implements IotRealTimeDataService{
 						    this.alarmInboxDao.insert(fit);
 							break;
 						default:
+							Map<String,String> errMap= new HashMap<>();
+							map.put("msg", "未消费数据");
+        					errMap.put("iot", JSONUtil.toJsonStr(map));
+        					streamProducer.sendMsg(Constants.HEALTH_TOPIC_ERROR, errMap);
 							break;
 				   };
 				}
