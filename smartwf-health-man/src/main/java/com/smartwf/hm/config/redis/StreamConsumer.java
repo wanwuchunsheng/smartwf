@@ -66,7 +66,6 @@ public class StreamConsumer implements CommandLineRunner {
             }
     		//阻塞读取，读取完成继续阻塞读取
             while(true) {
-            	log.info("进入消费服务。。。。。。");
             	// 阻塞读取分组{无消息等待，有消息向下执行}
                 @SuppressWarnings("unchecked")
 				RedisFuture<List<StreamMessage<String, String>>> redisFuture =redisStream.xreadgroup(Consumer.from(GROUP_NAME, CONSUMER_NAME),XReadArgs.Builder.count(1).block(0),XReadArgs.StreamOffset.lastConsumed(STREAMS_KEY));
