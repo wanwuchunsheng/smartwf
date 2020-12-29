@@ -1,6 +1,7 @@
 package com.smartwf.hm.modules.admin.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.service.RedisService;
 import com.smartwf.common.utils.CkUtils;
+import com.smartwf.hm.config.redis.StreamProducer;
 import com.smartwf.hm.modules.admin.service.IotRealTimeDataService;
 import com.smartwf.hm.modules.alarmstatistics.dao.AlarmInboxDao;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
@@ -32,6 +34,9 @@ public class IotRealTimeDataServiceImpl implements IotRealTimeDataService{
 	
 	@Autowired
 	private RedisService redisService;
+	
+	@Autowired
+	private StreamProducer streamProducer;
 	
 	@Value("${spring.system.pms.server-uri}")
 	private String pmsServiceUri;
@@ -56,8 +61,14 @@ public class IotRealTimeDataServiceImpl implements IotRealTimeDataService{
 	        				//警告
 	        				try {
 		        				//调用生产中心补全数据
-		        				String res=HttpRequest.post(new StringBuffer().append(pmsServiceUri).append("/workOrder/add").toString()).form(map).timeout(60000).execute().body();
-		        				log.info("底层实时数据补全返回："+res);
+		        				String res=HttpRequest.post(new StringBuffer().append(pmsServiceUri).append("/asset/getAssetForHealth").toString()).form(map).timeout(15000).execute().body();
+		        				if(StrUtil.isEmpty(res)) {
+		        					//redis记录异常数据
+		        					Map<String,String> errMap= new HashMap<>();
+		        					errMap.put("iot", JSONUtil.toJsonStr(map));
+		        					streamProducer.sendMsg("topic:smartwf_monitor_error", errMap);
+		        					break;
+		        				}
 		        				Map<String,Object> resmap=JSONUtil.parseObj(res);
 		        				//预警
 								fit=new FaultInformation();
