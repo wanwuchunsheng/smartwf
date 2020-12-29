@@ -452,8 +452,8 @@ public class AlarmInboxServiceImpl implements AlarmInboxService {
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("tenant_domain", tenantDomain);
 		queryWrapper.ge("create_time", DateUtil.today());
-		//1故障  2缺陷
-		queryWrapper.eq("incident_type", Constants.ONE);
+		//1故障  2缺陷 3警告
+		queryWrapper.eq("incident_type", 3);
 		//支持批量拼接
 		if(StringUtils.isNotBlank(windFarm)) {
 			List<String> list=new ArrayList<>();

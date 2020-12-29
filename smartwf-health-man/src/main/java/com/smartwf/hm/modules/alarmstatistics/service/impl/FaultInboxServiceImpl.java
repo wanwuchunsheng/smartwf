@@ -449,7 +449,7 @@ public class FaultInboxServiceImpl implements FaultInboxService {
 		QueryWrapper<FaultInformation> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("tenant_domain", tenantDomain);
 		queryWrapper.ge("create_time", DateUtil.today());
-		//1故障  2缺陷
+		//1故障  2缺陷 3警告
 		queryWrapper.eq("incident_type", Constants.ONE);
 		//支持批量拼接
 		if(StringUtils.isNotBlank(windFarm)) {
