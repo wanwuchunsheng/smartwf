@@ -43,8 +43,8 @@
 	        (select name from sys_city where code=b.city_code) as cityName,
 	        (select name from sys_area where code=b.area_code) as areaName,
 			b.create_time
-		 from sys_organization a left join basic_windfarm_config b on a.tenant_id=b.tenant_id
-		 where a.enable=0 and a.org_type=1 and a.id=b.wind_farm
+		 from sys_organization a left join basic_windfarm_config b on a.id=b.wind_farm 
+		 where a.enable=0 and a.org_type=1  
 		 <if test="bean.tenantId != null ">
               and a.tenant_id=#{bean.tenantId}
          </if>
