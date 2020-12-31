@@ -18,6 +18,8 @@ import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
 import com.smartwf.sm.modules.sysconfig.service.WindFarmConfigService;
 import com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -149,7 +151,7 @@ public class WindfarmConfigController {
     @PutMapping("updateWindFarmConfig")
     @ApiOperation(value = "修改风场配置接口", notes = "修改风场配置")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "Integer"),
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户主键ID", dataType = "Integer"),
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场（组织架构风场ID）", dataType = "Integer"),
@@ -177,7 +179,11 @@ public class WindfarmConfigController {
     })
     @TraceLog(content = "修改风场配置", paramIndexs = {0})
     public ResponseEntity<Result<?>> updateWindFarmConfig(WindfarmConfig bean) {
-        this.windFarmConfigService.updateWindFarmConfig(bean);
+    	if(bean.getId()==null) {
+    		this.windFarmConfigService.saveWindFarmConfig(bean);
+    	}else {
+    		this.windFarmConfigService.updateWindFarmConfig(bean);
+    	}
         return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
     }
     
