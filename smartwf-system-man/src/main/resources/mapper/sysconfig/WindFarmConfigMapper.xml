@@ -39,6 +39,7 @@
 			b.off_line,
 			b.status,
 			b.remark,
+			b.type,
 			(select pro_name from sys_province where pro_code=b.pro_code) as proName,
 	        (select name from sys_city where code=b.city_code) as cityName,
 	        (select name from sys_area where code=b.area_code) as areaName,
