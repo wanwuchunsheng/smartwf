@@ -173,4 +173,9 @@
        select a.id,b.tenant_domain from sys_organization a,sys_tenant b where a.tenant_id=b.id and b.enable=0 and a.enable=0 and a.org_type=1
     </select>
 	
+	<!-- 查询租户-->
+    <select id="selectTenantByWindfarm" resultType="com.smartwf.sm.modules.admin.pojo.Tenant">
+        select b.id,b.tenant_domain from sys_organization  a,sys_tenant b where a.tenant_id=b.id and a.id=#{windFarm}
+    </select>
+	
 </mapper>

@@ -98,6 +98,17 @@ public class WindfarmConfig implements Serializable {
 	private Integer type;
 	
 	/**
+	 * 可利用率
+	 */
+	private Double availability;
+	
+	/**
+	 * 等效利用小时
+	 */
+	private Double equivalentUtilHours;
+	
+	
+	/**
 	 * 状态（是否启用人工更新数据） 0否  1是
 	 */
 	private Integer status;

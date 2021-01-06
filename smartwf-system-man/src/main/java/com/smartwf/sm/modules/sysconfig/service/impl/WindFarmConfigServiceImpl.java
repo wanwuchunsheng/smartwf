@@ -15,6 +15,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.utils.CkUtils;
+import com.smartwf.sm.modules.admin.dao.TenantDao;
+import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.sysconfig.dao.WindFarmConfigDao;
 import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
 import com.smartwf.sm.modules.sysconfig.service.WindFarmConfigService;
@@ -32,6 +34,9 @@ public class WindFarmConfigServiceImpl implements WindFarmConfigService{
 	
 	@Autowired
 	private WindFarmConfigDao windFarmConfigDao;
+	
+	@Autowired
+	private TenantDao tenantDao;
 
 	/**
 	 * @Description:查询风场配置配置分页
@@ -73,6 +78,10 @@ public class WindFarmConfigServiceImpl implements WindFarmConfigService{
 				return Result.data(Constants.EQU_SUCCESS,"添加失败，数据重复添加");
 			}
 			bean.setCreateTime(new Date());
+			//通过风场ID查询租户
+			Tenant tbean=this.tenantDao.selectTenantByWindfarm(bean.getWindFarm());
+			bean.setTenantDomain(tbean.getTenantDomain());
+			bean.setTenantId(tbean.getId());
 			this.windFarmConfigDao.insert(bean);
 			return Result.data(Constants.EQU_SUCCESS,"成功");
 		}

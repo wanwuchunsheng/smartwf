@@ -18,3 +18,6 @@ public class SystemManApplication {
 		SpringApplication.run(SystemManApplication.class, args);
 	}
 }
+
+
+

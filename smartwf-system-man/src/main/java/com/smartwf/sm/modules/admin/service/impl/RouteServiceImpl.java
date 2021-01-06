@@ -112,6 +112,16 @@ public class RouteServiceImpl implements RouteService{
 		map.put("value", ppg.getInstalledCapacity());
 		map.put("unit", "MW");
 		maplist.put("installedCapacity", map);
+		//可利用率
+		map=new HashMap<>();
+		map.put("value", ppg.getAvailability());
+		map.put("unit", "%");
+		maplist.put("availability", map);
+		//等效利用小时
+		map=new HashMap<>();
+		map.put("value", ppg.getEquivalentUtilHours());
+		map.put("unit", "H");
+		maplist.put("equivalentUtilHours", map);
 		//返回
 		return Result.data(Constants.EQU_SUCCESS,maplist);
 	}

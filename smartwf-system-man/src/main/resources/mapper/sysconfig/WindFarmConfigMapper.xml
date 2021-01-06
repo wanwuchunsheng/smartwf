@@ -40,6 +40,8 @@
 			b.status,
 			b.remark,
 			b.type,
+			b.availability,
+			b.equivalentUtilHours,
 			(select pro_name from sys_province where pro_code=b.pro_code) as proName,
 	        (select name from sys_city where code=b.city_code) as cityName,
 	        (select name from sys_area where code=b.area_code) as areaName,
@@ -59,7 +61,9 @@
 			sum(daily_generation) as daily_generation,
 			sum(cumulative_generation) as cumulative_generation,
 			sum(real_time_capacity) as real_time_capacity,
-			sum(installed_capacity) as installed_capacity
+			sum(installed_capacity) as installed_capacity,
+			sum(availability) as availability,
+			sum(equivalent_util_hours) as equivalent_util_hours
 		 from basic_windfarm_config where 1=1
 		 <if test="bean.tenantDomain != null ">
               and tenant_domain=#{bean.tenantDomain}

@@ -203,6 +203,12 @@ public interface TenantDao extends BaseMapper<Tenant> {
      */
 	List<Map<String, String>> initWeatherTenant();
 
+	/**
+     * 查询租户信息
+     * @return
+     */
+	Tenant selectTenantByWindfarm(@Param("windFarm") Integer windFarm);
+
 	
     
 }
