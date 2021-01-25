@@ -103,6 +103,14 @@ public interface FaultOverviewDao extends BaseMapper<FaultInformation> {
    	 * @return
    	 */
 	List<Map<String,Object>> selectFaultRecordByIncidentType(@Param("bean") FaultInformationVO bean);
+	/**
+	 * 故障，警告，缺陷全局未处理数统计
+   	 * @author WCH
+   	 * @dateTime 2020-7-20 17:55:35
+   	 * @param bean
+   	 * @return
+	 * */
+	List<Map<String, Integer>> selectFaultStatusByAll(@Param("bean") FaultInformationVO bean);
 	
 
 }

@@ -181,4 +181,26 @@
 	  ) a GROUP BY a.incident_type order by a.incident_type asc
     </select>
     
+    
+    <!-- 故障/警告/缺陷 -未处理总数 -->
+    <select id="selectFaultStatusByAll" resultType="java.util.Map">
+       select 
+			case incident_type 
+				when 1 then 'fault'
+				when 2 then 'defect'
+				when 3 then 'alert'
+			else 'null'
+			end as name,
+			count(*) as value
+		from fault_information 
+		where alarm_status=0  
+		<if test="bean.tenantDomain != null ">
+             and tenant_domain = #{bean.tenantDomain}
+        </if>
+        <if test="bean.windFarm != null ">
+          and wind_farm in (${bean.windFarm}) 
+        </if>
+		group by incident_type
+    </select>
+    
 </mapper>

@@ -16,6 +16,7 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultOverviewService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
@@ -55,6 +56,8 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		List<FaultInformationVO> alarm= this.faultOverviewDao.selectFaultTypeByAlarm(bean);
 		//2统计缺陷
 		List<FaultInformationVO> defect= this.faultOverviewDao.selectFaultTypeByDefect(bean);
+		//故障，警告，缺陷全局未处理数统计
+		List<Map<String,Integer>> stList=this.faultOverviewDao.selectFaultStatusByAll(bean);
 		//封装故障
 		if(fault!=null && fault.size()>0) {
 			master =new String[fault.size()][2];
@@ -68,6 +71,15 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 			fr.put("id", 0);
 			fr.put("title", "故障");
 			fr.put("content",master);
+			//故障未处理数
+			int val=0;
+			for( Map<String,Integer> m:stList) {
+				if("fault".equals(m.get("name"))) {
+					val=Convert.toInt( m.get("value"));
+					break;
+				}
+			}
+			fr.put("fault", val);
 			list.add(fr);
 		}
 		
@@ -84,6 +96,15 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 			fr.put("id", 1);
 			fr.put("title", "报警");
 			fr.put("content",master);
+			//警告未处理数
+			int val=0;
+			for( Map<String,Integer> m:stList) {
+				if("alert".equals(m.get("name"))) {
+					val=Convert.toInt( m.get("value"));
+					break;
+				}
+			}
+			fr.put("alert", val);
 			list.add(fr);
 		}
 		//封装缺陷
@@ -99,6 +120,15 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 			fr.put("id", 2);
 			fr.put("title", "缺陷");
 			fr.put("content",master);
+			//缺陷未处理数
+			int val=0;
+			for( Map<String,Integer> m:stList) {
+				if("defect".equals(m.get("name"))) {
+					val=Convert.toInt( m.get("value"));
+					break;
+				}
+			}
+			fr.put("defect", val);
 			list.add(fr);
 		}
 		//返回结果
