@@ -39,6 +39,10 @@ public class UserInfoVO extends UserInfo{
 	 *  角色id
 	 */
 	private String roleIds; 
+	/**
+	 *  角色英文名称
+	 */
+	private String roleEngName; 
 	
 	/**
 	 * 组织架构

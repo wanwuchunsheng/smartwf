@@ -285,7 +285,8 @@
 		      group_concat(postIds separator ',') as postIds,
 		      group_concat(postName separator ',') as postName,
 		      (select group_concat(b1.id separator ',') from sys_user_role a1,sys_role b1 where a1.role_id = b1.id and f.id=user_id and f.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as roleIds, 
-					(select group_concat(b1.role_name separator ',') from sys_user_role a1,sys_role b1 where a1.role_id = b1.id and f.id=user_id and f.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as roleName 
+			  (select group_concat(b1.eng_name separator ',') from sys_user_role a1,sys_role b1 where a1.role_id = b1.id and f.id=user_id and f.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as roleEngName,		
+			  (select group_concat(b1.role_name separator ',') from sys_user_role a1,sys_role b1 where a1.role_id = b1.id and f.id=user_id and f.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as roleName 
 		 from (
 		   select 
 				  a.id,
