@@ -26,4 +26,12 @@ public interface WikiService {
      * @return
      */
 	Result<?> selectUserOrganizationByOrgId(String tenantId, String orgId);
+
+	/**
+     * @Description：知识中心-查询所有用户
+     * @param tenantId
+     * @param orgId
+     * @return
+     */
+	Result<?> selectUserInfoByAll(Integer tenantId);
 }

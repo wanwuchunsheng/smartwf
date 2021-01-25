@@ -437,4 +437,9 @@
 				a.tenant_id = b.id
 		) f where f.userDomain=#{user.loginCode}
     </select>
+    
+    <!-- 知识中心-查询租户下所有人 -->
+    <select id="selectUserInfoByAll" resultType="java.util.Map">
+       select id,login_code,user_name,enable from sys_user_info where tenant_id=#{tenantId}
+    </select>
 </mapper>

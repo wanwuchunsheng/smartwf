@@ -76,5 +76,26 @@ public class WikiController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR, "用户ID查询名称失败！"));
     }
+    
+    /**
+     * @Description：知识中心-查询所有用户
+     * @param tenantId
+     * @param orgId
+     * @return
+     */
+    @GetMapping("selectUserInfoByAll")
+    @ApiOperation(value = "查询租户下所有用户接口", notes = "查询租户下所有用户")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> selectUserInfoByAll(Integer tenantId) {
+        try {
+        	Result<?> result= this.wikiService.selectUserInfoByAll(tenantId);
+        	return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            log.error("用户ID查询名称失败！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR, "查询失败！"));
+    }
 
 }

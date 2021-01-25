@@ -75,6 +75,18 @@ public class WikiServiceImpl implements WikiService {
 		return Result.data(Constants.EQU_SUCCESS, map);
 	}
 
+	/**
+     * @Description：知识中心-查询所有用户
+     * @param tenantId
+     * @param orgId
+     * @return
+     */
+	@Override
+	public Result<?> selectUserInfoByAll(Integer tenantId) {
+		List<Map<String,String>> data=this.userInfoDao.selectUserInfoByAll(tenantId);
+		return Result.data(Constants.EQU_SUCCESS, data);
+	}
+
 
    
 }

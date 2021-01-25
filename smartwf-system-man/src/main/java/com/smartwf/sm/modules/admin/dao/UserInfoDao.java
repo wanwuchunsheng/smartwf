@@ -11,9 +11,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.User;
 import com.smartwf.sm.modules.admin.pojo.Role;
-import com.smartwf.sm.modules.admin.pojo.Tenant;
 import com.smartwf.sm.modules.admin.pojo.UserInfo;
-import com.smartwf.sm.modules.admin.pojo.UserRole;
 import com.smartwf.sm.modules.admin.vo.UserInfoVO;
 
 /**
@@ -144,6 +142,14 @@ public interface UserInfoDao extends BaseMapper<UserInfo> {
 	 * @return
 	 */
 	UserInfo selectUserInfoByLoginCode(@Param("user") User user);
+
+	/**
+     * @Description：知识中心-查询所有用户
+     * @param tenantId
+     * @param orgId
+     * @return
+     */
+	List<Map<String,String>> selectUserInfoByAll(@Param("tenantId") Integer tenantId);
 
 
     
