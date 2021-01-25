@@ -97,6 +97,11 @@ public class RouteServiceImpl implements RouteService{
 		map.put("value", ppg.getDailyGeneration());
 		map.put("unit", "MW·h");
 		maplist.put("dailyGeneration", map);
+		//月发电量
+		map=new HashMap<>();
+		map.put("value", ppg.getMonthGeneration());
+		map.put("unit", "MW·h");
+		maplist.put("monthGeneration", map);
 		//累计发电量
 		map=new HashMap<>();
 		map.put("value", ppg.getCumulativeGeneration());

@@ -60,6 +60,10 @@ public class WindfarmConfig implements Serializable {
 	 */
 	private Double dailyGeneration;
 	/**
+	 * 月发电量
+	 */
+	private Double monthGeneration;
+	/**
 	 * 累计发电量
 	 */
 	private Double cumulativeGeneration;

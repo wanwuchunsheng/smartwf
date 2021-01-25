@@ -59,6 +59,7 @@
     <select id="selectPortalPowerGenByParam" resultType="com.smartwf.sm.modules.sysconfig.vo.WindfarmConfigVO">
          select 
 			sum(daily_generation) as daily_generation,
+			sum(month_generation) as month_generation,
 			sum(cumulative_generation) as cumulative_generation,
 			sum(real_time_capacity) as real_time_capacity,
 			sum(installed_capacity) as installed_capacity,
