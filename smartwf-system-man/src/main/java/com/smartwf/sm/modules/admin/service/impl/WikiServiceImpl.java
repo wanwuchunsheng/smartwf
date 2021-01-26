@@ -83,8 +83,12 @@ public class WikiServiceImpl implements WikiService {
      */
 	@Override
 	public Result<?> selectUserInfoByAll(Integer tenantId) {
-		List<Map<String,String>> data=this.userInfoDao.selectUserInfoByAll(tenantId);
-		return Result.data(Constants.EQU_SUCCESS, data);
+		List<Map<String,String>> userData=this.userInfoDao.selectUserInfoByAll(tenantId);
+		List<Map<String,String>> orgData=this.organizationDao.selectWikiOrganizationByAll(tenantId);
+		Map<String,Object> resMap=new HashMap<>();
+		resMap.put("userInfo", userData);
+		resMap.put("org", orgData);
+		return Result.data(Constants.EQU_SUCCESS, resMap);
 	}
 
 

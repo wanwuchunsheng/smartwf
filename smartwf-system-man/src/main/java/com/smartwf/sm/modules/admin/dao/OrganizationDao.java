@@ -114,6 +114,14 @@ public interface OrganizationDao extends BaseMapper<Organization> {
      */
 	List<Map<String, Object>> selectOrganizationByIds(@Param("tenantId") String tenantId, @Param("list") List<String> list);
 
+	/**
+     * @Description：知识中心-查询所有组织机构
+     * @param tenantId
+     * @param orgId
+     * @return
+     */
+	List<Map<String, String>> selectWikiOrganizationByAll(@Param("tenantId") Integer tenantId);
+
 	
 	
 	
