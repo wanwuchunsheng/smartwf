@@ -41,6 +41,7 @@ public class SuperExceptionHandler {
             BindingResult bindingResult = e.getBindingResult();
             return this.binding(bindingResult);
         }
+        log.error("进入统一异常处理。。。");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.failMsg());
     }
 

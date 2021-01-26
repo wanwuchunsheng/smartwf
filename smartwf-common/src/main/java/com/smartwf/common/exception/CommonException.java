@@ -12,7 +12,12 @@ import lombok.Setter;
 public class CommonException extends RuntimeException {
 
 
-    private int code;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private int code;
 
     private String msg;
 
@@ -21,7 +26,7 @@ public class CommonException extends RuntimeException {
         this.msg = super.getMessage();
     }
 
-    public CommonException(Integer code, String msg) {
+    public CommonException(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
