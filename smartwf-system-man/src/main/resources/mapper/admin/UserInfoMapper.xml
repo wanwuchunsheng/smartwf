@@ -252,7 +252,7 @@
         </if>
     </select>
     
-    <!-- 查询所有排班用户  -->
+    <!-- 查询所有排班用户  and b.eng_name=#{shiftGroup}   -->
     <select id="selectUserInfoByRoleParam"  resultType="com.smartwf.sm.modules.admin.vo.UserInfoVO" >
          select 
 		      		f.id,
@@ -326,7 +326,8 @@
 		    and a.id=d2.user_id and d1.id=d2.organization_id
 		    and a.id=e2.user_id and e1.id=e2.post_id
 		    and a.tenant_id=c.tenant_id and b.tenant_id = c.tenant_id and a.tenant_id=d1.tenant_id and a.tenant_id=e1.tenant_id
-			and b.eng_name=#{shiftGroup} and a.tenant_id= (select id from sys_tenant where enable=0 and tenant_domain=#{tenantDomain})
+			
+			and a.tenant_id= (select id from sys_tenant where enable=0 and tenant_domain=#{tenantDomain})
 			<if test="windFarm != null ">
 		    and d1.id=#{windFarm}
 		    </if>
@@ -334,7 +335,7 @@
     </select>
     
     
-     <!-- 排班用户主键查询 -->
+     <!-- 排班用户主键查询  and b.eng_name=#{shiftGroup}  -->
     <select id="selectUserInfoByRoleByUserId"  resultType="com.smartwf.sm.modules.admin.vo.UserInfoVO" >
          select 
 		  a.id,
@@ -370,7 +371,8 @@
 			(select group_concat(b1.role_name separator ',') from sys_user_role a1,sys_role b1 where a1.role_id = b1.id and a.id=user_id and a.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as roleName 
 		from sys_user_info  a, sys_role b, sys_user_role c 
 		where a.id=c.user_id and b.id= c.role_id and a.tenant_id=c.tenant_id and b.tenant_id = c.tenant_id
-		and b.eng_name=#{shiftGroup} and b.tenant_id= (select id from sys_tenant where enable=0 and tenant_domain=#{tenantDomain} ) 
+		
+		and b.tenant_id= (select id from sys_tenant where enable=0 and tenant_domain=#{tenantDomain} ) 
 		and a.id in (${ids})
     </select>
     

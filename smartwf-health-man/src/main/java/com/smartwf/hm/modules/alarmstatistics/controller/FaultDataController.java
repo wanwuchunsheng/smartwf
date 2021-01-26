@@ -24,6 +24,7 @@ import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultDataService;
 import com.smartwf.hm.modules.alarmstatistics.vo.DefectVO;
 
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -118,6 +119,9 @@ public class FaultDataController {
     })
     public ResponseEntity<Result<?>> saveDefect(DefectVO bean,HttpServletRequest request) {
         try {
+        	if(StrUtil.isBlank(bean.getStartTime()) || bean.getStartTime().length()!=19) {
+        		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.INTERNAL_SERVER_ERROR,"故障起始时间格式不符合接口规范！"));
+        	}
         	//获取前端上传的文件列表
             List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
             StringBuffer sb=null;
