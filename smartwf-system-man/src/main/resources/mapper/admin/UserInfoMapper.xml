@@ -368,12 +368,14 @@
 			(select group_concat(role_id separator ',') from sys_user_role where a.id=user_id and a.tenant_id=tenant_id group by tenant_id,user_id) as roleIds,
             (select group_concat(b1.org_name separator ',') from sys_user_organization a1,sys_organization b1  where a1.organization_id = b1.id and a.id=a1.user_id and a.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as organizationName,
 			(select group_concat(b1.post_name separator ',') from sys_user_post a1,sys_post b1 where a1.post_id = b1.id and a.id=user_id and a.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as postName,
+			(select group_concat(b1.eng_name separator ',') from sys_user_role a1,sys_role b1 where a1.role_id = b1.id and a.id=user_id and a.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as roleEngName,
 			(select group_concat(b1.role_name separator ',') from sys_user_role a1,sys_role b1 where a1.role_id = b1.id and a.id=user_id and a.tenant_id=a1.tenant_id group by a1.tenant_id,a1.user_id) as roleName 
 		from sys_user_info  a, sys_role b, sys_user_role c 
 		where a.id=c.user_id and b.id= c.role_id and a.tenant_id=c.tenant_id and b.tenant_id = c.tenant_id
 		
 		and b.tenant_id= (select id from sys_tenant where enable=0 and tenant_domain=#{tenantDomain} ) 
 		and a.id in (${ids})
+		 group by a.id
     </select>
     
     
