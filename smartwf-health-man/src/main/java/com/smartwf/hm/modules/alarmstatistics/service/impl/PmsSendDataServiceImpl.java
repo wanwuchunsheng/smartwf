@@ -123,7 +123,7 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		}
 		json1.put("orderSource", orderSource);
 		json2.put("source",orderSource );
-		json2.put("taskContent", fim.getId()+taskContent);
+		json2.put("taskContent", taskContent);
 		json3.put("assetId", fim.getAssetNumber());
 		//添加第3层
 		jsonList= new ArrayList<>(16);
@@ -207,7 +207,7 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		}
 		json1.put("orderSource", orderSource);
 		json2.put("source",orderSource );
-		json2.put("taskContent", fim.getId()+taskContent);
+		json2.put("taskContent", taskContent);
 		json3.put("assetId", fim.getAssetNumber());
 		//添加第3层
 		jsonList= new ArrayList<>(16);
