@@ -278,6 +278,8 @@ public class UserInfoController {
     })
     public ResponseEntity<Result<?>> selectUserInfoByRoleByUserId( String tenantDomain,String windFarm,String ids) {
         try {
+           //去除字符串前后逗号
+           ids=ids.replaceAll("^,*|,*$", "");
            Result<?> userInfoList= this.userService.selectUserInfoByRoleByUserId(tenantDomain,windFarm,ids);
        	   return ResponseEntity.status(HttpStatus.OK).body(userInfoList);
         } catch (Exception e) {

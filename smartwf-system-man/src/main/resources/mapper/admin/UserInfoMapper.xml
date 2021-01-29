@@ -331,6 +331,7 @@
 			<if test="windFarm != null ">
 		    and d1.id=#{windFarm}
 		    </if>
+		    group by a.id
 		) f group by f.id order by f.id
     </select>
     
