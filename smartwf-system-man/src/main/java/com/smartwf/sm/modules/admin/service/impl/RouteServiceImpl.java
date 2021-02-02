@@ -247,7 +247,7 @@ public class RouteServiceImpl implements RouteService{
 		String res=this.redisService.get(locationWf);
 		if(StrUtil.isNotBlank(res)) {
 			//直接将值返回
-			listmap.add(JSONUtil.toBean(res, Map.class));
+			listmap.add(JSONUtil.parseObj(res));
 		}else {
 			map=new HashMap<>();
 			map.put("proName", tcf.getProName());
@@ -262,7 +262,7 @@ public class RouteServiceImpl implements RouteService{
 			String resWt=this.redisService.get(locationWt);
 			if(StrUtil.isNotBlank(resWt)) {
 				//直接将值返回
-				listmap.add(JSONUtil.toBean(resWt, Map.class));
+				listmap.add(JSONUtil.parseObj(resWt));
 			}else {
 				map=new HashMap<>();
 				map.put("proName", wt.getProName());
@@ -292,8 +292,9 @@ public class RouteServiceImpl implements RouteService{
 				map.put("key", wc.getApiKey());
 				//发送http get请求
 				String resJson=HttpRequest.get(wc.getApiUrl()).form(map).timeout(60000).execute().body();
-				Map<String,Object> resmap=JSONUtil.toBean(resJson,Map.class);
-				map.put("weather", resmap.get("now"));
+				Map<String,Object> resmap=JSONUtil.parseObj(resJson);
+				//map.put("weather", resmap.get("now"));
+				map.put("weather", resmap.get("now")==null?"":resmap.get("now"));
 				map.put("type", type);
 			    //保存redis，设置时间1小时
 				this.redisService.set(location,JSONUtil.toJsonStr(map), 1800);
