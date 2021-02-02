@@ -45,9 +45,6 @@ public class SecurityIncidentsController {
 	private SecurityIncidentsService securityIncidentsService;
 	
 	@Autowired
-	private DefectService defectService;
-	
-	@Autowired
 	private SFtpConfig config;
 	
 
@@ -85,7 +82,7 @@ public class SecurityIncidentsController {
 	 * @param id
 	 * @return
 	 */
-    @PostMapping("selectSecurityIncidentsByPage")
+    @PostMapping("selectSecurityIncidentsById")
     @ApiOperation(value = "安全事故主键查询接口", notes = "安全事故主键查询")
     @ApiImplicitParams({
 	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),

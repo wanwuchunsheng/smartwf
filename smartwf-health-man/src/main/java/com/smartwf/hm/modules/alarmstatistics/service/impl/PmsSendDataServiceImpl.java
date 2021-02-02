@@ -142,7 +142,7 @@ public class PmsSendDataServiceImpl implements PmsSendDataService {
 		log.info(JSONUtil.toJsonStr(json1));
 		String url=new StringBuffer().append(pmsServiceUri).append("/workOrder/add").toString();
 		String res=HttpRequest.post(url).header(Constants.SESSION_ID,  user.getSessionId()).form(mapform).timeout(60000).execute().body();
-		log.info("故障转工单返回："+res);
+		log.info("故障转工单返回：",res);
 		if(StringUtils.isNotBlank(res)) {
 			Map<String,Object> resmap=JSONUtil.parseObj(res);
 			if(Constants.EQU_SUCCESS !=Convert.toInt(resmap.get("code"))) {
