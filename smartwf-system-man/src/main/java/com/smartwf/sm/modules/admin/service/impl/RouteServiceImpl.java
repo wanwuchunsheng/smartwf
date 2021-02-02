@@ -269,6 +269,7 @@ public class RouteServiceImpl implements RouteService{
 				map.put("cityName", wt.getCityName());
 				map.put("areaName", wt.getAreaName());
 				map.put("windfarmName", wt.getWindFarmTitle());
+				map.put("windfarmId", wt.getWindFarm());
 				listmap.add(requestWeather(locationWt, "1",map));
 			}
 		}
@@ -293,7 +294,6 @@ public class RouteServiceImpl implements RouteService{
 				//发送http get请求
 				String resJson=HttpRequest.get(wc.getApiUrl()).form(map).timeout(60000).execute().body();
 				Map<String,Object> resmap=JSONUtil.parseObj(resJson);
-				//map.put("weather", resmap.get("now"));
 				map.put("weather", resmap.get("now")==null?"":resmap.get("now"));
 				map.put("type", type);
 			    //保存redis，设置时间1小时
