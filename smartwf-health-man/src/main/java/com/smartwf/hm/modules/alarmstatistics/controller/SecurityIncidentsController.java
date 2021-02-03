@@ -5,10 +5,13 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,7 +85,7 @@ public class SecurityIncidentsController {
 	 * @param id
 	 * @return
 	 */
-    @PostMapping("selectSecurityIncidentsById")
+    @GetMapping("selectSecurityIncidentsById")
     @ApiOperation(value = "安全事故主键查询接口", notes = "安全事故主键查询")
     @ApiImplicitParams({
 	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
@@ -104,7 +107,7 @@ public class SecurityIncidentsController {
 	 * @param id
 	 * @return
 	 */
-    @PostMapping("selectSecurityIncidentsByFiles")
+    @GetMapping("selectSecurityIncidentsByFiles")
     @ApiOperation(value = "安全事故附件查询接口", notes = "安全事故附件查询")
     @ApiImplicitParams({
 	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
@@ -191,7 +194,7 @@ public class SecurityIncidentsController {
 	 * @param id
 	 * @return
 	 */
-    @PostMapping("updateSecurityIncidents")
+    @PutMapping("updateSecurityIncidents")
     @ApiOperation(value = "安全事故添加接口", notes = "安全事故添加查询")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true),

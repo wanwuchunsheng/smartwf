@@ -50,4 +50,12 @@ public interface SecurityIncidentsService {
 	 */
 	Result<?> updateSecurityIncidents(SecurityIncidentsVO bean);
 
+	/**
+ 	 *  功能说明：安全生产多少天
+ 	 *    根据事故记录分析系统运行天数
+ 	 * @author WCH
+ 	 * @return
+ 	 */
+	Result<?> selectSafetyProductionTime(SecurityIncidentsVO bean);
+
 }

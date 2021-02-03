@@ -59,7 +59,7 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 		}
 		//发生地质
 		if (StrUtil.isNotEmpty(bean.getLocality())) {
-			queryWrapper.eq("locality", bean.getLocality());
+			 queryWrapper.like("locality", Constants.PER_CENT + bean.getLocality() + Constants.PER_CENT);
 		}
 		//事故编码
 		if (StrUtil.isNotEmpty(bean.getIncidentCode())) {
@@ -82,7 +82,9 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 	 */
 	@Override
 	public Result<?> selectSecurityIncidentsById(SecurityIncidents bean) {
-		SecurityIncidents datas= this.securityIncidentsDao.selectById(bean.getId());
+		QueryWrapper<SecurityIncidents> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("id", bean.getId());
+		List<SecurityIncidents> datas= this.securityIncidentsDao.selectList(queryWrapper);
 		return Result.data(Constants.EQU_SUCCESS, datas);
 	}
 
@@ -114,8 +116,8 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 		bean.setCreateUserId(user.getId());
 		bean.setCreateUserName(user.getUserName());
 		bean.setUpdateTime(bean.getCreateTime());
-		bean.setUpdateUserId(bean.getUpdateUserId());
-		bean.setUpdateUserName(bean.getUpdateUserName());
+		bean.setUpdateUserId(bean.getCreateUserId());
+		bean.setUpdateUserName(bean.getCreateUserName());
 		bean.setIncidentStatus(Constants.ZERO);
 		//事故编码 随机生成
 		bean.setIncidentCode(IdUtil.createSnowflake(1, 1).nextIdStr());
@@ -176,6 +178,18 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 			}
 		}
 		return Result.msg(Constants.EQU_SUCCESS,"修改成功！");
+	}
+
+	/**
+ 	 *  功能说明：安全生产多少天
+ 	 *    根据事故记录分析系统运行天数
+ 	 * @author WCH
+ 	 * @return
+ 	 */
+	@Override
+	public Result<?> selectSafetyProductionTime(SecurityIncidentsVO bean) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

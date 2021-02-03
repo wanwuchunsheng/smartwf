@@ -17,7 +17,9 @@ import com.smartwf.common.pojo.User;
 import com.smartwf.hm.modules.admin.service.GlobalService;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
 import com.smartwf.hm.modules.alarmstatistics.service.AlarmInboxService;
+import com.smartwf.hm.modules.alarmstatistics.service.SecurityIncidentsService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
+import com.smartwf.hm.modules.alarmstatistics.vo.SecurityIncidentsVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,6 +44,9 @@ public class GlobalDataController {
 	
 	@Autowired
     private GlobalService globalService;
+	
+	@Autowired
+    private SecurityIncidentsService securityIncidentsService;
 
     /**
      * @Description：认证登录
@@ -119,7 +124,7 @@ public class GlobalDataController {
 	 * @param bean
 	 * @return
 	 */
-    @PostMapping("selectFaultRecordByAll")
+      @PostMapping("selectFaultRecordByAll")
       @ApiOperation(value = "查询（故障、警告、缺陷）操作记录接口", notes = "查询操作记录")
       @ApiImplicitParams({
   	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
@@ -133,6 +138,28 @@ public class GlobalDataController {
 	           log.error("查询所有警告操作记录信息错误！{}", e.getMessage(), e);
 	       }
 	       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg("查询所有警告操作记录信息错误！"));
+      }
+      
+     /**
+ 	 *  功能说明：安全生产多少天
+ 	 *    根据事故记录分析系统运行天数
+ 	 * @author WCH
+ 	 * @return
+ 	 */
+      @GetMapping("selectSafetyProductionTime")
+      @ApiOperation(value = "安全生产多少天统计接口", notes = "安全生产多少天统计")
+      @ApiImplicitParams({
+      	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+      	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String")
+      })
+      public ResponseEntity<Result<?>> selectSafetyProductionTime(SecurityIncidentsVO bean) {
+          try {
+             Result<?> result= this.securityIncidentsService.selectSafetyProductionTime(bean);
+         	 return ResponseEntity.ok(result);
+          } catch (Exception e) {
+              log.error("安全生产多少天统计错误！{}", e.getMessage(), e);
+          }
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.ERRCODE502012,"安全生产多少天统计错误！"));
       }
    
 }
