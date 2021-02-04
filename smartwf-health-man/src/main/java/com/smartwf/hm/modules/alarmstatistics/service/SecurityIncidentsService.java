@@ -58,4 +58,11 @@ public interface SecurityIncidentsService {
  	 */
 	Result<?> selectSafetyProductionTime(SecurityIncidentsVO bean);
 
+	/**
+	 * @Description: 安全事故-删除附件
+	 * @param id
+	 * @return
+	 */
+	Result<?> deleteSecurityIncidentsByFiles(SecurityIncidentsVO bean);
+
 }

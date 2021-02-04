@@ -1,14 +1,15 @@
 package com.smartwf.hm.modules.alarmstatistics.controller;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,7 +24,6 @@ import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.config.ftp.SFtpConfig;
 import com.smartwf.hm.config.ftp.SFtpUtil;
 import com.smartwf.hm.modules.alarmstatistics.pojo.SecurityIncidents;
-import com.smartwf.hm.modules.alarmstatistics.service.DefectService;
 import com.smartwf.hm.modules.alarmstatistics.service.SecurityIncidentsService;
 import com.smartwf.hm.modules.alarmstatistics.vo.SecurityIncidentsVO;
 
@@ -89,7 +89,7 @@ public class SecurityIncidentsController {
     @ApiOperation(value = "安全事故主键查询接口", notes = "安全事故主键查询")
     @ApiImplicitParams({
 	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true)
     })
     public ResponseEntity<Result<?>> selectSecurityIncidentsById(SecurityIncidents bean) {
@@ -111,7 +111,7 @@ public class SecurityIncidentsController {
     @ApiOperation(value = "安全事故附件查询接口", notes = "安全事故附件查询")
     @ApiImplicitParams({
 	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true)
     })
     public ResponseEntity<Result<?>> selectSecurityIncidentsByFiles(SecurityIncidents bean) {
@@ -171,7 +171,7 @@ public class SecurityIncidentsController {
     	                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, fl.getInputStream());
         	        	if(flag) {
         	        		//上传成功，
-        	        		sb.append(datdDirectory).append(",");
+        	        		sb.append(datdDirectory).append(",,").append(fileName).append("&&");
         	        	}
         	        }
             	}
@@ -233,8 +233,8 @@ public class SecurityIncidentsController {
     	                //上传文件到sftp
     	                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, fl.getInputStream());
         	        	if(flag) {
-        	        		//上传成功，
-        	        		sb.append(datdDirectory).append(",");
+        	        		//上传成功
+        	        		sb.append(datdDirectory).append(",,").append(fileName).append("&&");
         	        	}
         	        }
             	}
@@ -252,4 +252,52 @@ public class SecurityIncidentsController {
     }
     
  
+    /**
+	 * @Description: 安全事故-删除附件
+	 * @param id
+	 * @return
+	 */
+    @DeleteMapping("deleteSecurityIncidentsByFiles")
+    @ApiOperation(value = "安全事故附件删除接口（单删除）", notes = "安全事故附件删除")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "filePath", value = "文件路径", dataType = "String",required = true)
+    })
+    public ResponseEntity<Result<?>> deleteSecurityIncidentsByFiles(SecurityIncidentsVO bean) {
+        try {
+        	//删除文件
+            boolean flag = SFtpUtil.deleteFile(config,bean.getFilePath());
+        	if(flag) {
+        		//删除数据库表记录
+        		Result<?> result = this.securityIncidentsService.deleteSecurityIncidentsByFiles(bean);
+            	return ResponseEntity.status(HttpStatus.OK).body(result);
+        	}
+        	return ResponseEntity.ok(Result.msg(Constants.EQU_SUCCESS, "事故附件删除错误！"));
+        } catch (Exception e) {
+            log.error("安全事故附件删除错误！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST, "安全事故附件删除错误！"));
+    }
+    
+    /**
+	 * @Description: 安全事故-删除附件
+	 * @param id
+	 * @return
+	 */
+    @PostMapping("downloadByFiles")
+    @ApiOperation(value = "安全事故附件下载接口", notes = "安全事故附件下载接口")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "filePath", value = "文件路径", dataType = "String",required = true)
+    })
+    public String downloadByFiles(SecurityIncidentsVO bean) {
+        try {
+        	//删除文件
+            File flag = SFtpUtil.downloadFile(config,bean.getFilePath());
+        	return "";
+        } catch (Exception e) {
+            log.error("安全事故附件下载错误！{}", e.getMessage(), e);
+        }
+        return "";
+    }
+    
 }

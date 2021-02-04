@@ -21,6 +21,7 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.SecurityIncidents;
 import com.smartwf.hm.modules.alarmstatistics.service.SecurityIncidentsService;
 import com.smartwf.hm.modules.alarmstatistics.vo.SecurityIncidentsVO;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
@@ -124,14 +125,17 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 		this.securityIncidentsDao.insert(bean);
 		//添加附件
 		if(StrUtil.isNotBlank(bean.getFilePath()) ) {
-			String[] str=bean.getFilePath().split(",");
+			//123.png,操作说明;222.png
+			String[] str=bean.getFilePath().split("&&");
 			if(str != null && str.length>0) {
 				FileUploadRecord fuRecord=null;
 				for(String s:str) {
+					String[] cont=s.split(",,");
 					fuRecord= new FileUploadRecord();
 					fuRecord.setPid(bean.getId());
-					fuRecord.setFilePath(s);
+					fuRecord.setFilePath(Convert.toStr(cont[0]));
 					fuRecord.setTenantDomain(bean.getTenantDomain());
+					fuRecord.setRemark(Convert.toStr(cont[1]));
 					fuRecord.setCreateTime(new Date());
 					fuRecord.setCreateUserId(user.getId());
 					fuRecord.setCreateUserName(user.getUserName());
@@ -162,14 +166,16 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 		this.fileUploadRecordDao.delete(queryWrapper);
 		//重新添加附件
 		if(StrUtil.isNotBlank(bean.getFilePath()) ) {
-			String[] str=bean.getFilePath().split(",");
+			String[] str=bean.getFilePath().split("&&");
 			if(str != null && str.length>0) {
 				FileUploadRecord fuRecord=null;
 				for(String s:str) {
+					String[] cont=s.split(",,");
 					fuRecord= new FileUploadRecord();
 					fuRecord.setPid(bean.getId());
-					fuRecord.setFilePath(s);
+					fuRecord.setFilePath(Convert.toStr(cont[0]));
 					fuRecord.setTenantDomain(bean.getTenantDomain());
+					fuRecord.setRemark(Convert.toStr(cont[1]));
 					fuRecord.setCreateTime(new Date());
 					fuRecord.setCreateUserId(user.getId());
 					fuRecord.setCreateUserName(user.getUserName());
@@ -190,6 +196,20 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 	public Result<?> selectSafetyProductionTime(SecurityIncidentsVO bean) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * @Description: 安全事故-删除附件
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public Result<?> deleteSecurityIncidentsByFiles(SecurityIncidentsVO bean) {
+		QueryWrapper<FileUploadRecord> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("pid", bean.getFilePath());
+		queryWrapper.eq("file_path", bean.getFilePath());
+		this.fileUploadRecordDao.delete(queryWrapper);
+		return Result.msg(Constants.EQU_SUCCESS, "删除成功");
 	}
 
 }
