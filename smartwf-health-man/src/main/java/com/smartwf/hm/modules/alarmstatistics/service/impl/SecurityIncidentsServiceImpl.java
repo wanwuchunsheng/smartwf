@@ -2,8 +2,8 @@ package com.smartwf.hm.modules.alarmstatistics.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
+import com.smartwf.common.service.RedisService;
 import com.smartwf.common.thread.UserThreadLocal;
 import com.smartwf.hm.modules.alarmstatistics.dao.FileUploadRecordDao;
 import com.smartwf.hm.modules.alarmstatistics.dao.SecurityIncidentsDao;
@@ -24,6 +25,7 @@ import com.smartwf.hm.modules.alarmstatistics.vo.SecurityIncidentsVO;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 /**
  * 安全事故实现类
@@ -39,6 +41,9 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 	
 	@Autowired
 	private FileUploadRecordDao fileUploadRecordDao;
+	
+	@Autowired
+	private RedisService redisService;
 	
 	/**
 	 * @Description: 安全事故-分页查询
@@ -125,7 +130,6 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 		this.securityIncidentsDao.insert(bean);
 		//添加附件
 		if(StrUtil.isNotBlank(bean.getFilePath()) ) {
-			//123.png,操作说明;222.png
 			String[] str=bean.getFilePath().split("&&");
 			if(str != null && str.length>0) {
 				FileUploadRecord fuRecord=null;
@@ -194,8 +198,8 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
  	 */
 	@Override
 	public Result<?> selectSafetyProductionTime(SecurityIncidentsVO bean) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String,Object> map = JSONUtil.parseObj(redisService.get("safetyProductionTime"));
+		return Result.data(Constants.EQU_SUCCESS, map);
 	}
 
 	/**

@@ -149,8 +149,8 @@ public class GlobalDataController {
       @GetMapping("selectSafetyProductionTime")
       @ApiOperation(value = "安全生产多少天统计接口", notes = "安全生产多少天统计")
       @ApiImplicitParams({
-      	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-      	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String")
+      	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true ),
+      	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true )
       })
       public ResponseEntity<Result<?>> selectSafetyProductionTime(SecurityIncidentsVO bean) {
           try {
