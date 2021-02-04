@@ -212,4 +212,18 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 		return Result.msg(Constants.EQU_SUCCESS, "删除成功");
 	}
 
+	/**
+	 * 功能说明：通过主键,路径查询附件信息
+	 * @author WCH
+	 * @Date 2021年2月4日13:59:17
+	 * 
+	 * */
+	@Override
+	public FileUploadRecord selectFileUploadRecord(SecurityIncidentsVO bean) {
+		QueryWrapper<FileUploadRecord> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("pid", bean.getFilePath());
+		queryWrapper.eq("file_path", bean.getFilePath());
+		return this.fileUploadRecordDao.selectOne(queryWrapper);
+	}
+
 }

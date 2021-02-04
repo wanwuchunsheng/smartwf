@@ -1,13 +1,17 @@
 package com.smartwf.hm.modules.alarmstatistics.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +27,7 @@ import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.config.ftp.SFtpConfig;
 import com.smartwf.hm.config.ftp.SFtpUtil;
+import com.smartwf.hm.modules.alarmstatistics.pojo.FileUploadRecord;
 import com.smartwf.hm.modules.alarmstatistics.pojo.SecurityIncidents;
 import com.smartwf.hm.modules.alarmstatistics.service.SecurityIncidentsService;
 import com.smartwf.hm.modules.alarmstatistics.vo.SecurityIncidentsVO;
@@ -280,24 +285,37 @@ public class SecurityIncidentsController {
     }
     
     /**
-	 * @Description: 安全事故-删除附件
+	 * @Description: 安全事故-下载附件
+	 * @author WCH
 	 * @param id
 	 * @return
 	 */
     @PostMapping("downloadByFiles")
     @ApiOperation(value = "安全事故附件下载接口", notes = "安全事故附件下载接口")
     @ApiImplicitParams({
-    	    @ApiImplicitParam(paramType = "query", name = "filePath", value = "文件路径", dataType = "String",required = true)
+    	    @ApiImplicitParam(paramType = "query", name = "filePath", value = "文件路径", dataType = "String",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true)
     })
-    public String downloadByFiles(SecurityIncidentsVO bean) {
+    public ResponseEntity<Object> downloadByFiles(SecurityIncidentsVO bean) {
         try {
-        	//删除文件
-            File flag = SFtpUtil.downloadFile(config,bean.getFilePath());
-        	return "";
+        	//通过主键,路径查询附件信息
+        	FileUploadRecord fur=this.securityIncidentsService.selectFileUploadRecord(bean);
+        	//下载文件
+            File file = SFtpUtil.downloadFile(config,bean.getFilePath());
+            //获取原始文件名称
+            String fileName = fur.getRemark();
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", String.format("attachment;filename=\"%s", fileName));
+            headers.add("Cache-Control", "no-cache,no-store,must-revalidate");
+            headers.add("Pragma", "no-cache");
+            headers.add("Expires", "0");
+            ResponseEntity<Object> responseEntity = ResponseEntity.ok().headers(headers).contentLength(file.length()).contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
+            return responseEntity;
         } catch (Exception e) {
             log.error("安全事故附件下载错误！{}", e.getMessage(), e);
         }
-        return "";
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST, "安全事故附件下载错误！"));
     }
     
 }

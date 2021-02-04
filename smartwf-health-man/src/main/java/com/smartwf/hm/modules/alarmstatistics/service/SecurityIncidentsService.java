@@ -2,6 +2,7 @@ package com.smartwf.hm.modules.alarmstatistics.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
+import com.smartwf.hm.modules.alarmstatistics.pojo.FileUploadRecord;
 import com.smartwf.hm.modules.alarmstatistics.pojo.SecurityIncidents;
 import com.smartwf.hm.modules.alarmstatistics.vo.SecurityIncidentsVO;
 
@@ -64,5 +65,13 @@ public interface SecurityIncidentsService {
 	 * @return
 	 */
 	Result<?> deleteSecurityIncidentsByFiles(SecurityIncidentsVO bean);
+
+	/**
+	 * 功能说明：通过主键,路径查询附件信息
+	 * @author WCH
+	 * @Date 2021年2月4日13:59:17
+	 * 
+	 * */
+	FileUploadRecord selectFileUploadRecord(SecurityIncidentsVO bean);
 
 }
