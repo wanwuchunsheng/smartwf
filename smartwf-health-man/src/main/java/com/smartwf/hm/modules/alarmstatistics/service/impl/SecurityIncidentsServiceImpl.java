@@ -1,9 +1,12 @@
 package com.smartwf.hm.modules.alarmstatistics.service.impl;
 
+import static org.assertj.core.api.Assertions.entry;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -174,7 +177,7 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 			map.put("tenantDomain", bean.getTenantDomain());
 			map.put("windFarm", bean.getWindFarm());
 			//更新redis
-			this.redisService.set( Constants.SAFETYPRODUCTIONTIM_KEY, JSONUtil.toJsonStr(map));
+			this.redisService.set( Constants.SAFETYPRODUCTIONTIM_KEY+bean.getWindFarm(), JSONUtil.toJsonStr(map));
 		}
 		//更新记录审核状态
 		User user= UserThreadLocal.getUser();
@@ -216,11 +219,17 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 	@Override
 	public Result<?> selectSafetyProductionTime(SecurityIncidentsVO bean,HttpServletRequest request) {
 		//根据统计数据
-		String str=redisService.get(Constants.SAFETYPRODUCTIONTIM_KEY);
+		String str=redisService.get(Constants.SAFETYPRODUCTIONTIM_KEY+bean.getWindFarm());
+		Map<String,Object> resMap= new HashMap<String, Object>();
+		if(StrUtil.isBlank(str)) {
+			//空返回默认0
+			resMap.put("totalDays", 0);
+			return Result.data(Constants.EQU_SUCCESS, resMap);
+		}
+		//非空对比起止时间返回相距天数
 		Map<String,Object> map = JSONUtil.parseObj(str);
 		String dateTime= Convert.toStr(map.get("dateTime"));
-		long totalDays = DateUtil.betweenDay( DateUtil.parse(dateTime),new Date(),true);
-		Map<String,Object> resMap= new HashMap<String, Object>();
+		long totalDays = DateUtil.betweenDay(DateUtil.parse(dateTime),new Date(),true);
 		resMap.put("totalDays", totalDays);
 		//判断数据有效期
 		return Result.data(Constants.EQU_SUCCESS, resMap);
@@ -262,16 +271,20 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 	 * */
 	@Override
 	public void initSecurityIncidentsService() {
-		//判断redis是否存在数据
-		String str=redisService.get(Constants.SAFETYPRODUCTIONTIM_KEY);
-		if(StrUtil.isBlank(str)) {
-			//String windFarms=this.redisService.get("initWindfarmTenant");
-			//Map<String,Object> windfarmMap = JSONUtil.parseObj(windFarms);
-			//获取风场
-			Map<String,Object> map = new HashMap<>();
-			map.put("type", 0);
-			map.put("dateTime", DateUtil.formatDateTime(new Date()));
-			this.redisService.set(Constants.SAFETYPRODUCTIONTIM_KEY, JSONUtil.toJsonStr(map));
+		Map<String,Object> map = null;
+		String windFarms=this.redisService.get("initWindfarmTenant");
+		Map<String,Object> windfarmMap = JSONUtil.parseObj(windFarms);
+		for(Entry<String, Object> m: windfarmMap.entrySet()) {
+			String str=redisService.get(Constants.SAFETYPRODUCTIONTIM_KEY+m.getKey());
+			if(StrUtil.isBlank(str)) {
+				//获取风场
+				map = new HashMap<>();
+				map.put("type", 0);
+				map.put("dateTime", DateUtil.formatDateTime(new Date()));
+				map.put("tenantDomain", m.getValue());
+				map.put("windFarm",m.getKey());
+				this.redisService.set(Constants.SAFETYPRODUCTIONTIM_KEY+m.getKey(), JSONUtil.toJsonStr(map));
+			}
 		}
 	}
 
