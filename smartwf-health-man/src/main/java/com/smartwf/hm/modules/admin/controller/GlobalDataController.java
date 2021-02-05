@@ -152,14 +152,13 @@ public class GlobalDataController {
       	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true ),
       	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true )
       })
-      public ResponseEntity<Result<?>> selectSafetyProductionTime(SecurityIncidentsVO bean) {
+      public ResponseEntity<Result<?>> selectSafetyProductionTime(HttpServletRequest request, SecurityIncidentsVO bean) {
           try {
-             Result<?> result= this.securityIncidentsService.selectSafetyProductionTime(bean);
+             Result<?> result= this.securityIncidentsService.selectSafetyProductionTime(bean,request);
          	 return ResponseEntity.ok(result);
           } catch (Exception e) {
               log.error("安全生产多少天统计错误！{}", e.getMessage(), e);
           }
-          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.ERRCODE502012,"安全生产多少天统计错误！"));
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg(Constants.BAD_REQUEST,"安全生产多少天统计错误！"));
       }
-   
 }

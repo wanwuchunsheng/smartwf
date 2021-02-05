@@ -213,11 +213,12 @@ public class SecurityIncidentsController {
     	    @ApiImplicitParam(paramType = "query", name = "powerFacilitiesDamaged", value = "电力设施损坏情况", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "otherFacilitiesDamaged", value = "其他损坏情况", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "adverseSocialInfluence", value = "不良社会影响", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "incidentStatus", value = "状态(0待审核 1通过  2不通过)", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "incidentStatus", value = "状态(0待审核 1通过  2不通过)", dataType = "int", required =true ),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "其他情况", dataType = "String")
     })
     public ResponseEntity<Result<?>> updateSecurityIncidents(HttpServletRequest request, SecurityIncidentsVO bean) {
         try {
+        	/***
         	//获取前端上传的文件列表
             List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
             StringBuffer sb=null;
@@ -248,6 +249,7 @@ public class SecurityIncidentsController {
             if(sb!=null) {
             	bean.setFilePath(sb.toString().trim());
             }
+            */
         	Result<?> result = this.securityIncidentsService.updateSecurityIncidents(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {

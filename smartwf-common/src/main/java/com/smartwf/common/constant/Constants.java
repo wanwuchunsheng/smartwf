@@ -35,6 +35,8 @@ public class Constants {
     public static final String SUPER_TENANT="tenants_super_administrator";
     /** 风场管理员角色 */
     public static final String SUPER_WINDFARM="station_manager";
+    /***安全事故运行天数Key */
+    public static final String SAFETYPRODUCTIONTIM_KEY="safetyProductionTime";
     
     public static final String REDIS_TOPIC = "topic:smartwf_monitor";
     

@@ -1,8 +1,11 @@
 package com.smartwf.hm.modules.alarmstatistics.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
+import com.smartwf.common.handler.UserProfile;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
@@ -23,6 +27,7 @@ import com.smartwf.hm.modules.alarmstatistics.service.SecurityIncidentsService;
 import com.smartwf.hm.modules.alarmstatistics.vo.SecurityIncidentsVO;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -157,19 +162,30 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 	 */
 	@Override
 	public Result<?> updateSecurityIncidents(SecurityIncidentsVO bean) {
+		//审核状态为事故，更新redis时间
+		if(null !=bean.getIncidentStatus() && bean.getIncidentStatus()==Constants.ONE) {
+			//查询对象
+			SecurityIncidents sids=this.securityIncidentsDao.selectById(bean);
+			//封装数据
+			Map<String,Object> map = new HashMap<String,Object>();
+			//type： 0系统统计  1人工干涉统计
+			map.put("type", 0);
+			map.put("dateTime", DateUtil.formatDateTime(sids.getOccurrenceTime()));
+			//更新redis
+			this.redisService.set( Constants.SAFETYPRODUCTIONTIM_KEY, JSONUtil.toJsonStr(map));
+		}
+		//更新记录审核状态
 		User user= UserThreadLocal.getUser();
 		bean.setUpdateTime(new Date());
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		this.securityIncidentsDao.updateById(bean);
-		//保存附件，1删除原有附件  2重新添加附件
-		QueryWrapper<FileUploadRecord> queryWrapper = new QueryWrapper<>();
-		//主键
-		queryWrapper.eq("pid", bean.getId());
-		//删除
-		this.fileUploadRecordDao.delete(queryWrapper);
 		//重新添加附件
 		if(StrUtil.isNotBlank(bean.getFilePath()) ) {
+			//保存附件，1删除原有附件  2重新添加附件
+			QueryWrapper<FileUploadRecord> queryWrapper = new QueryWrapper<>();
+			queryWrapper.eq("pid", bean.getId());
+			this.fileUploadRecordDao.delete(queryWrapper);
 			String[] str=bean.getFilePath().split("&&");
 			if(str != null && str.length>0) {
 				FileUploadRecord fuRecord=null;
@@ -192,14 +208,20 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 
 	/**
  	 *  功能说明：安全生产多少天
- 	 *    根据事故记录分析系统运行天数
  	 * @author WCH
  	 * @return
  	 */
 	@Override
-	public Result<?> selectSafetyProductionTime(SecurityIncidentsVO bean) {
-		Map<String,Object> map = JSONUtil.parseObj(redisService.get("safetyProductionTime"));
-		return Result.data(Constants.EQU_SUCCESS, map);
+	public Result<?> selectSafetyProductionTime(SecurityIncidentsVO bean,HttpServletRequest request) {
+		//根据统计数据
+		String str=redisService.get(Constants.SAFETYPRODUCTIONTIM_KEY);
+		Map<String,Object> map = JSONUtil.parseObj(str);
+		String dateTime= Convert.toStr(map.get("dateTime"));
+		long totalDays = DateUtil.betweenDay( DateUtil.parse(dateTime),new Date(),true);
+		Map<String,Object> resMap= new HashMap<String, Object>();
+		resMap.put("totalDays", totalDays);
+		//判断数据有效期
+		return Result.data(Constants.EQU_SUCCESS, resMap);
 	}
 
 	/**
@@ -228,6 +250,24 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 		queryWrapper.eq("pid", bean.getFilePath());
 		queryWrapper.eq("file_path", bean.getFilePath());
 		return this.fileUploadRecordDao.selectOne(queryWrapper);
+	}
+
+	/**
+	 * 功能说明：初始化安全生产天数 
+	 * @author WCH
+	 * @Date 2021年2月4日13:59:17
+	 * 
+	 * */
+	@Override
+	public void initSecurityIncidentsService() {
+		//判断redis是否存在数据
+		String str=redisService.get(Constants.SAFETYPRODUCTIONTIM_KEY);
+		if(StrUtil.isBlank(str)) {
+			Map<String,Object> map = new HashMap<>();
+			map.put("type", 0);
+			map.put("dateTime", DateUtil.formatDateTime(new Date()));
+			this.redisService.set(Constants.SAFETYPRODUCTIONTIM_KEY, JSONUtil.toJsonStr(map));
+		}
 	}
 
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.hm.modules.alarmstatistics.dao.SecurityIncidentsDao" >
+    
+   <!-- 统计事故距离今天总天数 -->
+   <select id="selectSafetyProductionTotalDays" resultType="java.util.Map">
+        SELECT  TIMESTAMPDIFF(DAY,(
+			 select DATE_FORMAT(occurrence_time,'%Y-%m-%d') from security_incidents where 1=1 
+				<if test="bean.tenantDomain != null ">
+		          and tenant_domain = #{bean.tenantDomain}
+		        </if>
+		        <if test="bean.windFarm != null ">
+		          and wind_farm = #{bean.windFarm}
+		        </if>
+		        <if test="bean.incidentStatus != null ">
+		          and incident_status= #{bean.incidentStatus}
+		        </if>
+			    order by update_time desc limit 0,1
+		),DATE_FORMAT(NOW(), '%Y-%m-%d')) as totalDays 
+   </select>
+   
+   
+   
+</mapper>

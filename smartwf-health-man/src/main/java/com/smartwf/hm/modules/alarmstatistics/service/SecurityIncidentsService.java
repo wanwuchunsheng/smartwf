@@ -1,5 +1,7 @@
 package com.smartwf.hm.modules.alarmstatistics.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FileUploadRecord;
@@ -57,7 +59,7 @@ public interface SecurityIncidentsService {
  	 * @author WCH
  	 * @return
  	 */
-	Result<?> selectSafetyProductionTime(SecurityIncidentsVO bean);
+	Result<?> selectSafetyProductionTime(SecurityIncidentsVO bean,HttpServletRequest request);
 
 	/**
 	 * @Description: 安全事故-删除附件
@@ -73,5 +75,13 @@ public interface SecurityIncidentsService {
 	 * 
 	 * */
 	FileUploadRecord selectFileUploadRecord(SecurityIncidentsVO bean);
+	
+	/**
+	 * 功能说明：初始化安全生产天数
+	 * @author WCH
+	 * @Date 2021年2月4日13:59:17
+	 * 
+	 * */
+	void initSecurityIncidentsService();
 
 }
