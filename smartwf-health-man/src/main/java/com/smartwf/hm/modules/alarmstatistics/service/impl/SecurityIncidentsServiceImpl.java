@@ -171,6 +171,8 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 			//type： 0系统统计  1人工干涉统计
 			map.put("type", 0);
 			map.put("dateTime", DateUtil.formatDateTime(sids.getOccurrenceTime()));
+			map.put("tenantDomain", bean.getTenantDomain());
+			map.put("windFarm", bean.getWindFarm());
 			//更新redis
 			this.redisService.set( Constants.SAFETYPRODUCTIONTIM_KEY, JSONUtil.toJsonStr(map));
 		}
@@ -263,6 +265,9 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 		//判断redis是否存在数据
 		String str=redisService.get(Constants.SAFETYPRODUCTIONTIM_KEY);
 		if(StrUtil.isBlank(str)) {
+			//String windFarms=this.redisService.get("initWindfarmTenant");
+			//Map<String,Object> windfarmMap = JSONUtil.parseObj(windFarms);
+			//获取风场
 			Map<String,Object> map = new HashMap<>();
 			map.put("type", 0);
 			map.put("dateTime", DateUtil.formatDateTime(new Date()));
