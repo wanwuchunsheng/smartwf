@@ -1,7 +1,5 @@
 package com.smartwf.hm.modules.alarmstatistics.service.impl;
 
-import static org.assertj.core.api.Assertions.entry;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,12 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
-import com.smartwf.common.handler.UserProfile;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.common.pojo.User;
 import com.smartwf.common.service.RedisService;
@@ -123,6 +121,7 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 	 * @param id
 	 * @return
 	 */
+	@Transactional(rollbackFor=Exception.class)
 	@Override
 	public Result<?> saveSecurityIncidents(SecurityIncidentsVO bean) {
 		User user= UserThreadLocal.getUser();
@@ -133,9 +132,16 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 		bean.setUpdateUserId(bean.getCreateUserId());
 		bean.setUpdateUserName(bean.getCreateUserName());
 		bean.setIncidentStatus(Constants.ZERO);
-		//事故编码 随机生成
 		bean.setIncidentCode(IdUtil.createSnowflake(1, 1).nextIdStr());
 		this.securityIncidentsDao.insert(bean);
+		//刷新redis记录安全生产多少天
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("type", 0);
+		map.put("dateTime", DateUtil.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
+		map.put("tenantDomain", bean.getTenantDomain());
+		map.put("windFarm", bean.getWindFarm());
+		//更新redis
+		this.redisService.set( Constants.SAFETYPRODUCTIONTIM_KEY+bean.getWindFarm(), JSONUtil.toJsonStr(map));
 		//添加附件
 		if(StrUtil.isNotBlank(bean.getFilePath()) ) {
 			String[] str=bean.getFilePath().split("&&");
@@ -185,7 +191,7 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 		bean.setUpdateUserId(user.getId());
 		bean.setUpdateUserName(user.getUserName());
 		this.securityIncidentsDao.updateById(bean);
-		//重新添加附件
+		//删除后，重新添加附件
 		if(StrUtil.isNotBlank(bean.getFilePath()) ) {
 			//保存附件，1删除原有附件  2重新添加附件
 			QueryWrapper<FileUploadRecord> queryWrapper = new QueryWrapper<>();
