@@ -253,6 +253,8 @@ public class RouteServiceImpl implements RouteService{
 			map.put("proName", tcf.getProName());
 			map.put("cityName", tcf.getCityName());
 			map.put("areaName", tcf.getAreaName());
+			map.put("windfarmId", "");
+			map.put("windfarmName", "");
 			listmap.add(requestWeather(locationWf, "0",map));
 		}
 		//查询各风场天气
@@ -268,7 +270,7 @@ public class RouteServiceImpl implements RouteService{
 				map.put("proName", wt.getProName());
 				map.put("cityName", wt.getCityName());
 				map.put("areaName", wt.getAreaName());
-				map.put("windfarmName", wt.getWindFarmTitle());
+				map.put("windfarmName", wt.getWindFarmTitle()==null?"":wt.getWindFarmTitle());
 				map.put("windfarmId", wt.getWindFarm());
 				listmap.add(requestWeather(locationWt, "1",map));
 			}
