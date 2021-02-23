@@ -32,6 +32,7 @@ import com.smartwf.hm.modules.alarmstatistics.pojo.SecurityIncidents;
 import com.smartwf.hm.modules.alarmstatistics.service.SecurityIncidentsService;
 import com.smartwf.hm.modules.alarmstatistics.vo.SecurityIncidentsVO;
 
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -200,7 +201,7 @@ public class SecurityIncidentsController {
 	 * @return
 	 */
     @PutMapping("updateSecurityIncidents")
-    @ApiOperation(value = "安全事故添加接口", notes = "安全事故添加查询")
+    @ApiOperation(value = "安全事故修改接口", notes = "安全事故修改查询")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true),
 	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
