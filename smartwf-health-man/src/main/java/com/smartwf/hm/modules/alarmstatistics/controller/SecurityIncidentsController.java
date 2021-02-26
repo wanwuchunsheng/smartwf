@@ -144,7 +144,7 @@ public class SecurityIncidentsController {
         @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
         @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "incidentTitle", value = "事故标题", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "occurrenceTime", value = "发生时间", dataType = "Date"),
+	    @ApiImplicitParam(paramType = "query", name = "occurrenceTime", value = "发生时间（yyyy-MM-dd HH:mm:ss）", dataType = "Date"),
 	    @ApiImplicitParam(paramType = "query", name = "locality", value = "发生地点", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "afterBriefly", value = "概要经过", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "personalInjury", value = "人身伤害情况", dataType = "String"),

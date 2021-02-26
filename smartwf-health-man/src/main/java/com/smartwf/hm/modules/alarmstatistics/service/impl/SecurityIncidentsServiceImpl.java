@@ -249,7 +249,7 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 	@Override
 	public Result<?> deleteSecurityIncidentsByFiles(SecurityIncidentsVO bean) {
 		QueryWrapper<FileUploadRecord> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("pid", bean.getFilePath());
+		queryWrapper.eq("pid", bean.getId());
 		queryWrapper.eq("file_path", bean.getFilePath());
 		this.fileUploadRecordDao.delete(queryWrapper);
 		return Result.msg(Constants.EQU_SUCCESS, "删除成功");
