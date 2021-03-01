@@ -97,6 +97,10 @@ spring:
     pms:
       server-uri: http://192.168.1.151:8181/pms
       #server-uri: http://192.168.3.48:8300/smartwf_sys_backend
+    message:
+      server-uri: http://192.168.1.151:8081/message
+    management:
+      server-uri: http://192.168.1.151:8300/smartwf_sys_backend
   
 # 配置ftp服务器信息
 sftp: 

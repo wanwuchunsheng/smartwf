@@ -356,6 +356,23 @@ public class RouteServiceImpl implements RouteService{
 		log.info(JSONUtil.toJsonStr(mapRes));
 		return Result.data(Constants.EQU_SUCCESS,mapRes);
 	}
+
+	/**
+     * 健康中心 -人员/角色查询
+     * @author WCH
+     * @param tenantDomain
+     * @param windFarm
+     * @return
+     */
+	@Override
+	public Map<String, Object> selectWindfarmUserAndRole(String tenantDomain, String windFarm) {
+		List<Map<String, Object>> maps = this.userInfoDao.selectWindfarmUserAndRole(tenantDomain,windFarm);
+		Map<String,Object> map=new HashMap<>();
+		for(Map<String, Object> m : maps) {
+			map.put(StrUtil.toString(m.get("type")), m.get("userRole"));
+		}
+		return map;
+	}
 	
 	
 	

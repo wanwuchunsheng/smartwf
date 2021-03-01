@@ -1,5 +1,7 @@
 package com.smartwf.sm.modules.admin.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import com.smartwf.sm.modules.admin.service.RouteService;
 import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
 import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
 
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -167,7 +170,30 @@ public class RouteController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( Constants.BAD_REQUEST ,"省份风场统计错误！"));
     }
     
-    
+    /**
+     * 健康中心 -人员/角色查询
+     * @author WCH
+     * @param tenantDomain
+     * @param windFarm
+     * @return
+     */
+    @PostMapping("/selectWindfarmUserAndRole")
+    @ApiOperation(value = "用户/角色查询列表接口", notes = "用户角色查询列表")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "farmId", value = "风场ID", dataType = "String", required = true)
+    })
+    public Map<String,Object> selectWindfarmUserAndRole(String tenantDomain,String farmId) {
+        try {
+        	if(StrUtil.isNotBlank(tenantDomain) && StrUtil.isNotBlank(farmId)) {
+        		Map<String,Object> map = this.routeService.selectWindfarmUserAndRole(tenantDomain,farmId);
+                return map;
+        	}
+        } catch (Exception e) {
+            log.error("用户角色查询列表错误！{}", e.getMessage(), e);
+        }
+        return null;
+    }
     
     
     

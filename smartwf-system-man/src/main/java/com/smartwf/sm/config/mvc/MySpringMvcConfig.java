@@ -49,6 +49,7 @@ public class MySpringMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/iot/selectIotConfigByAll**")
                 //知识中心初始化
                 .excludePathPatterns("/globaldata/selectTenantOrWindFarm**")
+                .excludePathPatterns("/route/selectWindfarmUserAndRole")
                 //用户注销
                 .excludePathPatterns("/globaldata/logout")
                 // rpc注册中心

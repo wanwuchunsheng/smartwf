@@ -447,4 +447,30 @@
     <select id="selectUserInfoByAll" resultType="java.util.Map">
        select id,login_code,user_name,enable from sys_user_info where tenant_id=#{tenantId}
     </select>
+    
+    <!-- 健康中心-查询用户角色 -->
+    <select id="selectWindfarmUserAndRole" resultType="java.util.Map">
+       select group_concat(tf.id) as userRole, 'userId' as type from (
+			select DISTINCT t.id,t.user_name from (
+				select a.id,a.user_name,a.login_code,c.org_name,c.org_type, d.eng_name, d.role_name,f.tenant_domain
+				 from sys_user_info a ,sys_user_organization b,sys_organization c ,sys_role d,sys_user_role e ,sys_tenant f
+				where a.id=b.user_id and b.organization_id= c.id and e.user_id=a.id and e.role_id = d.id  and b.tenant_id= f.id
+				and a.tenant_id=c.tenant_id and a.enable=0 and c.enable=0 and d.enable = 0
+				and f.tenant_domain=#{tenantDomain} and c.id= #{windFarm}
+			)t
+		) tf
+		
+		union ALL
+		
+		select group_concat(tf.eng_name) as userRole, 'roleName' as type from (
+			select DISTINCT t.eng_name from (
+				select a.id,a.user_name,a.login_code,c.org_name,c.org_type, d.eng_name, d.role_name,f.tenant_domain
+				 from sys_user_info a ,sys_user_organization b,sys_organization c ,sys_role d,sys_user_role e ,sys_tenant f
+				where a.id=b.user_id and b.organization_id= c.id and e.user_id=a.id and e.role_id = d.id  and b.tenant_id= f.id
+				and a.tenant_id=c.tenant_id and a.enable=0 and c.enable=0 and d.enable = 0
+				and f.tenant_domain=#{tenantDomain} and c.id= #{windFarm}
+			)t
+		) tf
+    </select>
+    
 </mapper>

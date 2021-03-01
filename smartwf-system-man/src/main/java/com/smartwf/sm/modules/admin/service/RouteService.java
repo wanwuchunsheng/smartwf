@@ -1,5 +1,7 @@
 package com.smartwf.sm.modules.admin.service;
 
+import java.util.Map;
+
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.sysconfig.pojo.TenantConfig;
 import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
@@ -60,6 +62,15 @@ public interface RouteService {
      * @return
      */
 	Result<?> selectWindfarmConfigByProCode(WindfarmConfig bean);
+
+	/**
+     * 健康中心 -人员/角色查询
+     * @author WCH
+     * @param tenantDomain
+     * @param windFarm
+     * @return
+     */
+	Map<String, Object> selectWindfarmUserAndRole(String tenantDomain, String windFarm);
 
 	
 }

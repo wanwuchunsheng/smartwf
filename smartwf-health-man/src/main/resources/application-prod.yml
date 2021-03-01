@@ -96,6 +96,10 @@ spring:
   system:
     pms:
       server-uri: https://portal.windmagics.com/pms
+    message:
+      server-uri: https://portal.windmagics.com/message
+    management:
+      server-uri: https://portal.windmagics.com/smartwf_sys_backend
 
 # 配置ftp服务器信息
 sftp: 

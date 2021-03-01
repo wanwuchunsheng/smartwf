@@ -151,6 +151,15 @@ public interface UserInfoDao extends BaseMapper<UserInfo> {
      */
 	List<Map<String,String>> selectUserInfoByAll(@Param("tenantId") Integer tenantId);
 
+	/**
+     * 健康中心 -人员/角色查询
+     * @author WCH
+     * @param tenantDomain
+     * @param windFarm
+     * @return
+     */
+	List<Map<String, Object>> selectWindfarmUserAndRole(@Param("tenantDomain") String tenantDomain, @Param("windFarm") String windFarm);
+
 
     
 }
