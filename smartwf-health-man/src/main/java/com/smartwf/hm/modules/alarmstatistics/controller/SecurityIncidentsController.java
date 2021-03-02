@@ -232,6 +232,7 @@ public class SecurityIncidentsController {
         	        	String temp = "image/";
     	                // 获取图片的文件名
     	                String fileName = fl.getOriginalFilename();
+    	                long fileSize = fl.getSize();
     	                // 获取图片的扩展名
     	                String extensionName = fileName.substring(fileName.indexOf("."));
     	                // 新的图片文件名 = 获取时间戳+"."图片扩展名
@@ -242,7 +243,7 @@ public class SecurityIncidentsController {
     	                boolean flag = SFtpUtil.uploadFile( config,datdDirectory, fl.getInputStream());
         	        	if(flag) {
         	        		//上传成功
-        	        		sb.append(datdDirectory).append(",,").append(fileName).append("&&");
+        	        		sb.append(datdDirectory).append(",,").append(fileName).append(",,").append(fileSize).append("&&");
         	        	}
         	        }
             	}
