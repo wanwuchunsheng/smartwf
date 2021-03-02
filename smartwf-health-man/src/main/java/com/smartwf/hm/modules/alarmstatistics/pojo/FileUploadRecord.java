@@ -40,6 +40,10 @@ public class FileUploadRecord implements Serializable {
 	 */
 	private String filePath;
 	/**
+	 *  文件大小
+	 */
+	private long fileSize;
+	/**
 	 * 备注
 	 */
 	private String remark;

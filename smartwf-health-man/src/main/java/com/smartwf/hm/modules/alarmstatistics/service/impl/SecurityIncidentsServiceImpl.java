@@ -154,6 +154,7 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 					fuRecord.setFilePath(Convert.toStr(cont[0]));
 					fuRecord.setTenantDomain(bean.getTenantDomain());
 					fuRecord.setRemark(Convert.toStr(cont[1]));
+					fuRecord.setFileSize(Convert.toLong(cont[2]));
 					fuRecord.setCreateTime(new Date());
 					fuRecord.setCreateUserId(user.getId());
 					fuRecord.setCreateUserName(user.getUserName());
@@ -207,6 +208,7 @@ public class SecurityIncidentsServiceImpl implements SecurityIncidentsService{
 					fuRecord.setFilePath(Convert.toStr(cont[0]));
 					fuRecord.setTenantDomain(bean.getTenantDomain());
 					fuRecord.setRemark(Convert.toStr(cont[1]));
+					fuRecord.setFileSize(Convert.toLong(cont[2]));
 					fuRecord.setCreateTime(new Date());
 					fuRecord.setCreateUserId(user.getId());
 					fuRecord.setCreateUserName(user.getUserName());

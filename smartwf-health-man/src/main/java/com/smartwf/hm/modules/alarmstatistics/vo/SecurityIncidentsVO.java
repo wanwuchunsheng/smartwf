@@ -31,8 +31,13 @@ public class SecurityIncidentsVO extends SecurityIncidents{
 	 *  结束时间
 	 */
 	private String endTime;
-	
+	/**
+	 *  文件路径
+	 */
 	private String filePath;
-	
+	/**
+	 *  文件大小
+	 */
+	private long fileSize;
 
 }
