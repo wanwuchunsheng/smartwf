@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -77,10 +76,6 @@ public class GlobalDataController {
 	@Autowired
     private Wso2Config wso2Config;
 	
-	@Autowired
-    private TenantService tenantService;
-	
-	 
    
     /**
      * @Description 根据用户等级，返回租户列表
@@ -556,6 +551,27 @@ public class GlobalDataController {
             log.error("获取用户风场失败！{}", e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( "用户风场失败！"));
+    }
+    
+    /**
+     * @Description：监视中心-获取发电量接口
+     * @param tenantId,typeDevel
+     * @return
+     */
+    @GetMapping("selectGeneratingCapacity")
+    @ApiOperation(value = "发电量查询接口", notes = "发电量信息")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
+    	@ApiImplicitParam(paramType = "query", name = "typeDevel", value = "类型等级（0分公司 1一般组织 2风场 3风电 4风光 5光伏 6综合）", dataType = "int", required = true)
+    })
+    public ResponseEntity<Result<?>> selectGeneratingCapacity(String tenantId ,Integer typeDevel) {
+        try {
+        	Result<?> result= this.globalDataService.selectGeneratingCapacity(tenantId,typeDevel);
+        	return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            log.error("发电量查询失败！{}", e.getMessage(), e);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.msg( "发电量查询失败！"));
     }
     
 }

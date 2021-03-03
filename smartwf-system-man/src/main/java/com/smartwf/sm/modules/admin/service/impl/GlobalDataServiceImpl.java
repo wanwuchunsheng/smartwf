@@ -30,6 +30,8 @@ import com.smartwf.sm.modules.admin.service.PostService;
 import com.smartwf.sm.modules.admin.service.RoleService;
 import com.smartwf.sm.modules.admin.service.TenantService;
 import com.smartwf.sm.modules.admin.vo.OrganizationVO;
+import com.smartwf.sm.modules.sysconfig.dao.WindFarmConfigDao;
+import com.smartwf.sm.modules.sysconfig.pojo.WindfarmConfig;
 import com.smartwf.sm.modules.sysconfig.service.WeatherConfigService;
 import com.smartwf.sm.modules.wso2.pojo.IdentityConfig;
 import com.smartwf.sm.modules.wso2.service.IdentityConfigService;
@@ -75,6 +77,9 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 	
 	@Autowired
 	private WeatherConfigService weatherConfigService;
+	
+	@Autowired
+	private WindFarmConfigDao windFarmConfigDao;
 	
 	
 	
@@ -465,6 +470,17 @@ public class GlobalDataServiceImpl implements GlobalDataService{
 		}
 		List<Map<String,Object>> list= this.organizationDao.selectUserInfoByWindFarm(bean);
 		return Result.data(Constants.EQU_SUCCESS, list);
+	}
+
+	/**
+     * @Description：监视中心-获取发电量接口
+     * @param tenantId,typeDevel
+     * @return
+     */
+	@Override
+	public Result<?> selectGeneratingCapacity(String tenantId ,Integer typeDevel) {
+		List<Map<String,Object>> maps= this.windFarmConfigDao.selectGeneratingCapacity(tenantId,typeDevel);
+		return null;
 	}
 
 	

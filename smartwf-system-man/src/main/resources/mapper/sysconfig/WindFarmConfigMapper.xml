@@ -309,4 +309,21 @@
          
     </select>
     
+    
+    <!-- 查询租户配置表 -->
+    <select id="selectGeneratingCapacity" resultType="java.util.Map">
+        SELECT
+			a.equivalent_util_hours,
+			a.month_generation,	     
+			a.plan_month_generation,
+			a.annual_output, 
+			a.plan_annual_output,
+			a.daily_generation
+		FROM
+			basic_windfarm_config a where 1=1
+		<if test="bean.tenantId != null ">
+			and a.tenant_id=#{bean.tenantId}
+		</if>
+    </select>
+    
 </mapper>

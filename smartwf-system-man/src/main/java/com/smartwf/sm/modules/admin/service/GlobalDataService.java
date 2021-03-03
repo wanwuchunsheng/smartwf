@@ -86,6 +86,12 @@ public interface GlobalDataService {
      * @return
      */
 	Result<?> selectUserInfoByWindFarm(UserOrganization bean);
+	/**
+     * @Description：监视中心-获取发电量接口
+     * @param tenantId,typeDevel
+     * @return
+     */
+	Result<?> selectGeneratingCapacity(String tenantId ,Integer typeDevel);
 
 	
 }

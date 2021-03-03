@@ -94,6 +94,13 @@ public interface WindFarmConfigDao extends BaseMapper<WindfarmConfig> {
      */
 	List<Map<String, Object>> selectProWindfarmByAdmin(@Param("bean") WindfarmConfig bean);
 
+	/**
+     * @Description：监视中心-获取发电量接口
+     * @param tenantId,typeDevel
+     * @return
+     */
+	List<Map<String, Object>> selectGeneratingCapacity(@Param("tenantId") String tenantId, @Param("typeDevel") Integer typeDevel);
+
 	
 
 	
