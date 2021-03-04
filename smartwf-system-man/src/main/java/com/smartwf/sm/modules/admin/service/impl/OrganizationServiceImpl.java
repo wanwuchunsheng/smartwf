@@ -229,10 +229,6 @@ public class OrganizationServiceImpl implements OrganizationService{
 		GlobalData gd=new GlobalData();
 		gd.setFlushType(Convert.toStr(Constants.ZERO));
 		this.globalDataService.flushCache(gd);
-		/** 向知识中心推送新增 */
-		Map<String,String> map=new HashMap<>();
-		map.put("org", "delete");
-		this.streamProducer.sendMsg(Constants.REDIS_TOPIC_WIKI, map);
 	}
 	
 	/**
