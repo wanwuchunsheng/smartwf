@@ -313,16 +313,18 @@
     <!-- 查询租户配置表 -->
     <select id="selectGeneratingCapacity" resultType="java.util.Map">
         SELECT
-			a.equivalent_util_hours,
-			a.month_generation,	     
-			a.plan_month_generation,
-			a.annual_output, 
-			a.plan_annual_output,
-			a.daily_generation
+			ifnull(a.month_generation,0) as monthGeneration,
+			ifnull(a.plan_month_generation,0) as planMonthGeneration,
+			ifnull(a.annual_energy_output,0) as annualEnergyOutput, 
+			ifnull(a.plan_annual_energy_output,0) as planAnnualEnergyOutput,
+			ifnull(a.daily_generation,0) as dailyGeneration
 		FROM
 			basic_windfarm_config a where 1=1
-		<if test="bean.tenantId != null ">
-			and a.tenant_id=#{bean.tenantId}
+		<if test="tenantId != null ">
+			and a.tenant_id=#{tenantId}
+		</if>
+		<if test="windFarm != null ">
+			and a.wind_farm=#{windFarm}
 		</if>
     </select>
     

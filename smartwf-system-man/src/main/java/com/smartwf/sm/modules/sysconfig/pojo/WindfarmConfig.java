@@ -75,11 +75,11 @@ public class WindfarmConfig implements Serializable {
 	/**
 	 * 年发电量
 	 */
-	private Double annualOutput;
+	private Double annualEnergyOutput;
 	/**
 	 * 计划年发电量
 	 */
-	private Double planAnnualOutput;
+	private Double planAnnualEnergyOutput;
 	
 	/**
 	 * 机组

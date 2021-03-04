@@ -91,7 +91,7 @@ public interface GlobalDataService {
      * @param tenantId,typeDevel
      * @return
      */
-	Result<?> selectGeneratingCapacity(String tenantId ,Integer typeDevel);
+	Result<?> selectGeneratingCapacity(String tenantId ,Integer windFarm);
 
 	
 }

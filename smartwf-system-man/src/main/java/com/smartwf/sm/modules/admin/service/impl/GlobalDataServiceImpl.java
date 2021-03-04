@@ -478,9 +478,9 @@ public class GlobalDataServiceImpl implements GlobalDataService{
      * @return
      */
 	@Override
-	public Result<?> selectGeneratingCapacity(String tenantId ,Integer typeDevel) {
-		List<Map<String,Object>> maps= this.windFarmConfigDao.selectGeneratingCapacity(tenantId,typeDevel);
-		return null;
+	public Result<?> selectGeneratingCapacity(String tenantId ,Integer windFarm) {
+		List<Map<String,Object>> maps= this.windFarmConfigDao.selectGeneratingCapacity(tenantId,windFarm);
+		return Result.data(Constants.EQU_SUCCESS, maps);
 	}
 
 	

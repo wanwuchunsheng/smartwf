@@ -99,7 +99,7 @@ public interface WindFarmConfigDao extends BaseMapper<WindfarmConfig> {
      * @param tenantId,typeDevel
      * @return
      */
-	List<Map<String, Object>> selectGeneratingCapacity(@Param("tenantId") String tenantId, @Param("typeDevel") Integer typeDevel);
+	List<Map<String, Object>> selectGeneratingCapacity(@Param("tenantId") String tenantId, @Param("windFarm") Integer windFarm);
 
 	
 

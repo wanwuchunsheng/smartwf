@@ -538,7 +538,7 @@ public class GlobalDataController {
      * @return
      */
     @GetMapping("selectUserInfoByWindFarm")
-    @ApiOperation(value = "用户风场接口", notes = "获取用户风场信息")
+    @ApiOperation(value = "（知识中心）用户风场接口", notes = "获取用户风场信息")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
     	@ApiImplicitParam(paramType = "query", name = "userId", value = "用户ID", dataType = "int", required = true)
@@ -559,14 +559,14 @@ public class GlobalDataController {
      * @return
      */
     @GetMapping("selectGeneratingCapacity")
-    @ApiOperation(value = "发电量查询接口", notes = "发电量信息")
+    @ApiOperation(value = "（监视中心）发电量查询接口", notes = "发电量信息")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
-    	@ApiImplicitParam(paramType = "query", name = "typeDevel", value = "类型等级（0分公司 1一般组织 2风场 3风电 4风光 5光伏 6综合）", dataType = "int", required = true)
+    	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场（主键）", dataType = "int", required = true)
     })
-    public ResponseEntity<Result<?>> selectGeneratingCapacity(String tenantId ,Integer typeDevel) {
+    public ResponseEntity<Result<?>> selectGeneratingCapacity(String tenantId ,Integer windFarm) {
         try {
-        	Result<?> result= this.globalDataService.selectGeneratingCapacity(tenantId,typeDevel);
+        	Result<?> result= this.globalDataService.selectGeneratingCapacity(tenantId,windFarm);
         	return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             log.error("发电量查询失败！{}", e.getMessage(), e);
