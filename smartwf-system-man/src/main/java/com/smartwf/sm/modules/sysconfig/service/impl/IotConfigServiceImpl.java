@@ -73,7 +73,7 @@ public class IotConfigServiceImpl implements IotConfigService{
 		msgMap.put("msg", "配置有新增！");
 		Map<String, String> map = new HashMap<>();
 		map.put("iot", JSONUtil.toJsonStr(msgMap));
-		this.streamProducer.sendMsg(Constants.REDIS_TOPIC, map);
+		this.streamProducer.sendMsg(Constants.REDIS_TOPIC_MONITOR, map);
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class IotConfigServiceImpl implements IotConfigService{
 		msgMap.put("msg", "配置有修改！");
 		Map<String, String> map = new HashMap<>();
 		map.put("iot", JSONUtil.toJsonStr(map));
-		this.streamProducer.sendMsg(Constants.REDIS_TOPIC, map);
+		this.streamProducer.sendMsg(Constants.REDIS_TOPIC_MONITOR, map);
 	}
 
 	/**

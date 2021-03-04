@@ -164,10 +164,8 @@ public class OrganizationServiceImpl implements OrganizationService{
 			this.globalDataService.flushCache(gd);
 			/** 向知识中心推送新增 */
 			Map<String,String> map=new HashMap<>();
-			bean.setRemark("add");
-			map.put("org", JSONUtil.toJsonStr(bean));
-			this.streamProducer.sendMsg("topic:smartwf_wiki", map);
-			log.info("向消息中心推送-组织机构新增{}",JSONUtil.toJsonStr(map));
+			map.put("org", "save");
+			this.streamProducer.sendMsg(Constants.REDIS_TOPIC_WIKI, map);
 		} catch (Exception e) {
 			log.error("组织机构添加异常！",e,e.getMessage());
 		}
@@ -194,10 +192,8 @@ public class OrganizationServiceImpl implements OrganizationService{
 			this.globalDataService.flushCache(gd);
 			/** 向知识中心推送新增 */
 			Map<String,String> map=new HashMap<>();
-			bean.setRemark("update");
-			map.put("org", JSONUtil.toJsonStr(bean));
-			this.streamProducer.sendMsg("topic:smartwf_wiki", map);
-			log.info("向消息中心推送-组织机构修改{}",JSONUtil.toJsonStr(map));
+			map.put("org", "update");
+			this.streamProducer.sendMsg(Constants.REDIS_TOPIC_WIKI, map);
 		} catch (Exception e) {
 			log.error("组织机构添加异常！",e,e.getMessage());
 		}

@@ -38,7 +38,9 @@ public class Constants {
     /***安全事故运行天数Key */
     public static final String SAFETYPRODUCTIONTIM_KEY="safetyProductionTime";
     
-    public static final String REDIS_TOPIC = "topic:smartwf_monitor";
+    public static final String REDIS_TOPIC_MONITOR = "topic:smartwf_monitor";
+    
+    public static final String REDIS_TOPIC_WIKI = "topic:smartwf_wiki";
     
     public static final String HEALTH_TOPIC_ERROR = "topic:smartwf_health_error";
     
