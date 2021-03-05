@@ -68,11 +68,8 @@ public class IotConfigServiceImpl implements IotConfigService{
 		bean.setCreateTime(new Date());
 		this.iotConfigDao.insert(bean);
 		//添加成功，发送消息提醒Iot有配置有变更
-		Map<String, Object> msgMap = new HashMap<>();
-		msgMap.put("status", "1");
-		msgMap.put("msg", "配置有新增！");
 		Map<String, String> map = new HashMap<>();
-		map.put("iot", JSONUtil.toJsonStr(msgMap));
+		map.put("iot", "add");
 		this.streamProducer.sendMsg(Constants.REDIS_TOPIC_MONITOR, map);
 	}
 
@@ -85,11 +82,8 @@ public class IotConfigServiceImpl implements IotConfigService{
 	public void updateIotConfig(IotConfig bean) {
 		this.iotConfigDao.updateById(bean);
 		//添加成功，发送消息提醒Iot有配置有变更
-		Map<String, Object> msgMap = new HashMap<>();
-		msgMap.put("status", "1");
-		msgMap.put("msg", "配置有修改！");
 		Map<String, String> map = new HashMap<>();
-		map.put("iot", JSONUtil.toJsonStr(map));
+		map.put("iot", "update");
 		this.streamProducer.sendMsg(Constants.REDIS_TOPIC_MONITOR, map);
 	}
 
