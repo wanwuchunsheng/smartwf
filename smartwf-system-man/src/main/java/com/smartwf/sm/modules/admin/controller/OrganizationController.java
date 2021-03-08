@@ -218,7 +218,7 @@ public class OrganizationController {
     @ApiOperation(value = "全局用户查询（知识中心提供）", notes = "全局用户查询（知识中心提供）")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户（主键）", dataType = "int", required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "remark", value = "模糊查询（人员姓名，手机号）", dataType = "String",required = true)
+    	    @ApiImplicitParam(paramType = "query", name = "remark", value = "模糊查询（人员姓名或手机号）", dataType = "String",required = true)
     })
     public ResponseEntity<Result<?>> selectUserInfoByParam(UserInfo bean) {
         try {
