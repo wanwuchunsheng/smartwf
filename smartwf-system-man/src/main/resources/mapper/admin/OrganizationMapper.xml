@@ -17,6 +17,7 @@
 			wfmark,
 			wind_farm,
 			tenant_id,
+			type_level,
 			enable,
 			level
 		from sys_organization
