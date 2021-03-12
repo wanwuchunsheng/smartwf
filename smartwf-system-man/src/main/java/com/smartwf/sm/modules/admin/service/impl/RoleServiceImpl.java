@@ -237,17 +237,19 @@ public class RoleServiceImpl implements RoleService{
 	public Result<?> selectRoleByUserId(Role bean) {
 		User user=UserThreadLocal.getUser();
 		QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-		//是否租户管理员角色
-		if(CkUtils.verifyTenantUser(user)) {
-			queryWrapper.notIn("eng_name", Constants.SUPER_ADMIN);
-		}
-		//是否风场管理员角色
-		if(CkUtils.verifyWindFarmUser(user)) {
-			queryWrapper.notIn("eng_name", Constants.SUPER_ADMIN,Constants.SUPER_TENANT);
-		}
-		//是否平台管理员角色
+		//平台管理员角色，查询所有
 		if(!CkUtils.verifyAdminUser(user)) {
-			queryWrapper.notIn("eng_name", Constants.SUPER_ADMIN,Constants.SUPER_TENANT,Constants.SUPER_ADMIN);
+			//queryWrapper.notIn("eng_name", Constants.SUPER_ADMIN,Constants.SUPER_TENANT,Constants.SUPER_ADMIN);
+			//是否风场管理员角色
+			//if(CkUtils.verifyWindFarmUser(user)) {
+				//queryWrapper.notIn("eng_name", Constants.SUPER_ADMIN,Constants.SUPER_TENANT);
+			//}
+			//租户管理员角色,过滤平台管理员
+			if(CkUtils.verifyTenantUser(user)) {
+				queryWrapper.notIn("eng_name", Constants.SUPER_ADMIN);
+			}else {
+				queryWrapper.notIn("eng_name", Constants.SUPER_ADMIN,Constants.SUPER_TENANT);
+			}
 		}
 		//降序
 		queryWrapper.orderByDesc("update_time"); 
