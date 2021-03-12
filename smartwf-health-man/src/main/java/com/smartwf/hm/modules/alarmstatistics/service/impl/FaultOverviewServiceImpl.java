@@ -12,15 +12,18 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.dao.FaultOverviewDao;
+import com.smartwf.hm.modules.alarmstatistics.dao.SecurityIncidentsDao;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
 import com.smartwf.hm.modules.alarmstatistics.service.FaultOverviewService;
 import com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO;
+import com.smartwf.hm.modules.alarmstatistics.vo.SecurityIncidentsVO;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -36,6 +39,10 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 	
 	@Autowired
 	private FaultOverviewDao faultOverviewDao;
+	
+	@Autowired
+	private SecurityIncidentsDao securityIncidentsDao;
+	
 	
 
 	/**
@@ -56,6 +63,8 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 		List<FaultInformationVO> alarm= this.faultOverviewDao.selectFaultTypeByAlarm(bean);
 		//2统计缺陷
 		List<FaultInformationVO> defect= this.faultOverviewDao.selectFaultTypeByDefect(bean);
+		//3安全事故
+		List<FaultInformationVO> securityInc= this.securityIncidentsDao.selectSecurityIncidents(bean);
 		//故障，警告，缺陷全局未处理数统计
 		List<Map<String,Integer>> stList=this.faultOverviewDao.selectFaultStatusByAll(bean);
 		//封装故障
@@ -74,7 +83,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 			//故障未处理数
 			int val=0;
 			for( Map<String,Integer> m:stList) {
-				if("fault".equals(m.get("name"))) {
+				if("fault".equals(Convert.toStr(m.get("name")))) {
 					val=Convert.toInt( m.get("value"));
 					break;
 				}
@@ -99,7 +108,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 			//警告未处理数
 			int val=0;
 			for( Map<String,Integer> m:stList) {
-				if("alert".equals(m.get("name"))) {
+				if("alert".equals(Convert.toStr(m.get("name")))) {
 					val=Convert.toInt( m.get("value"));
 					break;
 				}
@@ -123,7 +132,7 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 			//缺陷未处理数
 			int val=0;
 			for( Map<String,Integer> m:stList) {
-				if("defect".equals(m.get("name"))) {
+				if("defect".equals(Convert.toStr(m.get("name")))) {
 					val=Convert.toInt( m.get("value"));
 					break;
 				}
@@ -131,6 +140,31 @@ public class FaultOverviewServiceImpl implements FaultOverviewService {
 			fr.put("defect", val);
 			list.add(fr);
 		}
+		//事故
+		if(securityInc!=null && securityInc.size()>0) {
+			master =new String[securityInc.size()][2];
+			int i = 0; 
+			for(FaultInformationVO fivo:securityInc ) {
+				master[i][0]=fivo.getFname();
+				master[i][1]=fivo.getFvalue();
+				i++;
+			}
+			fr = new HashMap<String,Object>(4);
+			fr.put("id", 3);
+			fr.put("title", "事故");
+			fr.put("content",master);
+			//缺陷未处理数
+			int val=0;
+			for( Map<String,Integer> m:stList) {
+				if("securityInc".equals(Convert.toStr(m.get("name")))) {
+					val=Convert.toInt( m.get("value"));
+					break;
+				}
+			}
+			fr.put("securityInc", val);
+			list.add(fr);
+		}
+		
 		//返回结果
 		return Result.data(list);
 	}

@@ -194,6 +194,7 @@
 			count(*) as value
 		from fault_information 
 		where alarm_status=0  
+		and DATE_FORMAT(start_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
 		<if test="bean.tenantDomain != null ">
              and tenant_domain = #{bean.tenantDomain}
         </if>
@@ -201,6 +202,20 @@
           and wind_farm in (${bean.windFarm}) 
         </if>
 		group by incident_type
+		
+		UNION all
+		
+		select 
+		  'securityInc' as  name, 
+		  count(*) as value 
+		from security_incidents 
+		where incident_status=0 and DATE_FORMAT(occurrence_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
+		<if test="bean.tenantDomain != null ">
+             and tenant_domain = #{bean.tenantDomain}
+        </if>
+        <if test="bean.windFarm != null ">
+          and wind_farm in (${bean.windFarm}) 
+        </if>
     </select>
     
 </mapper>

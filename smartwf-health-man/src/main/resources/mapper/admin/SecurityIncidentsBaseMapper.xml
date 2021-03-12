@@ -19,6 +19,22 @@
 		),DATE_FORMAT(NOW(), '%Y-%m-%d')) as totalDays 
    </select>
    
-   
-   
+   <!-- 健康中心首页统计-安全事故分析  -->
+   <select id="selectSecurityIncidents" resultType="com.smartwf.hm.modules.alarmstatistics.vo.FaultInformationVO">
+		 select a.fname,count(a.fname) as fvalue from (
+				select 
+					date_format(occurrence_time,'%Y-%m-%d') as fname
+				from security_incidents 
+				where 1=1 
+				and DATE_FORMAT(occurrence_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
+				<if test="bean.tenantDomain != null ">
+	                and tenant_domain = #{bean.tenantDomain}
+	            </if>
+	            <if test="bean.windFarm != null ">
+		            and wind_farm in (${bean.windFarm}) 
+		        </if>
+			) a
+		 group by a.fname order by a.fname asc 
+    </select>
+    
 </mapper>
