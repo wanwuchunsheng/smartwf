@@ -124,10 +124,10 @@
             and a.alarm_source=#{bean.alarmSource}
         </if>
         <if test="bean.alarmDescription != null ">
-            and a.alarm_description like '%${bean.alarmDescription}%'
+            and a.alarm_description like CONCAT('%',#{bean.alarmDescription},'%')
         </if>
         <if test="bean.alarmLocation != null ">
-            and a.alarm_location like '%${bean.alarmLocation}%'
+            and a.alarm_location like CONCAT('%',#{bean.alarmLocation},'%')
         </if>
         <if test="bean.alarmLevel != null ">
             and a.alarm_level=#{bean.alarmLevel}
@@ -139,16 +139,16 @@
             and a.fault_type =#{bean.faultType}
         </if>
         <if test="bean.deviceCode != null ">
-            and a.device_code like '%${bean.deviceCode}%'
+            and a.device_code like CONCAT('%',#{bean.deviceCode},'%')
         </if>
         <if test="bean.assetNumber != null ">
-            and a.asset_number like '%${bean.assetNumber}%'
+            and a.asset_number like CONCAT('%',#{bean.assetNumber},'%') 
         </if>
         <if test="bean.operatingStatus != null ">
             and a.operating_status =#{bean.operatingStatus}
         </if>
         <if test="bean.discovererId != null ">
-            and a.discoverer_id like '%${bean.discovererId}%'
+            and a.discoverer_id like CONCAT('%',#{bean.discovererId},'%')
         </if>
         <if test="bean.sTime != null" >
           and a.start_time between #{bean.sTime} and #{bean.eTime}

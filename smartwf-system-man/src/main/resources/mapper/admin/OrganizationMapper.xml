@@ -26,16 +26,16 @@
             and tenant_id = #{bean.tenantId}
         </if>
         <if test="bean.orgCode != null ">
-            and org_code like '%${bean.orgCode}%'
+            and org_code like CONCAT('%',#{bean.orgCode},'%') 
         </if>
         <if test="bean.orgName != null ">
-            and org_name like '%${bean.orgName}%'
+            and org_name like CONCAT('%',#{bean.orgName},'%') 
         </if>
         <if test="bean.enable != null ">
             and enable=#{bean.enable}
         </if>
         <if test="bean.remark != null ">
-            and remark like '%${bean.remark}%'
+            and remark like CONCAT('%',#{bean.remark},'%')
         </if>
         <if test="bean.startTime != null">
             and create_time between #{bean.startTime} and #{bean.endTime}

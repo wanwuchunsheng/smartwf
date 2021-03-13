@@ -50,7 +50,7 @@
             and a.post_code= #{bean.postCode} 
         </if>
         <if test="bean.postName != null ">
-            and a.post_name like '%${bean.postName}%'
+            and a.post_name like CONCAT('%',#{bean.postName},'%')
         </if>
         <if test="bean.enable != null ">
             and a.enable = #{bean.enable} 
@@ -59,7 +59,7 @@
             and a.create_time between #{bean.startTime} and #{bean.endTime}
         </if>
         <if test="bean.remark != null ">
-            and a.remark like '%${bean.remark}%'
+            and a.remark like CONCAT('%',#{bean.remark},'%') 
         </if>
     </select>
     

@@ -33,10 +33,10 @@
           and find_in_set(a.wind_farm, #{bean.windFarm})
         </if>
         <if test="bean.alarmSource != null ">
-          and a.alarm_source like '%${bean.alarmSource}%'
+          and a.alarm_source like CONCAT('%',#{bean.alarmSource},'%') 
         </if>
         <if test="bean.alarmDescription != null ">
-          and a.alarm_description like '%${bean.alarmDescription}%' 
+          and a.alarm_description like CONCAT('%',#{bean.alarmDescription},'%') 
         </if>
         <if test="bean.alarmLocation != null ">
           and a.alarm_location = #{bean.alarmLocation}
@@ -97,10 +97,10 @@
           and find_in_set(a.wind_farm, #{bean.windFarm})
         </if>
         <if test="bean.alarmSource != null ">
-          and a.alarm_source like '%${bean.alarmSource}%'
+          and a.alarm_source like CONCAT('%',#{bean.alarmSource},'%') 
         </if>
         <if test="bean.alarmDescription != null ">
-          and a.alarm_description like '%${bean.alarmDescription}%' 
+          and a.alarm_description like CONCAT('%',#{bean.alarmDescription},'%') 
         </if>
         <if test="bean.alarmLocation != null ">
           and a.alarm_location = #{bean.alarmLocation}
@@ -299,7 +299,7 @@
           and a.device_code = #{bean.deviceCode}
         </if>
         <if test="bean.deviceName != null ">
-          and a.device_name like '%${bean.deviceName}%' 
+          and a.device_name like CONCAT('%',#{bean.deviceName},'%') 
         </if>
           order by b.start_time desc
     </select>

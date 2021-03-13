@@ -47,7 +47,7 @@
                 and user_name=#{bean.userName}
             </if>
             <if test="bean.mobile != null ">
-                and mobile like '%${bean.mobile}%'
+                and mobile like CONCAT('%',#{bean.mobile},'%')  
             </if>
             <if test="bean.enable != null ">
                 and enable=#{bean.enable}
@@ -375,7 +375,7 @@
 		where a.id=c.user_id and b.id= c.role_id and a.tenant_id=c.tenant_id and b.tenant_id = c.tenant_id
 		
 		and b.tenant_id= (select id from sys_tenant where enable=0 and tenant_domain=#{tenantDomain} ) 
-		and a.id in (${ids})
+		and find_in_set(a.id, #{ids})
 		 group by a.id
     </select>
     
@@ -384,7 +384,7 @@
         select 
 			id,
 			user_name 
-		from sys_user_info where user_name like '%${bean.remark}%' or mobile like '%${bean.remark}%'
+		from sys_user_info where user_name like CONCAT('%',#{bean.remark},'%') or mobile like CONCAT('%',#{bean.remark},'%') 
 	    and tenant_id=#{bean.tenantId} 
     </select>
     
