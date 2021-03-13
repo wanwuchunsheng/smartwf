@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -137,7 +138,7 @@ public class RouteController {
     @PostMapping("/selectPortalWeatherByParam")
     @ApiOperation(value = "天气查询接口", notes = "天气查询查询")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户Id", dataType = "String", required = true)
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户Id", dataType = "int", required = true)
     })
     public ResponseEntity<Result<?>> selectPortalWeatherByParam(TenantConfig bean) {
         try {
@@ -158,9 +159,9 @@ public class RouteController {
     @GetMapping("/selectWindfarmConfigByProCode")
     @ApiOperation(value = "省份风场统计接口", notes = "省份风场统计查询")
     @ApiImplicitParams({
-    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户Id", dataType = "String", required = true)
+    	@ApiImplicitParam(paramType = "query", name = "tenantId", value = "租户Id", dataType = "int", required = true)
     })
-    public ResponseEntity<Result<?>> selectWindfarmConfigByProCode(WindfarmConfig bean) {
+    public ResponseEntity<Result<?>> selectWindfarmConfigByProCode( WindfarmConfig bean) {
         try {
             Result<?> result = this.routeService.selectWindfarmConfigByProCode(bean);
             return ResponseEntity.ok().body(result);

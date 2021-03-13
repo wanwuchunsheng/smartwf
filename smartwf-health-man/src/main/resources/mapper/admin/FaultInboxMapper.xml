@@ -30,7 +30,7 @@
           and a.tenant_domain = #{bean.tenantDomain}
         </if>
         <if test="bean.windFarm != null ">
-          and a.wind_farm in (${bean.windFarm}) 
+          and find_in_set(a.wind_farm, #{bean.windFarm})
         </if>
         <if test="bean.alarmSource != null ">
           and a.alarm_source like '%${bean.alarmSource}%'
@@ -94,7 +94,7 @@
           and a.tenant_domain = #{bean.tenantDomain}
         </if>
         <if test="bean.windFarm != null ">
-          and a.wind_farm in (${bean.windFarm}) 
+          and find_in_set(a.wind_farm, #{bean.windFarm})
         </if>
         <if test="bean.alarmSource != null ">
           and a.alarm_source like '%${bean.alarmSource}%'
@@ -182,7 +182,7 @@
 				          and tenant_domain = #{bean.tenantDomain}
 				        </if>
 				        <if test="bean.windFarm != null ">
-				          and wind_farm in ( ${bean.windFarm} )
+				          and find_in_set(wind_farm, #{bean.windFarm})
 				        </if>
 						GROUP BY asset_number, device_name
 			) d4 on f1.asset_number=d4.asset_number and f1.device_name=d4.device_name
@@ -194,7 +194,7 @@
 			          and tenant_domain = #{bean.tenantDomain}
 			        </if>
 			        <if test="bean.windFarm != null ">
-			          and wind_farm in ( ${bean.windFarm} )
+			          and find_in_set(wind_farm, #{bean.windFarm})
 			        </if>
 					AND to_days(start_time) = to_days(now())
 					GROUP BY asset_number, device_name
@@ -211,7 +211,7 @@
 			          and tenant_domain = #{bean.tenantDomain}
 			        </if>
 			        <if test="bean.windFarm != null ">
-			          and wind_farm in ( ${bean.windFarm} )
+			          and find_in_set(wind_farm, #{bean.windFarm})
 			        </if>
 					AND DATE_FORMAT(start_time, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
 					GROUP BY asset_number, device_name
@@ -236,7 +236,7 @@
 			          and tenant_domain = #{bean.tenantDomain}
 			         </if>
 			         <if test="bean.windFarm != null ">
-			          and wind_farm in ( ${bean.windFarm} )
+			          and find_in_set(wind_farm, #{bean.windFarm})
 			         </if>
 					 GROUP BY asset_number, device_name
 					 ) a
@@ -250,7 +250,7 @@
 		          and tenant_domain = #{bean.tenantDomain}
 		         </if>
 		         <if test="bean.windFarm != null ">
-		          and wind_farm in ( ${bean.windFarm} )
+		          and find_in_set(wind_farm, #{bean.windFarm})
 		         </if>
 			     AND alarm_status = 0
 					GROUP BY asset_number, device_name
@@ -260,7 +260,7 @@
 	          and f1.tenant_domain = #{bean.tenantDomain}
 	         </if>
 	         <if test="bean.windFarm != null ">
-	          and f1.wind_farm in ( ${bean.windFarm} )
+	          and find_in_set(f1.wind_farm, #{bean.windFarm})
 	         </if>
              order by f1.asset_number
     </select>
@@ -293,7 +293,7 @@
           and b.tenant_domain = #{bean.tenantDomain}
         </if>
         <if test="bean.windFarm != null ">
-          and b.wind_farm in (${bean.windFarm}) 
+          and find_in_set(b.wind_farm, #{bean.windFarm})
         </if>
         <if test="bean.deviceCode != null ">
           and a.device_code = #{bean.deviceCode}

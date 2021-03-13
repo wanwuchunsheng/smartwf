@@ -89,46 +89,49 @@ public class RouteServiceImpl implements RouteService{
 	public Result<?> selectPortalPowerGenByParam(WindfarmConfig bean) {
 		//查询日发电量，装机量，实时量
 		WindfarmConfigVO ppg=this.windFarmConfigDao.selectPortalPowerGenByParam(bean);
-		//构建返回数据
 		Map<String,Map<String,Object>> maplist= new HashMap<>();
-		Map<String,Object> map=null;
-		//日发电量
-		map=new HashMap<>();
-		map.put("value", ppg.getDailyGeneration());
-		map.put("unit", "MW·h");
-		maplist.put("dailyGeneration", map);
-		//月发电量
-		map=new HashMap<>();
-		map.put("value", ppg.getMonthGeneration());
-		map.put("unit", "MW·h");
-		maplist.put("monthGeneration", map);
-		//累计发电量
-		map=new HashMap<>();
-		map.put("value", ppg.getCumulativeGeneration());
-		map.put("unit", "MW·h");
-		maplist.put("cumulativeGeneration", map);
-		//实时容量
-		map=new HashMap<>();
-		map.put("value", ppg.getRealTimeCapacity());
-		map.put("unit", "MW");
-		maplist.put("realTimeCapacity", map);
-		//装机容量
-		map=new HashMap<>();
-		map.put("value", ppg.getInstalledCapacity());
-		map.put("unit", "MW");
-		maplist.put("installedCapacity", map);
-		//可利用率
-		map=new HashMap<>();
-		map.put("value", ppg.getAvailability());
-		map.put("unit", "%");
-		maplist.put("availability", map);
-		//等效利用小时
-		map=new HashMap<>();
-		map.put("value", ppg.getEquivalentUtilHours());
-		map.put("unit", "H");
-		maplist.put("equivalentUtilHours", map);
-		//返回
-		return Result.data(Constants.EQU_SUCCESS,maplist);
+		if(ppg!=null) {
+			//构建返回数据
+			Map<String,Object> map=null;
+			//日发电量
+			map=new HashMap<>();
+			map.put("value", ppg.getDailyGeneration());
+			map.put("unit", "MW·h");
+			maplist.put("dailyGeneration", map);
+			//月发电量
+			map=new HashMap<>();
+			map.put("value", ppg.getMonthGeneration());
+			map.put("unit", "MW·h");
+			maplist.put("monthGeneration", map);
+			//累计发电量
+			map=new HashMap<>();
+			map.put("value", ppg.getCumulativeGeneration());
+			map.put("unit", "MW·h");
+			maplist.put("cumulativeGeneration", map);
+			//实时容量
+			map=new HashMap<>();
+			map.put("value", ppg.getRealTimeCapacity());
+			map.put("unit", "MW");
+			maplist.put("realTimeCapacity", map);
+			//装机容量
+			map=new HashMap<>();
+			map.put("value", ppg.getInstalledCapacity());
+			map.put("unit", "MW");
+			maplist.put("installedCapacity", map);
+			//可利用率
+			map=new HashMap<>();
+			map.put("value", ppg.getAvailability());
+			map.put("unit", "%");
+			maplist.put("availability", map);
+			//等效利用小时
+			map=new HashMap<>();
+			map.put("value", ppg.getEquivalentUtilHours());
+			map.put("unit", "H");
+			maplist.put("equivalentUtilHours", map);
+			//返回
+			return Result.data(Constants.EQU_SUCCESS,maplist);
+		}
+		return Result.data(null, maplist, Constants.BAD_REQUEST, "查询异常，请检查请求参数！");
 	}
 
 	/**

@@ -207,6 +207,7 @@ public class Wso2ClientUtils {
 		user.setPwd(null);
 		user.setRefreshToken(null);
 		user.setTenantPw(null);
+		user.setRedirectUri(null);
 		//user.setSessionState(null);
 		//user.setIdToken(null);
 		return user;

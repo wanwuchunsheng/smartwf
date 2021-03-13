@@ -31,7 +31,7 @@
 	                and tenant_domain = #{bean.tenantDomain}
 	            </if>
 	            <if test="bean.windFarm != null ">
-		            and wind_farm in (${bean.windFarm}) 
+		            and find_in_set(wind_farm, #{bean.windFarm})
 		        </if>
 			) a
 		 group by a.fname order by a.fname asc 

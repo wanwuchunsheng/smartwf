@@ -15,7 +15,7 @@
                 and tenant_domain = #{bean.tenantDomain}
             </if>
             <if test="bean.windFarm != null ">
-	            and wind_farm in (${bean.windFarm}) 
+	            and find_in_set(wind_farm, #{bean.windFarm})
 	        </if>
 		) a
 		group by a.fname order by a.fname asc
@@ -33,7 +33,7 @@
                 and tenant_domain = #{bean.tenantDomain}
             </if>
             <if test="bean.windFarm != null ">
-	            and wind_farm in (${bean.windFarm}) 
+	            and find_in_set(wind_farm, #{bean.windFarm})
 	        </if>
 		) a
 		group by a.fname order by a.fname asc
@@ -51,7 +51,7 @@
                 and tenant_domain = #{bean.tenantDomain}
             </if>
             <if test="bean.windFarm != null ">
-	            and wind_farm in (${bean.windFarm}) 
+	            and find_in_set(wind_farm, #{bean.windFarm}) 
 	        </if>
 		) a
 		group by a.fname order by a.fname asc
@@ -73,7 +73,7 @@
                 and tenant_domain = #{bean.tenantDomain}
             </if>
             <if test="bean.windFarm != null ">
-	            and wind_farm in (${bean.windFarm}) 
+	            and find_in_set(wind_farm, #{bean.windFarm})
 	        </if>
 		) a  group by a.fname,a.alarm_level order by a.fname asc
     </select>
@@ -85,13 +85,13 @@
 				date_format(start_time,'%Y-%m-%d') as fname,
 				alarm_status
 			from fault_information 
-			where incident_type=${bean.incidentType}
+			where find_in_set(incident_type, #{bean.incidentType})
 			and DATE_FORMAT(start_time,'%Y-%m-%d') between #{bean.stime} and #{bean.etime}
 			<if test="bean.tenantDomain != null ">
                 and tenant_domain = #{bean.tenantDomain}
             </if>
             <if test="bean.windFarm != null ">
-	            and wind_farm in (${bean.windFarm}) 
+	            and find_in_set(wind_farm, #{bean.windFarm})
 	        </if>
 		) a  group by a.alarm_status order by a.alarm_status asc
     </select>
@@ -109,7 +109,7 @@
                 and tenant_domain = #{bean.tenantDomain}
             </if>
             <if test="bean.windFarm != null ">
-	          and wind_farm in (${bean.windFarm}) 
+	          and find_in_set(wind_farm, #{bean.windFarm})
 	        </if>
 		) a  group by a.incident_type order by a.incident_type asc
     </select>
@@ -130,7 +130,7 @@
 					and tenant_domain = #{bean.tenantDomain}
 			</if>
 			<if test="bean.windFarm != null ">
-					and wind_farm in (${bean.windFarm}) 
+					and find_in_set(wind_farm, #{bean.windFarm}) 
 			</if>
 		) a  group by a.alarm_status order by a.alarm_status asc
     </select>
@@ -154,7 +154,7 @@
             and tenant_domain = #{bean.tenantDomain}
         </if>
         <if test="bean.windFarm != null ">
-            and wind_farm in (${bean.windFarm}) 
+            and find_in_set(wind_farm, #{bean.windFarm})
         </if>
         order by update_time desc
     </select>
@@ -176,7 +176,7 @@
                and tenant_domain = #{bean.tenantDomain}
             </if>
             <if test="bean.windFarm != null ">
-            and wind_farm in (${bean.windFarm}) 
+           	   and find_in_set(wind_farm, #{bean.windFarm})
          </if>
 	  ) a GROUP BY a.incident_type order by a.incident_type asc
     </select>
@@ -199,7 +199,7 @@
              and tenant_domain = #{bean.tenantDomain}
         </if>
         <if test="bean.windFarm != null ">
-          and wind_farm in (${bean.windFarm}) 
+          and find_in_set(wind_farm, #{bean.windFarm})
         </if>
 		group by incident_type
 		
@@ -214,7 +214,7 @@
              and tenant_domain = #{bean.tenantDomain}
         </if>
         <if test="bean.windFarm != null ">
-          and wind_farm in (${bean.windFarm}) 
+          and find_in_set(wind_farm, #{bean.windFarm})
         </if>
     </select>
     
