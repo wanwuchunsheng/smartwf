@@ -4,7 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -83,5 +87,21 @@ public class MySpringMvcConfig implements WebMvcConfigurer {
             }
         };
     }
-
+    
+    
+    
+    /**
+     * 说明：统一参数验证异常
+     * 
+    
+    @Bean
+    public javax.validation.Validator validator(){
+        ValidatorFactory validatorFactory = Validation.byProvider( HibernateValidator.class )
+                .configure()
+                .addProperty( "hibernate.validator.fail_fast", "true" )
+                .buildValidatorFactory();
+        return validatorFactory.getValidator();
+ 
+    }
+ * */
 }

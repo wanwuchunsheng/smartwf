@@ -2,18 +2,26 @@ package com.smartwf.sm.modules.admin.pojo;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.smartwf.common.pojo.BasePojo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @Description: 用户资料表
  * @author WCH
  */
-@Data
+@Getter
+@Setter
 @TableName("sys_user_info")
 public class UserInfo extends BasePojo implements Serializable{
 	
@@ -23,6 +31,7 @@ public class UserInfo extends BasePojo implements Serializable{
      * 主键id
      */
 	@TableId(type = IdType.AUTO)
+	@NotNull(message = "id不能为空", groups = Update.class)
 	private Integer id;
    
 	/**
@@ -48,6 +57,8 @@ public class UserInfo extends BasePojo implements Serializable{
 	/**
 	 * 手机号
 	 */
+	@Length(min = 11,max = 11,message = "手机号码必须11位数", groups = {Update.class})
+	@Pattern(regexp = "^((13[0-9])|(14[5,7,9])|(15([0-3]|[5-9]))|(166)|(17[0,1,3,5,6,7,8])|(18[0-9])|(19[8|9]))\\d{8}$", message = "手机号格式错误", groups = {Update.class})
 	private String mobile;
 	/**
 	 * 办公电话

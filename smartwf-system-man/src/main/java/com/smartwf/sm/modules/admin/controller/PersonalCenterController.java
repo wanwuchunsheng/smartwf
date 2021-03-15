@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.smartwf.common.annotation.TraceLog;
+import com.smartwf.common.annotation.ParamValidated.Update;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.handler.UserProfile;
 import com.smartwf.common.pojo.Result;
@@ -88,7 +90,7 @@ public class PersonalCenterController {
     	@ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "int", required = true),
         @ApiImplicitParam(paramType = "query", name = "userName", value = "姓名", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "sex", value = "性别（0-女 1-男）", dataType = "Integer"),
-        @ApiImplicitParam(paramType = "query", name = "mobile", value = "手机号", dataType = "String"),
+        @ApiImplicitParam(paramType = "query", name = "mobile", value = "手机号码", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "address", value = "住址", dataType = "String"),
         @ApiImplicitParam(paramType = "query", name = "phone", value = "电话", dataType = "String"),
@@ -96,7 +98,7 @@ public class PersonalCenterController {
  	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @TraceLog(content = "修改用户资料", paramIndexs = {0})
-    public ResponseEntity<Result<?>> updateSysUser(UserInfoVO bean) {
+    public ResponseEntity<Result<?>> updateSysUser(@Validated(value = Update.class) UserInfoVO bean) {
         try {
             this.personalCenterService.updateUserInfo(bean);
             return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"修改成功"));
