@@ -4,6 +4,11 @@ package com.smartwf.sm.config.exception;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+
+import org.hibernate.validator.HibernateValidator;
+import org.springframework.context.annotation.Bean;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -50,6 +55,18 @@ public class RequestValidateExceptionHandle {
         return map;
     }
 
-	
+    /**
+     * 说明：统一参数验证异常
+     *   参数不合法马上返回，无需全局检验完成再返回
+    * */
+    @Bean
+    public javax.validation.Validator validator(){
+        ValidatorFactory validatorFactory = Validation.byProvider( HibernateValidator.class )
+                .configure()
+                .addProperty( "hibernate.validator.fail_fast", "true" )
+                .buildValidatorFactory();
+        return validatorFactory.getValidator();
+ 
+    }
 
 }

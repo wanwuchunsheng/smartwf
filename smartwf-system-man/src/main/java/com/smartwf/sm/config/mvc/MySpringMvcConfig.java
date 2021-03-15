@@ -89,19 +89,5 @@ public class MySpringMvcConfig implements WebMvcConfigurer {
     }
     
     
-    
-    /**
-     * 说明：统一参数验证异常
-     * 
-    
-    @Bean
-    public javax.validation.Validator validator(){
-        ValidatorFactory validatorFactory = Validation.byProvider( HibernateValidator.class )
-                .configure()
-                .addProperty( "hibernate.validator.fail_fast", "true" )
-                .buildValidatorFactory();
-        return validatorFactory.getValidator();
  
-    }
- * */
 }
