@@ -49,32 +49,33 @@ public class GlobalServiceImple implements GlobalService{
 	@Override
 	public Result<?> selectfaultInformationById(String id) {
 		FaultInformation bean= this.faultDataDao.selectById(id);
-		Integer incidentType=bean.getIncidentType();
-		FaultInformationVO fv=null;
-		
-		//1-故障类型
-		if(Constants.ONE==incidentType) {
-			//封装对象
-			fv=new FaultInformationVO();
-			fv.setId(id);
-			//调用故障接口
-			return this.faultInboxService.selectFaultInforById(fv);
-		}
-		// 2-缺陷类型
-		if(Constants.TWO ==incidentType) {
-			//封装对象
-			DefectVO dv= new DefectVO();
-			dv.setId(id);
-			//调用故障接口
-			return this.defectService.selectDefectById(dv);
-		}
-		// 3告警类型
-		if(Constants.ORDERSOURCES ==incidentType) {
-			//封装对象
-			fv=new FaultInformationVO();
-			fv.setId(id);
-			//调用故障接口
-			return this.alarmInboxService.selectAlarmInforById(fv);
+		if(bean!=null) {
+			Integer incidentType=bean.getIncidentType();
+			FaultInformationVO fv=null;
+			//1-故障类型
+			if(Constants.ONE==incidentType) {
+				//封装对象
+				fv=new FaultInformationVO();
+				fv.setId(id);
+				//调用故障接口
+				return this.faultInboxService.selectFaultInforById(fv);
+			}
+			// 2-缺陷类型
+			if(Constants.TWO ==incidentType) {
+				//封装对象
+				DefectVO dv= new DefectVO();
+				dv.setId(id);
+				//调用故障接口
+				return this.defectService.selectDefectById(dv);
+			}
+			// 3告警类型
+			if(Constants.ORDERSOURCES ==incidentType) {
+				//封装对象
+				fv=new FaultInformationVO();
+				fv.setId(id);
+				//调用故障接口
+				return this.alarmInboxService.selectAlarmInforById(fv);
+			}
 		}
 		return Result.msg(Constants.ERRCODE502012,"失败");
 	}

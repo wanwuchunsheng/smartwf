@@ -3,9 +3,13 @@ package com.smartwf.hm.modules.alarmstatistics.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.smartwf.common.annotation.ParamValidated;
+import com.smartwf.common.annotation.ParamValidated.Query;
 
 import lombok.Data;
 
@@ -28,6 +32,7 @@ public class FaultOperationRecord implements Serializable {
 	/**
 	 * 故障主键
 	 */
+	@NotNull(message = " 故障主键不能为空",groups = Query.class)
 	private String faultInfoId;
 	/**
 	 * 操作状态

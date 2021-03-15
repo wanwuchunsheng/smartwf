@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.smartwf.common.pojo.BasePojo;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 /**
@@ -27,6 +28,7 @@ public class FaultInformation extends BasePojo implements Serializable{
 	 * 主键
 	 */
 	@TableId(type = IdType.UUID)
+	@NotNull(message = "id不能为空", groups = Update.class)
 	private String id;
 
 	/**
@@ -93,6 +95,7 @@ public class FaultInformation extends BasePojo implements Serializable{
 	/**
 	 * 风场
 	 */
+	@NotNull(message = "windFarm不能为空", groups = Query.class)
 	private String windFarm;
 	/**
 	 * 资产编码
@@ -101,6 +104,7 @@ public class FaultInformation extends BasePojo implements Serializable{
 	/**
 	 * 工单号
 	 */
+	@NotNull(message = "工单号不能为空", groups = Update.class)
 	private String orderNumber;
 	/**
 	 *  故障状态
@@ -110,6 +114,7 @@ public class FaultInformation extends BasePojo implements Serializable{
 		3已处理
 		4已关闭
 	 */
+	@NotNull(message = "故障状态不能为空", groups = Update.class)
 	private Integer alarmStatus;
 	/**
 	 * 操作状态

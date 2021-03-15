@@ -3,10 +3,14 @@ package com.smartwf.hm.modules.alarmstatistics.pojo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.smartwf.common.annotation.ParamValidated.Update;
 import com.smartwf.common.pojo.BasePojo;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,6 +35,7 @@ public class SecurityIncidents extends BasePojo implements Serializable {
 	/**
 	 * 租户域
 	 */
+	@NotNull(message = "租户域不能为空", groups = Query.class)
 	private String tenantDomain;
 	/**
 	 * 风场ID
