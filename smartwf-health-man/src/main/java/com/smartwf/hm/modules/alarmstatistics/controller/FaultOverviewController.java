@@ -1,8 +1,11 @@
 package com.smartwf.hm.modules.alarmstatistics.controller;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("faultoverview")
 @Slf4j
 @Api(description = "故障总览控制器")
+@Validated
 public class FaultOverviewController {
 	
 	@Autowired
@@ -50,7 +54,7 @@ public class FaultOverviewController {
     	    @ApiImplicitParam(paramType = "query", name = "stime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true ),
             @ApiImplicitParam(paramType = "query", name = "etime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true )
     })
-    public ResponseEntity<Result<?>> selectFaultTypeByDate(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectFaultTypeByDate(FaultInformationVO bean,@NotNull(message = "租户域不能为空") String tenantDomain) {
         try {
             Result<?> result = this.faultOverviewService.selectFaultTypeByDate(bean);
             if (result != null) {
@@ -79,7 +83,9 @@ public class FaultOverviewController {
     	    @ApiImplicitParam(paramType = "query", name = "stime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true ),
             @ApiImplicitParam(paramType = "query", name = "etime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true )
     })
-    public ResponseEntity<Result<?>> selectFaultStatusByDate(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectFaultStatusByDate(FaultInformationVO bean,
+    		@NotNull(message = "租户域不能为空") String tenantDomain,
+    		@NotNull(message = "事变类型不能为空") Integer incidentType) {
         try {
             Result<?> result = this.faultOverviewService.selectFaultStatusByDate(bean);
             if (result != null) {
@@ -106,7 +112,7 @@ public class FaultOverviewController {
     	    @ApiImplicitParam(paramType = "query", name = "stime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true ),
             @ApiImplicitParam(paramType = "query", name = "etime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true )
     })
-    public ResponseEntity<Result<?>> selectProcessingEfficByDate(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectProcessingEfficByDate(FaultInformationVO bean,@NotNull(message = "租户域不能为空") String tenantDomain) {
         try {
             Result<?> result = this.faultOverviewService.selectProcessingEfficByDate(bean);
             if (result != null) {
@@ -134,7 +140,8 @@ public class FaultOverviewController {
     	    @ApiImplicitParam(paramType = "query", name = "stime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true ),
             @ApiImplicitParam(paramType = "query", name = "etime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date", required = true )
     })
-    public ResponseEntity<Result<?>> selectFaultLevelByDate(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectFaultLevelByDate(FaultInformationVO bean,
+    		@NotNull(message = "租户域不能为空") String tenantDomain) {
         try {
             Result<?> result = this.faultOverviewService.selectFaultLevelByDate(bean);
             if (result != null) {
@@ -159,7 +166,8 @@ public class FaultOverviewController {
 	        @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectFaultByAlarmStatus(Page<FaultInformation> page,FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectFaultByAlarmStatus(Page<FaultInformation> page,FaultInformationVO bean,
+    		@NotNull(message = "租户域不能为空") String tenantDomain) {
         try {
             Result<?> result = this.faultOverviewService.selectFaultByAlarmStatus(page,bean);
             if (result != null) {
@@ -184,7 +192,8 @@ public class FaultOverviewController {
    	      @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String", required = true),
           @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true)
     })
-    public ResponseEntity<Result<?>> selectFaultRecordByIncidentType(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectFaultRecordByIncidentType(FaultInformationVO bean,
+    		@NotNull(message = "租户域不能为空") String tenantDomain, @NotNull(message = "风场不能为空") String windFarm) {
        try {
        	 Result<?> result =this.faultOverviewService.selectFaultRecordByIncidentType(bean);
        	 return ResponseEntity.status(HttpStatus.OK).body(result);
