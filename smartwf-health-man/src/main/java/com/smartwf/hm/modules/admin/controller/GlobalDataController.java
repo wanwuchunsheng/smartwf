@@ -1,15 +1,19 @@
 package com.smartwf.hm.modules.admin.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smartwf.common.annotation.ParamValidated.QueryParam;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.handler.UserProfile;
 import com.smartwf.common.pojo.Result;
@@ -36,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("globaldata")
 @Slf4j
 @Api(description = "全局数据控制器")
+@Validated
 public class GlobalDataController {
 	
 	
@@ -84,7 +89,10 @@ public class GlobalDataController {
    	    @ApiImplicitParam(paramType = "query", name = "orderNumber", value = "工单号", dataType = "String", required = true),
    	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
-    public ResponseEntity<Result<?>> updateAlarmInByParam(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> updateAlarmInByParam(FaultInformationVO bean,
+    		@NotBlank(message = "故障主键不能为空") String faultId,
+    		@NotBlank(message = "状态不能为空") Integer alarmStatus,
+    		@NotBlank(message = "工单号不能为空") String orderNumber ) {
         try {
            Result<?> result= this.alarmInboxService.updateAlarmInByParam(bean);
        	   return ResponseEntity.ok(result);
@@ -107,7 +115,7 @@ public class GlobalDataController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "id", value = "（故障/缺陷/警告）主键", dataType = "String", required = true)
     })
-    public ResponseEntity<Result<?>> selectfaultInformationById(String id) {
+    public ResponseEntity<Result<?>> selectfaultInformationById(@NotBlank(message = "（故障、警告、缺陷）主键不能为空") String id) {
         try {
            Result<?> result= this.globalService.selectfaultInformationById(id);
        	   return ResponseEntity.ok(result);
@@ -130,7 +138,7 @@ public class GlobalDataController {
   	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
        	    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "（故障、警告、缺陷）主键", dataType = "String", required = true )
       })
-      public ResponseEntity<Result<?>> selectFaultRecordByAll(FaultOperationRecord bean) {
+      public ResponseEntity<Result<?>> selectFaultRecordByAll(FaultOperationRecord bean,@NotBlank(message = "（故障、警告、缺陷）主键不能为空") String faultInfoId) {
 	       try {
 	       	 Result<?> result = this.globalService.selectFaultRecordByAll(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -152,7 +160,7 @@ public class GlobalDataController {
       	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true ),
       	@ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required = true )
       })
-      public ResponseEntity<Result<?>> selectSafetyProductionTime(HttpServletRequest request, SecurityIncidentsVO bean) {
+      public ResponseEntity<Result<?>> selectSafetyProductionTime(HttpServletRequest request,@Validated(value = QueryParam.class) SecurityIncidentsVO bean) {
           try {
              Result<?> result= this.securityIncidentsService.selectSafetyProductionTime(bean,request);
          	 return ResponseEntity.ok(result);
