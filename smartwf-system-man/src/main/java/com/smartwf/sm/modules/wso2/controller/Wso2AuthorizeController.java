@@ -12,19 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
-import com.smartwf.common.pojo.User;
-import com.smartwf.common.thread.UserThreadLocal;
-import com.smartwf.common.utils.Wso2ClientUtils;
-import com.smartwf.common.wso2.Wso2Config;
 import com.smartwf.sm.modules.wso2.service.Wso2AuthorizeService;
 
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+
 /**
  * 说明：WSO2授权控制器
  * @author WCH
@@ -39,9 +34,7 @@ public class Wso2AuthorizeController {
 	
 	@Autowired
 	private Wso2AuthorizeService wso2AuthorizeService;
-	
-	@Autowired
-	private Wso2Config wso2Config;
+
 	
 	
 	/**

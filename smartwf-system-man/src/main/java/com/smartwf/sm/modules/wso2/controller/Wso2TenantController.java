@@ -2,9 +2,12 @@ package com.smartwf.sm.modules.wso2.controller;
 
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smartwf.common.annotation.ParamValidated.Add;
+import com.smartwf.common.annotation.ParamValidated.Query;
+import com.smartwf.common.annotation.ParamValidated.QueryParam;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.sm.modules.wso2.pojo.Wso2Tenant;
@@ -32,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("wso2/tenant")
 @Slf4j
 @Api(description = "WSO2租户控制器")
+@Validated
 public class Wso2TenantController {
 	
 	@Autowired
@@ -54,7 +61,7 @@ public class Wso2TenantController {
     	@ApiImplicitParam(paramType = "query", name = "lastname", value = "姓氏", dataType = "String",required = true),
     	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域（一般后面带.com）", dataType = "String",required = true)
     })
-    public ResponseEntity<Result<?>> addTenant(Wso2Tenant bean) {
+    public ResponseEntity<Result<?>> addTenant(@Validated(value = Add.class) Wso2Tenant bean) {
         try {
         	Map<String,Object> map =this.wso2TenantService.addTenant(bean);
         	if(!map.isEmpty()) {
@@ -80,7 +87,7 @@ public class Wso2TenantController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域（一般后面带.com）", dataType = "String",required = true)
     })
-    public ResponseEntity<Result<?>> selectTenant(Wso2Tenant bean) {
+    public ResponseEntity<Result<?>> selectTenant(@Validated(value = QueryParam.class) Wso2Tenant bean) {
         try {
         	Map<String,Object> map =this.wso2TenantService.selectTenant(bean);
         	if(!map.isEmpty()) {
@@ -105,7 +112,7 @@ public class Wso2TenantController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域（一般后面带.com）", dataType = "String",required = true)
     })
-    public ResponseEntity<Result<?>> deleteTenant(Wso2Tenant bean) {
+    public ResponseEntity<Result<?>> deleteTenant(@Validated(value = QueryParam.class) Wso2Tenant bean) {
         try {
         	Map<String,Object> map =this.wso2TenantService.deleteTenant(bean);
         	if(!map.isEmpty()) {
@@ -137,7 +144,7 @@ public class Wso2TenantController {
     	@ApiImplicitParam(paramType = "query", name = "lastname", value = "姓氏", dataType = "String"),
     	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域（一般后面带.com）", dataType = "String")
     })
-    public ResponseEntity<Result<?>> updateTenant(Wso2Tenant bean) {
+    public ResponseEntity<Result<?>> updateTenant(@Validated(value = Query.class) Wso2Tenant bean) {
         try {
         	Map<String,Object> map =this.wso2TenantService.updateTenant(bean);
         	if(!map.isEmpty()) {
@@ -165,7 +172,9 @@ public class Wso2TenantController {
     	@ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域（一般后面带.com）", dataType = "String",required = true),
     	@ApiImplicitParam(paramType = "query", name = "active", value = "true:启用   false：禁用", dataType = "Boolean",required = true)
     })
-    public ResponseEntity<Result<?>> deactivateTenant(Wso2Tenant bean) {
+    public ResponseEntity<Result<?>> deactivateTenant(Wso2Tenant bean,
+    		@NotNull(message = "租户域不能为空") String tenantDomain,
+    		@NotNull(message = "租户启停状态不能为空") Boolean active ) {
         try {
         	Map<String,Object> map =this.wso2TenantService.deactivateTenant(bean);
         	if(!map.isEmpty()) {
