@@ -9,7 +9,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.smartwf.common.annotation.ParamValidated;
+import com.smartwf.common.annotation.ParamValidated.Add;
 import com.smartwf.common.annotation.ParamValidated.Query;
+import com.smartwf.common.annotation.ParamValidated.QueryParam;
 
 import lombok.Data;
 
@@ -32,7 +34,8 @@ public class FaultOperationRecord implements Serializable {
 	/**
 	 * 故障主键
 	 */
-	@NotNull(message = " 故障主键不能为空",groups = Query.class)
+	@NotNull(message = " 故障主键不能为空",groups = QueryParam.class)
+	@NotNull(message = " 故障主键不能为空",groups = Add.class)
 	private String faultInfoId;
 	/**
 	 * 操作状态
@@ -52,12 +55,14 @@ public class FaultOperationRecord implements Serializable {
 	 * 操作说明
 	 * 
 	 */
+	@NotNull(message = " 操作说明不能为空",groups = Add.class)
 	private String closureReason;
 	/**
 	 * 操作类型
 	 * 1.处理记录
 	 * 2.处理意见
 	 */
+	@NotNull(message = " 操作类型不能为空",groups = Add.class)
 	private Integer closureType;
 	/**
 	 * 备注
@@ -79,6 +84,7 @@ public class FaultOperationRecord implements Serializable {
 	/**
 	 * 租户域
 	 */
+	@NotNull(message = " 租户域不能为空",groups = Add.class)
 	private String tenantDomain;
 	
 }

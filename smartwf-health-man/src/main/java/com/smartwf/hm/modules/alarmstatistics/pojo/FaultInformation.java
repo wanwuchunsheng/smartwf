@@ -2,18 +2,21 @@ package com.smartwf.hm.modules.alarmstatistics.pojo;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.smartwf.common.pojo.BasePojo;
-import javax.validation.constraints.NotNull;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 /**
  * @author WCH
  * @Description: 故障报警表
  */
-@Data
+@Getter
+@Setter
 @TableName("fault_information")
 public class FaultInformation extends BasePojo implements Serializable{
 	/**
@@ -29,6 +32,7 @@ public class FaultInformation extends BasePojo implements Serializable{
 	 */
 	@TableId(type = IdType.UUID)
 	@NotNull(message = "id不能为空", groups = Update.class)
+	@NotNull(message = "id不能为空", groups = Query.class)
 	private String id;
 
 	/**
@@ -95,7 +99,7 @@ public class FaultInformation extends BasePojo implements Serializable{
 	/**
 	 * 风场
 	 */
-	@NotNull(message = "windFarm不能为空", groups = Query.class)
+	@NotNull(message = "风场不能为空", groups = QueryParam.class)
 	private String windFarm;
 	/**
 	 * 资产编码
@@ -104,7 +108,6 @@ public class FaultInformation extends BasePojo implements Serializable{
 	/**
 	 * 工单号
 	 */
-	@NotNull(message = "工单号不能为空", groups = Update.class)
 	private String orderNumber;
 	/**
 	 *  故障状态
@@ -114,7 +117,6 @@ public class FaultInformation extends BasePojo implements Serializable{
 		3已处理
 		4已关闭
 	 */
-	@NotNull(message = "故障状态不能为空", groups = Update.class)
 	private Integer alarmStatus;
 	/**
 	 * 操作状态
@@ -138,6 +140,7 @@ public class FaultInformation extends BasePojo implements Serializable{
 	/**
 	 * 租户域
 	 */
+	@NotNull(message = "租户域不能为空", groups = QueryParam.class)
 	private String tenantDomain;
 	
 }

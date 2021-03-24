@@ -1,15 +1,22 @@
 package com.smartwf.hm.modules.alarmstatistics.controller;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.annotation.ParamValidated.Query;
+import com.smartwf.common.annotation.ParamValidated.QueryParam;
+import com.smartwf.common.annotation.ParamValidated.Update;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultOperationRecord;
@@ -56,7 +63,7 @@ public class DefectController {
     	    @ApiImplicitParam(paramType = "query", name = "managementMeasures", value = "管控措施", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
-    public ResponseEntity<Result<?>> updateDefectById(DefectVO bean) {
+    public ResponseEntity<Result<?>> updateDefectById(@Validated(value = Update.class) DefectVO bean) {
         try {
         	 this.defectService.updateDefectById(bean);
         	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"修改成功"));
@@ -77,7 +84,7 @@ public class DefectController {
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String")
     })
-    public ResponseEntity<Result<?>> selectDefectById(DefectVO bean) {
+    public ResponseEntity<Result<?>> selectDefectById(@Validated(value = Query.class) DefectVO bean) {
         try {
         	 Result<?> result = this.defectService.selectDefectById(bean);
         	 return ResponseEntity.ok(result);
@@ -97,7 +104,7 @@ public class DefectController {
     @PostMapping("selectDefectByPage")
     @ApiOperation(value = "分页查询缺陷接口", notes = "分页查询缺陷信息查询")
     @ApiImplicitParams({
-	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
+	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required =  true),
 	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "报警码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "报警源", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "报警描述", dataType = "String"),
@@ -121,7 +128,7 @@ public class DefectController {
         @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
         @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
 	})
-    public ResponseEntity<Result<?>> selectDefectByPage( Page<DefectVO> page, DefectVO bean) {
+    public ResponseEntity<Result<?>> selectDefectByPage(Page<DefectVO> page,@Validated(value = QueryParam.class) DefectVO bean) {
         try {
         	Result<?> result = this.defectService.selectDefectByPage(page,bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -141,7 +148,7 @@ public class DefectController {
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
 	})
-    public ResponseEntity<Result<?>> selectDefectCountByAll(String tenantDomain,String windFarm) {
+    public ResponseEntity<Result<?>> selectDefectCountByAll(@RequestParam @NotNull String tenantDomain,String windFarm) {
         try {
         	Integer count=this.defectService.selectDefectCountByAll(tenantDomain, windFarm);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));

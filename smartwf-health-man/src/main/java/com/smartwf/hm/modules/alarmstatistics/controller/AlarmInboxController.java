@@ -1,15 +1,24 @@
 package com.smartwf.hm.modules.alarmstatistics.controller;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.annotation.ParamValidated.Add;
+import com.smartwf.common.annotation.ParamValidated.Query;
+import com.smartwf.common.annotation.ParamValidated.QueryParam;
+import com.smartwf.common.annotation.ParamValidated.Update;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.modules.alarmstatistics.pojo.FaultInformation;
@@ -35,6 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("alarminbox")
 @Slf4j
 @Api(description = "警告收件箱(重点机位)控制器")
+@Validated
 public class AlarmInboxController {
 	
 	@Autowired
@@ -53,8 +63,8 @@ public class AlarmInboxController {
     @PostMapping("selectAlarmInforByPage")
     @ApiOperation(value = "警告分页查询接口", notes = "警告分页查询")
     @ApiImplicitParams({
-	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
-	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
+	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
+	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String",required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "警告码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "警告源", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "警告描述", dataType = "String"),
@@ -69,7 +79,7 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectAlarmInforByPage( Page<FaultInformation> page, FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectAlarmInforByPage( Page<FaultInformation> page,@Validated(value = QueryParam.class) FaultInformationVO bean) {
         try {
         	Result<?> result = this.alarmInboxService.selectAlarmInforByPage(page,bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -90,7 +100,7 @@ public class AlarmInboxController {
     @ApiOperation(value = "查询所有警告接口", notes = "查询所有警告")
     @ApiImplicitParams({
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String"),
+    	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "alarmCode", value = "警告码", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmSource", value = "警告源", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "alarmDescription", value = "警告描述", dataType = "String"),
@@ -103,7 +113,7 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" )
     })
-    public ResponseEntity<Result<?>> selectAlarmInforByAll(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectAlarmInforByAll(@Validated(value = QueryParam.class) FaultInformationVO bean) {
         try {
         	Result<?> result = this.alarmInboxService.selectAlarmInforByAll(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -139,7 +149,7 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "startTime", value = "起始时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" ),
             @ApiImplicitParam(paramType = "query", name = "endTime", value = "截止时间(yyyy-MM-dd HH:mm:ss)", dataType = "Date" )
     })
-    public ResponseEntity<Result<?>> updateAlarmInforById(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> updateAlarmInforById(@Validated(value = Update.class) FaultInformationVO bean) {
         try {
         	 this.alarmInboxService.updateAlarmInforById(bean);
         	 return ResponseEntity.status(HttpStatus.OK).body(Result.msg("修改成功"));
@@ -160,7 +170,7 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String")
     })
-    public ResponseEntity<Result<?>> selectAlarmInforById(FaultInformationVO bean) {
+    public ResponseEntity<Result<?>> selectAlarmInforById(@Validated(value = Query.class) FaultInformationVO bean) {
         try {
         	 Result<?> result = this.alarmInboxService.selectAlarmInforById(bean);
         	 return ResponseEntity.ok(result);
@@ -181,7 +191,7 @@ public class AlarmInboxController {
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String")
     })
-    public ResponseEntity<Result<?>> selectDefectById(DefectVO bean) {
+    public ResponseEntity<Result<?>> selectDefectById(@Validated(value = Query.class) DefectVO bean) {
         try {
         	 Result<?> result = this.defectService.selectDefectById(bean);
         	 return ResponseEntity.ok(result);
@@ -200,9 +210,11 @@ public class AlarmInboxController {
     @ApiOperation(value = "实时警告未处理总数接口", notes = "实时警告未处理总数查询")
     @ApiImplicitParams({
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String",required = true)
 	})
-    public ResponseEntity<Result<?>> selectAlarmsCountByAll(String tenantDomain,String windFarm) {
+    public ResponseEntity<Result<?>> selectAlarmsCountByAll(
+    		@NotNull(message = "租户域不能为空") String tenantDomain,
+    		@NotNull(message = "风场不能为空") String windFarm) {
         try {
         	Integer count=this.alarmInboxService.selectAlarmsCountByAll(tenantDomain,windFarm);
     	   	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
@@ -221,9 +233,11 @@ public class AlarmInboxController {
     @ApiOperation(value = "今日新增总数查询接口", notes = "今日新增总数查询")
     @ApiImplicitParams({
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String",required = true)
 	})
-    public ResponseEntity<Result<?>> selectAlarmsCountByToday(String tenantDomain,String windFarm) {
+    public ResponseEntity<Result<?>> selectAlarmsCountByToday(
+    		@NotNull(message = "租户域不能为空") String tenantDomain,
+    		@NotNull(message = "风场不能为空") String windFarm) {
         try {
         	Integer count=this.alarmInboxService.selectAlarmsCountByToday(tenantDomain,windFarm);
     	   	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
@@ -247,7 +261,7 @@ public class AlarmInboxController {
   	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
        	    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "警告表（主键）", dataType = "String", required = true )
       })
-      public ResponseEntity<Result<?>> selectFaultRecordByAll(FaultOperationRecord bean) {
+      public ResponseEntity<Result<?>> selectFaultRecordByAll(@Validated(value = QueryParam.class) FaultOperationRecord bean) {
 	       try {
 	       	 Result<?> result = this.alarmInboxService.selectFaultRecordByAll(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -420,7 +434,7 @@ public class AlarmInboxController {
 		    @ApiImplicitParam(paramType = "query", name = "closureStatus", value = "操作状态{5待审核 0未处理  2处理中 3已处理 4已关闭}", dataType = "Integer"),
 		    @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String" )
 		})
-	    public ResponseEntity<Result<?>> addFaultOperationRecord(FaultOperationRecord bean) {
+	    public ResponseEntity<Result<?>> addFaultOperationRecord(@Validated(value = Add.class) FaultOperationRecord bean) {
 	        try {
 	        	this.alarmInboxService.addFaultOperationRecord(bean);
 	        	return ResponseEntity.status(HttpStatus.OK).body(Result.msg(Constants.EQU_SUCCESS,"添加成功！"));
