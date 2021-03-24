@@ -1,6 +1,9 @@
 package com.smartwf.hm.modules.alarmstatistics.vo;
 
+import javax.validation.constraints.NotNull;
+
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.smartwf.common.annotation.ParamValidated.Delete;
 import com.smartwf.hm.modules.alarmstatistics.pojo.SecurityIncidents;
 
 import lombok.Getter;
@@ -34,6 +37,7 @@ public class SecurityIncidentsVO extends SecurityIncidents{
 	/**
 	 *  文件路径
 	 */
+	@NotNull(message = "租户域不能为空", groups = Delete.class)
 	private String filePath;
 	/**
 	 *  文件大小

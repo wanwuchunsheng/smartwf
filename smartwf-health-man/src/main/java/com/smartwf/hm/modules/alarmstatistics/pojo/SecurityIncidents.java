@@ -3,6 +3,7 @@ package com.smartwf.hm.modules.alarmstatistics.pojo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.smartwf.common.annotation.ParamValidated.QueryParam;
 import com.smartwf.common.annotation.ParamValidated.Update;
 import com.smartwf.common.pojo.BasePojo;
 
@@ -31,15 +32,21 @@ public class SecurityIncidents extends BasePojo implements Serializable {
 	 * 主键
 	 */
 	@TableId(type = IdType.UUID)
+	@NotNull(message = "主键不能为空", groups = Update.class)
+	@NotNull(message = "租户域不能为空", groups = Delete.class)
 	private String id;
 	/**
 	 * 租户域
 	 */
 	@NotNull(message = "租户域不能为空", groups = Query.class)
+	@NotNull(message = "租户域不能为空", groups = QueryParam.class)
+	@NotNull(message = "租户域不能为空", groups = Add.class)
 	private String tenantDomain;
 	/**
 	 * 风场ID
 	 */
+	@NotNull(message = "风场不能为空", groups = QueryParam.class)
+	@NotNull(message = "风场域不能为空", groups = Add.class)
 	private String windFarm;
 	/**
 	 * 事故标题
@@ -84,6 +91,8 @@ public class SecurityIncidents extends BasePojo implements Serializable {
 	/**
 	 * 事故状态0-待审核 1-通过 2-不通过
 	 */
+	@NotNull(message = "事故状态不能为空", groups = Add.class)
+	@NotNull(message = "事故状态不能为空", groups = Update.class)
 	private Integer incidentStatus;
 	
 	/**

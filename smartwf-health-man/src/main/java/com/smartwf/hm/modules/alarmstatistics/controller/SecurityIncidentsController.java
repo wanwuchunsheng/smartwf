@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.smartwf.common.annotation.ParamValidated.Add;
+import com.smartwf.common.annotation.ParamValidated.Delete;
+import com.smartwf.common.annotation.ParamValidated.Query;
+import com.smartwf.common.annotation.ParamValidated.QueryParam;
+import com.smartwf.common.annotation.ParamValidated.Update;
 import com.smartwf.common.constant.Constants;
 import com.smartwf.common.pojo.Result;
 import com.smartwf.hm.config.ftp.SFtpConfig;
@@ -76,7 +82,7 @@ public class SecurityIncidentsController {
     	    @ApiImplicitParam(paramType = "query", name = "current", value = "第几页，默认1", dataType = "Integer"),
             @ApiImplicitParam(paramType = "query", name = "size", value = "每页多少条，默认10", dataType = "Integer")
     })
-    public ResponseEntity<Result<?>> selectSecurityIncidentsByPage( Page<SecurityIncidents> page, SecurityIncidentsVO bean) {
+    public ResponseEntity<Result<?>> selectSecurityIncidentsByPage( Page<SecurityIncidents> page,@Validated(value = QueryParam.class) SecurityIncidentsVO bean) {
         try {
         	Result<?> result = this.securityIncidentsService.selectAlarmInforByPage(page,bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -98,7 +104,7 @@ public class SecurityIncidentsController {
 	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true)
     })
-    public ResponseEntity<Result<?>> selectSecurityIncidentsById(SecurityIncidents bean) {
+    public ResponseEntity<Result<?>> selectSecurityIncidentsById(@Validated(value = Query.class) SecurityIncidents bean) {
         try {
         	Result<?> result = this.securityIncidentsService.selectSecurityIncidentsById(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -120,7 +126,7 @@ public class SecurityIncidentsController {
 	        @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true)
     })
-    public ResponseEntity<Result<?>> selectSecurityIncidentsByFiles(SecurityIncidents bean) {
+    public ResponseEntity<Result<?>> selectSecurityIncidentsByFiles(@Validated(value = Query.class) SecurityIncidents bean) {
         try {
         	Result<?> result = this.securityIncidentsService.selectSecurityIncidentsByFiles(bean);
         	return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -154,7 +160,7 @@ public class SecurityIncidentsController {
 	    @ApiImplicitParam(paramType = "query", name = "incidentStatus", value = "状态(0待审核 1通过  2不通过)", dataType = "String",required = true),
 	    @ApiImplicitParam(paramType = "query", name = "remark", value = "其他情况", dataType = "String")
     })
-    public ResponseEntity<Result<?>> saveSecurityIncidents(HttpServletRequest request,SecurityIncidentsVO bean) {
+    public ResponseEntity<Result<?>> saveSecurityIncidents(HttpServletRequest request,@Validated(value = Add.class) SecurityIncidentsVO bean) {
         try {
         	//获取前端上传的文件列表
             List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
@@ -218,7 +224,7 @@ public class SecurityIncidentsController {
     	    @ApiImplicitParam(paramType = "query", name = "incidentStatus", value = "状态(0待审核 1通过  2不通过)", dataType = "int", required =true ),
     	    @ApiImplicitParam(paramType = "query", name = "remark", value = "其他情况", dataType = "String")
     })
-    public ResponseEntity<Result<?>> updateSecurityIncidents(HttpServletRequest request, SecurityIncidentsVO bean) {
+    public ResponseEntity<Result<?>> updateSecurityIncidents(HttpServletRequest request,@Validated(value = Update.class) SecurityIncidentsVO bean) {
         try {
         	/***
         	//获取前端上传的文件列表
@@ -273,7 +279,7 @@ public class SecurityIncidentsController {
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "filePath", value = "文件路径", dataType = "String",required = true)
     })
-    public ResponseEntity<Result<?>> deleteSecurityIncidentsByFiles(SecurityIncidentsVO bean) {
+    public ResponseEntity<Result<?>> deleteSecurityIncidentsByFiles(@Validated(value = Delete.class) SecurityIncidentsVO bean) {
         try {
         	//删除文件
             boolean flag = SFtpUtil.deleteFile(config,bean.getFilePath());
@@ -301,7 +307,7 @@ public class SecurityIncidentsController {
     	    @ApiImplicitParam(paramType = "query", name = "filePath", value = "文件路径", dataType = "String",required = true),
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String",required = true)
     })
-    public ResponseEntity<Object> downloadByFiles(SecurityIncidentsVO bean) {
+    public ResponseEntity<Object> downloadByFiles(@Validated(value = Delete.class) SecurityIncidentsVO bean) {
         try {
         	//通过主键,路径查询附件信息
         	FileUploadRecord fur=this.securityIncidentsService.selectFileUploadRecord(bean);
