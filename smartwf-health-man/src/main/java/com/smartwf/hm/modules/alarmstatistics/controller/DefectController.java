@@ -38,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("defect")
 @Slf4j
 @Api(description = "缺陷收件箱控制器")
+@Validated
 public class DefectController {
 	
 	@Autowired
@@ -56,7 +57,7 @@ public class DefectController {
     	    @ApiImplicitParam(paramType = "query", name = "id", value = "主键", dataType = "String", required = true ),
     	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
     	    @ApiImplicitParam(paramType = "query", name = "orderNumber", value = "缺陷工单号", dataType = "String"),
-    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态( 0未处理  1已转工单  2处理中  3已处理  4已关闭  )", dataType = "int",required = true),
+    	    @ApiImplicitParam(paramType = "query", name = "alarmStatus", value = "故障状态( 0未处理  1已转工单  2处理中  3已处理  4已关闭  )", dataType = "int"),
     	    @ApiImplicitParam(paramType = "query", name = "incidentType", value = "事变类型(1故障类型 2缺陷类型)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
     	    @ApiImplicitParam(paramType = "query", name = "workOrderTitle", value = "工单标题", dataType = "String"),
@@ -115,7 +116,7 @@ public class DefectController {
 	    @ApiImplicitParam(paramType = "query", name = "manufacturers", value = "厂家", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "deviceCode", value = "设备编码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "deviceName", value = "设备名称", dataType = "String"),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String"),
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场", dataType = "String",required =  true),
 	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "资产编码", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "assetNumber", value = "缺陷工单号", dataType = "String"),
 	    @ApiImplicitParam(paramType = "query", name = "operatingStatus", value = "操作状态(0默认  1重点关注)", dataType = "Integer"),
@@ -146,9 +147,11 @@ public class DefectController {
     @ApiOperation(value = "缺陷未处理总数查询接口", notes = "缺陷未处理总数查询")
     @ApiImplicitParams({
 	    @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String",required = true),
-	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String")
+	    @ApiImplicitParam(paramType = "query", name = "windFarm", value = "风场{支持多风场：中间逗号拼接}", dataType = "String",required = true)
 	})
-    public ResponseEntity<Result<?>> selectDefectCountByAll(@RequestParam @NotNull String tenantDomain,String windFarm) {
+    public ResponseEntity<Result<?>> selectDefectCountByAll(
+    		@NotNull(message = "租户域不能为空") String tenantDomain,
+    		@NotNull(message = "风场不能为空") String windFarm) {
         try {
         	Integer count=this.defectService.selectDefectCountByAll(tenantDomain, windFarm);
         	return ResponseEntity.status(HttpStatus.OK).body(Result.data(Constants.EQU_SUCCESS, count));
@@ -170,7 +173,7 @@ public class DefectController {
   	        @ApiImplicitParam(paramType = "query", name = "tenantDomain", value = "租户域", dataType = "String"),
        	    @ApiImplicitParam(paramType = "query", name = "faultInfoId", value = "故障报警表（主键）", dataType = "String", required = true )
       })
-      public ResponseEntity<Result<?>> selectDefectByAll(FaultOperationRecord bean) {
+      public ResponseEntity<Result<?>> selectDefectByAll(@Validated(value = QueryParam.class) FaultOperationRecord bean) {
 	       try {
 	       	 Result<?> result = this.defectService.selectDefectByAll(bean);
 	       	 return ResponseEntity.status(HttpStatus.OK).body(result);
