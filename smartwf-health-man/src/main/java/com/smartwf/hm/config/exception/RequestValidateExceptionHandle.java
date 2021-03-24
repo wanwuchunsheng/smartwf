@@ -62,7 +62,7 @@ public class RequestValidateExceptionHandle {
     /**
      * 说明：统一参数验证异常
      *   参数不合法马上返回，无需全局检验完成再返回
-   
+     * */
     @Bean
     public javax.validation.Validator validator(){
         ValidatorFactory validatorFactory = Validation.byProvider( HibernateValidator.class )
@@ -71,6 +71,6 @@ public class RequestValidateExceptionHandle {
                 .buildValidatorFactory();
         return validatorFactory.getValidator();
     }
-     * */
+    
     
 }

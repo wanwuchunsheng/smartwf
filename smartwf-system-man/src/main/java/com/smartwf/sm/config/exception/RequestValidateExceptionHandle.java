@@ -1,20 +1,25 @@
 package com.smartwf.sm.config.exception;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.stream.Collectors;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
+import org.apache.http.HttpStatus;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.smartwf.common.pojo.Result;
 
 /**
  * 说明：校验统一 参数校验处理异常
@@ -25,40 +30,38 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class RequestValidateExceptionHandle {
 	
-	//json格式
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public Map<String, Object> errorHandler(MethodArgumentNotValidException ex) {
-        StringBuilder errorMsg = new StringBuilder();
-        BindingResult re = ex.getBindingResult();
-        for (ObjectError error : re.getAllErrors()) {
-            errorMsg.append(error.getDefaultMessage()).append(",");
-        }
-        errorMsg.delete(errorMsg.length() - 1, errorMsg.length());
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("code", 400);
-        map.put("msg", errorMsg.toString());
-        return map;
+	 /**
+     * 处理请求参数格式错误 @RequestBody上validate失败后抛出的异常是MethodArgumentNotValidException异常
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Result<?>> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
+        return ResponseEntity.status(HttpStatus.SC_OK).body(Result.data(HttpStatus.SC_BAD_REQUEST,message));
     }
-
-	//表单格式
-    @ExceptionHandler(value = BindException.class)
-    public Map<String, Object> errorHandler(BindException ex) {
-        BindingResult result = ex.getBindingResult();
-        StringBuilder errorMsg = new StringBuilder();
-        for (ObjectError error : result.getAllErrors()) {
-            errorMsg.append(error.getDefaultMessage()).append(",");
-        }
-        errorMsg.delete(errorMsg.length() - 1, errorMsg.length());
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("code", 400);
-        map.put("msg", errorMsg.toString());
-        return map;
+ 
+    /**
+     * 处理Get请求中 使用@Valid 验证路径中请求实体校验失败后抛出的异常
+     */
+    @ExceptionHandler(BindException.class)
+    @ResponseBody
+    public ResponseEntity<Result<?>> BindExceptionHandler(BindException e) {
+        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
+        return ResponseEntity.status(HttpStatus.SC_OK).body(Result.data(HttpStatus.SC_BAD_REQUEST,message));
+    }
+ 
+    /**
+     * 处理请求参数格式错误 @RequestParam上validate失败后抛出的异常是ConstraintViolationException
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Result<?>> ConstraintViolationExceptionHandler(ConstraintViolationException e) {
+        String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
+        return ResponseEntity.status(HttpStatus.SC_OK).body(Result.data(HttpStatus.SC_BAD_REQUEST,message));
     }
 
     /**
      * 说明：统一参数验证异常
      *   参数不合法马上返回，无需全局检验完成再返回
-    * */
+     * */
     @Bean
     public javax.validation.Validator validator(){
         ValidatorFactory validatorFactory = Validation.byProvider( HibernateValidator.class )
@@ -66,7 +69,6 @@ public class RequestValidateExceptionHandle {
                 .addProperty( "hibernate.validator.fail_fast", "true" )
                 .buildValidatorFactory();
         return validatorFactory.getValidator();
- 
     }
 
 }
