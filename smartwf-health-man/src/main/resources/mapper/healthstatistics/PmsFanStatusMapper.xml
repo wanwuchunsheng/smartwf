@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartwf.hm.modules.healthstatistics.dao.FanStatusDao" >
+    
+    <!-- 监视中心，泳道图状态统计 -->
+    <select id="selectAssetModelByCount" resultType="java.util.Map">
+        select 
+	        count(*) as count,
+	        t.run_status as runStatus 
+        from (
+		    select id,device_code,device_name,run_status,wind_farm,tenant_domain from pms_asset_model
+		) t  where 1=1
+		 and t.tenant_domain = #{bean.tenantDomain}
+		 and find_in_set(t.wind_farm, #{bean.windFarm})
+		 group by t.run_status 
+    </select>
+    
+    <!-- 统计风机运行状态 -->
+    <select id="selectFanRunStatusByCount" resultType="com.smartwf.hm.modules.healthstatistics.vo.FanStatusVO">
+       select count(*) as count,t.analysis_state,t.analysis_result,t.run_status from (
+			    select 
+					a.device_code,
+					a.device_name,
+					a.run_status,
+					a.wind_farm,
+					a.tenant_domain,
+					b.analysis_state,
+					b.analysis_result
+				from pms_asset_model a, pms_fan_status b 
+				where a.wind_farm=b.wind_farm 
+				and a.tenant_domain = b.tenant_domain
+				and a.device_code=b.device_code 
+				and a.id=b.am_id
+			) t
+		where 1=1
+		 and t.tenant_domain = #{bean.tenantDomain}
+		 and find_in_set(t.wind_farm, #{bean.windFarm})
+		group by t.analysis_state,t.run_status
+    </select>
+        
+</mapper>
