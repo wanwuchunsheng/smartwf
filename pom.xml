@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.smartwf.parent</groupId>
   <artifactId>smartwf</artifactId>
-  <version>0.0.7.RELEASE</version>
+  <version>0.0.8.RELEASE</version>
   <packaging>pom</packaging>
   <name>smartwf</name>
   <description>智慧风电场</description>
@@ -57,6 +57,7 @@
         <oauth2.client.version>1.0.0</oauth2.client.version>
         <sftp.version>0.1.54</sftp.version>
         <jwt.version>6.0</jwt.version>
+        <nacos.config.version>0.2.3</nacos.config.version>
     </properties>
 
     <dependencyManagement>
@@ -96,6 +97,12 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${com.alibaba.druid}</version>
             </dependency>
+            <!-- alibaba-nacos -->
+			<dependency>
+			     <groupId>com.alibaba.boot</groupId>
+			     <artifactId>nacos-config-spring-boot-starter</artifactId>
+			     <version>${nacos.config.version}</version>
+			 </dependency>
             <!-- swagger2-RESTful风格API -->
             <dependency>
                 <groupId>io.springfox</groupId>

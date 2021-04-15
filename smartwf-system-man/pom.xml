@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.smartwf.parent</groupId>
     <artifactId>smartwf</artifactId>
-    <version>0.0.7.RELEASE</version>
+    <version>0.0.8.RELEASE</version>
   </parent>
   <groupId>com.smartwf.sm</groupId>
   <artifactId>smartwf-system-man</artifactId>
@@ -14,7 +14,7 @@
         <dependency>
             <groupId>com.smartwf.common</groupId>
   			<artifactId>smartwf-common</artifactId>
-            <version>0.0.7.RELEASE</version>
+            <version>0.0.8.RELEASE</version>
         </dependency>
         <!-- web -->
         <dependency>
