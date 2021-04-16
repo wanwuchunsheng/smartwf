@@ -57,7 +57,7 @@
         <oauth2.client.version>1.0.0</oauth2.client.version>
         <sftp.version>0.1.54</sftp.version>
         <jwt.version>6.0</jwt.version>
-        <nacos.config.version>0.2.3</nacos.config.version>
+        <spring-cloud-alibaba.version>2.2.2.RELEASE</spring-cloud-alibaba.version>
     </properties>
 
     <dependencyManagement>
@@ -97,12 +97,12 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${com.alibaba.druid}</version>
             </dependency>
-            <!-- alibaba-nacos -->
-			<dependency>
-			     <groupId>com.alibaba.boot</groupId>
-			     <artifactId>nacos-config-spring-boot-starter</artifactId>
-			     <version>${nacos.config.version}</version>
-			 </dependency>
+            <!-- alibaba nacos -->
+			 <dependency>
+	            <groupId>com.alibaba.cloud</groupId>
+	            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+	            <version>${spring-cloud-alibaba.version}</version>
+	        </dependency>
             <!-- swagger2-RESTful风格API -->
             <dependency>
                 <groupId>io.springfox</groupId>
