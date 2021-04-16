@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 
 import com.smartwf.common.constant.Constants;
@@ -29,6 +30,7 @@ import redis.clients.jedis.ShardedJedisPool;
  */
 @SpringBootConfiguration
 @EnableCaching
+@RefreshScope //支持Nacos的动态刷新功能。
 @Slf4j
 public class RedisConfig extends CachingConfigurerSupport {
 
