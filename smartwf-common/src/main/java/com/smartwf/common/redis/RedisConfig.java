@@ -15,8 +15,6 @@ import com.smartwf.common.constant.Constants;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
-import io.lettuce.core.api.StatefulRedisConnection;
-import io.lettuce.core.api.sync.RedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
